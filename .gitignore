@@ -1,0 +1,17 @@
+# Ignore everything
+*
+
+# Keep these folders
+!1_scripts/
+!2_phits/
+!2_phits/template_input_files/
+!4_other_input_files/
+
+# Keep everything inside them
+!1_scripts/**
+!2_phits/template_input_files/**
+!4_other_input_files/**
+
+# Keep these files
+!.gitignore
+!README.md

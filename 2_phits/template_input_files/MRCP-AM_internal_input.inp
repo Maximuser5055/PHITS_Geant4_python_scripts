@@ -1,0 +1,63 @@
+file = MRCP-AM_internal_input.inp
+# ----------------------------------------------------------------------------
+#    name               : MRCP PHANTOM                                        
+#    sex                : MALE                                              
+#    author             : HUREL
+# ----------------------------------------------------------------------------
+
+[ Parameters ]
+ icntl    =           0     # (D=0) 3:ECH 5:NOR 6:SRC 7,8:GSH 11:DSH 12:DUMP
+ maxcas   =     1000000     # (D=10) number of particles per one batch
+ maxbch   =          10     # (D=10) number of batches
+ itetvol  =           0     # (D=0) =1 Volume calculation for tetrahedrons
+ ntetelem =        2000     # Number of tetra element allowed in sub-block
+ maxbnk   =     1000000     # (D=10000) maximum bank memory length
+ itetra   =           0     # (D=0) tetra data is read(=1)/write(=2) on binary
+ file(6)  = MRCP-AM_internal.out # (D=phits.out) general output file name
+ file(7)  = (path to 'xsdir.jnd' file) # nuclear data input file name
+ file(20) = (path to egs folder)       # Directory library data for EGS5
+ negs     =           1     # (D=-1) 1:EGS
+ ipegs    =           0     # [EGS](D=0) 0:Full
+
+[ Source ]
+  totfact =    1.00         # (D=1.0) global factor
+   s-type =    2            # rectangular-solid source
+     proj =   photon        # kind of incident particle         
+       e0 =    1.00         # energy of beam [MeV/u]
+       x0 =  -14.00         # minimum position of x-axis [cm]
+       x1 =    8.00         # maximum position of x-axis [cm]
+       y0 =  -10.00         # minimum position of y-axis [cm]
+       y1 =    9.00         # maximum position of y-axis [cm]
+       z0 =   26.00         # minimum position of z-axis [cm]
+       z1 =   45.00         # maximum position of z-axis [cm]
+      dir =   all           # z-direction of beam [isotropic]
+ # region selection of source
+      reg =    9500
+    ntmax =    1000         # (D=1000) maximum trial number of region selection
+
+[ Material ]
+$ ----------------------------------------------------------------------------
+$ MATERIAL DATA FOR EACH ORGAN/TISSUE
+$ ----------------------------------------------------------------------------
+infl:{../phantoms/MRCP-AM.material}
+
+[ Surface ]
+  10  rpp -37.8854 37.8854 -24.56301 24.56301 -98.00236 98.00236  $ Phantom box
+  20  rpp -38.0854 38.0854 -24.76301 24.76301 -98.20236 98.20236
+  90  box -1000 -1000 -1000 2000 0 0 0 2000 0 0 0 2000         $ World boundary
+  
+[ Cell ]
+$ ----------------------------------------------------------------------------
+$ CELLS FOR PHANTOM
+$ ----------------------------------------------------------------------------
+infl:{../phantoms/MRCP-AM.cell}
+
+[ T-deposit ]
+# Deposit energy in a certain region.
+ file   = Result_MRCP-AM_internal.out        # file name of output for the axis
+ mesh   = reg               # mesh type is region-wise
+ reg    = all               # all regions become tallying region
+ axis   = reg               # axis of output
+ unit   = 0                 # unit is [Gy/source]
+        
+[ End ]
