@@ -29,6 +29,7 @@
 //
 
 #include "TETModelImport.hh"
+#include <filesystem>
 
 TETModelImport::TETModelImport(G4bool isAF, G4UIExecutive* ui)
 {
@@ -259,6 +260,13 @@ void TETModelImport::ColourRead()
 
 void TETModelImport::PrintMaterialInfomation()
 {
+
+	// Write to a csv file
+	namespace fs = std::filesystem;
+	fs::create_directories("../../../4_results/geant4");
+	std::ofstream summaryFile("../../../4_results/geant4/organ_summary.csv");
+	summaryFile << "OrganID,NumTet,Volume_cm3,Density_gcm3,Mass_g,Organ\n";
+
 	// Print the overal information for each organ
 	//
 	G4cout << G4endl
@@ -273,10 +281,15 @@ void TETModelImport::PrintMaterialInfomation()
 	std::map<G4int, G4Material*>::iterator matIter;
 	G4cout<<std::setiosflags(std::ios::fixed);
 	G4cout.precision(3);
+
+	summaryFile << std::fixed;
+    summaryFile.precision(3);
+
 	for(matIter=materialMap.begin(); matIter!=materialMap.end();matIter++)
 	{
 		G4int idx = matIter->first;
 
+		// Console
 		G4cout << std::setw(9)  << idx                         // organ ID
 			   << std::setw(11) << numTetMap[idx]              // # of tetrahedrons
 			   << std::setw(11) << volumeMap[idx]/cm3          // organ volume
@@ -284,5 +297,16 @@ void TETModelImport::PrintMaterialInfomation()
 			                       ->GetDensity()/(g/cm3)      // organ density
 			   << std::setw(11) << massMap[idx]/g              // organ mass
 			   << "\t"<<materialMap[idx]->GetName() << G4endl; // organ name
+
+		// CSV File
+        summaryFile << idx << ","
+                    << numTetMap[idx] << ","
+                    << volumeMap[idx]/cm3 << ","
+                    << materialMap[idx]->GetDensity()/(g/cm3) << ","
+                    << massMap[idx]/g << ","
+                    << materialMap[idx]->GetName()
+                    << "\n";
 	}
+
+	summaryFile.close();
 }

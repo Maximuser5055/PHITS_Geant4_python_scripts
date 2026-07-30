@@ -4,7 +4,7 @@
 /run/verbose 2
 
 # Set the number of threads for multi-threading mode
-#/run/numberOfThreads 8
+#/run/numberOfThreads 12
 
 # Initialize
 /run/initialize
@@ -13,4 +13,4 @@
 /control/execute source.mac
 
 # Set the nps
-/run/beamOn 100000
+/run/beamOn 1000

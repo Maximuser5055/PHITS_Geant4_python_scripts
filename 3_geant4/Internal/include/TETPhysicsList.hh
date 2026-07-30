@@ -49,7 +49,7 @@ class G4VPhysicsConstructor;
 //             modified according to specific purposes or applications.
 // *********************************************************************
 
-class TETPhysicsList: public G4VModularPhysicsList
+class TETPhysicsList : public G4VModularPhysicsList
 {
 public:
 	TETPhysicsList();
