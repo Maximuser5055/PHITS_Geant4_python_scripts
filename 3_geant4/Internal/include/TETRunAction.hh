@@ -67,6 +67,7 @@ public:
 	virtual void EndOfRunAction(const G4Run*);
 
 	void PrintResult(std::ostream &out);
+	void PrintCSV(std::ostream& out);
   
 private:
 	TETModelImport* tetData;

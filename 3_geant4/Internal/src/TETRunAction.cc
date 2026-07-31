@@ -29,6 +29,7 @@
 //
 
 #include "TETRunAction.hh"
+#include <filesystem>
 
 TETRunAction::TETRunAction(TETModelImport* _tetData, G4String _output)
 :tetData(_tetData), fRun(0), numOfEvent(0), runID(0), outputFile(_output)
@@ -43,7 +44,6 @@ G4Run* TETRunAction::GenerateRun()
 	fRun = new TETRun();
 	return fRun;
 }
-
 
 void TETRunAction::BeginOfRunAction(const G4Run* aRun)
 {
@@ -69,6 +69,25 @@ void TETRunAction::EndOfRunAction(const G4Run* aRun)
 	std::ofstream ofs(outputFile.c_str());
 	PrintResult(ofs);
 	ofs.close();
+
+	// Write a csv file
+	std::filesystem::path csvPath =
+		std::filesystem::path("../../../4_results/geant4") /
+    	outputFile.c_str();
+
+	csvPath.replace_extension(".csv");
+
+	std::ofstream csv(csvPath);
+
+	if (!csv)
+	{
+		G4cerr << "Unable to create " << csvPath << G4endl;
+	}
+	else
+	{
+		PrintCSV(csv);
+		csv.close();
+}
 }
 
 void TETRunAction::PrintResult(std::ostream &out)
@@ -90,8 +109,8 @@ void TETRunAction::PrintResult(std::ostream &out)
 	out.precision(3);
 	for(auto itr : tetData->GetMassMap()){
 		G4double meanDose    = edepMap[itr.first].first  / itr.second / numOfEvent;
-		G4double squareDoese = edepMap[itr.first].second / (itr.second*itr.second);
-		G4double variance    = ((squareDoese/numOfEvent) - (meanDose*meanDose))/numOfEvent;
+		G4double squareDose = edepMap[itr.first].second / (itr.second*itr.second);
+		G4double variance    = ((squareDose/numOfEvent) - (meanDose*meanDose))/numOfEvent;
 		G4double relativeE   = sqrt(variance)/meanDose;
 
 		out << setw(8)  << itr.first << "| "
@@ -102,3 +121,41 @@ void TETRunAction::PrintResult(std::ostream &out)
 	out << "=====================================================================" << G4endl << G4endl;
 }
 
+void TETRunAction::PrintCSV(std::ostream& out)
+{
+    EDEPMAP edepMap = *fRun->GetEdepMap();
+
+    out << "Organ ID,"
+        << "Organ Mass (g),"
+        << "Dose (Gy/source),"
+        << "Relative Error\n";
+
+    out.precision(10);
+
+    for (auto itr : tetData->GetMassMap())
+    {
+        G4double meanDose =
+            edepMap[itr.first].first /
+            itr.second /
+            numOfEvent;
+
+        G4double squareDose =
+            edepMap[itr.first].second /
+            (itr.second * itr.second);
+
+        G4double variance =
+            ((squareDose / numOfEvent) -
+             (meanDose * meanDose)) /
+            numOfEvent;
+
+        G4double relativeE =
+            (meanDose > 0.0)
+                ? std::sqrt(variance) / meanDose
+                : 0.0;
+
+        out << itr.first << ","
+            << itr.second / g << ","
+            << meanDose / (joule / kg) << ","
+            << relativeE << "\n";
+    }
+}
