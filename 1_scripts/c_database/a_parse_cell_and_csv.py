@@ -4,13 +4,13 @@
 # import necessary libraries
 import re
 import pandas as pd
-import c_config as config
+import b_config.a_config as config
 
 # Define path parameters
 male_cell_file_path = config.CELL_FILES["AM"]
 female_cell_file_path = config.CELL_FILES["AF"]
 csv_file_path = config.ORGAN_ID_CSV
-organ_groups_csv_file_path = config.SOURCE_TARGET_CSV
+organ_groups_csv_file_path = config.SOURCE_CSV
 
 # Organ database file path
 database_file_path = config.DATABASE_FILE
@@ -68,19 +68,11 @@ def parse_cell_csv_inputs():
                 .replace(", ", "_")
             )
 
-    # Reading the source and target organs
+    # Reading the source organs
     organ_groups = pd.read_csv(organ_groups_csv_file_path)
 
     main_source_organs = (
         organ_groups["source_organ_ID"]
-        .dropna()
-        .astype(int)
-        .unique()
-        .tolist()
-    )
-
-    main_target_organs = (
-        organ_groups["target_organ_ID"]
         .dropna()
         .astype(int)
         .unique()
@@ -112,6 +104,7 @@ def parse_cell_csv_inputs():
             f.write("    },\n\n")
 
         f.write("}\n\n")
+        
         # -------------------------------------------------------------------------
         # Source organs
         # -------------------------------------------------------------------------
@@ -145,38 +138,3 @@ def parse_cell_csv_inputs():
             f.write("    },\n\n")
 
         f.write("}\n\n")
-
-        # -------------------------------------------------------------------------
-        # Target organs
-        # -------------------------------------------------------------------------
-
-        f.write("TARGET_ORGANS = {\n")
-
-        for phantom_name, organs in [
-            ("AM", male_organs),
-            ("AF", female_organs),
-        ]:
-
-            f.write(f'    "{phantom_name}": {{\n')
-
-            for organ_id in main_target_organs:
-
-                organ = organs.get(organ_id)
-
-                if organ is None:
-
-                    organ_name = name_dict.get(organ_id, "Unknown")
-
-                    print(
-                        f"Warning: Source organ ID {organ_id} ({organ_name})"
-                        f"does not exist in phantom {phantom_name}. Skipping."
-                    )
-                    continue
-
-                f.write(
-                    f'        {organ_id}: "{organ["name"]}",\n'
-                )
-
-            f.write("    },\n\n")
-
-        f.write("}\n")

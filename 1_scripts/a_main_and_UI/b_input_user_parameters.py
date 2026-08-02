@@ -29,25 +29,79 @@ def get_user_parameters():
     print("Internal Dosimetry Pipeline Configuration")
     print("=" * 60)
 
-    phits_root = input(f"PHITS root [Current = {config.PHITS_ROOT}]: ").strip()
-    phits_root = Path(phits_root) if phits_root else config.PHITS_ROOT
+    print("\nSimulation Engine")
+    print("[1] PHITS")
+    print("[2] Geant4")
 
-    parallelization = (
-        input(f"Parallelization (OMP/MPI) [Current = {config.PARALLELIZATION}]: ")
-        .strip()
-        .upper()
-    )
-    if parallelization == "":
-        parallelization = config.PARALLELIZATION
+    while True:
+        choice = input("Select simulation engine (1-2): ").strip()
 
-    threads = input(f"Parallelization Threads [Current = {config.THREADS}]: ").strip()
-    threads = int(threads) if threads else config.THREADS
+        if choice == "1":
+            simulation_code = "PHITS"
+            break
 
-    maxcas = input(f"PHITS maxcas (no. of particle histories per batch) [Current = {config.MAXCAS}]: ").strip()
-    maxcas = int(maxcas) if maxcas else config.MAXCAS
+        elif choice == "2":
+            simulation_code = "GEANT4"
+            break
 
-    maxbch = input(f"PHITS maxbch (no. of batches) [Current = {config.MAXBCH}]: ").strip()
-    maxbch = int(maxbch) if maxbch else config.MAXBCH
+        print("Invalid choice. Please enter 1 or 2.")
+
+    if simulation_code == "PHITS":
+
+        phits_root = input(f"PHITS root [Current = {config.PHITS_ROOT}]: ").strip()
+        phits_root = Path(phits_root) if phits_root else config.PHITS_ROOT
+
+        parallelization = (
+            input(f"Parallelization (OMP/MPI) [Current = {config.PARALLELIZATION}]: ")
+            .strip()
+            .upper()
+        )
+        if parallelization == "":
+            parallelization = config.PARALLELIZATION
+
+        threads = input(f"Parallelization Threads [Current = {config.THREADS}]: ").strip()
+        threads = int(threads) if threads else config.THREADS
+
+        maxcas = input(f"PHITS maxcas (no. of particle histories per batch) [Current = {config.MAXCAS}]: ").strip()
+        maxcas = int(maxcas) if maxcas else config.MAXCAS
+
+        maxbch = input(f"PHITS maxbch (no. of batches) [Current = {config.MAXBCH}]: ").strip()
+        maxbch = int(maxbch) if maxbch else config.MAXBCH
+
+        while True:
+            source_dir = input(
+                f"Directory containing source_organs.csv "
+                f"[Current = {config.SOURCE_CSV.parent}]: "
+            ).strip()
+
+            source_csv = (
+                Path(source_dir) / "source_organs.csv"
+                if source_dir
+                else config.SOURCE_CSV
+            )
+
+            if source_csv.is_file():
+                break
+
+            print(f"\nError: '{source_csv}' was not found. Please try again.\n")
+
+        while True:
+            phantom_input_generation = input(
+                f"Phantom Input Generation (AM/AF/BOTH) [Current = {config.PHANTOM_INPUT_GENERATION}]: "
+            ).strip().upper()
+
+            if phantom_input_generation == "":
+                phantom_input_generation = config.PHANTOM_INPUT_GENERATION
+
+            if phantom_input_generation in ("AM", "AF", "Both"):
+                break
+
+            print("\nError: Please enter AM, AF, or Both.\n")
+
+    elif simulation_code == "GEANT4":
+
+        geant4_build = ...
+        threads = ...
 
     uncertainty_limit = input(
         f"Maximum allowed statistical uncertainty (%) "
@@ -60,44 +114,20 @@ def get_user_parameters():
         else config.UNCERTAINTY_LIMIT
     )
 
-    while True:
-        source_target_dir = input(
-            f"Directory containing source_target_organs.csv "
-            f"[Current = {config.SOURCE_TARGET_CSV.parent}]: "
-        ).strip()
+    update_config("SIMULATION_CODE", simulation_code)
 
-        source_target_csv = (
-            Path(source_target_dir) / "source_target_organs.csv"
-            if source_target_dir
-            else config.SOURCE_TARGET_CSV
-        )
+    if simulation_code == "PHITS":
+        update_config("PHITS_ROOT", phits_root)
+        update_config("PARALLELIZATION", parallelization)
+        update_config("THREADS", threads)
+        update_config("MAXCAS", maxcas)
+        update_config("MAXBCH", maxbch)
+        update_config("UNCERTAINTY_LIMIT", uncertainty_limit)
+        update_config("SOURCE_CSV", source_csv)
+        update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
 
-        if source_target_csv.is_file():
-            break
-
-        print(f"\nError: '{source_target_csv}' was not found. Please try again.\n")
-
-    while True:
-        phantom_input_generation = input(
-            f"Phantom Input Generation (AM/AF/BOTH) [Current = {config.PHANTOM_INPUT_GENERATION}]: "
-        ).strip().upper()
-
-        if phantom_input_generation == "":
-            phantom_input_generation = config.PHANTOM_INPUT_GENERATION
-
-        if phantom_input_generation in ("AM", "AF", "Both"):
-            break
-
-        print("\nError: Please enter AM, AF, or Both.\n")
-   
-    update_config("PHITS_ROOT", phits_root)
-    update_config("PARALLELIZATION", parallelization)
-    update_config("THREADS", threads)
-    update_config("MAXCAS", maxcas)
-    update_config("MAXBCH", maxbch)
-    update_config("UNCERTAINTY_LIMIT", uncertainty_limit)
-    update_config("SOURCE_TARGET_CSV", source_target_csv)
-    update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
+    elif simulation_code == "GEANT4":
+        exit("GEANT4 configuration is not yet implemented.")
 
     ############################
     # Create required directories
@@ -112,13 +142,14 @@ def get_user_parameters():
         directory.mkdir(parents=True, exist_ok=True)
 
     return {
+            "simulation_code": simulation_code,
             "phits_root": phits_root,
             "parallelization": parallelization,
             "threads": threads,
             "maxcas": maxcas,
             "maxbch": maxbch,
             "uncertainty_limit": uncertainty_limit,
-            "source_target_csv": source_target_csv,
+            "source_csv": source_csv,
             "phantom": phantom_input_generation,
     }
     
