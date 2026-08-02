@@ -12,7 +12,7 @@
 !1_scripts/**
 !2_phits/template_input_files/**
 !3_geant4/**
-!4_other_input_files/**
+!5_other_input_files/**
 
 # Ignore these
 3_geant4/phantoms/

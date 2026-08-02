@@ -1,0 +1,80 @@
+﻿Target region,Acronym,ID number(s)
+Red (active) marrow,R-marrow,1400_2500_2700_2900_4000_4200_4400_4600_4800_5000_5200_5400_5600
+Colon wall,Colon,7600_7601_7602_7800_7801_7802_8000_8001_8002_8200_8201_8202_8400_8401_8402_8600
+Stem cells of colon,Colon-stem,7601_7801_8001_8201_8401
+RLung + LLung,Lungs,9700_9900
+Stomach wall,St-wall,7200_7201_7202_7203
+Stem cells of stomach,St-stem,7201
+Breast-a + Breast-g,Breast,6200_6300_6400_6500
+ROvary + LOvary,Ovaries,11100_11200
+Testes,Testes,12900_13000
+Urinary bladder wall,UB-wall,13700_13701
+Urinary bladder basal cells,UB-basal,13701
+Oesophagus wall,Oesophagus,11000_11001_11002
+Oesophagus basal cells,Oesophagus-bas,11001
+Liver,Liver,9500
+Thyroid,Thyroid,13200
+50-um endosteal region,Endost-BS,1400_1500_1700_1800_2000_2100_2300_2500_2700_2900_3000_3200_3300_3500_3600_3800_4000_4200_4400_4600_4800_5000_5200_5400_5600
+Brain,Brain,6100
+Salivary glands,S-glands,12000_12100
+Skin,Skin,12200_12201_12300_12301_12400_12401_12500_12501
+Basal cells of skin,Skin-bas,12201_12301_12401_12501
+RAdrenal + LAdrenal,Adrenals,100_200
+ET region,ET,300_301_302_303_401_402_403_404_405
+Gallbladder wall,GB-wall,7000
+Heart wall,Ht-wall,8700
+RKidney + LKidney,Kidneys,8900_9000_9100_9200_9300_9400
+Systemic lymph nodes,LN-Sys,10200_10300_10400_10500
+Muscle,Muscle,10600_10700_10800_10900
+Oral mucosa,O-mucosa,500_501_600
+Pancreas,Pancreas,11300
+Prostate,Prostate,11500
+Small intestine wall,SI-wall,7400_7401_7402_7403
+Stem cells of small intestine,SI-stem,7401
+Spleen,Spleen,12700
+Thymus,Thymus,13100
+Uterus/cervix,Uterus,13900
+Tongue,Tongue,500_13300_13301
+Tonsils,Tonsils,13400
+Right colon wall (ascending + right transverse),RC-wall,7600_7601_7602_7800_7801_7802
+Left colon wall (left transverse + descending),LC-wall,8000_8001_8002_8200_8201_8202
+Rectosigmoid colon wall (sigmoid + rectum),RS-wall,8400_8401_8402_8600
+Stem cells of right colon (ascending + right transverse),RC-stem,7601_7801
+Stem cells of left colon (left transverse + descending),LC-stem,8001_8201
+Stem cells of rectosigmoid colon (sigmoid + rectum),RSig-stem,8401
+Basal cells of anterior nasal passages,ET1-bas,302
+Basal cells of posterior nasal passages + pharynx,ET2-bas,402
+Extrathoracic lymph nodes,LN-ET,10000
+Bronchi basal cells,Bronch-bas,804_805
+Bronchi secretory cells,Bronch-sec,803_804
+Bronchiolar secretory cells,Brchiol-sec,813
+Alveolar-interstitium,AI,9700_9900
+Thoracic lymph nodes,LN-Th,10100
+Right lung lobe,RLung,9900
+Left lung lobe,LLung,9700
+Right adrenal gland,RAdrenal,200
+Left adrenal gland,LAdrenal,100
+Right breast adipose,RBreast-a,6400
+Right breast glandular,RBreast-g,6500
+Left breast adipose,LBreast-a,6200
+Left breast glandular,LBreast-g,6300
+RBreast-a + RBreast-g,RBreast,6400_6500
+LBreast-a + LBreast-g,LBreast,6200_6300
+RBreast-a + LBreast-a,Breast-a,6200_6400
+RBreast-g + LBreast-g,Breast-g,6300_6500
+Entire lens of eye,Lens-ent,6600_6601_6800_6801
+Sensitive lens of eye,Lens-sen,6600_6800
+Right kidney cortex,RKidney-C,9200
+Right kidney medulla,RKidney-M,9300
+Right kidney pelvis,RKidney-P,9400
+Right kidney C+M+P,RKidney,9200_9300_9400
+Left kidney cortex,LKidney-C,8900
+Left kidney medulla,LKidney-M,9000
+Left kidney pelvis,LKidney-P,9100
+Left kidney C+M+P,LKidney,8900_9000_9100
+Right ovary,ROvary,11200
+Left ovary,LOvary,11100
+Pituitary gland,P-gland,11400
+Spinal cord,Sp-cord,12600
+Ureters,Ureters,13500_13600
+Adipose/residual tissue,Adipose,11600_11700_11800_11900
