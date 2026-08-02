@@ -1,11 +1,11 @@
 # This script asks the user for various input files and PHITS parameters
 
 # Import necessary libraries
-import c_config as config
+import b_config.a_config as config
 from pathlib import Path
 
 def update_config(setting, value):
-    config_file = Path(__file__).parent / "c_config.py"
+    config_file = Path(__file__).parent / "b_config" / "a_config.py"
 
     lines = config_file.read_text().splitlines()
 

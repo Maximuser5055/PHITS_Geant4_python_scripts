@@ -6,8 +6,8 @@
 # Import necessary libraries
 from pathlib import Path
 import shutil
-import c_config as config
-from e_organ_database import SOURCE_ORGANS, TARGET_ORGANS
+import b_config.a_config as config
+from c_database.b_organ_database import SOURCE_ORGANS, TARGET_ORGANS
 
 def generate_inputs():
     # Read input template and define paths for phantom and interaction model files
