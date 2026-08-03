@@ -4,13 +4,13 @@
 /run/verbose 2
 
 # Set the number of threads for multi-threading mode
-#/run/numberOfThreads {{THREADS}}
+#/run/numberOfThreads 8
 
 # Initialize
 /run/initialize
 
 # source setting
-/control/execute {{SOURCE_MAC}}
+/control/execute Geant4_MRCP_AM_source_Brain_gamma_energy_1.0.mac
 
 # Set the nps
-/run/beamOn {{NPS}}
+/run/beamOn 1000

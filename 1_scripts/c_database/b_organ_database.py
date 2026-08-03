@@ -3012,19 +3012,3 @@ SOURCE_ORGANS = {
 
 }
 
-TARGET_ORGANS = {
-    "AM": {
-        9500: "Liver",
-        6100: "Brain",
-        12900: "Testis_left",
-        13000: "Testis_right",
-    },
-
-    "AF": {
-        9500: "Liver",
-        6100: "Brain",
-        11100: "Ovary_left",
-        11200: "Ovary_right",
-    },
-
-}

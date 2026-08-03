@@ -40,9 +40,13 @@ PHITS_BAT = "phits.bat"
 # Geant4 Directories and Files
 ############################
 
-GEANT4_FOLDER = ROOT / "3_geant4"
+GEANT4_DIR = ROOT / "3_geant4"
 
-INTERNAL_FOLDER = ROOT / "3_geant4" / "Internal"
+INTERNAL_DIR = ROOT / "3_geant4" / "Internal"
+
+GEANT4_BUILD_DIR = INTERNAL_DIR / "build"
+
+GEANT4_GENERATED_INPUTS_DIR = GEANT4_BUILD_DIR / "generated_inputs"
 
 ############################
 # General Directories and Files
@@ -50,9 +54,9 @@ INTERNAL_FOLDER = ROOT / "3_geant4" / "Internal"
 
 ORGAN_ID_CSV = ROOT / "5_other_input_files/organ_ID_names.csv"
 
-SOURCE_CSV = Path(r"/home/clarence/Geant4_SAF_Calculations/python_scripts/5_other_input_files/source_organs.csv")
+SOURCE_CSV = ROOT / "5_other_input_files/source_organs.csv"
 
-DATABASE_FILE = ROOT / "1_scripts/d_organ_database.py"
+DATABASE_FILE = ROOT / "1_scripts/c_database/b_organ_database.py"
 
 RESULTS_DIR = ROOT / "4_results"
 
@@ -62,15 +66,13 @@ RERUN_CSV = ROOT / "4_results/5_rerun_required.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "PHITS"
+SIMULATION_CODE = "GEANT4"
 
 ############################
 # PHITS Settings
 ############################
 
 PARALLELIZATION = "OMP"
-
-THREADS = 8
     
 MAXCAS = 500
 
@@ -88,20 +90,30 @@ SEXINFO = {
     "AF": "FEMALE",
 }
 
-SOURCE_TYPES = [
+PHITS_SOURCE_TYPES = [
     "photon",
-]
-
-SOURCE_ENERGIES = [
-    1.0,
 ]
 
 ############################
 # Geant 4 Settings
 ############################
 
+REBUILD = False
+
+GEANT4_SOURCE_TYPES = [
+    "gamma",
+]
+
+NPS = 1000
+
 ############################
 # General Settings
 ############################
+
+THREADS = 8
+
+SOURCE_ENERGIES = [
+    1.0,
+]
 
 UNCERTAINTY_LIMIT = 5.0

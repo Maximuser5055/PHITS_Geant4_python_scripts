@@ -28,6 +28,8 @@
 // \author HUREL
 //
 
+#include <filesystem>
+
 #include "TETDetectorConstruction.hh"
 #include "TETModelImport.hh"
 #include "TETPhysicsList.hh"
@@ -144,11 +146,27 @@ int main(int argc,char** argv)
 	//
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-	if ( ! ui ){
+	//if ( ! ui ){
 		// batch mode
-		G4String command = "/control/execute ";
-		UImanager->ApplyCommand(command+macro);
+	//	G4String command = "/control/execute ";
+	//	UImanager->ApplyCommand(command+macro);
+	//}
+
+	if (!ui) {
+		// batch mode
+		namespace fs = std::filesystem;
+		fs::path macroPath(macro.data());
+
+		G4String macroDirectory = macroPath.parent_path().string();
+
+		if (!macroDirectory.empty()) {
+			UImanager->ApplyCommand("/control/macroPath " + macroDirectory);
+		}
+
+		// Execute the .in using its full path
+		UImanager->ApplyCommand("/control/execute " + G4String(macroPath.string()));
 	}
+
 	else {
 		// interactive mode
 		UImanager->ApplyCommand("/control/execute init_vis.mac");

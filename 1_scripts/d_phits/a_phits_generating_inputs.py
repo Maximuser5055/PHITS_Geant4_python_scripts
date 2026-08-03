@@ -9,7 +9,7 @@ import shutil
 import b_config.a_config as config
 from c_database.b_organ_database import SOURCE_ORGANS
 
-def generate_inputs():
+def phits_generate_inputs():
     # Read input template and define paths for phantom and interaction model files
     template = config.INPUT_TEMPLATE_FILE.read_text()
     infl_file_directory = config.INCLUDE_FILES_DIR
@@ -32,10 +32,10 @@ def generate_inputs():
         threads = config.THREADS
         maxcas = config.MAXCAS
         maxbch = config.MAXBCH
-        source_type = config.SOURCE_TYPES
+        source_type = config.PHITS_SOURCE_TYPES
         source_energies = config.SOURCE_ENERGIES
         target_regions = "all"
-        sexinfo = config.SEXINFO
+        sexinfo = config.SEXINFO.get(phantom)
 
         # Loop through source energies and regions to generate input files
         for energy in source_energies:
@@ -49,7 +49,7 @@ def generate_inputs():
                 )
 
                 deposit_output_file = (
-                    f"deposit_MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.out"
+                    f"phits_deposit_MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.out"
                 )
 
                 text = template
@@ -69,11 +69,11 @@ def generate_inputs():
                 text = text.replace("{{PHITSOUTPUTFILE}}", phits_output_file)
                 text = text.replace("{{DEPOSITOUTPUTFILE}}", deposit_output_file)
 
-                filename = f"MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.inp"
+                filename = f"PHITS_MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.inp"
 
                 phantom_source = Path(infl_file_directory)
 
-                filename = f"MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.inp"
+                filename = f"PHITS_MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.inp"
                 job_name = filename.removesuffix(".inp")
 
                 # Job directory

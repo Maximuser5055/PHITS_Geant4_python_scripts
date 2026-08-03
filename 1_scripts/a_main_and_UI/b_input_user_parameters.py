@@ -9,7 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 def update_config(setting, value):
-    config_file = Path(__file__).parent / "b_config" / "a_config.py"
+    config_file = Path(__file__).parent.parent / "b_config" / "a_config.py"
 
     lines = config_file.read_text().splitlines()
 
@@ -104,11 +104,10 @@ def get_user_parameters():
 
     elif simulation_code == "GEANT4":
 
-        geant4_build = ...
         threads = ...
 
     uncertainty_limit = input(
-        f"Maximum allowed statistical uncertainty (%) "
+        f"\nMaximum allowed statistical uncertainty (%) "
         f"[Current = {config.UNCERTAINTY_LIMIT}]: "
     ).strip()
 
@@ -130,8 +129,8 @@ def get_user_parameters():
         update_config("SOURCE_CSV", source_csv)
         update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
 
-    elif simulation_code == "GEANT4":
-        exit("GEANT4 configuration is not yet implemented.")
+    #elif simulation_code == "GEANT4":
+    #    update_config("REBUILD", rebuild)
 
     ############################
     # Create required directories
@@ -145,15 +144,25 @@ def get_user_parameters():
     for directory in DIRECTORIES:
         directory.mkdir(parents=True, exist_ok=True)
 
-    return {
-            "simulation_code": simulation_code,
-            "phits_root": phits_root,
-            "parallelization": parallelization,
-            "threads": threads,
-            "maxcas": maxcas,
-            "maxbch": maxbch,
-            "uncertainty_limit": uncertainty_limit,
-            "source_csv": source_csv,
-            "phantom": phantom_input_generation,
+    params = {
+    "simulation_code": simulation_code,
+    "uncertainty_limit": uncertainty_limit,
     }
+
+    if simulation_code == "PHITS":
+        params.update({
+        "phits_root": phits_root,
+        "parallelization": parallelization,
+        "threads": threads,
+        "maxcas": maxcas,
+        "maxbch": maxbch,
+        "source_csv": source_csv,
+        "phantom": phantom_input_generation,
+    })
+
+    elif simulation_code == "GEANT4":
+        params.update({
+    })
+
+    return params
     
