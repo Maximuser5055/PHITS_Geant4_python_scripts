@@ -3,6 +3,10 @@
 # Import necessary libraries
 import b_config.a_config as config
 from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
 
 def update_config(setting, value):
     config_file = Path(__file__).parent / "b_config" / "a_config.py"

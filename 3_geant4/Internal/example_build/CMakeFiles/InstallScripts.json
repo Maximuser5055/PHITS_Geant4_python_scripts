@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/example_build/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

@@ -7,7 +7,7 @@
 from pathlib import Path
 import pandas as pd
 import re
-import c_config as config
+import b_config.a_config as config
 
 def check_uncertainty():
     # -------------------------------------------------------------------------

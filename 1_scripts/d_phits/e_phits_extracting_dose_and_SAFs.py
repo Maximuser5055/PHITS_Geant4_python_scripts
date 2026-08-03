@@ -5,8 +5,8 @@
 # Import necessary libraries
 import re
 import pandas as pd
-import c_config as config
-from e_organ_database import ORGANS
+import b_config.a_config as config
+from c_database.b_organ_database import ORGANS
 
 def calculate_dose_and_safs():
     # -------------------------------------------------------------------------

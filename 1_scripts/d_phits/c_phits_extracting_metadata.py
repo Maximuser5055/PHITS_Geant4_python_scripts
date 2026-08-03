@@ -4,7 +4,7 @@
 import re
 from pathlib import Path
 import csv
-import c_config as config
+import b_config.a_config as config
 
 def extract_metadata_stats():
     # PHITS output file

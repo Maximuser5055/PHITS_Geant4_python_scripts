@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 import re
 import pandas as pd
-import c_config as config
+import b_config.a_config as config
 
 def run_phits():
     # Batch file to run PHITS

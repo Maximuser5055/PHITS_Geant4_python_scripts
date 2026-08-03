@@ -3,7 +3,7 @@
 
 # Import necessary libraries
 import pandas as pd
-import c_config as config
+import b_config.a_config as config
 
 def calculate_metadata():
     # Master log produced by e_extracting_metadata.py

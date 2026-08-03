@@ -7,7 +7,7 @@
 from pathlib import Path
 import shutil
 import b_config.a_config as config
-from c_database.b_organ_database import SOURCE_ORGANS, TARGET_ORGANS
+from c_database.b_organ_database import SOURCE_ORGANS
 
 def generate_inputs():
     # Read input template and define paths for phantom and interaction model files
@@ -34,7 +34,7 @@ def generate_inputs():
         maxbch = config.MAXBCH
         source_type = config.SOURCE_TYPES
         source_energies = config.SOURCE_ENERGIES
-        target_regions = " ".join(map(str, TARGET_ORGANS[phantom].keys()))
+        target_regions = "all"
         sexinfo = config.SEXINFO
 
         # Loop through source energies and regions to generate input files

@@ -1,6 +1,12 @@
 # This script acts as the main python file for running all the Python files below
 
 # Import sub-Python files
+from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
 from a_main_and_UI.b_input_user_parameters import get_user_parameters, update_config
 from c_database.a_parse_cell_and_csv import parse_cell_csv_inputs
 from d_phits.a_phits_generating_inputs import generate_inputs
@@ -9,6 +15,9 @@ from d_phits.c_phits_extracting_metadata import extract_metadata_stats
 from d_phits.d_calculating_extra_metadata import calculate_metadata
 from d_phits.e_phits_extracting_dose_and_SAFs import calculate_dose_and_safs
 from d_phits.f_check_uncertainty import check_uncertainty
+from e_geant4.a_geant4_setup_and_build_executable import build_geant4
+
+
 
 def main():
     get_user_parameters()
@@ -19,6 +28,7 @@ def main():
     calculate_metadata()
     calculate_dose_and_safs()
     check_uncertainty()
+    build_geant4()
 
 if __name__ == "__main__":
     main()
