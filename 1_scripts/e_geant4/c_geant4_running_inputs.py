@@ -10,9 +10,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 
 import b_config.a_config as config
-
+from e_geant4.a_geant4_setup_and_build_executable import find_geant4make
 
 def run_geant4():
+
+    geant4make_path = find_geant4make()
 
     executable = config.GEANT4_BUILD_DIR / "Internal"
     input_root = config.GEANT4_GENERATED_INPUTS_DIR
@@ -125,24 +127,30 @@ def run_geant4():
 
         source_id = (infile.parent / "source_id.txt").read_text().strip()
 
-        cmd = [
-            str(executable),
-            "-i", source_id,
-            "-m", str(infile.resolve()),
-            "-o", str(outfile.resolve()),
-        ]
+        cmd = (
+            f'source "{geant4make_path}" && '
+            f'"{executable}" '
+            f'-i {source_id} '
+            f'-m "{infile.resolve()}" '
+            f'-o "{outfile.resolve()}"'
+        )
 
         if phantom == "AF":
-            cmd.append("-f")
+            cmd += " -f"
 
         print(f"Starting {infile.name}")
 
         process = subprocess.Popen(
-            cmd,
+            ["bash", "-c", cmd],
             cwd=config.GEANT4_BUILD_DIR
         )
 
         returncode = process.wait()
+
+        if returncode == 0:
+            print(f"Finished {infile.name}")
+        else:
+            print(f"Failed {infile.name} (return code {returncode})")
 
         print(f"Finished {infile.name}")
 
