@@ -1,11 +1,5 @@
 # THis script sets up the Geant4 environment and builds the project using CMake and Make.
 
-# temporary
-from pathlib import Path
-import sys
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
-
 # Import necessary libraries
 import os
 import subprocess

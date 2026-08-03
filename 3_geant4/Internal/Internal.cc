@@ -29,6 +29,8 @@
 //
 
 #include <filesystem>
+#include <chrono>
+#include <fstream>
 
 #include "TETDetectorConstruction.hh"
 #include "TETModelImport.hh"
@@ -56,6 +58,12 @@ void PrintUsage(){
 
 int main(int argc,char** argv) 
 {
+	auto totalStart = std::chrono::steady_clock::now();
+	auto setupStart = std::chrono::steady_clock::now();
+
+	double setupSeconds = 0.0;
+	double runSeconds   = 0.0;
+
 	// Read the arguments for batch mode
 	//
 	G4String macro;
@@ -116,13 +124,13 @@ int main(int argc,char** argv)
 
 	// Construct the default run manager
 	//
-#ifdef G4MULTITHREADED
-	G4MTRunManager * runManager = new G4MTRunManager;
-	// set the default number of threads as one
-	runManager->SetNumberOfThreads(1);
-#else
-	G4RunManager * runManager = new G4RunManager;
-#endif
+	#ifdef G4MULTITHREADED
+		G4MTRunManager * runManager = new G4MTRunManager;
+		// set the default number of threads as one
+		runManager->SetNumberOfThreads(1);
+	#else
+		G4RunManager * runManager = new G4RunManager;
+	#endif
 
 	// Set a class to import phantom data
 	//
@@ -136,7 +144,7 @@ int main(int argc,char** argv)
 	runManager->SetUserInitialization(new TETPhysicsList());
 	// user action initialisation
 	runManager->SetUserInitialization(new TETActionInitialization(tetData, internalSource, output));
-    
+
 	// Visualization manager
 	//
 	G4VisManager* visManager = new G4VisExecutive;
@@ -146,12 +154,18 @@ int main(int argc,char** argv)
 	//
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
+	auto setupEnd = std::chrono::steady_clock::now();
+
+	setupSeconds = std::chrono::duration<double>(setupEnd - setupStart).count();
+
 	//if ( ! ui ){
 		// batch mode
 	//	G4String command = "/control/execute ";
 	//	UImanager->ApplyCommand(command+macro);
 	//}
 
+	auto runStart = std::chrono::steady_clock::now();
+	
 	if (!ui) {
 		// batch mode
 		namespace fs = std::filesystem;
@@ -165,6 +179,10 @@ int main(int argc,char** argv)
 
 		// Execute the .in using its full path
 		UImanager->ApplyCommand("/control/execute " + G4String(macroPath.string()));
+
+		auto runEnd = std::chrono::steady_clock::now();
+
+		runSeconds = std::chrono::duration<double>(runEnd - runStart).count();
 	}
 
 	else {
@@ -178,6 +196,59 @@ int main(int argc,char** argv)
 	// Job termination
 	//
 	delete runManager;
+
+	auto totalEnd = std::chrono::steady_clock::now();
+
+	double totalSeconds =
+		std::chrono::duration<double>(totalEnd - totalStart).count();
+
+	namespace fs = std::filesystem;
+
+	fs::path timingPath(output.data());
+
+	std::string filename = timingPath.filename().string();
+
+	const std::string depositPrefix = "Geant4_deposit_";
+	const std::string timingPrefix  = "Geant4_timing_";
+
+	if (filename.rfind(depositPrefix, 0) == 0)
+	{
+		filename.replace(
+			0,
+			depositPrefix.size(),
+			timingPrefix
+		);
+	}
+
+	timingPath = timingPath.parent_path() / filename;
+	timingPath.replace_extension(".txt");
+
+	std::ofstream timing(timingPath);
+
+	if (timing)
+	{
+		timing << "Geant4 Timing Summary\n";
+		timing << "=====================\n\n";
+
+		timing << "Macro      : " << macro << "\n";
+		timing << "Output     : " << output << "\n\n";
+
+		timing << "Setup time      : "
+			<< setupSeconds
+			<< " s\n";
+
+		timing << "Execution time  : "
+			<< runSeconds
+			<< " s\n";
+
+		timing << "Total wall time : "
+			<< totalSeconds
+			<< " s\n";
+	}
+
+	G4cout << "\nTotal wall time: "
+		<< totalSeconds
+		<< " s\n";
 }
 
 

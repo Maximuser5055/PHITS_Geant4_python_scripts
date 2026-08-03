@@ -1,7 +1,6 @@
 # This script acts as the main python file for running all the Python files below
 
 # Import sub-Python files
-from logging import config
 from pathlib import Path
 import sys
 
