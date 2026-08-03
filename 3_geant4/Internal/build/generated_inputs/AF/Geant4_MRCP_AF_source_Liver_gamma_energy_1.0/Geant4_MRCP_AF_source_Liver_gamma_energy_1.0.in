@@ -13,4 +13,4 @@
 /control/execute Geant4_MRCP_AF_source_Liver_gamma_energy_1.0.mac
 
 # Set the nps
-/run/beamOn 100000
+/run/beamOn 10000000

@@ -104,7 +104,7 @@ GEANT4_SOURCE_TYPES = [
     "gamma",
 ]
 
-NPS = 1000000
+NPS = 10000000
 
 ############################
 # General Settings

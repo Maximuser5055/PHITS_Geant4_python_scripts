@@ -70,7 +70,7 @@ def build_geant4():
 
     else:
 
-        print("No source tree changes. Running make only.")
+        print("\nNo source tree changes. Running make only.")
 
         cmd = (
             f'source "{geant4make_path}" && '

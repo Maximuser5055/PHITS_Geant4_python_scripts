@@ -4,7 +4,7 @@ Geant4 Timing Summary
 Macro      : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AM/Geant4_MRCP_AM_source_Liver_gamma_energy_1.0/Geant4_MRCP_AM_source_Liver_gamma_energy_1.0.in
 Output     : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AM/Geant4_MRCP_AM_source_Liver_gamma_energy_1.0/Geant4_deposit_MRCP_AM_source_Liver_gamma_energy_1.0.out
 
-Setup time      : 8.55086 s
-BeamOn time  : 134.011 s
-Execution time  : 195.288 s
-Total wall time : 206.52 s
+Setup time      : 8.72395 s
+BeamOn time  : 13644.5 s
+Execution time  : 13706.4 s
+Total wall time : 13718.6 s
