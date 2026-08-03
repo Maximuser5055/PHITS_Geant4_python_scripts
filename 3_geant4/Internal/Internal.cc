@@ -143,7 +143,14 @@ int main(int argc,char** argv)
 	// physics list
 	runManager->SetUserInitialization(new TETPhysicsList());
 	// user action initialisation
-	runManager->SetUserInitialization(new TETActionInitialization(tetData, internalSource, output));
+	auto* actions =
+		new TETActionInitialization(
+			tetData,
+			internalSource,
+			output
+		);
+
+	runManager->SetUserInitialization(actions);
 
 	// Visualization manager
 	//
@@ -193,6 +200,9 @@ int main(int argc,char** argv)
 		delete ui;
 	}
 
+	double transportSeconds =
+    actions->GetRunAction()->GetTransportSeconds();
+
 	// Job termination
 	//
 	delete runManager;
@@ -236,6 +246,10 @@ int main(int argc,char** argv)
 		timing << "Setup time      : "
 			<< setupSeconds
 			<< " s\n";
+
+		timing << "BeamOn time  : "
+		<< transportSeconds
+		<< " s\n";
 
 		timing << "Execution time  : "
 			<< runSeconds

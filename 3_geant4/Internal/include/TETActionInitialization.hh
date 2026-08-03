@@ -54,6 +54,7 @@ class TETActionInitialization : public G4VUserActionInitialization
 	TETActionInitialization(TETModelImport* tetData,
 			                G4int           internalSource,
 							G4String        outputFileName);
+	TETRunAction* GetRunAction() const { return fRunAction; }
 	virtual ~TETActionInitialization();
 
 	virtual void BuildForMaster() const;
@@ -63,6 +64,7 @@ class TETActionInitialization : public G4VUserActionInitialization
 	TETModelImport* tetData;
 	G4int           internalSource;
 	G4String        output;
+	mutable TETRunAction* fRunAction = nullptr;
 };
 
 #endif

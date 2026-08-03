@@ -39,14 +39,17 @@ TETActionInitialization::~TETActionInitialization()
 
 void TETActionInitialization::BuildForMaster() const
 {
-	SetUserAction(new TETRunAction(tetData, output));
+	fRunAction = new TETRunAction(tetData, output);
+	SetUserAction(fRunAction);
 }
 
 void TETActionInitialization::Build() const
 {
-	// initialise UserAction classes
-	SetUserAction(new TETPrimaryGeneratorAction(tetData, internalSource));
-	SetUserAction(new TETRunAction(tetData, output));
-	SetUserAction(new TETSteppingAction);
-}  
+    SetUserAction(new TETPrimaryGeneratorAction(tetData, internalSource));
+
+    fRunAction = new TETRunAction(tetData, output);
+    SetUserAction(fRunAction);
+
+    SetUserAction(new TETSteppingAction());
+}
 
