@@ -177,5 +177,3 @@ def run_geant4():
                 print(f"✗ {infile.name} failed")
 
     print("\nAll Geant4 jobs completed.")
-
-run_geant4()

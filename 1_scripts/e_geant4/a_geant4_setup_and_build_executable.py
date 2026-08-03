@@ -45,7 +45,7 @@ def source_snapshot(project_dir):
 def build_geant4():
 
     geant4make_path = find_geant4make()
-
+    project_dir = config.INTERNAL_DIR.resolve()
     executable = project_dir / "build" / "Internal"
     build_dir = project_dir / "build"
     build_dir.mkdir(parents=True, exist_ok=True)
@@ -95,9 +95,3 @@ def build_geant4():
     executable = build_dir / "Internal"
 
     return executable
-
-project_dir = config.INTERNAL_DIR.resolve()
-
-SNAPSHOT = project_dir / "build" / ".cmake_snapshot.json"
-
-build_geant4()

@@ -4,7 +4,7 @@
 /run/verbose 2
 
 # Set the number of threads for multi-threading mode
-#/run/numberOfThreads 6
+#/run/numberOfThreads 8
 
 # Initialize
 /run/initialize
@@ -13,4 +13,4 @@
 /control/execute Geant4_MRCP_AF_source_Liver_gamma_energy_1.0.mac
 
 # Set the nps
-/run/beamOn 1000
+/run/beamOn 10000

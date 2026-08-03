@@ -71,9 +71,7 @@ void TETRunAction::EndOfRunAction(const G4Run* aRun)
 	ofs.close();
 
 	// Write a csv file
-	std::filesystem::path csvPath =
-		std::filesystem::path("../../../4_results/geant4") /
-    	outputFile.c_str();
+	std::filesystem::path csvPath(outputFile.c_str());
 
 	csvPath.replace_extension(".csv");
 
@@ -87,7 +85,7 @@ void TETRunAction::EndOfRunAction(const G4Run* aRun)
 	{
 		PrintCSV(csv);
 		csv.close();
-}
+	}
 }
 
 void TETRunAction::PrintResult(std::ostream &out)

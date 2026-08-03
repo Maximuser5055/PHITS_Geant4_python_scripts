@@ -54,7 +54,7 @@ GEANT4_GENERATED_INPUTS_DIR = GEANT4_BUILD_DIR / "generated_inputs"
 
 ORGAN_ID_CSV = ROOT / "5_other_input_files/organ_ID_names.csv"
 
-SOURCE_CSV = ROOT / "5_other_input_files/source_organs.csv"
+SOURCE_CSV = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs.csv")
 
 DATABASE_FILE = ROOT / "1_scripts/c_database/b_organ_database.py"
 
@@ -104,7 +104,7 @@ GEANT4_SOURCE_TYPES = [
     "gamma",
 ]
 
-NPS = 1000
+NPS = 10000
 
 ############################
 # General Settings

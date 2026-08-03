@@ -18,7 +18,7 @@ from d_phits.e_phits_extracting_dose_and_SAFs import calculate_dose_and_safs
 from d_phits.f_check_uncertainty import check_uncertainty
 from e_geant4.a_geant4_setup_and_build_executable import build_geant4
 from e_geant4.b_geant4_generating_inputs import geant4_generate_inputs
-
+from e_geant4.c_geant4_running_inputs import run_geant4
 
 def main():
     params = get_user_parameters()
@@ -38,6 +38,7 @@ def main():
         parse_cell_csv_inputs()
         build_geant4()
         geant4_generate_inputs()
+        run_geant4()
 
 if __name__ == "__main__":
     main()
