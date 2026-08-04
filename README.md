@@ -1,4 +1,4 @@
-# PHITS Automation Scripts
+# PHITS and Geant4 Automation Scripts
 
 **Author:** Clarence Albert S. Feliciano  
 **Degree:** MS Medical Physics  
