@@ -2,6 +2,33 @@
 
 # Import necessary libraries
 from pathlib import Path
+import platform
+
+############################
+# Operating System
+############################
+
+SYSTEM = None
+IS_WINDOWS = False
+IS_LINUX = False
+IS_WSL = False
+
+def detect_operating_system():
+
+    global SYSTEM, IS_WINDOWS, IS_LINUX, IS_WSL
+
+    SYSTEM = platform.system()  # "Windows", "Linux"
+    IS_WINDOWS = SYSTEM == "Windows"
+    IS_LINUX = SYSTEM == "Linux"
+
+    # Detect if running inside WSL
+    IS_WSL = (
+        IS_LINUX and
+        ("microsoft" in platform.release().lower() or
+         "microsoft" in platform.version().lower())
+    )
+
+    return SYSTEM, IS_WINDOWS, IS_LINUX, IS_WSL
 
 ############################
 # File Paths
@@ -66,7 +93,7 @@ RERUN_CSV = ROOT / "4_results/5_rerun_required.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "GEANT4"
+SIMULATION_CODE = "PHITS"
 
 ############################
 # PHITS Settings
@@ -82,8 +109,6 @@ PHANTOMS = [
     "AM",
     "AF",
 ]
-
-PHANTOM_INPUT_GENERATION = "Both"
 
 SEXINFO = {
     "AM": "MALE",
@@ -103,6 +128,8 @@ REBUILD = False
 GEANT4_SOURCE_TYPES = [
     "gamma",
 ]
+
+PHANTOM_INPUT_GENERATION = "Both"
 
 NPS = 10000000
 

@@ -10,6 +10,9 @@ import b_config.a_config as config
 from c_database.b_organ_database import SOURCE_ORGANS
 
 def phits_generate_inputs():
+
+    total_files = 0
+
     # Read input template and define paths for phantom and interaction model files
     template = config.INPUT_TEMPLATE_FILE.read_text()
     infl_file_directory = config.INCLUDE_FILES_DIR
@@ -92,3 +95,20 @@ def phits_generate_inputs():
 
                 # Write the input file
                 (job_dir / filename).write_text(text)
+
+                total_files += 1
+
+    print(f"\nGenerated PHITS inputs in {base_output_dir}")
+
+    num_phantoms = len(phantoms)
+    num_organs_per_phantom = len(SOURCE_ORGANS[phantoms[0]])
+    num_source_types = len(config.PHITS_SOURCE_TYPES)
+    num_energy_bins = len(config.SOURCE_ENERGIES)
+
+    print(
+        f"Generated {total_files} PHITS input file(s) "
+        f"({num_phantoms} phantom type(s) × "
+        f"{num_organs_per_phantom} source organ(s) × "
+        f"{num_source_types} source type(s) × "
+        f"{num_energy_bins} source energy bin(s))."
+    )

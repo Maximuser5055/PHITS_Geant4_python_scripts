@@ -24,6 +24,7 @@ def run_phits():
     }
 
     # User interface for selecting which phantom(s) to run simulations for
+    print("\n")
     print("=" * 50)
     print("PHITS Specific Absorbed Fraction (SAF) Simulation Launcher")
     print("=" * 50)

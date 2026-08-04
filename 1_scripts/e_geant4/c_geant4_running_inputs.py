@@ -22,7 +22,8 @@ def run_geant4():
     #########################################
     # User Interface
     #########################################
-
+    
+    print("\n")
     print("=" * 50)
     print("Geant4 SAF Simulation Launcher")
     print("=" * 50)

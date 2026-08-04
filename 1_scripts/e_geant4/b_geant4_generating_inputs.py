@@ -9,6 +9,8 @@ from c_database.b_organ_database import SOURCE_ORGANS
 
 def geant4_generate_inputs():
 
+    total_files = 0
+
     # Read templates
     input_template = (config.GEANT4_BUILD_DIR / "example.in").read_text()
     source_template = (config.GEANT4_BUILD_DIR / "source.mac").read_text()
@@ -102,4 +104,19 @@ def geant4_generate_inputs():
 
                 (job_dir / "source_id.txt").write_text(str(region))
 
-    print(f"Generated Geant4 inputs in {base_output_dir}")
+                total_files += 1
+
+    print(f"\nGenerated Geant4 inputs in {base_output_dir}")
+
+    num_phantoms = len(phantoms)
+    num_organs_per_phantom = len(SOURCE_ORGANS[phantoms[0]])
+    num_source_types = len(config.GEANT4_SOURCE_TYPES)
+    num_energy_bins = len(config.SOURCE_ENERGIES)
+
+    print(
+        f"Generated {total_files} Geant4 input file(s) [{int(total_files/2)} .in and {int(total_files/2)} .mac files]"
+        f"({num_phantoms} phantom type(s) × "
+        f"{num_organs_per_phantom} source organ(s) × "
+        f"{num_source_types} source type(s) × "
+        f"{num_energy_bins} source energy bin(s))."
+    )

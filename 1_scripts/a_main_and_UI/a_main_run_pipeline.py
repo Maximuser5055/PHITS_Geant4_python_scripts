@@ -8,6 +8,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from a_main_and_UI.b_input_user_parameters import get_user_parameters
+from b_config.a_config import detect_operating_system
 from c_database.a_parse_cell_and_csv import parse_cell_csv_inputs
 from d_phits.a_phits_generating_inputs import phits_generate_inputs
 from d_phits.b_phits_running_inputs import run_phits
@@ -20,6 +21,9 @@ from e_geant4.b_geant4_generating_inputs import geant4_generate_inputs
 from e_geant4.c_geant4_running_inputs import run_geant4
 
 def main():
+
+    detect_operating_system()
+    
     params = get_user_parameters()
 
     if params["simulation_code"] == "PHITS":

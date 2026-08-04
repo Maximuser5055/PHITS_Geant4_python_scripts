@@ -28,31 +28,59 @@ def update_config(setting, value):
     config_file.write_text("\n".join(lines))
 
 def get_user_parameters():
+    
     # User Interface
-    print("=" * 60)
+    print("\n")
+    print("=" * 50)
     print("Internal Dosimetry Pipeline Configuration")
-    print("=" * 60)
+    print("=" * 50)
 
-    print("\nSimulation Engine")
-    print("[1] PHITS")
-    print("[2] Geant4")
+    print(f"\nOperating System : {config.SYSTEM}")
+    print(f"Running in WSL   : {config.IS_WSL}")
 
-    while True:
-        choice = input("Select simulation engine (1-2): ").strip()
+    print("\nMonte Carlo particle transport code options for the working OS:")
 
-        if choice == "1":
-            simulation_code = "PHITS"
-            break
+    if config.IS_WINDOWS:
+        print("[1] PHITS")
+        print("[2] Geant4 (Not available on Windows)")
 
-        elif choice == "2":
-            simulation_code = "GEANT4"
-            break
+        while True:
+            choice = input("Select transport code (1): ").strip()
 
-        print("Invalid choice. Please enter 1 or 2.")
+            if choice in ("", "1"):
+                simulation_code = "PHITS"
+                break
+
+            elif choice == "2":
+                print("\nGeant4 is only supported on Linux or WSL2.")
+                print("Please use PHITS instead.\n")
+
+            else:
+                print("Invalid choice. Please enter 1.")
+
+    elif config.IS_LINUX or config.IS_WSL:
+        print("[1] PHITS")
+        print("[2] Geant4")
+
+        while True:
+            choice = input("Select transport code (1-2): ").strip()
+
+            if choice == "1":
+                simulation_code = "PHITS"
+                break
+
+            elif choice == "2":
+                simulation_code = "GEANT4"
+                break
+
+            print("Invalid choice. Please enter 1 or 2.")
+
+    else:
+        raise RuntimeError("Unsupported operating system.")
 
     if simulation_code == "PHITS":
 
-        phits_root = input(f"PHITS root [Current = {config.PHITS_ROOT}]: ").strip()
+        phits_root = input(f"\nPHITS root [Current = {config.PHITS_ROOT}]: ").strip()
         phits_root = Path(phits_root) if phits_root else config.PHITS_ROOT
 
         parallelization = (
@@ -72,42 +100,47 @@ def get_user_parameters():
         maxbch = input(f"PHITS maxbch (no. of batches) [Current = {config.MAXBCH}]: ").strip()
         maxbch = int(maxbch) if maxbch else config.MAXBCH
 
-        while True:
-            source_dir = input(
-                f"Directory containing source_organs.csv "
-                f"[Current = {config.SOURCE_CSV.parent}]: "
-            ).strip()
-
-            source_csv = (
-                Path(source_dir) / "source_organs.csv"
-                if source_dir
-                else config.SOURCE_CSV
-            )
-
-            if source_csv.is_file():
-                break
-
-            print(f"\nError: '{source_csv}' was not found. Please try again.\n")
-
-        while True:
-            phantom_input_generation = input(
-                f"Phantom Input Generation (AM/AF/BOTH) [Current = {config.PHANTOM_INPUT_GENERATION}]: "
-            ).strip().upper()
-
-            if phantom_input_generation == "":
-                phantom_input_generation = config.PHANTOM_INPUT_GENERATION
-
-            if phantom_input_generation in ("AM", "AF", "Both"):
-                break
-
-            print("\nError: Please enter AM, AF, or Both.\n")
-
     elif simulation_code == "GEANT4":
 
-        threads = ...
+        threads = input(f"\nParallelization Threads [Current = {config.THREADS}]: ").strip()
+        threads = int(threads) if threads else config.THREADS
+
+        nps = input(f"GEANT4 nps (no. of particle histories) [Current = {config.NPS}]: ").strip()
+        nps = int(nps) if nps else config.NPS
+
+
+    while True:
+        source_dir = input(
+            f"Directory containing source_organs.csv "
+            f"[Current = {config.SOURCE_CSV.parent}]: "
+        ).strip()
+
+        source_csv = (
+            Path(source_dir) / "source_organs.csv"
+            if source_dir
+            else config.SOURCE_CSV
+        )
+
+        if source_csv.is_file():
+            break
+
+        print(f"\nError: '{source_csv}' was not found. Please try again.\n")
+
+    while True:
+        phantom_input_generation = input(
+            f"Phantom Input Generation (AM/AF/Both) [Current = {config.PHANTOM_INPUT_GENERATION}]: "
+        ).strip().upper()
+
+        if phantom_input_generation == "":
+            phantom_input_generation = config.PHANTOM_INPUT_GENERATION
+
+        if phantom_input_generation in ("AM", "AF", "Both"):
+            break
+
+        print("\nError: Please enter AM, AF, or Both.\n")
 
     uncertainty_limit = input(
-        f"\nMaximum allowed statistical uncertainty (%) "
+        f"Maximum allowed statistical uncertainty (%) "
         f"[Current = {config.UNCERTAINTY_LIMIT}]: "
     ).strip()
 
@@ -118,19 +151,19 @@ def get_user_parameters():
     )
 
     update_config("SIMULATION_CODE", simulation_code)
-
+    update_config("UNCERTAINTY_LIMIT", uncertainty_limit)
+    update_config("THREADS", threads)
+    update_config("SOURCE_CSV", source_csv)
+    update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
+    
     if simulation_code == "PHITS":
         update_config("PHITS_ROOT", phits_root)
         update_config("PARALLELIZATION", parallelization)
-        update_config("THREADS", threads)
         update_config("MAXCAS", maxcas)
         update_config("MAXBCH", maxbch)
-        update_config("UNCERTAINTY_LIMIT", uncertainty_limit)
-        update_config("SOURCE_CSV", source_csv)
-        update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
 
-    #elif simulation_code == "GEANT4":
-    #    update_config("REBUILD", rebuild)
+    elif simulation_code == "GEANT4":
+        update_config("NPS", nps)
 
     ############################
     # Create required directories
@@ -147,21 +180,22 @@ def get_user_parameters():
     params = {
     "simulation_code": simulation_code,
     "uncertainty_limit": uncertainty_limit,
+    "threads": threads,
+    "source_csv": source_csv,
+    "phantom": phantom_input_generation,
     }
 
     if simulation_code == "PHITS":
         params.update({
         "phits_root": phits_root,
         "parallelization": parallelization,
-        "threads": threads,
         "maxcas": maxcas,
         "maxbch": maxbch,
-        "source_csv": source_csv,
-        "phantom": phantom_input_generation,
     })
 
     elif simulation_code == "GEANT4":
         params.update({
+        "nps": nps,
     })
 
     return params
