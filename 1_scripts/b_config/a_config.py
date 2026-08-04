@@ -93,7 +93,7 @@ RERUN_CSV = ROOT / "4_results/5_rerun_required.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "PHITS"
+SIMULATION_CODE = "GEANT4"
 
 ############################
 # PHITS Settings
@@ -131,7 +131,7 @@ GEANT4_SOURCE_TYPES = [
 
 PHANTOM_INPUT_GENERATION = "Both"
 
-NPS = 10000000
+NPS = 100
 
 ############################
 # General Settings
