@@ -9,14 +9,21 @@ import b_config.a_config as config
 from c_database.b_organ_database import ORGANS
 
 def phits_calculate_dose_and_safs():
+
     # -------------------------------------------------------------------------
     # Root directories
     # -------------------------------------------------------------------------
 
     input_root = config.GENERATED_INPUTS_DIR
-
     output_root = config.RESULTS_DIR
 
+    # -------------------------------------------------------------------------
+    # File names
+    # -------------------------------------------------------------------------
+
+    phits_am_file = "e_phits_all_dose_and_SAFs_AM.csv"
+    phits_af_file = "f_phits_all_dose_and_SAFs_AF.csv"
+    
     # -------------------------------------------------------------------------
     # Regex patterns
     # -------------------------------------------------------------------------
@@ -192,12 +199,12 @@ def phits_calculate_dose_and_safs():
     # -------------------------------------------------------------------------
 
     adult_male.to_csv(
-        output_root / "3_all_dose_and_SAFs_AM.csv",
+        output_root / phits_am_file,
         index=False
     )
 
     adult_female.to_csv(
-        output_root / "4_all_dose_and_SAFs_AF.csv",
+        output_root / phits_af_file,
         index=False
     )
 

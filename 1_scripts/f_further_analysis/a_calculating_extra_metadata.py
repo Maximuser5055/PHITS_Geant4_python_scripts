@@ -1,25 +1,18 @@
 #This script calculates additional metadata based on the extracted metadata from PHITS .out and .inp files. 
 # It reads the extracted metadata, performs calculations, and saves the results to a CSV file.
 
-# temp
-from pathlib import Path
-import sys
-
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
-
 # Import necessary libraries
 import pandas as pd
 import b_config.a_config as config
 
 def calculate_extra_metadata():
     if config.SIMULATION_CODE.upper() == "PHITS":
-        input_prefix = "1_phits"
-        output_prefix = "3_phits"
+        input_prefix = "a_phits"
+        output_prefix = "c_phits"
 
     elif config.SIMULATION_CODE.upper() == "GEANT4":
-        input_prefix = "2_geant4"
-        output_prefix = "4_geant4"
+        input_prefix = "b_geant4"
+        output_prefix = "d_geant4"
 
     else:
         raise ValueError(

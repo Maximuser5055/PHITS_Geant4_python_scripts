@@ -16,7 +16,7 @@ def geant4_extract_metadata_stats():
 
     metadata_output_file = (
         config.RESULTS_DIR /
-        "2_geant4_all_simulations_log.csv"
+        "b_geant4_all_simulations_log.csv"
     )
 
     PHANTOM_NAMES = {

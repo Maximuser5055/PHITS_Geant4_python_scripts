@@ -89,6 +89,8 @@ RESULTS_DIR = ROOT / "4_results"
 
 RERUN_CSV = ROOT / "4_results/5_rerun_required.csv"
 
+TARGET_REGION_CSV = ROOT / "5_other_input_files/target_regions_ICRP_145.csv"
+
 ############################
 # PHITS or Geant4
 ############################
@@ -132,6 +134,12 @@ GEANT4_SOURCE_TYPES = [
 PHANTOM_INPUT_GENERATION = "Both"
 
 NPS = 10000
+
+SOURCE_TYPE_MAP = {
+    "gamma": "photon",
+    # Future mappings:
+    # "e-": "electron",
+}
 
 ############################
 # General Settings

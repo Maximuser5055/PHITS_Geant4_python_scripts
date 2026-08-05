@@ -4,9 +4,9 @@ Geant4 Timing Summary
 Macro      : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AF/Geant4_MRCP_AF_source_Brain_gamma_energy_1.0/Geant4_MRCP_AF_source_Brain_gamma_energy_1.0.in
 Output     : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AF/Geant4_MRCP_AF_source_Brain_gamma_energy_1.0/Geant4_deposit_MRCP_AF_source_Brain_gamma_energy_1.0.out
 
-Starting Datetime    : 2026-08-05T11:06:47
-Termination Datetime : 2026-08-05T11:08:02
+Starting Datetime    : 2026-08-05T13:55:59
+Termination Datetime : 2026-08-05T13:57:12
 
-Setup Time (s)       : 9.25446 s
-Execution Time (s)   : 65.7681 s
-Total wall time (s)  : 75.0226 s
+Setup Time (s)       : 9.21842 s
+Execution Time (s)   : 63.9316 s
+Total Wall Time (s)  : 73.15 s

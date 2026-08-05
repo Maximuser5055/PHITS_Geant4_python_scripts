@@ -12,7 +12,7 @@ def phits_extract_metadata_stats():
     output_files = sorted(root.rglob("phits_*.out"))
 
     # Define metadata output file
-    metadata_output_file = config.RESULTS_DIR / "1_phits_all_simulations_log.csv"
+    metadata_output_file = config.RESULTS_DIR / "a_phits_all_simulations_log.csv"
 
     # Phantom models
     PHANTOM_NAMES = {
