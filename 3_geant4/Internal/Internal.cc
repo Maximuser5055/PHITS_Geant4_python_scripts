@@ -29,8 +29,13 @@
 //
 
 #include <filesystem>
-#include <chrono>
 #include <fstream>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
+
+#include "G4Timer.hh"
 
 #include "TETDetectorConstruction.hh"
 #include "TETModelImport.hh"
@@ -56,10 +61,30 @@ void PrintUsage(){
 	G4cerr<< "Example: ./Internal -i 9500 -m run.mac -o run.out (-f)" <<G4endl;
 }
 
+std::string GetISODateTime()
+{
+	auto now = std::chrono::system_clock::now();
+	std::time_t t = std::chrono::system_clock::to_time_t(now);
+
+	std::tm tm = *std::localtime(&t);
+
+	std::ostringstream oss;
+	oss << std::put_time(&tm, "%Y-%m-%dT%H:%M:%S");
+
+	return oss.str();
+}
+
 int main(int argc,char** argv) 
 {
-	auto totalStart = std::chrono::steady_clock::now();
-	auto setupStart = std::chrono::steady_clock::now();
+
+	std::string startDateTime = GetISODateTime();
+
+	G4Timer totalTimer;
+	G4Timer setupTimer;
+	G4Timer runTimer;
+
+	totalTimer.Start();
+	setupTimer.Start();
 
 	double setupSeconds = 0.0;
 	double runSeconds   = 0.0;
@@ -161,9 +186,8 @@ int main(int argc,char** argv)
 	//
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-	auto setupEnd = std::chrono::steady_clock::now();
-
-	setupSeconds = std::chrono::duration<double>(setupEnd - setupStart).count();
+	setupTimer.Stop();
+	setupSeconds = setupTimer.GetRealElapsed();
 
 	//if ( ! ui ){
 		// batch mode
@@ -171,7 +195,7 @@ int main(int argc,char** argv)
 	//	UImanager->ApplyCommand(command+macro);
 	//}
 
-	auto runStart = std::chrono::steady_clock::now();
+	runTimer.Start();
 	
 	if (!ui) {
 		// batch mode
@@ -186,10 +210,6 @@ int main(int argc,char** argv)
 
 		// Execute the .in using its full path
 		UImanager->ApplyCommand("/control/execute " + G4String(macroPath.string()));
-
-		auto runEnd = std::chrono::steady_clock::now();
-
-		runSeconds = std::chrono::duration<double>(runEnd - runStart).count();
 	}
 
 	else {
@@ -200,17 +220,17 @@ int main(int argc,char** argv)
 		delete ui;
 	}
 
-	double transportSeconds =
-    actions->GetRunAction()->GetTransportSeconds();
-
 	// Job termination
 	//
 	delete runManager;
 
-	auto totalEnd = std::chrono::steady_clock::now();
+	runTimer.Stop();
+	runSeconds = runTimer.GetRealElapsed();
 
-	double totalSeconds =
-		std::chrono::duration<double>(totalEnd - totalStart).count();
+	totalTimer.Stop();
+	double totalSeconds = totalTimer.GetRealElapsed();
+
+	std::string endDateTime = GetISODateTime();
 
 	namespace fs = std::filesystem;
 
@@ -243,26 +263,21 @@ int main(int argc,char** argv)
 		timing << "Macro      : " << macro << "\n";
 		timing << "Output     : " << output << "\n\n";
 
-		timing << "Setup time      : "
+		timing << "Starting Datetime    : " << startDateTime << "\n";
+		timing << "Termination Datetime : " << endDateTime << "\n\n";
+
+		timing << "Setup Time (s)       : "
 			<< setupSeconds
 			<< " s\n";
 
-		timing << "BeamOn time  : "
-		<< transportSeconds
-		<< " s\n";
-
-		timing << "Execution time  : "
+		timing << "Execution Time (s)   : "
 			<< runSeconds
 			<< " s\n";
 
-		timing << "Total wall time : "
+		timing << "Total wall time (s)  : "
 			<< totalSeconds
 			<< " s\n";
 	}
-
-	G4cout << "\nTotal wall time: "
-		<< totalSeconds
-		<< " s\n";
 }
 
 

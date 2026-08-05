@@ -131,7 +131,7 @@ GEANT4_SOURCE_TYPES = [
 
 PHANTOM_INPUT_GENERATION = "Both"
 
-NPS = 100
+NPS = 10000
 
 ############################
 # General Settings

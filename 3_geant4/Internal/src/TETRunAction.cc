@@ -30,7 +30,6 @@
 
 #include "TETRunAction.hh"
 #include <filesystem>
-#include <chrono>
 
 TETRunAction::TETRunAction(TETModelImport* _tetData, G4String _output)
 :tetData(_tetData), fRun(0), numOfEvent(0), runID(0), outputFile(_output)
@@ -47,9 +46,7 @@ G4Run* TETRunAction::GenerateRun()
 }
 
 void TETRunAction::BeginOfRunAction(const G4Run* aRun)
-{	
-	transportStart = std::chrono::steady_clock::now();
-
+{
 	// print the progress at the interval of 10%
 	numOfEvent=aRun->GetNumberOfEventToBeProcessed();
 	G4RunManager::GetRunManager()->SetPrintProgress(int(numOfEvent*0.1));
@@ -57,13 +54,6 @@ void TETRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void TETRunAction::EndOfRunAction(const G4Run* aRun)
 {
-	auto transportEnd = std::chrono::steady_clock::now();
-
-	transportSeconds =
-		std::chrono::duration<double>(
-			transportEnd - transportStart
-		).count();
-
 	// print the result only in the Master
 	if(!isMaster) return;
 

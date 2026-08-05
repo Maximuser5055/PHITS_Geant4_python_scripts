@@ -12,7 +12,7 @@ def extract_metadata_stats():
     output_files = sorted(root.rglob("phits_*.out"))
 
     # Define metadata output file
-    metadata_output_file = config.RESULTS_DIR / "1_all_simulations_log.csv"
+    metadata_output_file = config.RESULTS_DIR / "1_phits_all_simulations_log.csv"
 
     # Phantom models
     PHANTOM_NAMES = {
@@ -240,9 +240,9 @@ def extract_metadata_stats():
             "maxcas": results.get("maxcas"),
             "maxbch": results.get("maxbch"),
 
-            "Initialisation Time (s)": results.get("initialization_time"),
-            "Particle Transport Time (s)": results.get("particle_transport_time"),
-            "Elapsed Time (s)": results.get("elapsed_time"),
+            "Setup Time (s)": results.get("initialization_time"),
+            "Execution Time (s)": results.get("particle_transport_time"),
+            "Total wall Time (s)": results.get("elapsed_time"),
 
         }
         return ordered_results

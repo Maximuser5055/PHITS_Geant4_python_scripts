@@ -5,14 +5,11 @@
 import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
-import time
 
 import b_config.a_config as config
 from e_geant4.a_geant4_setup_and_build_executable import find_geant4make
 
 def run_geant4():
-
-    overall_start = time.perf_counter()
 
     geant4make_path = find_geant4make()
 
@@ -176,13 +173,5 @@ def run_geant4():
                 print(f"✓ {infile.name}")
             else:
                 print(f"✗ {infile.name} failed")
-
-    overall_end = time.perf_counter()
-
-    elapsed = overall_end - overall_start
-
-    print("\n" + "="*60)
-    print(f"Total elapsed wall-clock time: {elapsed:.2f} s")
-    print("="*60)
 
     print("\nAll Geant4 jobs completed.")

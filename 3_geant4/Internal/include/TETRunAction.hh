@@ -34,7 +34,6 @@
 #include <ostream>
 #include <fstream>
 #include <map>
-#include <chrono>
 
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
@@ -63,8 +62,6 @@ public:
 	virtual ~TETRunAction();
 
 public:
-	double GetTransportSeconds() const { return transportSeconds; }
-
 	virtual G4Run* GenerateRun();
 	virtual void BeginOfRunAction(const G4Run*);
 	virtual void EndOfRunAction(const G4Run*);
@@ -78,8 +75,6 @@ private:
 	G4int           numOfEvent;
 	G4int           runID;
 	G4String        outputFile;
-	std::chrono::steady_clock::time_point transportStart;
-    double transportSeconds = 0.0;
 };
 
 #endif
