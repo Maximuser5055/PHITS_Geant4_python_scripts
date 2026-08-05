@@ -8,7 +8,7 @@ import pandas as pd
 import b_config.a_config as config
 from c_database.b_organ_database import ORGANS
 
-def calculate_dose_and_safs():
+def phits_calculate_dose_and_safs():
     # -------------------------------------------------------------------------
     # Root directories
     # -------------------------------------------------------------------------

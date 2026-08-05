@@ -274,7 +274,7 @@ int main(int argc,char** argv)
 			<< runSeconds
 			<< " s\n";
 
-		timing << "Total wall time (s)  : "
+		timing << "Total Wall Time (s)  : "
 			<< totalSeconds
 			<< " s\n";
 	}

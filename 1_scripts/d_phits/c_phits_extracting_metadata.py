@@ -6,7 +6,7 @@ from pathlib import Path
 import csv
 import b_config.a_config as config
 
-def extract_metadata_stats():
+def phits_extract_metadata_stats():
     # PHITS output file
     root = config.GENERATED_INPUTS_DIR 
     output_files = sorted(root.rglob("phits_*.out"))
@@ -91,7 +91,7 @@ def extract_metadata_stats():
     def extract_metadata(output_file: Path):
 
         # Determine the corresponding PHITS input file   
-        input_file = output_file.with_name(
+        input_files = output_file.with_name(
             output_file.stem.replace("phits_", "") + ".inp"
         )
 
@@ -183,7 +183,7 @@ def extract_metadata_stats():
 
                         break
                 
-        with open(input_file, encoding="utf-8", errors="ignore") as f:
+        with open(input_files, encoding="utf-8", errors="ignore") as f:
 
             for line in f:
 
@@ -237,29 +237,36 @@ def extract_metadata_stats():
             "Source Energy (MeV)": results.get("source_energy"),
 
             "Parallel Mode": results.get("parallelization"),
-            "maxcas": results.get("maxcas"),
+            "maxcas (nps if Geant4)": results.get("maxcas"),
             "maxbch": results.get("maxbch"),
 
             "Setup Time (s)": results.get("initialization_time"),
             "Execution Time (s)": results.get("particle_transport_time"),
-            "Total wall Time (s)": results.get("elapsed_time"),
+            "Individual Wall Time (s)": results.get("elapsed_time"),
 
         }
+
+        print(f"\nProcessing:")
+        print(f"{output_files.name}")
+        print(f"{input_files.name}")
+
         return ordered_results
 
     all_results = []
 
-    # Loop through all PHITS output and input files and extract metadata
+    if not output_files:
+        print("\n[WARNING] No PHITS output files were found.")
+        print(f"Search directory: {root}")
+        return
+
     for output_file in output_files:
+        all_results.append(
+            extract_metadata(output_file)
+        )
 
-        print(f"Processing {output_file.name}")
-
-        metadata = extract_metadata(output_file)
-
-        all_results.append(metadata)
-
-    # Write the extracted metadata to a CSV file
-    with open(metadata_output_file, "w", newline="") as f:
+    with open(metadata_output_file,
+              "w",
+              newline="") as f:
 
         writer = csv.DictWriter(
             f,
@@ -268,3 +275,8 @@ def extract_metadata_stats():
 
         writer.writeheader()
         writer.writerows(all_results)
+
+    print("\nMetadata extraction complete.")
+    print(f"Processed {len(all_results)} simulation(s).")
+    print(f"Output written to:")
+    print(f"{metadata_output_file}")

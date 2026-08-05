@@ -1,18 +1,41 @@
 #This script calculates additional metadata based on the extracted metadata from PHITS .out and .inp files. 
 # It reads the extracted metadata, performs calculations, and saves the results to a CSV file.
 
+# temp
+from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
 # Import necessary libraries
 import pandas as pd
 import b_config.a_config as config
 
-def calculate_metadata():
-    # Master log produced by e_extracting_metadata.py
-    log_file = config.RESULTS_DIR / "1_all_simulations_log.csv"
+def calculate_extra_metadata():
+    if config.SIMULATION_CODE.upper() == "PHITS":
+        input_prefix = "1_phits"
+        output_prefix = "3_phits"
+
+    elif config.SIMULATION_CODE.upper() == "GEANT4":
+        input_prefix = "2_geant4"
+        output_prefix = "4_geant4"
+
+    else:
+        raise ValueError(
+            f"Unknown SIMULATION_CODE: {config.SIMULATION_CODE}"
+        )
+
+    # Input metadata log
+    input_file = config.RESULTS_DIR / f"{input_prefix}_all_simulations_log.csv"
+
+    # Output statistics
+    output_file = config.RESULTS_DIR / f"{output_prefix}_extra_metadata_statistics.csv"
 
     # Output directory
-    results_dir = log_file.parent
+    results_dir = input_file.parent
 
-    df = pd.read_csv(log_file)
+    df = pd.read_csv(input_file)
 
     # Format seconds to days, hours, minutes, and seconds
     def format_duration(seconds):
@@ -31,7 +54,7 @@ def calculate_metadata():
     def summarize(df, group_cols, category):
 
         summary = (
-            df.groupby(group_cols)["Elapsed Time (s)"]
+            df.groupby(group_cols)["Individual Wall Time (s)"]
             .agg(
                 Count="count",
                 Average="mean",
@@ -43,11 +66,21 @@ def calculate_metadata():
             .round(2)
         )
 
+        summary.rename(
+            columns={
+                "Average": "Average (s)",
+                "StdDev": "StdDev (s)",
+                "Minimum": "Minimum (s)",
+                "Maximum": "Maximum (s)",
+            },
+            inplace=True,
+        )
+
         summary.insert(0, "Category", category)
 
         # Human-readable time columns
-        for col in ["Average"]:
-            summary[f"{col} (dhms)"] = summary[col].apply(format_duration)
+        for col in ["Average (s)"]:
+            summary[f"{col.replace('(s)', '(dhms)')}"] = (summary[col].apply(format_duration))
 
         # Ensure all grouping columns exist
         for col in ["Source Energy (MeV)", "Phantom", "Source Organ", "Source Type"]:
@@ -63,11 +96,11 @@ def calculate_metadata():
                 "Phantom",
                 "Source Organ",
                 "Count",
-                "Average",
+                "Average (s)",
                 "Average (dhms)",
-                "StdDev",
-                "Minimum",
-                "Maximum",
+                "StdDev (s)",
+                "Minimum (s)",
+                "Maximum (s)",
             ]
         ]
 
@@ -106,14 +139,14 @@ def calculate_metadata():
         "Source Energy (MeV)": [""],
         "Phantom": [""],
         "Source Organ": [""],
-        "Count": [df["Elapsed Time (s)"].count()],
-        "Average": [round(df["Elapsed Time (s)"].mean(), 2)],
-        "Average (dhms)": [format_duration(round(df["Elapsed Time (s)"].mean(), 2))],
-        "StdDev": [round(df["Elapsed Time (s)"].std(), 2)],
-        "Minimum": [round(df["Elapsed Time (s)"].min(), 2)],
-        "Maximum": [round(df["Elapsed Time (s)"].max(), 2)],
-        "Total Elapsed Time (s)": [total_elapsed_seconds],
-        "Total Elapsed Time (dhms)": [format_duration(total_elapsed_seconds)],
+        "Count": [df["Individual Wall Time (s)"].count()],
+        "Average (s)": [round(df["Individual Wall Time (s)"].mean(), 2)],
+        "Average (dhms)": [format_duration(round(df["Individual Wall Time (s)"].mean(), 2))],
+        "StdDev (s)": [round(df["Individual Wall Time (s)"].std(), 2)],
+        "Minimum (s)": [round(df["Individual Wall Time (s)"].min(), 2)],
+        "Maximum (s)": [round(df["Individual Wall Time (s)"].max(), 2)],
+        "Overall Wall Time (s)": [total_elapsed_seconds],
+        "Overall Wall Time (dhms)": [format_duration(total_elapsed_seconds)],
     })
 
     summary = pd.concat(
@@ -126,9 +159,8 @@ def calculate_metadata():
         ignore_index=True
     )
 
-    summary.to_csv(
-        results_dir / "2_extra_metadata_statistics.csv",
-        index=False
-    )
+    summary.to_csv(output_file,index=False)
 
-    print("Extra metadata statistics written successfully.")
+    print(f"Extra metadata statistics written to:\n"f"{output_file}")
+
+calculate_metadata()
