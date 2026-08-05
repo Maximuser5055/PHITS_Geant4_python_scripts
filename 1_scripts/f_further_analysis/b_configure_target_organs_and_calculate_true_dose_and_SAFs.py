@@ -1,12 +1,5 @@
 # This script combines the target organs defined in the mapping file and calculates the true dose and SAFs for each target region.
 
-# temporary
-from pathlib import Path
-import sys
-
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
-
 # Import necessary libraries
 import numpy as np
 import pandas as pd
@@ -23,6 +16,19 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
     # ==========================================================
 
     simulation = config.SIMULATION_CODE
+    mapping = pd.read_csv(config.TARGET_REGION_CSV)
+    skeletal = pd.read_csv(config.SKELETAL_MASSES_CSV)
+
+    RBM_REGION = "Red (active) marrow"
+    ENDOSTEUM_REGION = "50-um endosteal region"
+
+    skeletal = skeletal.set_index("Organ ID")
+
+    am_marrow = skeletal["Ref_AM_Marrow_Mass(g)"]
+    af_marrow = skeletal["Ref_AF_Marrow_Mass(g)"]
+
+    am_endosteum = skeletal["Ref_AM_Endosteum_Mass(g)"]
+    af_endosteum = skeletal["Ref_AF_Endosteum_Mass(g)"]
 
     # Process both phantoms
     for phantom in ["AM", "AF"]:
@@ -54,8 +60,8 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
         )
 
         print(f"\nProcessing {phantom}...")
+
         df = pd.read_csv(input_csv)
-        mapping = pd.read_csv(config.TARGET_REGION_CSV)
 
         df["Target Organ ID"] = df["Target Organ ID"].astype(int)
 
@@ -71,6 +77,13 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
 
         grouped = df.groupby(grouping_columns)
 
+        if phantom == "AM":
+            marrow_lookup = am_marrow
+            endosteum_lookup = am_endosteum
+        else:
+            marrow_lookup = af_marrow
+            endosteum_lookup = af_endosteum
+
         # ==========================================================
         # Loop over every source organ / energy
         # ==========================================================
@@ -85,10 +98,7 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
 
                 target_name = region["Target region"]
 
-                ids = [
-                    int(x)
-                    for x in str(region["ID number(s)"]).split("_")
-                ]
+                ids = [int(x.strip()) for x in str(region["ID number(s)"]).split("_")]
 
                 rows = source_df[
                     source_df["Target Organ ID"].isin(ids)
@@ -97,7 +107,59 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
                 if rows.empty:
                     continue
 
-                masses = rows["Target Organ Mass (g)"].to_numpy(float)
+                expected_ids = set(ids)
+                found_ids = set(rows["Target Organ ID"])
+
+                missing_ids = sorted(expected_ids - found_ids)
+
+                if missing_ids:
+                    print(
+                        f"Warning: {target_name} "
+                        f"(Source Organ ID {group_key[1]}, "
+                        f"Energy {group_key[4]} MeV) "
+                        f"is missing Target Organ IDs: {missing_ids}"
+                    )
+
+                # ======================================================
+                # Determine masses used for weighting
+                # ======================================================
+
+                if target_name == RBM_REGION:
+
+                    mapped_masses = rows["Target Organ ID"].map(marrow_lookup)
+
+                    if mapped_masses.isna().any():
+                        missing_ids = rows.loc[
+                            mapped_masses.isna(),
+                            "Target Organ ID"
+                        ].tolist()
+
+                        raise ValueError(
+                            f"Missing marrow masses for Organ IDs: {missing_ids}"
+                        )
+
+                    masses = mapped_masses.to_numpy(float)
+
+                elif target_name == ENDOSTEUM_REGION:
+
+                    mapped_masses = rows["Target Organ ID"].map(endosteum_lookup)
+
+                    if mapped_masses.isna().any():
+                        missing_ids = rows.loc[
+                            mapped_masses.isna(),
+                            "Target Organ ID"
+                        ].tolist()
+
+                        raise ValueError(
+                            f"Missing endosteum masses for Organ IDs: {missing_ids}"
+                        )
+
+                    masses = mapped_masses.to_numpy(float)
+
+                else:
+
+                    masses = rows["Target Organ Mass (g)"].to_numpy(float)
+                
                 doses = rows["Dose (Gy/source)"].to_numpy(float)
                 safs = rows["SAF (kg^-1)"].to_numpy(float)
                 rel_errors = rows["Relative Error"].to_numpy(float)
@@ -170,27 +232,26 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
                     "Source Energy (MeV)":
                         group_key[4],
 
-                    "Target Organ ID":
+                    "Target Organ IDs":
                         "_".join(map(str, ids)),
 
-                    "Target Organ Name":
+                    "Target Region Name":
                         target_name,
 
-                    "Target Organ Mass (g)":
+                    "Combined Target Region Mass (g)":
                         total_mass,
 
-                    "Dose (Gy/source)":
+                    "Combined Dose (Gy/source)":
                         combined_dose,
 
-                    "SAF (kg^-1)":
+                    "Combined SAF (kg^-1)":
                         combined_saf,
 
-                    "Relative Error":
+                    "Combined Relative Error":
                         combined_relative_error,
 
-                    "Statistical Uncertainty (%)":
+                    "Combined Statistical Uncertainty (%)":
                         statistical_uncertainty
-
                 })
 
         # ==========================================================
@@ -205,8 +266,8 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
 
         target_region_order = mapping["Target region"].tolist()
 
-        output["Target Organ Name"] = pd.Categorical(
-            output["Target Organ Name"],
+        output["Target Region Name"] = pd.Categorical(
+            output["Target Region Name"],
             categories=target_region_order,
             ordered=True,
         )
@@ -215,7 +276,7 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
             [
                 "Source Organ ID",
                 "Source Energy (MeV)",
-                "Target Organ Name",
+                "Target Region Name",
             ],
             inplace=True,
             ignore_index=True,
@@ -224,5 +285,3 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
         output.to_csv(output_csv, index=False)
 
         print(f"Target regions configured successfully.\n"f"Saved to:\n{output_csv}")
-
-combine_target_organs_and_calculate_true_dose_and_SAFs()

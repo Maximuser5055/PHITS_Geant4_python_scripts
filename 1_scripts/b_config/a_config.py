@@ -89,7 +89,9 @@ RESULTS_DIR = ROOT / "4_results"
 
 RERUN_CSV = ROOT / "4_results/5_rerun_required.csv"
 
-TARGET_REGION_CSV = ROOT / "5_other_input_files/target_regions_ICRP_145.csv"
+TARGET_REGION_CSV = ROOT / "5_other_input_files/target_regions_Filipino.csv"
+
+SKELETAL_MASSES_CSV = ROOT / "5_other_input_files/skeletal_tissue_masses_ICRP116.csv"
 
 ############################
 # PHITS or Geant4
