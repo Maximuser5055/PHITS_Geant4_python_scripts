@@ -208,5 +208,3 @@ def geant4_extract_metadata_stats():
     print(f"Processed {len(all_results)} simulation(s).")
     print(f"Output written to:")
     print(f"{metadata_output_file}")
-
-extract_metadata_stats()

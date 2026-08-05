@@ -162,5 +162,3 @@ def calculate_extra_metadata():
     summary.to_csv(output_file,index=False)
 
     print(f"Extra metadata statistics written to:\n"f"{output_file}")
-
-calculate_metadata()
