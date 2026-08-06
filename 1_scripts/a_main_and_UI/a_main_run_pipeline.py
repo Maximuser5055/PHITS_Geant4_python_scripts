@@ -31,9 +31,9 @@ from f_further_analysis.b_configure_target_organs_and_calculate_true_dose_and_SA
 def main():
 
     detect_operating_system()
-    
-    params = get_user_parameters()
 
+    params = get_user_parameters()
+    
     if params["simulation_code"] == "PHITS":
 
         parse_cell_csv_inputs()
@@ -43,7 +43,6 @@ def main():
         calculate_extra_metadata()
         phits_calculate_dose_and_safs()
         
-
     elif params["simulation_code"] == "GEANT4":
 
         parse_cell_csv_inputs()

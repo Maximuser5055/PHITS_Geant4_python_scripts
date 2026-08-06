@@ -4,9 +4,9 @@ Geant4 Timing Summary
 Macro      : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AF/Geant4_MRCP_AF_source_Liver_gamma_energy_1.0/Geant4_MRCP_AF_source_Liver_gamma_energy_1.0.in
 Output     : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AF/Geant4_MRCP_AF_source_Liver_gamma_energy_1.0/Geant4_deposit_MRCP_AF_source_Liver_gamma_energy_1.0.out
 
-Starting Datetime    : 2026-08-05T18:39:16
-Termination Datetime : 2026-08-05T18:40:27
+Starting Datetime    : 2026-08-05T22:42:01
+Termination Datetime : 2026-08-06T05:08:55
 
-Setup Time (s)       : 9.20463 s
-Execution Time (s)   : 62.476 s
-Total Wall Time (s)  : 71.6806 s
+Setup Time (s)       : 9.06671 s
+Execution Time (s)   : 23205.3 s
+Total Wall Time (s)  : 23214.4 s

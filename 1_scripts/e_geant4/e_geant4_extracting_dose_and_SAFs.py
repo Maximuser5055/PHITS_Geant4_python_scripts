@@ -335,5 +335,3 @@ def geant4_calculate_dose_and_SAFs():
     print(
         f"Deleted {deleted} individual deposit CSV file(s)."
     )
-
-geant4_calculate_dose_and_SAFs()

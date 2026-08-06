@@ -3002,12 +3002,12 @@ ORGANS = {
 SOURCE_ORGANS = {
     "AM": {
         9500: "Liver",
-        6100: "Brain",
+        13200: "Thyroid",
     },
 
     "AF": {
         9500: "Liver",
-        6100: "Brain",
+        13200: "Thyroid",
     },
 
 }

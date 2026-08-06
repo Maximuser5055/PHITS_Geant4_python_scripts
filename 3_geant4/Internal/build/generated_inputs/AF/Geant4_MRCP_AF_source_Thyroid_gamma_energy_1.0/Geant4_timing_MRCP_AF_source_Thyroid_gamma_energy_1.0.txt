@@ -1,0 +1,12 @@
+Geant4 Timing Summary
+=====================
+
+Macro      : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AF/Geant4_MRCP_AF_source_Thyroid_gamma_energy_1.0/Geant4_MRCP_AF_source_Thyroid_gamma_energy_1.0.in
+Output     : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AF/Geant4_MRCP_AF_source_Thyroid_gamma_energy_1.0/Geant4_deposit_MRCP_AF_source_Thyroid_gamma_energy_1.0.out
+
+Starting Datetime    : 2026-08-05T22:42:01
+Termination Datetime : 2026-08-06T04:58:56
+
+Setup Time (s)       : 9.05491 s
+Execution Time (s)   : 22606.1 s
+Total Wall Time (s)  : 22615.1 s
