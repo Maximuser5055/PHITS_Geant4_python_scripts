@@ -41,6 +41,26 @@ SCRIPT_DIR = Path(__file__).resolve().parent.parent
 ROOT = SCRIPT_DIR.parent
 
 ############################
+# General Directories and Files
+############################
+
+DATABASE_FILE = ROOT / "1_scripts/c_database/b_organ_database.py"
+
+RESULTS_DIR = ROOT / "4_results"
+
+RERUN_CSV = ROOT / "4_results/5_rerun_required.csv"
+
+OTHER_INPUT_FILES_DIR = ROOT / "5_other_input_files"
+
+ORGAN_ID_CSV = OTHER_INPUT_FILES_DIR / "organ_ID_names.csv"
+
+SOURCE_CSV = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs.csv")
+
+TARGET_REGION_CSV = OTHER_INPUT_FILES_DIR / "target_regions_Filipino.csv"
+
+SKELETAL_MASSES_CSV = OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116.csv"
+
+############################
 # PHITS Directories and Files
 ############################
 
@@ -63,35 +83,23 @@ GENERATED_INPUTS_DIR = ROOT / "2_phits/generated_inputs"
 
 PHITS_BAT = "phits.bat"
 
+PHITS_METADATA_FILE = RESULTS_DIR / "a_phits_all_simulations_log.csv"
+
 ############################
 # Geant4 Directories and Files
 ############################
 
 GEANT4_DIR = ROOT / "3_geant4"
 
-INTERNAL_DIR = ROOT / "3_geant4" / "Internal"
+INTERNAL_DIR = GEANT4_DIR / "Internal"
 
 GEANT4_BUILD_DIR = INTERNAL_DIR / "build"
 
+GEANT4_EXECUTABLE_FILE = GEANT4_BUILD_DIR / "Internal"
+
 GEANT4_GENERATED_INPUTS_DIR = GEANT4_BUILD_DIR / "generated_inputs"
 
-############################
-# General Directories and Files
-############################
-
-ORGAN_ID_CSV = ROOT / "5_other_input_files/organ_ID_names.csv"
-
-SOURCE_CSV = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs.csv")
-
-DATABASE_FILE = ROOT / "1_scripts/c_database/b_organ_database.py"
-
-RESULTS_DIR = ROOT / "4_results"
-
-RERUN_CSV = ROOT / "4_results/5_rerun_required.csv"
-
-TARGET_REGION_CSV = ROOT / "5_other_input_files/target_regions_Filipino.csv"
-
-SKELETAL_MASSES_CSV = ROOT / "5_other_input_files/skeletal_tissue_masses_ICRP116.csv"
+GEANT4_METADATA_FILE = RESULTS_DIR / "b_geant4_all_simulations_log.csv"
 
 ############################
 # PHITS or Geant4
@@ -131,16 +139,21 @@ REBUILD = False
 
 GEANT4_SOURCE_TYPES = [
     "gamma",
+    #"e-", # electron
 ]
 
 PHANTOM_INPUT_GENERATION = "Both"
+
+PHANTOM_NAMES = {
+    "AM": "Adult Male",
+    "AF": "Adult Female"
+}
 
 NPS = 100000000
 
 SOURCE_TYPE_MAP = {
     "gamma": "photon",
-    # Future mappings:
-    # "e-": "electron",
+    "e-": "electron",
 }
 
 ############################

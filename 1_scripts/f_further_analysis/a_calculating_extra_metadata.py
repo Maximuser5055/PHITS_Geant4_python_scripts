@@ -5,18 +5,18 @@
 import pandas as pd
 import b_config.a_config as config
 
-def calculate_extra_metadata():
-    if config.SIMULATION_CODE.upper() == "PHITS":
+def calculate_extra_metadata(params):
+    if params["simulation_code"].upper() == "PHITS":
         input_prefix = "a_phits"
         output_prefix = "c_phits"
 
-    elif config.SIMULATION_CODE.upper() == "GEANT4":
+    elif params["simulation_code"].upper() == "GEANT4":
         input_prefix = "b_geant4"
         output_prefix = "d_geant4"
 
     else:
         raise ValueError(
-            f"Unknown SIMULATION_CODE: {config.SIMULATION_CODE}"
+            f"Unknown SIMULATION_CODE: {params["simulation_code"].upper()}"
         )
 
     # Input metadata log

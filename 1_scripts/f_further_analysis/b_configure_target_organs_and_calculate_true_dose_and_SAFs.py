@@ -7,7 +7,7 @@ import pandas as pd
 from b_config import a_config as config
 
 
-def combine_target_organs_and_calculate_true_dose_and_SAFs():
+def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
     print("\nConfiguring target regions...")
 
@@ -15,10 +15,11 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
     # Determine input/output files
     # ==========================================================
 
-    simulation = config.SIMULATION_CODE
+    simulation = params["simulation_code".upper()]
     mapping = pd.read_csv(config.TARGET_REGION_CSV)
     skeletal = pd.read_csv(config.SKELETAL_MASSES_CSV)
-
+    results_dir = config.RESULTS_DIR
+    
     RBM_REGION = "Red (active) marrow"
     ENDOSTEUM_REGION = "50-um endosteal region"
 
@@ -43,21 +44,15 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs():
 
         else:
             raise ValueError(
-                f"Unsupported simulation code: {config.SIMULATION_CODE}"
+                f"Unsupported simulation code: {simulation}"
             )
 
         # ==========================================================
         # Read files
         # ==========================================================
-        input_csv = (
-            config.RESULTS_DIR /
-            f"{input_prefix}_{simulation.lower()}_all_dose_and_SAFs_{phantom}.csv"
-        )
+        input_csv = ( results_dir /f"{input_prefix}_{simulation.lower()}_all_dose_and_SAFs_{phantom}.csv")
 
-        output_csv = (
-            config.RESULTS_DIR /
-            f"{output_prefix}_{simulation.lower()}_target_regions_dose_SAFs_{phantom}.csv"
-        )
+        output_csv = ( results_dir / f"{output_prefix}_{simulation.lower()}_target_regions_dose_SAFs_{phantom}.csv")
 
         print(f"\nProcessing {phantom}...")
 

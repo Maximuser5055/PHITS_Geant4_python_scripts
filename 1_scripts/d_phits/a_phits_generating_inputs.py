@@ -9,7 +9,7 @@ import shutil
 import b_config.a_config as config
 from c_database.b_organ_database import SOURCE_ORGANS
 
-def phits_generate_inputs():
+def phits_generate_inputs(params):
 
     total_files = 0
 
@@ -21,9 +21,9 @@ def phits_generate_inputs():
     base_output_dir = config.GENERATED_INPUTS_DIR
 
     # Adult male or female phantom or both
-    if config.PHANTOM_INPUT_GENERATION == "AM":
+    if params["phantom"] == "AM":
         phantoms = ["AM"]
-    elif config.PHANTOM_INPUT_GENERATION == "AF":
+    elif params["phantom"] == "AF":
         phantoms = ["AF"]
     else:
         phantoms = ["AM", "AF"]
@@ -31,12 +31,12 @@ def phits_generate_inputs():
     for phantom in phantoms:
 
         # Replace placeholders with actual values
-        parallelization = config.PARALLELIZATION
-        threads = config.THREADS
-        maxcas = config.MAXCAS
-        maxbch = config.MAXBCH
-        source_type = config.PHITS_SOURCE_TYPES
-        source_energies = config.SOURCE_ENERGIES
+        parallelization =  params["parallelization"]
+        threads =  params["threads"]
+        maxcas =  params["maxcas"]
+        maxbch =  params["maxbch"]
+        source_type = config.PHITS_SOURCE_TYPES # TBA
+        source_energies = config.SOURCE_ENERGIES #TBA
         target_regions = "all"
         sexinfo = config.SEXINFO.get(phantom)
 

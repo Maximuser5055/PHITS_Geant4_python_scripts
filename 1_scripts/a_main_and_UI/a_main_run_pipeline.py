@@ -26,7 +26,7 @@ from e_geant4.e_geant4_extracting_dose_and_SAFs import geant4_calculate_dose_and
 
 from f_further_analysis.a_calculating_extra_metadata import calculate_extra_metadata
 from f_further_analysis.b_configure_target_organs_and_calculate_true_dose_and_SAFs import combine_target_organs_and_calculate_true_dose_and_SAFs
-#from f_further_analysis.c_check_uncertainty import check_uncertainty
+from f_further_analysis.c_check_uncertainty import check_uncertainty
 
 def main():
 
@@ -37,24 +37,24 @@ def main():
     if params["simulation_code"] == "PHITS":
 
         parse_cell_csv_inputs()
-        phits_generate_inputs()
+        phits_generate_inputs(params)
         run_phits()
         phits_extract_metadata_stats()
-        calculate_extra_metadata()
+        calculate_extra_metadata(params)
         phits_calculate_dose_and_safs()
         
     elif params["simulation_code"] == "GEANT4":
 
         parse_cell_csv_inputs()
         build_geant4()
-        geant4_generate_inputs()
-        run_geant4()
+        geant4_generate_inputs(params)
+        run_geant4(params)
         geant4_extract_metadata_stats()
-        calculate_extra_metadata()
-        geant4_calculate_dose_and_SAFs()
+        calculate_extra_metadata(params)
+        geant4_calculate_dose_and_SAFs(params)
 
-    combine_target_organs_and_calculate_true_dose_and_SAFs()
-    #check_uncertainty()
+    combine_target_organs_and_calculate_true_dose_and_SAFs(params)
+    check_uncertainty(params)
 
 if __name__ == "__main__":
     main()

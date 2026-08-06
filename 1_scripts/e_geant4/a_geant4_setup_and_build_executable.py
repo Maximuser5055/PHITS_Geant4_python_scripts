@@ -20,7 +20,7 @@ def find_geant4make():
     raise FileNotFoundError("Could not find geant4make.sh")
 
 def executable_exists():
-    executable = config.INTERNAL_DIR / "build" / "Internal"
+    executable = config.GEANT4_EXECUTABLE_FILE
     return executable.is_file()
 
 def source_snapshot(project_dir):

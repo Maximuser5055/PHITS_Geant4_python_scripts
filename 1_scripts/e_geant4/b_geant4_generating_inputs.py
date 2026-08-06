@@ -7,7 +7,7 @@
 import b_config.a_config as config
 from c_database.b_organ_database import SOURCE_ORGANS
 
-def geant4_generate_inputs():
+def geant4_generate_inputs(params):
 
     total_files = 0
 
@@ -19,17 +19,17 @@ def geant4_generate_inputs():
     base_output_dir.mkdir(parents=True, exist_ok=True)
 
     # Adult male or female phantom or both
-    if config.PHANTOM_INPUT_GENERATION == "AM":
+    if params["phantom"] == "AM":
         phantoms = ["AM"]
-    elif config.PHANTOM_INPUT_GENERATION == "AF":
+    elif params["phantom"] == "AF":
         phantoms = ["AF"]
     else:
         phantoms = ["AM", "AF"]
 
     for phantom in phantoms:
 
-        threads = config.THREADS
-        nps = config.NPS       
+        threads = params["threads"]
+        nps = params["nps"]      
         particle = config.GEANT4_SOURCE_TYPES[0]
 
         for energy in config.SOURCE_ENERGIES:

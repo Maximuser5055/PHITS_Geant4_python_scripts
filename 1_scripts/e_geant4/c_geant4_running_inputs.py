@@ -9,13 +9,14 @@ import os
 import b_config.a_config as config
 from e_geant4.a_geant4_setup_and_build_executable import find_geant4make
 
-def run_geant4():
+def run_geant4(params):
 
     geant4make_path = find_geant4make()
 
-    executable = config.GEANT4_BUILD_DIR / "Internal"
+    executable = config.GEANT4_EXECUTABLE_FILE
     input_root = config.GEANT4_GENERATED_INPUTS_DIR
-
+    current_working_dir = config.GEANT4_BUILD_DIR
+    
     #########################################
     # User Interface
     #########################################
@@ -101,7 +102,7 @@ def run_geant4():
 
     total_threads = os.cpu_count()
 
-    threads_per_job = config.THREADS
+    threads_per_job = params["threads"]
 
     max_parallel = max(1, total_threads // threads_per_job)
 
@@ -140,7 +141,7 @@ def run_geant4():
 
         process = subprocess.Popen(
             ["bash", "-c", cmd],
-            cwd=config.GEANT4_BUILD_DIR
+            cwd= current_working_dir
         )
 
         returncode = process.wait()

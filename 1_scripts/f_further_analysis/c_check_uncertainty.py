@@ -1,4 +1,4 @@
-# This script checks the statistical uncertainty of each PHITS simulation.
+# This script checks the statistical uncertainty of each PHITS/Geant4 simulation.
 # If any source-target organ pair has a statistical uncertainty >= 5%,
 # the corresponding PHITS input file is updated with new maxcas/maxbch values
 # provided by the user.
@@ -9,19 +9,49 @@ import pandas as pd
 import re
 import b_config.a_config as config
 
-def check_uncertainty():
+def check_uncertainty(params):
+
+    # -------------------------------------------------------------------------
+    # Parameters
+    # -------------------------------------------------------------------------
+
+    uncertainty_limit = params["uncertainty_limit"]
+    simulation_code = params["simulation_code"].upper()
+
     # -------------------------------------------------------------------------
     # Directories
     # -------------------------------------------------------------------------
 
     results_dir = config.RESULTS_DIR
 
-    input_dir = config.GENERATED_INPUTS_DIR
+    if simulation_code == "PHITS":
 
-    csv_files = [
-        results_dir / "3_all_dose_and_SAFs_AM.csv",
-        results_dir / "4_all_dose_and_SAFs_AF.csv",
-    ]
+        input_dir = config.GENERATED_INPUTS_DIR
+
+        csv_files = [
+            results_dir / "i_phits_target_regions_dose_SAFs_AM.csv",
+            results_dir / "j_phits_target_regions_dose_SAFs_AF.csv",
+        ]
+
+        rerun_file = results_dir / "m_phits_rerun_required.csv"
+
+        input_extension = ".inp"
+
+    elif simulation_code == "GEANT4":
+
+        input_dir = config.GEANT4_GENERATED_INPUTS_DIR
+
+        csv_files = [
+            results_dir / "k_geant4_target_regions_dose_SAFs_AM.csv",
+            results_dir / "l_geant4_target_regions_dose_SAFs_AF.csv",
+        ]
+
+        rerun_file = results_dir / "n_geant4_rerun_required.csv"
+
+        input_extension = ".in"
+
+    else:
+        raise ValueError(f"Unsupported simulation code: {simulation_code}")
 
     # -------------------------------------------------------------------------
     # Read CSV files
@@ -64,9 +94,7 @@ def check_uncertainty():
                         "Maximum Statistical Uncertainty (%)"})
     )
 
-    rerun = summary[
-        summary["Maximum Statistical Uncertainty (%)"] >= config.UNCERTAINTY_LIMIT
-    ].copy()
+    rerun = summary[summary["Maximum Statistical Uncertainty (%)"] >= uncertainty_limit].copy()
 
     rerun = rerun.sort_values(
         by=[
@@ -141,7 +169,7 @@ def check_uncertainty():
 
     if rerun.empty:
 
-        print(f"\nAll simulations satisfy the {config.UNCERTAINTY_LIMIT:.1f}% criterion.")
+        print(f"\nAll simulations satisfy the {uncertainty_limit:.1f}% criterion.")
 
         raise SystemExit
 
@@ -152,10 +180,10 @@ def check_uncertainty():
     summary["Status"] = summary[
         "Maximum Statistical Uncertainty (%)"
     ].apply(
-        lambda x: "PASS" if x < config.UNCERTAINTY_LIMIT else "FAIL"
+        lambda x: "PASS" if x < uncertainty_limit else "FAIL"
     )
 
-    print(f"\nThreshold         : {config.UNCERTAINTY_LIMIT:.1f}%")
+    print(f"\nThreshold         : {uncertainty_limit:.1f}%")
     print(f"Total simulations : {len(summary)}")
     print(f"PASS              : {(summary['Status'] == 'PASS').sum()}")
     print(f"FAIL              : {(summary['Status'] == 'FAIL').sum()}\n")
@@ -201,6 +229,7 @@ def check_uncertainty():
     # -------------------------------------------------------------------------
     # Ask for confirmation in updating input files
     # -------------------------------------------------------------------------
+
     answer = input(
         "\nUpdate the input files for all FAILED simulations? (y/n): "
     ).strip().lower()
@@ -210,13 +239,50 @@ def check_uncertainty():
         raise SystemExit
 
     # -------------------------------------------------------------------------
-    # Ask for new maxcas/maxbch
+    # Ask for new simulation parameters
     # -------------------------------------------------------------------------
 
-    print("\nEnter the new PHITS parameters.\n")
+    if simulation_code == "PHITS":
 
-    new_maxcas = int(input("New maxcas : "))
-    new_maxbch = int(input("New maxbch : "))
+        print("\nEnter the new PHITS parameters.\n")
+
+        new_maxcas = int(input("New maxcas : "))
+        new_maxbch = int(input("New maxbch : "))
+
+        def update_input(text):
+
+            text, n1 = re.subn(
+                r"maxcas\s*=\s*\d+",
+                f"maxcas = {new_maxcas}",
+                text,
+            )
+
+            text, n2 = re.subn(
+                r"maxbch\s*=\s*\d+",
+                f"maxbch = {new_maxbch}",
+                text,
+            )
+
+            return text, (n1 > 0 and n2 > 0)
+
+    elif simulation_code == "GEANT4":
+
+        print("\nEnter the new Geant4 parameters.\n")
+
+        new_nps = int(input("New nps     : "))
+
+        def update_input(text):
+
+            text, n1 = re.subn(
+                r"/run/beamOn\s+\d+",
+                f"/run/beamOn {new_nps}",
+                text,
+            )
+
+            return text, (n1 > 0)
+
+    else:
+        raise ValueError(f"Unsupported simulation code: {simulation_code}")
 
     # -------------------------------------------------------------------------
     # Update corresponding input files
@@ -234,19 +300,9 @@ def check_uncertainty():
 
         text = input_file.read_text(encoding="utf-8")
 
-        text, n1 = re.subn(
-            r"maxcas\s*=\s*\d+",
-            f"maxcas = {new_maxcas}",
-        text
-        )
+        text, success = update_input(text)
 
-        text, n2 = re.subn(
-            r"maxbch\s*=\s*\d+",
-            f"maxbch = {new_maxbch}",
-            text
-        )
-
-        if n1 == 0 or n2 == 0:
+        if not success:
             print(f"Could not update {input_file.name}")
             continue
 
@@ -260,4 +316,4 @@ def check_uncertainty():
     print(f"{updated} input file(s) updated.")
     print("----------------------------------------")
 
-    print("\nYou can now rerun those simulations using d_running_inputs.py.")
+    print("\nYou can now rerun the failed simulations.")

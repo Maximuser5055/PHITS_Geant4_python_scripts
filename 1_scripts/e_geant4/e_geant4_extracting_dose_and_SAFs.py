@@ -11,11 +11,12 @@ from c_database.b_organ_database import ORGANS
 def geant4_calculate_dose_and_SAFs():
 
     # -------------------------------------------------------------
-    # Directories
+    # Directories 
     # -------------------------------------------------------------
 
     input_root = config.GEANT4_GENERATED_INPUTS_DIR
     output_root = config.RESULTS_DIR
+    source_type_map = config.SOURCE_TYPE_MAP
 
     # -------------------------------------------------------------
     # File names
@@ -29,11 +30,6 @@ def geant4_calculate_dose_and_SAFs():
     # -------------------------------------------------------------
 
     MEV_TO_J = 1.602176634e-13
-
-    PHANTOM_NAMES = {
-        "AM": "Adult Male",
-        "AF": "Adult Female"
-    }
 
     filename_pattern = re.compile(
         r"Geant4_deposit_MRCP_"
@@ -96,13 +92,13 @@ def geant4_calculate_dose_and_SAFs():
 
         phantom_code = match.group(1)
 
-        phantom = PHANTOM_NAMES[phantom_code]
+        phantom = config.PHANTOM_NAMES[phantom_code]
 
         source_organ = match.group(2)
 
         source_type = match.group(3).lower()
 
-        source_type = config.SOURCE_TYPE_MAP.get(
+        source_type = source_type_map.get(
             match.group(3).lower(),
         )       
 

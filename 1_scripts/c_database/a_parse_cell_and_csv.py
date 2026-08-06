@@ -10,7 +10,7 @@ import b_config.a_config as config
 male_cell_file_path = config.CELL_FILES["AM"]
 female_cell_file_path = config.CELL_FILES["AF"]
 csv_file_path = config.ORGAN_ID_CSV
-organ_groups_csv_file_path = config.SOURCE_CSV
+source_organs_csv_file_path = config.SOURCE_CSV
 
 # Organ database file path
 database_file_path = config.DATABASE_FILE
@@ -69,7 +69,7 @@ def parse_cell_csv_inputs():
             )
 
     # Reading the source organs
-    organ_groups = pd.read_csv(organ_groups_csv_file_path)
+    organ_groups = pd.read_csv(source_organs_csv_file_path)
 
     main_source_organs = (
         organ_groups["source_organ_ID"]
