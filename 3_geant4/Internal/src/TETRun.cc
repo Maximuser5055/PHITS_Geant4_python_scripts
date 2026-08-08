@@ -37,6 +37,7 @@ TETRun::TETRun()
 TETRun::~TETRun()
 {
 	edepMap.clear();
+	photonFluenceMap.clear();
 }
 
 void TETRun::RecordEvent(const G4Event* event)

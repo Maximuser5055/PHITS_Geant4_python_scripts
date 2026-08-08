@@ -68,6 +68,16 @@ TETModelImport::TETModelImport(G4bool isAF, G4UIExecutive* ui)
 	PrintMaterialInfomation();
 }
 
+TETModelImport::~TETModelImport()
+{
+    for (auto ele : eleVector)
+    {
+        delete[] ele;
+    }
+
+    eleVector.clear();
+}
+
 void TETModelImport::DataRead(G4String eleFile, G4String nodeFile)
 {
 	G4String tempStr;

@@ -16,7 +16,7 @@
 // ============================================================
 
 std::vector<G4double>
-TETPSPhotonFluence::energyBins;
+TETPSPhotonFluence::energyEdges;
 
 
 // ============================================================
@@ -48,31 +48,33 @@ TETPSPhotonFluence::~TETPSPhotonFluence()
 // ============================================================
 // Create logarithmic energy bins
 //
-// 0.001 MeV = 1 keV
-// 1.0   MeV
+// 100 bins
 //
-// 101 points gives 100 intervals.
+// Minimum energy = 0.01 MeV = 10 keV
+// Maximum energy = 10 MeV
+//
+// 101 boundaries -> 100 bins
 // ============================================================
 
 void TETPSPhotonFluence::InitializeEnergyBins()
 {
-    if (!energyBins.empty())
+    if (!energyEdges.empty())
         return;
 
-    const G4int nBins = 101;
+    const G4int nBins = 100;
 
-    const G4double Emin = 0.001;  // MeV
-    const G4double Emax = 1.0;    // MeV
+    const G4double Emin = 0.010;  // 10 keV
+    const G4double Emax = 1.0;   // 10 MeV
 
-    energyBins.resize(nBins);
+    energyEdges.resize(nBins+1);
 
-    for (G4int i = 0; i < nBins; i++)
+    for (G4int i = 0; i <= nBins; i++)
     {
         G4double fraction =
             static_cast<G4double>(i)
-            / static_cast<G4double>(nBins - 1);
+            / static_cast<G4double>(nBins);
 
-        energyBins[i] =
+        energyEdges[i] =
             Emin *
             std::pow(
                 Emax / Emin,
@@ -83,25 +85,76 @@ void TETPSPhotonFluence::InitializeEnergyBins()
 
 
 // ============================================================
-// Return representative energy of a bin
+// Lower edge of energy bin
 // ============================================================
 
-G4double TETPSPhotonFluence::GetEnergy(
+G4double TETPSPhotonFluence::GetEnergyLow(
     G4int bin
 )
 {
-    if (bin < 0 ||
-        bin >= static_cast<G4int>(energyBins.size()))
+    if (
+        bin < 0 ||
+        bin >= nEnergyBins
+    )
     {
         return -1.0;
     }
 
-    return energyBins[bin];
+
+    return energyEdges[bin];
 }
 
 
 // ============================================================
-// Initialize
+// Upper edge of energy bin
+// ============================================================
+
+G4double TETPSPhotonFluence::GetEnergyHigh(
+    G4int bin
+)
+{
+    if (
+        bin < 0 ||
+        bin >= nEnergyBins
+    )
+    {
+        return -1.0;
+    }
+
+
+    return energyEdges[bin + 1];
+}
+
+
+// ============================================================
+// Geometric center of energy bin
+//
+// Because bins are logarithmic, the geometric mean is used.
+// ============================================================
+
+G4double TETPSPhotonFluence::GetEnergyCenter(
+    G4int bin
+)
+{
+    if (
+        bin < 0 ||
+        bin >= nEnergyBins
+    )
+    {
+        return -1.0;
+    }
+
+
+    return std::sqrt(
+        energyEdges[bin]
+        *
+        energyEdges[bin + 1]
+    );
+}
+
+
+// ============================================================
+// Initialize scorer
 // ============================================================
 
 void TETPSPhotonFluence::Initialize(
@@ -114,6 +167,7 @@ void TETPSPhotonFluence::Initialize(
             GetName()
         );
 
+
     if (HCID < 0)
     {
         HCID =
@@ -124,6 +178,7 @@ void TETPSPhotonFluence::Initialize(
                     + "/" + GetName()
                 );
     }
+
 
     HCE->AddHitsCollection(
         HCID,
@@ -148,15 +203,18 @@ G4bool TETPSPhotonFluence::ProcessHits(
     G4Track* track =
         aStep->GetTrack();
 
-    if (track->GetDefinition()
-        != G4Gamma::GammaDefinition())
+
+    if (
+        track->GetDefinition()
+        != G4Gamma::GammaDefinition()
+    )
     {
         return false;
     }
 
 
     // --------------------------------------------------------
-    // Photon kinetic energy BEFORE the step
+    // Photon kinetic energy before the step
     // --------------------------------------------------------
 
     G4double energy =
@@ -164,9 +222,18 @@ G4bool TETPSPhotonFluence::ProcessHits(
             ->GetKineticEnergy();
 
 
-    // Only energies within our range
-    if (energy < 0.001 * MeV ||
-        energy > 1.0 * MeV)
+    G4double energyMeV =
+        energy / MeV;
+
+
+    // --------------------------------------------------------
+    // Only score between 1 keV and 10 MeV
+    // --------------------------------------------------------
+
+    if (
+        energyMeV < 0.01 ||
+        energyMeV > 1.0
+    )
     {
         return false;
     }
@@ -174,31 +241,40 @@ G4bool TETPSPhotonFluence::ProcessHits(
 
     // --------------------------------------------------------
     // Find energy bin
+    //
+    // Find first upper edge > energy
     // --------------------------------------------------------
 
-    G4double energyMeV =
-        energy / MeV;
-
     auto upper =
-        std::lower_bound(
-            energyBins.begin(),
-            energyBins.end(),
+        std::upper_bound(
+            energyEdges.begin(),
+            energyEdges.end(),
             energyMeV
         );
 
-    G4int bin =
-        upper - energyBins.begin();
 
-    if (bin >= static_cast<G4int>(
-                   energyBins.size()))
+    G4int bin =
+        static_cast<G4int>(
+            upper - energyEdges.begin()
+        ) - 1;
+
+
+    // Safety check
+
+    if (bin < 0)
     {
-        bin =
-            energyBins.size() - 1;
+        bin = 0;
+    }
+
+
+    if (bin >= nEnergyBins)
+    {
+        bin = nEnergyBins - 1;
     }
 
 
     // --------------------------------------------------------
-    // Find tetrahedron
+    // Find tetrahedron copy number
     // --------------------------------------------------------
 
     G4int copyNo =
@@ -207,34 +283,35 @@ G4bool TETPSPhotonFluence::ProcessHits(
             ->GetCopyNumber();
 
 
+    // --------------------------------------------------------
     // Convert tetrahedron index
     // to organ/material ID
+    // --------------------------------------------------------
+
     G4int organID =
-        tetData->GetMaterialIndex(copyNo);
+        tetData->GetMaterialIndex(
+            copyNo
+        );
 
 
     // --------------------------------------------------------
-    // Track length
+    // Get photon track length
     // --------------------------------------------------------
 
     G4double trackLength =
         aStep->GetStepLength();
 
 
-    if (trackLength <= 0.)
+    if (trackLength <= 0.0)
+    {
         return false;
+    }
 
 
     // --------------------------------------------------------
-    // Encode:
+    // Encode organ ID + energy bin
     //
-    // key = organID * number_of_bins + energy_bin
-    //
-    // Example:
-    //
-    // organ 1400, bin 20
-    //
-    // key = 1400 * 101 + 20
+    // key = organID * nEnergyBins + bin
     // --------------------------------------------------------
 
     G4int key =
@@ -250,6 +327,7 @@ G4bool TETPSPhotonFluence::ProcessHits(
         key,
         trackLength
     );
+
 
     return true;
 }

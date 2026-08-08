@@ -180,16 +180,14 @@ void TETRunAction::PrintCSV(std::ostream& out)
     }
 }
 
-void TETRunAction::PrintPhotonFluence(
-    std::ostream& out
-)
+void TETRunAction::PrintPhotonFluence(std::ostream& out)
 {
     auto fluxMap =
         *fRun->GetPhotonFluenceMap();
 
 
     // ========================================================
-    // IDs of the skeletal spongiosa regions
+    // Skeletal spongiosa IDs
     // ========================================================
 
     std::vector<G4int> spongiosaIDs =
@@ -211,12 +209,14 @@ void TETRunAction::PrintPhotonFluence(
 
 
     // ========================================================
-    // Header
+    // CSV header
     // ========================================================
 
     out
         << "Spongiosa ID,"
-        << "Energy (MeV),"
+        << "Energy Low (MeV),"
+        << "Energy High (MeV),"
+        << "Energy Center (MeV),"
         << "Fluence (photons/m2/source)"
         << "\n";
 
@@ -225,13 +225,13 @@ void TETRunAction::PrintPhotonFluence(
 
 
     // ========================================================
-    // Loop over spongiosa regions
+    // Loop over skeletal regions
     // ========================================================
 
     for (G4int organID : spongiosaIDs)
     {
         // ----------------------------------------------------
-        // Volume of this spongiosa region
+        // Total volume of this spongiosa region
         // ----------------------------------------------------
 
         G4double volume =
@@ -250,6 +250,10 @@ void TETRunAction::PrintPhotonFluence(
             bin++
         )
         {
+            // ------------------------------------------------
+            // Construct key
+            // ------------------------------------------------
+
             G4int key =
                 organID
                 * TETPSPhotonFluence::nEnergyBins
@@ -257,16 +261,20 @@ void TETRunAction::PrintPhotonFluence(
 
 
             // ------------------------------------------------
-            // Look for track length
+            // Find track length
             // ------------------------------------------------
 
-            auto itr = fluxMap.find(key);
+            auto itr =
+                fluxMap.find(key);
+
 
             G4double totalTrackLength = 0.0;
 
 
-            if (itr != fluxMap.end()) {
-                totalTrackLength = itr->second.first;
+            if (itr != fluxMap.end())
+            {
+                totalTrackLength =
+                    itr->second.first;
             }
 
 
@@ -274,39 +282,64 @@ void TETRunAction::PrintPhotonFluence(
             // Mean track length per source particle
             // ------------------------------------------------
 
-            G4double meanTrackLength = totalTrackLength / numOfEvent;
+            G4double meanTrackLength =
+                totalTrackLength
+                / numOfEvent;
+
 
             // ------------------------------------------------
-            // Fluence
+            // Track-length fluence estimator
             //
-            // track length / volume
+            // Phi = L / V
             // ------------------------------------------------
 
-            G4double fluence = meanTrackLength / volume;
+            G4double fluence =
+                meanTrackLength
+                / volume;
+
 
             // ------------------------------------------------
-            // Convert cm^-2 -> m^-2
-            //
-            // If volume is stored in mm3/cm3,
-            // use Geant4 units to handle conversion.
+            // Convert to photons/m2
             // ------------------------------------------------
 
-            G4double fluence_m2 = fluence * m2;
+            G4double fluence_m2 =
+                fluence * m2;
+
 
             // ------------------------------------------------
-            // Energy
+            // Energy-bin information
             // ------------------------------------------------
 
-            G4double energy = TETPSPhotonFluence::GetEnergy(bin);
+            G4double energyLow =
+                TETPSPhotonFluence::GetEnergyLow(
+                    bin
+                );
+
+
+            G4double energyHigh =
+                TETPSPhotonFluence::GetEnergyHigh(
+                    bin
+                );
+
+
+            G4double energyCenter =
+                TETPSPhotonFluence::GetEnergyCenter(
+                    bin
+                );
+
 
             // ------------------------------------------------
-            // Output
+            // Write row
             // ------------------------------------------------
 
             out
                 << organID
                 << ","
-                << energy
+                << energyLow
+                << ","
+                << energyHigh
+                << ","
+                << energyCenter
                 << ","
                 << fluence_m2
                 << "\n";

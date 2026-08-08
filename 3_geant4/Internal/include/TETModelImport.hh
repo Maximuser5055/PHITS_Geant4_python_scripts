@@ -66,7 +66,7 @@ class TETModelImport
 {
 public:
 	TETModelImport(G4bool isAF, G4UIExecutive* ui);
-	virtual ~TETModelImport() {};
+	virtual ~TETModelImport();
 
 	// get methods
 	G4String      GetPhantomName()           { return phantomName; };

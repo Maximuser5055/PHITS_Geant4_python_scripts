@@ -4,9 +4,9 @@ Geant4 Timing Summary
 Macro      : example_example.in
 Output     : example_AM_2.out
 
-Starting Datetime    : 2026-08-08T14:19:21
-Termination Datetime : 2026-08-08T14:20:34
+Starting Datetime    : 2026-08-08T18:25:15
+Termination Datetime : 2026-08-08T18:27:09
 
-Setup Time (s)       : 8.33849 s
-Execution Time (s)   : 64.1736 s
-Total Wall Time (s)  : 72.5121 s
+Setup Time (s)       : 8.18881 s
+Execution Time (s)   : 105.459 s
+Total Wall Time (s)  : 113.648 s

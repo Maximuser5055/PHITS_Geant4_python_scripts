@@ -5,11 +5,14 @@
 #include "G4THitsMap.hh"
 #include "G4Step.hh"
 #include "G4TouchableHistory.hh"
+
 #include "TETModelImport.hh"
 
 #include <vector>
 
-class TETPSPhotonFluence : public G4VPrimitiveScorer
+
+class TETPSPhotonFluence
+    : public G4VPrimitiveScorer
 {
 public:
 
@@ -20,31 +23,65 @@ public:
 
     virtual ~TETPSPhotonFluence();
 
+
     virtual G4bool ProcessHits(
         G4Step* aStep,
         G4TouchableHistory* ROhist
     ) override;
 
+
     virtual void Initialize(
         G4HCofThisEvent* HCE
     ) override;
 
+
     virtual void clear() override;
+
 
     virtual void EndOfEvent(
         G4HCofThisEvent* HCE
     ) override;
 
-    virtual void DrawAll() override {}
 
-    virtual void PrintAll() override {}
+    virtual void DrawAll() override
+    {
+    }
 
-    G4THitsMap<G4double>* GetHitsMap();
 
-    // Energy bin information
-    static const G4int nEnergyBins = 101;
+    virtual void PrintAll() override
+    {
+    }
 
-    static G4double GetEnergy(G4int bin);
+
+    G4THitsMap<G4double>*
+    GetHitsMap();
+
+
+    // ========================================================
+    // Number of energy bins
+    // ========================================================
+
+    static const G4int nEnergyBins = 100;
+
+
+    // ========================================================
+    // Get energy-bin boundaries
+    // ========================================================
+
+    static G4double GetEnergyLow(
+        G4int bin
+    );
+
+
+    static G4double GetEnergyHigh(
+        G4int bin
+    );
+
+
+    static G4double GetEnergyCenter(
+        G4int bin
+    );
+
 
 private:
 
@@ -54,9 +91,16 @@ private:
 
     G4THitsMap<G4double>* evtMap;
 
-    // Log-spaced energy bins:
-    // 0.001 MeV -> 1.0 MeV
-    static std::vector<G4double> energyBins;
+
+    // ========================================================
+    // Energy-bin boundaries
+    //
+    // 101 boundaries -> 100 bins
+    // ========================================================
+
+    static std::vector<G4double>
+        energyEdges;
+
 
     static void InitializeEnergyBins();
 };
