@@ -53,7 +53,6 @@ import re
 import numpy as np
 import pandas as pd
 
-
 # ============================================================
 # FILES
 # ============================================================
@@ -65,7 +64,6 @@ ICRP_FILE = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_sc
 OUTPUT_FILE = Path(
     "RBM_ICRP116_results.csv"
 )
-
 
 # ============================================================
 # GEANT4 ID -> ICRP ID
@@ -98,7 +96,6 @@ SKELETAL_IDS = [
 # ============================================================
 
 AM_MASS_KG = {
-
     1400: .0269,
     2500: .0093,
     2700: .0889,
@@ -112,9 +109,7 @@ AM_MASS_KG = {
     5200: .1439,
     5400: .1159,
     5600: .0363,
-
 }
-
 
 # ============================================================
 # NORMALIZE COLUMN NAMES
@@ -132,7 +127,6 @@ def normalize(text):
         .replace("(", "")
         .replace(")", "")
     )
-
 
 # ============================================================
 # FIND COLUMN
@@ -153,11 +147,9 @@ def find_column(
         key = normalize(candidate)
 
         if key in normalized_columns:
-
             return normalized_columns[key]
 
     return None
-
 
 # ============================================================
 # LOAD GEANT4 FLUENCE
@@ -168,10 +160,7 @@ print("=" * 80)
 print("LOADING GEANT4 PHOTON FLUENCE")
 print("=" * 80)
 
-fluence = pd.read_csv(
-    FLUENCE_FILE
-)
-
+fluence = pd.read_csv(FLUENCE_FILE)
 
 # ------------------------------------------------------------
 # Find columns
@@ -179,89 +168,44 @@ fluence = pd.read_csv(
 
 id_col = find_column(
     fluence,
-    [
-        "Spongiosa ID",
-        "SpongiosaID"
-    ]
+    ["Spongiosa ID"]
 )
-
 
 energy_center_col = find_column(
     fluence,
-    [
-        "Energy Center (MeV)",
-        "Energy Center"
-    ]
+    ["Energy Center (MeV)"]
 )
 
 
 fluence_col = find_column(
     fluence,
-    [
-        "Fluence (photons/m2/source)",
-        "Fluence"
-    ]
+    ["Fluence (photons/m2/source)"]
 )
 
-
 if id_col is None:
-
-    raise ValueError(
-        "Could not find the Spongiosa ID column."
-    )
-
+    raise ValueError("Could not find the Spongiosa ID column.")
 
 if energy_center_col is None:
-
-    raise ValueError(
-        "Could not find the Energy Center column."
-    )
-
+    raise ValueError("Could not find the Energy Center column.")
 
 if fluence_col is None:
-
-    raise ValueError(
-        "Could not find the Fluence column."
-    )
-
+    raise ValueError("Could not find the Fluence column.")
 
 # ------------------------------------------------------------
 # Convert data types
 # ------------------------------------------------------------
 
-fluence[id_col] = pd.to_numeric(
-    fluence[id_col],
-    errors="coerce"
-)
+fluence[id_col] = pd.to_numeric(fluence[id_col], errors="coerce")
 
+fluence[energy_center_col] = pd.to_numeric(fluence[energy_center_col], errors="coerce")
 
-fluence[energy_center_col] = pd.to_numeric(
-    fluence[energy_center_col],
-    errors="coerce"
-)
+fluence[fluence_col] = pd.to_numeric(fluence[fluence_col], errors="coerce").fillna(0.0)
 
-
-fluence[fluence_col] = pd.to_numeric(
-    fluence[fluence_col],
-    errors="coerce"
-).fillna(0.0)
-
-
-fluence = fluence.dropna(
-    subset=[
-        id_col,
-        energy_center_col
-    ]
-)
-
+fluence = fluence.dropna(subset=[id_col,energy_center_col])
 
 # Convert IDs to integer
 
-fluence[id_col] = (
-    fluence[id_col]
-    .astype(int)
-)
-
+fluence[id_col] = (fluence[id_col].astype(int))
 
 print(
     f"Loaded {len(fluence)} fluence rows."
@@ -280,7 +224,6 @@ icrp_raw = pd.read_csv(
     ICRP_FILE,
     header=None
 )
-
 
 # ============================================================
 # PARSE UPDATED ICRP CSV
@@ -303,26 +246,15 @@ icrp_raw = pd.read_csv(
 
 response_functions = {}
 
-
-for row in range(
-    icrp_raw.shape[0]
-):
+for row in range(icrp_raw.shape[0]):
 
     # Organ ID is in column 1
-    value = icrp_raw.iat[
-        row,
-        1
-    ]
-
+    value = icrp_raw.iat[row, 1]
 
     if pd.isna(value):
         continue
 
-
-    text = str(
-        value
-    ).strip()
-
+    text = str(value).strip()
 
     # --------------------------------------------------------
     # Look for:
@@ -336,27 +268,18 @@ for row in range(
         re.IGNORECASE
     )
 
-
     if match is None:
         continue
-
 
     organ_id = int(
         match.group(1)
     )
 
-
     # --------------------------------------------------------
     # Organ name is in column 2
     # --------------------------------------------------------
 
-    organ_name = str(
-        icrp_raw.iat[
-            row,
-            2
-        ]
-    ).strip()
-
+    organ_name = str(icrp_raw.iat[row, 2]).strip()
 
     # --------------------------------------------------------
     # Data structure:
@@ -368,117 +291,59 @@ for row in range(
 
     data_start = row + 2
 
-
     energies = []
     am_values = []
     tm50_values = []
 
-
     current_row = data_start
 
-
-    while (
-        current_row
-        < icrp_raw.shape[0]
-    ):
+    while (current_row< icrp_raw.shape[0]):
 
         # ----------------------------------------------------
         # Photon energy is in column 0
         # ----------------------------------------------------
 
-        energy_value = icrp_raw.iat[
-            current_row,
-            0
-        ]
-
+        energy_value = icrp_raw.iat[current_row, 0]
 
         try:
-
             energy = float(
                 energy_value
             )
 
-        except (
-            ValueError,
-            TypeError
-        ):
-
+        except (ValueError, TypeError):
             break
-
 
         # ----------------------------------------------------
         # AM is column 1
         # ----------------------------------------------------
 
-        am_value = icrp_raw.iat[
-            current_row,
-            1
-        ]
-
+        am_value = icrp_raw.iat[current_row, 1]
 
         try:
+            am = float(str(am_value).strip().replace("E","e"))
 
-            am = float(
-                str(am_value)
-                .strip()
-                .replace(
-                    "E",
-                    "e"
-                )
-            )
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
+        except (ValueError, TypeError):
             break
-
 
         # ----------------------------------------------------
         # TM50 is column 2
         # ----------------------------------------------------
 
-        tm50_value = icrp_raw.iat[
-            current_row,
-            2
-        ]
-
+        tm50_value = icrp_raw.iat[current_row, 2]
 
         try:
+            tm50 = float(str(tm50_value).strip().replace("E", "e"))
 
-            tm50 = float(
-                str(tm50_value)
-                .strip()
-                .replace(
-                    "E",
-                    "e"
-                )
-            )
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
+        except (ValueError, TypeError):
             tm50 = np.nan
 
+        energies.append(energy)
 
-        energies.append(
-            energy
-        )
+        am_values.append(am)
 
-        am_values.append(
-            am
-        )
-
-        tm50_values.append(
-            tm50
-        )
-
+        tm50_values.append(tm50)
 
         current_row += 1
-
 
     # --------------------------------------------------------
     # Store response function
@@ -510,7 +375,6 @@ for row in range(
             )
 
     }
-
 
 # ============================================================
 # PRINT WHAT WAS FOUND
@@ -591,17 +455,13 @@ bad_energy_counts = {
 
 }
 
-
 if bad_energy_counts:
 
     raise RuntimeError(
-
         "Unexpected number of energy points "
         "for these organ IDs:\n"
         f"{bad_energy_counts}"
-
     )
-
 
 print()
 print(
@@ -613,10 +473,7 @@ print(
 # LOG-LOG INTERPOLATION
 # ============================================================
 
-def make_response_interpolator(
-    energy,
-    response
-):
+def make_response_interpolator(energy,response):
 
     energy = np.asarray(
         energy,
@@ -627,7 +484,6 @@ def make_response_interpolator(
         response,
         dtype=float
     )
-
 
     # --------------------------------------------------------
     # Keep only valid positive values
@@ -643,11 +499,9 @@ def make_response_interpolator(
         (response > 0)
     )
 
-
     energy = energy[mask]
 
     response = response[mask]
-
 
     # --------------------------------------------------------
     # Sort by energy
@@ -661,25 +515,16 @@ def make_response_interpolator(
 
     response = response[order]
 
-
     if len(energy) < 2:
-
-        raise ValueError(
-            "Not enough valid ICRP response points."
-        )
-
+        raise ValueError("Not enough valid ICRP response points.")
 
     # --------------------------------------------------------
     # Log-log interpolation
     # --------------------------------------------------------
 
-    log_energy = np.log(
-        energy
-    )
+    log_energy = np.log(energy)
 
-    log_response = np.log(
-        response
-    )
+    log_response = np.log(response)
 
 
     def interpolate(E):
@@ -689,6 +534,10 @@ def make_response_interpolator(
             dtype=float
         )
 
+        if np.any(E <= 0):
+            raise ValueError(
+            "Energy must be positive."
+        )
 
         if (
             np.any(
@@ -712,15 +561,12 @@ def make_response_interpolator(
 
 
         return np.exp(
-
             np.interp(
                 np.log(E),
                 log_energy,
                 log_response
             )
-
         )
-
 
     return (
         interpolate,
@@ -772,7 +618,6 @@ for organ_id in SKELETAL_IDS:
         )
 
         continue
-
 
     icrp_energy = (
         response_functions[
@@ -829,7 +674,6 @@ for organ_id in SKELETAL_IDS:
 
     )
 
-
     # Fluence outside ICRP range
 
     excluded_fluence = (
@@ -839,7 +683,6 @@ for organ_id in SKELETAL_IDS:
         ]
         .sum()
     )
-
 
     # Usable bins
 
@@ -857,39 +700,19 @@ for organ_id in SKELETAL_IDS:
 
         continue
 
-
     # --------------------------------------------------------
     # Energy and fluence arrays
     # --------------------------------------------------------
 
-    E = (
-        used[
-            energy_center_col
-        ]
-        .to_numpy(
-            dtype=float
-        )
-    )
+    E = (used[energy_center_col].to_numpy(dtype=float))
 
-
-    Phi = (
-        used[
-            fluence_col
-        ]
-        .to_numpy(
-            dtype=float
-        )
-    )
-
+    Phi = (used[fluence_col].to_numpy(dtype=float))
 
     # --------------------------------------------------------
     # Interpolate ICRP response
     # --------------------------------------------------------
 
-    R = interpolate_R(
-        E
-    )
-
+    R = interpolate_R(E)
 
     # --------------------------------------------------------
     # Dose contribution
@@ -910,24 +733,11 @@ for organ_id in SKELETAL_IDS:
     #
     # --------------------------------------------------------
 
-    dose_contribution = (
-        Phi * R
-    )
+    dose_contribution = (Phi * R)
 
+    dose_Gy_per_source = (np.sum(dose_contribution))
 
-    dose_Gy_per_source = (
-        np.sum(
-            dose_contribution
-        )
-    )
-
-
-    total_fluence = (
-        np.sum(
-            Phi
-        )
-    )
-
+    total_fluence = (np.sum(Phi))
 
     # --------------------------------------------------------
     # Save site result
@@ -957,7 +767,6 @@ for organ_id in SKELETAL_IDS:
 
     )
 
-
     print(
         f"  Total fluence: "
         f"{total_fluence:.6e}"
@@ -969,7 +778,6 @@ for organ_id in SKELETAL_IDS:
         f"{dose_Gy_per_source:.6e} Gy/source"
     )
 
-
 # ============================================================
 # CREATE RESULTS DATAFRAME
 # ============================================================
@@ -978,14 +786,12 @@ results = pd.DataFrame(
     site_results
 )
 
-
 if results.empty:
 
     raise RuntimeError(
         "No skeletal-site results "
         "were calculated."
     )
-
 
 # ============================================================
 # CHECK ACTIVE MARROW MASSES
@@ -1081,7 +887,6 @@ if missing_masses:
 
     raise SystemExit
 
-
 # ============================================================
 # MASS-WEIGHTED RBM DOSE
 # ============================================================
@@ -1108,21 +913,14 @@ results[
 
 )
 
-
 results[
     "Mass-weighted dose contribution (Gy/source)"
 ] = (
-
-    results[
-        "AM dose (Gy/source)"
-    ]
+    results["AM dose (Gy/source)"]
 
     *
 
-    results[
-        "Mass fraction"
-    ]
-
+    results["Mass fraction"]
 )
 
 
@@ -1130,39 +928,22 @@ results[
 # Total RBM dose
 # ------------------------------------------------------------
 
-RBM_dose = (
-    results[
-        "Mass-weighted dose contribution (Gy/source)"
-    ]
-    .sum()
-)
-
+RBM_dose = (results["Mass-weighted dose contribution (Gy/source)"].sum())
 
 # ============================================================
 # RBM SAF
 # ============================================================
 
 # 1 MeV photon source
+MEV_TO_J = 1.6021766339999e-13
 
-MeV_to_J = (
-    1.602176634e-13
-)
-
-RBM_SAF = (
-    RBM_dose
-    /
-    MeV_to_J
-)
-
+RBM_SAF = (RBM_dose / MEV_TO_J)
 
 # ============================================================
 # SAVE RESULTS
 # ============================================================
 
-results.to_csv(
-    OUTPUT_FILE,
-    index=False
-)
+results.to_csv(OUTPUT_FILE, index=False)
 
 # ============================================================
 # PRINT FINAL RESULTS
@@ -1224,3 +1005,6 @@ print(
 )
 
 print()
+
+total_fluence = used[fluence_col].sum()
+print(total_fluence)

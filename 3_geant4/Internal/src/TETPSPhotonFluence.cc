@@ -61,18 +61,16 @@ void TETPSPhotonFluence::InitializeEnergyBins()
     if (!energyEdges.empty())
         return;
 
-    const G4int nBins = 100;
-
     const G4double Emin = 0.010;  // 10 keV
-    const G4double Emax = 1.0;   // 10 MeV
+    const G4double Emax = 10;   // 10 MeV
 
-    energyEdges.resize(nBins+1);
+    energyEdges.resize(nEnergyBins + 1);
 
-    for (G4int i = 0; i <= nBins; i++)
+    for (G4int i = 0; i <= nEnergyBins; i++)
     {
         G4double fraction =
             static_cast<G4double>(i)
-            / static_cast<G4double>(nBins);
+            / static_cast<G4double>(nEnergyBins);
 
         energyEdges[i] =
             Emin *
@@ -212,7 +210,6 @@ G4bool TETPSPhotonFluence::ProcessHits(
         return false;
     }
 
-
     // --------------------------------------------------------
     // Photon kinetic energy before the step
     // --------------------------------------------------------
@@ -232,7 +229,7 @@ G4bool TETPSPhotonFluence::ProcessHits(
 
     if (
         energyMeV < 0.01 ||
-        energyMeV > 1.0
+        energyMeV > 10
     )
     {
         return false;

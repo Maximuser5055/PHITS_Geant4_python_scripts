@@ -52,7 +52,6 @@ public:
     {
     }
 
-
     G4THitsMap<G4double>*
     GetHitsMap();
 
@@ -61,8 +60,7 @@ public:
     // Number of energy bins
     // ========================================================
 
-    static const G4int nEnergyBins = 100;
-
+    static constexpr G4int nEnergyBins = 1000;
 
     // ========================================================
     // Get energy-bin boundaries
