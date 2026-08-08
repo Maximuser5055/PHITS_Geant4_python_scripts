@@ -4,25 +4,6 @@
 import b_config.a_config as config
 from pathlib import Path
 
-def update_config(setting, value):
-    config_file = Path(__file__).parent.parent / "b_config" / "a_config.py"
-
-    lines = config_file.read_text().splitlines()
-
-    if isinstance(value, Path):
-        new_line = f'{setting} = Path(r"{value}")'
-    elif isinstance(value, str):
-        new_line = f'{setting} = "{value}"'
-    else:
-        new_line = f"{setting} = {repr(value)}"
-
-    for i, line in enumerate(lines):
-        if line.startswith(f"{setting} ="):
-            lines[i] = new_line
-            break
-
-    config_file.write_text("\n".join(lines))
-
 def get_user_parameters():
 
     # User Interface
@@ -146,20 +127,20 @@ def get_user_parameters():
         else config.UNCERTAINTY_LIMIT
     )
 
-    update_config("SIMULATION_CODE", simulation_code)
-    update_config("UNCERTAINTY_LIMIT", uncertainty_limit)
-    update_config("THREADS", threads)
-    update_config("SOURCE_CSV", source_csv)
-    update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
+    config.update_config("SIMULATION_CODE", simulation_code)
+    config.update_config("UNCERTAINTY_LIMIT", uncertainty_limit)
+    config.update_config("THREADS", threads)
+    config.update_config("SOURCE_CSV", source_csv)
+    config.update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
     
     if simulation_code == "PHITS":
-        update_config("PHITS_ROOT", phits_root)
-        update_config("PARALLELIZATION", parallelization)
-        update_config("MAXCAS", maxcas)
-        update_config("MAXBCH", maxbch)
+        config.update_config("PHITS_ROOT", phits_root)
+        config.update_config("PARALLELIZATION", parallelization)
+        config.update_config("MAXCAS", maxcas)
+        config.update_config("MAXBCH", maxbch)
 
     elif simulation_code == "GEANT4":
-        update_config("NPS", nps)
+        config.update_config("NPS", nps)
 
     ############################
     # Create required directories

@@ -15,7 +15,7 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
     # Determine input/output files
     # ==========================================================
 
-    simulation = params["simulation_code".upper()]
+    simulation = params["simulation_code"].upper()
     mapping = pd.read_csv(config.TARGET_REGION_CSV)
     skeletal = pd.read_csv(config.SKELETAL_MASSES_CSV)
     results_dir = config.RESULTS_DIR
@@ -50,6 +50,7 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
         # ==========================================================
         # Read files
         # ==========================================================
+        
         input_csv = ( results_dir /f"{input_prefix}_{simulation.lower()}_all_dose_and_SAFs_{phantom}.csv")
 
         output_csv = ( results_dir / f"{output_prefix}_{simulation.lower()}_target_regions_dose_SAFs_{phantom}.csv")
@@ -233,19 +234,19 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
                     "Target Region Name":
                         target_name,
 
-                    "Combined Target Region Mass (g)":
+                    "Target Region Mass (g)":
                         total_mass,
 
-                    "Combined Dose (Gy/source)":
+                    "Dose (Gy/source)":
                         combined_dose,
 
-                    "Combined SAF (kg^-1)":
+                    "SAF (kg^-1)":
                         combined_saf,
 
-                    "Combined Relative Error":
+                    "Relative Error":
                         combined_relative_error,
 
-                    "Combined Statistical Uncertainty (%)":
+                    "Statistical Uncertainty (%)":
                         statistical_uncertainty
                 })
 

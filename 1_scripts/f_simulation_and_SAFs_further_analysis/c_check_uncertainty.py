@@ -112,6 +112,8 @@ def check_uncertainty(params):
     rerun["Input File"] = ""
     rerun["Job Directory"] = ""
 
+    suffix = re.escape(input_extension)
+
     for index, row in rerun.iterrows():
 
         phantom = "AM" if row["Phantom"] == "Adult Male" else "AF"
@@ -120,18 +122,19 @@ def check_uncertainty(params):
 
         particle = row["Source Type"]
 
+        if simulation_code == "GEANT4":
+            particle = next(
+                k for k, v in config.SOURCE_TYPE_MAP.items()
+                if v == particle
+            )
+
         energy = row["Source Energy (MeV)"]
 
-        input_pattern = (
-            f"MRCP_{phantom}_source_{source}_{particle}_energy_*.inp"
-        )
+        input_pattern = (f"*MRCP_{phantom}_source_{source}_{particle}_energy_*{input_extension}")
 
         for file in input_dir.rglob(input_pattern):
 
-            match = re.search(
-                r"_energy_([0-9Ee.+-]+)\.inp$",
-                file.name
-            )
+            match = re.search(rf"_energy_([0-9Ee.+-]+){suffix}$",file.name,)
 
             if not match:
                 continue
@@ -154,11 +157,8 @@ def check_uncertainty(params):
     # Save rerun report
     # -------------------------------------------------------------------------
 
-    rerun.to_csv(
-        results_dir / "5_rerun_required.csv",
-        index=False
-    )
-
+    rerun.to_csv(rerun_file,index=False)
+    
     # -------------------------------------------------------------------------
     # Report
     # -------------------------------------------------------------------------
@@ -244,10 +244,17 @@ def check_uncertainty(params):
 
     if simulation_code == "PHITS":
 
-        print("\nEnter the new PHITS parameters.\n")
+        print("\nEnter new PHITS parameter/s:")
 
-        new_maxcas = int(input("New maxcas : "))
-        new_maxbch = int(input("New maxbch : "))
+        new_maxcas = input(f"New maxbch (no. of batches) [Current = {params["maxcas"]}]: ").strip()
+        new_maxcas = int(new_maxcas) if new_maxcas else params["maxcas"]
+        config.update_config("MAXCAS", new_maxcas)
+        config.MAXCAS = new_maxcas
+
+        new_maxbch = input(f"New maxbch (no. of batches) [Current = {params["maxbch"]}]: ").strip()
+        new_maxbch = int(new_maxbch) if new_maxbch else params["maxbch"]
+        config.update_config("MAXBCH", new_maxbch)
+        config.MAXBCH = new_maxbch
 
         def update_input(text):
 
@@ -267,10 +274,13 @@ def check_uncertainty(params):
 
     elif simulation_code == "GEANT4":
 
-        print("\nEnter the new Geant4 parameters.\n")
+        print("\nEnter new Geant4 parameter/s:")
 
-        new_nps = int(input("New nps     : "))
-
+        new_nps = input(f"New nps (no. of particle histories) [Current = {params["nps"]}]: ").strip()
+        new_nps = int(new_nps) if new_nps else params["nps"]
+        config.update_config("NPS", new_nps)
+        config.NPS = new_nps
+        
         def update_input(text):
 
             text, n1 = re.subn(
@@ -291,6 +301,11 @@ def check_uncertainty(params):
     updated = 0
 
     for _, row in rerun.iterrows():
+
+        if not row["Input File"]:
+            print(f"No matching input file found for:")
+            print(row)
+            continue
 
         input_file = input_dir / Path(row["Input File"])
 

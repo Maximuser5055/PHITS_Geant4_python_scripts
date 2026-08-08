@@ -24,9 +24,9 @@ from e_geant4.c_geant4_running_inputs import run_geant4
 from e_geant4.d_geant4_extracting_metadata import geant4_extract_metadata_stats
 from e_geant4.e_geant4_extracting_dose_and_SAFs import geant4_calculate_dose_and_SAFs
 
-from f_further_analysis.a_calculating_extra_metadata import calculate_extra_metadata
-from f_further_analysis.b_configure_target_organs_and_calculate_true_dose_and_SAFs import combine_target_organs_and_calculate_true_dose_and_SAFs
-from f_further_analysis.c_check_uncertainty import check_uncertainty
+from f_simulation_and_SAFs_further_analysis.a_calculating_extra_metadata import calculate_extra_metadata
+from f_simulation_and_SAFs_further_analysis.b_configure_target_organs_and_calculate_true_dose_and_SAFs import combine_target_organs_and_calculate_true_dose_and_SAFs
+from f_simulation_and_SAFs_further_analysis.c_check_uncertainty import check_uncertainty
 
 def main():
 
@@ -51,7 +51,7 @@ def main():
         run_geant4(params)
         geant4_extract_metadata_stats()
         calculate_extra_metadata(params)
-        geant4_calculate_dose_and_SAFs(params)
+        geant4_calculate_dose_and_SAFs()
 
     combine_target_organs_and_calculate_true_dose_and_SAFs(params)
     check_uncertainty(params)

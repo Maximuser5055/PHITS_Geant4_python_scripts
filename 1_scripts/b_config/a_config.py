@@ -30,6 +30,25 @@ def detect_operating_system():
 
     return SYSTEM, IS_WINDOWS, IS_LINUX, IS_WSL
 
+def update_config(setting, value):
+    config_file = Path(__file__)
+    
+    lines = config_file.read_text().splitlines()
+
+    if isinstance(value, Path):
+        new_line = f'{setting} = Path(r"{value}")'
+    elif isinstance(value, str):
+        new_line = f'{setting} = "{value}"'
+    else:
+        new_line = f"{setting} = {repr(value)}"
+
+    for i, line in enumerate(lines):
+        if line.startswith(f"{setting} ="):
+            lines[i] = new_line
+            break
+
+    config_file.write_text("\n".join(lines))
+    
 ############################
 # File Paths
 ############################
