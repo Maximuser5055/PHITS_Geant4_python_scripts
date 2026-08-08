@@ -428,6 +428,11 @@ CMakeFiles/Internal.dir/src/TETDetectorConstruction.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ThreeVector.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4String.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Colour.hh \
+ /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETPSPhotonFluence.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPrimitiveScorer.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4THitsMap.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Step.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4TouchableHistory.hh \
  /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETParameterisation.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPVParameterisation.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VVolumeMaterialScanner.hh \

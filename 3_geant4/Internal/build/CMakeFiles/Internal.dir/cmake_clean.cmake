@@ -10,6 +10,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Internal.dir/src/TETModelImport.cc.o.d"
   "CMakeFiles/Internal.dir/src/TETPSEnergyDeposit.cc.o"
   "CMakeFiles/Internal.dir/src/TETPSEnergyDeposit.cc.o.d"
+  "CMakeFiles/Internal.dir/src/TETPSPhotonFluence.cc.o"
+  "CMakeFiles/Internal.dir/src/TETPSPhotonFluence.cc.o.d"
   "CMakeFiles/Internal.dir/src/TETParameterisation.cc.o"
   "CMakeFiles/Internal.dir/src/TETParameterisation.cc.o.d"
   "CMakeFiles/Internal.dir/src/TETPhysicsList.cc.o"

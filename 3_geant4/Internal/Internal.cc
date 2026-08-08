@@ -189,14 +189,14 @@ int main(int argc,char** argv)
 	setupTimer.Stop();
 	setupSeconds = setupTimer.GetRealElapsed();
 
-	//if ( ! ui ){
-		// batch mode
-	//	G4String command = "/control/execute ";
-	//	UImanager->ApplyCommand(command+macro);
-	//}
-
 	runTimer.Start();
-	
+	if ( ! ui ){
+		// batch mode
+		G4String command = "/control/execute ";
+		UImanager->ApplyCommand(command+macro);
+	}
+
+	/*
 	if (!ui) {
 		// batch mode
 		namespace fs = std::filesystem;
@@ -211,7 +211,7 @@ int main(int argc,char** argv)
 		// Execute the .in using its full path
 		UImanager->ApplyCommand("/control/execute " + G4String(macroPath.string()));
 	}
-
+	*/
 	else {
 		// interactive mode
 		UImanager->ApplyCommand("/control/execute init_vis.mac");

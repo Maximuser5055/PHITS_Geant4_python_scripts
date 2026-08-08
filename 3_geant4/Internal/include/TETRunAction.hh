@@ -43,6 +43,7 @@
 #include "TETRun.hh"
 #include "TETPrimaryGeneratorAction.hh"
 #include "TETModelImport.hh"
+#include "TETPSPhotonFluence.hh"
 
 // *********************************************************************
 // The main function of this UserRunAction class is to produce the result
@@ -68,7 +69,8 @@ public:
 
 	void PrintResult(std::ostream &out);
 	void PrintCSV(std::ostream& out);
-	
+	void PrintPhotonFluence(std::ostream& out);
+
 private:
 	TETModelImport* tetData;
 	TETRun*         fRun;

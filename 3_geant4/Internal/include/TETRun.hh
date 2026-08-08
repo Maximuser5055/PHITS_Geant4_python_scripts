@@ -35,9 +35,10 @@
 #include "G4Event.hh"
 #include "G4THitsMap.hh"
 #include "G4SDManager.hh"
+#include "TETPSPhotonFluence.hh"
 
 typedef std::map<G4int, std::pair<G4double, G4double>> EDEPMAP;
-
+typedef std::map<G4int, std::pair<G4double, G4double>> FLUXMAP;
 // *********************************************************************
 // This is G4Run class that sums up energy deposition from each event.
 // The sum of the square of energy deposition was also calculated to
@@ -47,6 +48,9 @@ typedef std::map<G4int, std::pair<G4double, G4double>> EDEPMAP;
 //                 std::map.
 // -- Merge: Merge the data calculated in each thread.
 // *********************************************************************
+
+
+
 
 class TETRun : public G4Run 
 {
@@ -59,9 +63,11 @@ public:
     virtual void Merge(const G4Run*);
 
     EDEPMAP* GetEdepMap() {return &edepMap;};
+	FLUXMAP* GetPhotonFluenceMap(){return &photonFluenceMap;};
 
 private:
     EDEPMAP edepMap;
+	FLUXMAP photonFluenceMap;
 };
 
 #endif

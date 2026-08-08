@@ -524,14 +524,12 @@ CMakeFiles/Internal.dir/src/TETActionInitialization.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VReadOutGeometry.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4SensitiveVolumeList.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VSDFilter.hh \
- /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETPrimaryGeneratorAction.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VUserPrimaryGeneratorAction.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/globals.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ParticleGun.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPrimaryGenerator.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ParticleTable.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ParticleDefinition.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4RandomDirection.hh \
+ /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETPSPhotonFluence.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPrimitiveScorer.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4MultiFunctionalDetector.hh \
+ /usr/include/c++/15/functional \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Step.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4TouchableHistory.hh \
  /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETModelImport.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4UIExecutive.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VUIshell.hh \
@@ -548,6 +546,13 @@ CMakeFiles/Internal.dir/src/TETActionInitialization.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Exp.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Material.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Colour.hh \
+ /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETPrimaryGeneratorAction.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VUserPrimaryGeneratorAction.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/globals.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ParticleGun.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPrimaryGenerator.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ParticleTable.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ParticleDefinition.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4RandomDirection.hh \
  /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETSteppingAction.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4UserSteppingAction.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Step.hh
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4UserSteppingAction.hh

@@ -43,6 +43,8 @@ void TETRun::RecordEvent(const G4Event* event)
 {
 	auto  fCollID
 	= G4SDManager::GetSDMpointer()->GetCollectionID("PhantomSD/eDep");
+	auto fFluxCollID 
+	=G4SDManager::GetSDMpointer()->GetCollectionID("PhantomSD/photonFluence");
 
 	//Hits collections
 	//
@@ -51,11 +53,20 @@ void TETRun::RecordEvent(const G4Event* event)
 
 	G4THitsMap<G4double>* evtMap =
 			static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID));
+	G4THitsMap<G4double>* fluxMap =
+			static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fFluxCollID));
 
 	// sum up the energy deposition and the square of it
 	for (auto itr : *evtMap->GetMap()) {
 		edepMap[itr.first].first  += *itr.second;                   //sum
 		edepMap[itr.first].second += (*itr.second) * (*itr.second); //sum square
+	}
+
+	if (fluxMap) {
+    for (auto itr : *fluxMap->GetMap()) {
+        photonFluenceMap[itr.first].first += *itr.second;
+        photonFluenceMap[itr.first].second += (*itr.second) * (*itr.second);
+    	}
 	}
 }
 
@@ -63,10 +74,16 @@ void TETRun::Merge(const G4Run* run)
 {
 	// merge the data from each thread
 	EDEPMAP localMap = static_cast<const TETRun*>(run)->edepMap;
+	FLUXMAP localFlux = static_cast<const TETRun*>(run)->photonFluenceMap;
 
-	for(auto itr : localMap){
+	for(auto itr : localMap) {
 		edepMap[itr.first].first  += itr.second.first;
 		edepMap[itr.first].second += itr.second.second;
+	}
+
+	for (auto itr : localFlux) {
+    photonFluenceMap[itr.first].first += itr.second.first;
+	photonFluenceMap[itr.first].second += itr.second.second;
 	}
 
 	G4Run::Merge(run);

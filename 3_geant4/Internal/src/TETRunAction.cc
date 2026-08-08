@@ -29,6 +29,7 @@
 //
 
 #include "TETRunAction.hh"
+
 #include <filesystem>
 
 TETRunAction::TETRunAction(TETModelImport* _tetData, G4String _output)
@@ -85,6 +86,27 @@ void TETRunAction::EndOfRunAction(const G4Run* aRun)
 	{
 		PrintCSV(csv);
 		csv.close();
+	}
+
+	std::filesystem::path fluxPath(outputFile.c_str());
+
+	fluxPath.replace_extension(".csv");
+
+	fluxPath = fluxPath.parent_path() / (fluxPath.stem().string() + "_photon_fluence.csv");
+
+	std::ofstream fluxFile(fluxPath);
+
+	if (!fluxFile) {
+		G4cerr
+			<< "Unable to create "
+			<< fluxPath
+			<< G4endl;
+	}
+	else
+	{
+		PrintPhotonFluence(fluxFile);
+
+		fluxFile.close();
 	}
 }
 
@@ -155,5 +177,139 @@ void TETRunAction::PrintCSV(std::ostream& out)
             << itr.second / g << ","
             << meanDose / (joule / kg) << ","
             << relativeE << "\n";
+    }
+}
+
+void TETRunAction::PrintPhotonFluence(
+    std::ostream& out
+)
+{
+    auto fluxMap =
+        *fRun->GetPhotonFluenceMap();
+
+
+    // ========================================================
+    // IDs of the skeletal spongiosa regions
+    // ========================================================
+
+    std::vector<G4int> spongiosaIDs =
+    {
+        1400,
+        2500,
+        2700,
+        2900,
+        4000,
+        4200,
+        4400,
+        4600,
+        4800,
+        5000,
+        5200,
+        5400,
+        5600
+    };
+
+
+    // ========================================================
+    // Header
+    // ========================================================
+
+    out
+        << "Spongiosa ID,"
+        << "Energy (MeV),"
+        << "Fluence (photons/m2/source)"
+        << "\n";
+
+
+    out.precision(12);
+
+
+    // ========================================================
+    // Loop over spongiosa regions
+    // ========================================================
+
+    for (G4int organID : spongiosaIDs)
+    {
+        // ----------------------------------------------------
+        // Volume of this spongiosa region
+        // ----------------------------------------------------
+
+        G4double volume =
+            tetData->GetVolume(
+                organID
+            );
+
+
+        // ----------------------------------------------------
+        // Loop over energy bins
+        // ----------------------------------------------------
+
+        for (
+            G4int bin = 0;
+            bin < TETPSPhotonFluence::nEnergyBins;
+            bin++
+        )
+        {
+            G4int key =
+                organID
+                * TETPSPhotonFluence::nEnergyBins
+                + bin;
+
+
+            // ------------------------------------------------
+            // Look for track length
+            // ------------------------------------------------
+
+            auto itr = fluxMap.find(key);
+
+            G4double totalTrackLength = 0.0;
+
+
+            if (itr != fluxMap.end()) {
+                totalTrackLength = itr->second.first;
+            }
+
+
+            // ------------------------------------------------
+            // Mean track length per source particle
+            // ------------------------------------------------
+
+            G4double meanTrackLength = totalTrackLength / numOfEvent;
+
+            // ------------------------------------------------
+            // Fluence
+            //
+            // track length / volume
+            // ------------------------------------------------
+
+            G4double fluence = meanTrackLength / volume;
+
+            // ------------------------------------------------
+            // Convert cm^-2 -> m^-2
+            //
+            // If volume is stored in mm3/cm3,
+            // use Geant4 units to handle conversion.
+            // ------------------------------------------------
+
+            G4double fluence_m2 = fluence * m2;
+
+            // ------------------------------------------------
+            // Energy
+            // ------------------------------------------------
+
+            G4double energy = TETPSPhotonFluence::GetEnergy(bin);
+
+            // ------------------------------------------------
+            // Output
+            // ------------------------------------------------
+
+            out
+                << organID
+                << ","
+                << energy
+                << ","
+                << fluence_m2
+                << "\n";
+        }
     }
 }

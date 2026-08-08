@@ -115,6 +115,9 @@ void TETDetectorConstruction::ConstructSDandField()
 	// scorer for energy depositon in each organ
 	MFDet->RegisterPrimitive(new TETPSEnergyDeposit("eDep", tetData));
 
+	// Photon fluence scorer
+    MFDet->RegisterPrimitive(new TETPSPhotonFluence("photonFluence",tetData));
+	
 	// attach the detector to logical volume for parameterised geometry (phantom geometry)
 	SetSensitiveDetector(tetLogic, MFDet);
 }

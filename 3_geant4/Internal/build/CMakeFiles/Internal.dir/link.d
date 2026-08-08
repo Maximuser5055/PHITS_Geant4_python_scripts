@@ -7,6 +7,7 @@ Internal: \
   CMakeFiles/Internal.dir/src/TETDetectorConstruction.cc.o \
   CMakeFiles/Internal.dir/src/TETModelImport.cc.o \
   CMakeFiles/Internal.dir/src/TETPSEnergyDeposit.cc.o \
+  CMakeFiles/Internal.dir/src/TETPSPhotonFluence.cc.o \
   CMakeFiles/Internal.dir/src/TETParameterisation.cc.o \
   CMakeFiles/Internal.dir/src/TETPhysicsList.cc.o \
   CMakeFiles/Internal.dir/src/TETPrimaryGeneratorAction.cc.o \
@@ -146,6 +147,8 @@ CMakeFiles/Internal.dir/src/TETDetectorConstruction.cc.o:
 CMakeFiles/Internal.dir/src/TETModelImport.cc.o:
 
 CMakeFiles/Internal.dir/src/TETPSEnergyDeposit.cc.o:
+
+CMakeFiles/Internal.dir/src/TETPSPhotonFluence.cc.o:
 
 CMakeFiles/Internal.dir/src/TETParameterisation.cc.o:
 

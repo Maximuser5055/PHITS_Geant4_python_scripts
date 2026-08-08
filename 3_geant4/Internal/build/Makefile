@@ -301,6 +301,30 @@ src/TETPSEnergyDeposit.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Internal.dir/build.make CMakeFiles/Internal.dir/src/TETPSEnergyDeposit.cc.s
 .PHONY : src/TETPSEnergyDeposit.cc.s
 
+src/TETPSPhotonFluence.o: src/TETPSPhotonFluence.cc.o
+.PHONY : src/TETPSPhotonFluence.o
+
+# target to build an object file
+src/TETPSPhotonFluence.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Internal.dir/build.make CMakeFiles/Internal.dir/src/TETPSPhotonFluence.cc.o
+.PHONY : src/TETPSPhotonFluence.cc.o
+
+src/TETPSPhotonFluence.i: src/TETPSPhotonFluence.cc.i
+.PHONY : src/TETPSPhotonFluence.i
+
+# target to preprocess a source file
+src/TETPSPhotonFluence.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Internal.dir/build.make CMakeFiles/Internal.dir/src/TETPSPhotonFluence.cc.i
+.PHONY : src/TETPSPhotonFluence.cc.i
+
+src/TETPSPhotonFluence.s: src/TETPSPhotonFluence.cc.s
+.PHONY : src/TETPSPhotonFluence.s
+
+# target to generate assembly for a file
+src/TETPSPhotonFluence.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Internal.dir/build.make CMakeFiles/Internal.dir/src/TETPSPhotonFluence.cc.s
+.PHONY : src/TETPSPhotonFluence.cc.s
+
 src/TETParameterisation.o: src/TETParameterisation.cc.o
 .PHONY : src/TETParameterisation.o
 
@@ -474,6 +498,9 @@ help:
 	@echo "... src/TETPSEnergyDeposit.o"
 	@echo "... src/TETPSEnergyDeposit.i"
 	@echo "... src/TETPSEnergyDeposit.s"
+	@echo "... src/TETPSPhotonFluence.o"
+	@echo "... src/TETPSPhotonFluence.i"
+	@echo "... src/TETPSPhotonFluence.s"
 	@echo "... src/TETParameterisation.o"
 	@echo "... src/TETParameterisation.i"
 	@echo "... src/TETParameterisation.s"

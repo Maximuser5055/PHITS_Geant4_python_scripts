@@ -1,13 +1,12 @@
-CMakeFiles/Internal.dir/src/TETRun.cc.o: \
- /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/src/TETRun.cc \
+CMakeFiles/Internal.dir/src/TETPSPhotonFluence.cc.o: \
+ /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/src/TETPSPhotonFluence.cc \
  /usr/include/stdc-predef.h \
- /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETRun.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Run.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/globals.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ios.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Types.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4GlobalConfig.hh \
- /usr/include/c++/15/complex \
+ /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETPSPhotonFluence.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPrimitiveScorer.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4MultiFunctionalDetector.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4HCofThisEvent.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Allocator.hh \
+ /usr/include/c++/15/cstddef \
  /usr/include/x86_64-linux-gnu/c++/15/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/15/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -19,10 +18,20 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
  /usr/include/x86_64-linux-gnu/c++/15/bits/cpu_defines.h \
  /usr/include/c++/15/pstl/pstl_config.h \
- /usr/include/c++/15/bits/cpp_type_traits.h \
- /usr/include/c++/15/bits/version.h /usr/include/c++/15/type_traits \
- /usr/include/c++/15/ext/type_traits.h /usr/include/c++/15/cmath \
- /usr/include/c++/15/bits/requires_hosted.h /usr/include/math.h \
+ /usr/lib/gcc/x86_64-linux-gnu/15/include/stddef.h \
+ /usr/include/c++/15/bits/version.h /usr/include/c++/15/typeinfo \
+ /usr/include/c++/15/bits/exception.h \
+ /usr/include/c++/15/bits/hash_bytes.h \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4AllocatorPool.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VHitsCollection.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/globals.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ios.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Types.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4GlobalConfig.hh \
+ /usr/include/c++/15/complex /usr/include/c++/15/bits/cpp_type_traits.h \
+ /usr/include/c++/15/type_traits /usr/include/c++/15/ext/type_traits.h \
+ /usr/include/c++/15/cmath /usr/include/c++/15/bits/requires_hosted.h \
+ /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
@@ -37,7 +46,6 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
  /usr/include/c++/15/bits/std_abs.h /usr/include/stdlib.h \
- /usr/lib/gcc/x86_64-linux-gnu/15/include/stddef.h \
  /usr/include/x86_64-linux-gnu/bits/waitflags.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
@@ -106,11 +114,9 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
- /usr/include/c++/15/exception /usr/include/c++/15/bits/exception.h \
- /usr/include/c++/15/bits/exception_ptr.h \
- /usr/include/c++/15/bits/cxxabi_init_exception.h \
- /usr/include/c++/15/typeinfo /usr/include/c++/15/bits/hash_bytes.h \
- /usr/include/c++/15/new /usr/include/c++/15/bits/nested_exception.h \
+ /usr/include/c++/15/exception /usr/include/c++/15/bits/exception_ptr.h \
+ /usr/include/c++/15/bits/cxxabi_init_exception.h /usr/include/c++/15/new \
+ /usr/include/c++/15/bits/nested_exception.h \
  /usr/include/c++/15/bits/char_traits.h \
  /usr/include/c++/15/bits/localefwd.h \
  /usr/include/x86_64-linux-gnu/c++/15/bits/c++locale.h \
@@ -173,7 +179,7 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
  /usr/include/c++/15/bits/charconv.h \
  /usr/include/c++/15/bits/basic_string.tcc \
- /usr/include/c++/15/bits/memory_resource.h /usr/include/c++/15/cstddef \
+ /usr/include/c++/15/bits/memory_resource.h \
  /usr/include/c++/15/bits/uses_allocator.h \
  /usr/include/c++/15/bits/uses_allocator_args.h /usr/include/c++/15/tuple \
  /usr/include/c++/15/bits/locale_classes.tcc \
@@ -243,51 +249,11 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /usr/include/c++/15/bits/stl_vector.h \
  /usr/include/c++/15/bits/stl_bvector.h \
  /usr/include/c++/15/bits/vector.tcc \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Event.hh \
- /usr/include/c++/15/set /usr/include/c++/15/bits/stl_set.h \
- /usr/include/c++/15/bits/stl_multiset.h \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/evtdefs.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Allocator.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4AllocatorPool.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4PrimaryVertex.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4PrimaryParticle.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Step.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ThreeVector.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/CLHEP/Vector/ThreeVector.h \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/CLHEP/Utility/defs.h \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/CLHEP/Vector/ThreeVector.icc \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/pwdefs.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4HCofThisEvent.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VHitsCollection.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4DCofThisEvent.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VDigiCollection.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4TrajectoryContainer.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VTrajectory.hh \
- /usr/include/c++/15/memory \
- /usr/include/c++/15/bits/stl_raw_storage_iter.h \
- /usr/include/c++/15/bits/align.h /usr/include/c++/15/bits/unique_ptr.h \
- /usr/include/c++/15/bits/shared_ptr.h \
- /usr/include/c++/15/bits/shared_ptr_base.h \
- /usr/include/c++/15/bits/allocated_ptr.h \
- /usr/include/c++/15/ext/concurrence.h \
- /usr/include/c++/15/bits/shared_ptr_atomic.h \
- /usr/include/c++/15/bits/atomic_base.h \
- /usr/include/c++/15/bits/atomic_lockfree_defines.h \
- /usr/include/c++/15/backward/auto_ptr.h \
- /usr/include/c++/15/pstl/glue_memory_defs.h \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VUserEventInformation.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4THitsMap.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4THitsCollection.hh \
- /usr/include/c++/15/unordered_map \
- /usr/include/c++/15/bits/unordered_map.h \
- /usr/include/c++/15/bits/hashtable.h \
- /usr/include/c++/15/bits/hashtable_policy.h \
- /usr/include/c++/15/bits/enable_special_members.h \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4SDManager.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4HCtable.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4SDStructure.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VSensitiveDetector.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4CollectionNameVector.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Step.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPhysicalVolume.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/geomdefs.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4RotationMatrix.hh \
@@ -312,8 +278,15 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4AutoLock.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Threading.hh \
  /usr/include/c++/15/chrono /usr/include/c++/15/condition_variable \
- /usr/include/c++/15/future /usr/include/c++/15/bits/atomic_futex.h \
- /usr/include/c++/15/atomic /usr/include/c++/15/bits/std_function.h \
+ /usr/include/c++/15/bits/shared_ptr.h \
+ /usr/include/c++/15/bits/shared_ptr_base.h \
+ /usr/include/c++/15/bits/allocated_ptr.h \
+ /usr/include/c++/15/bits/unique_ptr.h \
+ /usr/include/c++/15/ext/concurrence.h /usr/include/c++/15/future \
+ /usr/include/c++/15/bits/atomic_base.h \
+ /usr/include/c++/15/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/15/bits/atomic_futex.h /usr/include/c++/15/atomic \
+ /usr/include/c++/15/bits/std_function.h \
  /usr/include/c++/15/bits/std_thread.h /usr/include/c++/15/thread \
  /usr/include/c++/15/bits/this_thread_sleep.h \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPhysicalVolume.icc \
@@ -341,6 +314,12 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4NavigationHistoryPool.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4NavigationHistory.icc \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4LogicalVolume.hh \
+ /usr/include/c++/15/memory \
+ /usr/include/c++/15/bits/stl_raw_storage_iter.h \
+ /usr/include/c++/15/bits/align.h \
+ /usr/include/c++/15/bits/shared_ptr_atomic.h \
+ /usr/include/c++/15/backward/auto_ptr.h \
+ /usr/include/c++/15/pstl/glue_memory_defs.h \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Region.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Region.icc \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4LogicalVolume.icc \
@@ -380,6 +359,7 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/trkdefs.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4DynamicParticle.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ElectronOccupancy.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/pwdefs.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4LorentzVector.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ParticleDefinition.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4PDefManager.hh \
@@ -394,12 +374,17 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VHit.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VReadOutGeometry.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4SensitiveVolumeList.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VSensitiveDetector.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4CollectionNameVector.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VSDFilter.hh \
- /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETPSPhotonFluence.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPrimitiveScorer.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4MultiFunctionalDetector.hh \
- /usr/include/c++/15/functional /usr/include/c++/15/array \
- /usr/include/c++/15/compare \
+ /usr/include/c++/15/functional /usr/include/c++/15/unordered_map \
+ /usr/include/c++/15/bits/unordered_map.h \
+ /usr/include/c++/15/bits/hashtable.h \
+ /usr/include/c++/15/bits/hashtable_policy.h \
+ /usr/include/c++/15/bits/enable_special_members.h \
+ /usr/include/c++/15/array /usr/include/c++/15/compare \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4THitsMap.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4THitsCollection.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Step.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4TouchableHistory.hh \
  /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETModelImport.hh \
@@ -421,4 +406,9 @@ CMakeFiles/Internal.dir/src/TETRun.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Pow.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Exp.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Material.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Colour.hh
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Colour.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Gamma.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4SDManager.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4HCtable.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4SDStructure.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4MultiFunctionalDetector.hh

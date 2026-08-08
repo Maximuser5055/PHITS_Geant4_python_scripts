@@ -441,6 +441,11 @@ CMakeFiles/Internal.dir/Internal.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ThreeVector.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4String.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Colour.hh \
+ /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETPSPhotonFluence.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPrimitiveScorer.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4THitsMap.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Step.hh \
+ /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4TouchableHistory.hh \
  /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETParameterisation.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VPVParameterisation.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VVolumeMaterialScanner.hh \
@@ -609,7 +614,6 @@ CMakeFiles/Internal.dir/Internal.cc.o: \
  /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETRun.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Run.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Event.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4THitsMap.hh \
  /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETPrimaryGeneratorAction.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4VUserPrimaryGeneratorAction.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4ParticleGun.hh \
@@ -619,7 +623,6 @@ CMakeFiles/Internal.dir/Internal.cc.o: \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4RandomDirection.hh \
  /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/include/TETSteppingAction.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4UserSteppingAction.hh \
- /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4Step.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4MTRunManager.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4MTBarrier.hh \
  /home/clarence/Software/Geant4/geant4-v11.4.2-install/include/Geant4/G4RNGHelper.hh \
