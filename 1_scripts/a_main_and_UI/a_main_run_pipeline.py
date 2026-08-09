@@ -27,6 +27,7 @@ from e_geant4.e_geant4_extracting_dose_and_SAFs import geant4_calculate_dose_and
 from f_simulation_and_SAFs_further_analysis.a_calculating_extra_metadata import calculate_extra_metadata
 from f_simulation_and_SAFs_further_analysis.c_configure_target_organs_and_calculate_true_dose_and_SAFs import combine_target_organs_and_calculate_true_dose_and_SAFs
 from f_simulation_and_SAFs_further_analysis.d_check_uncertainty import check_uncertainty
+from f_simulation_and_SAFs_further_analysis.b_calculate_marrow_endosteum_SAFs import calculate_marrow_endosteum_SAFs
 
 def main():
 
@@ -52,6 +53,7 @@ def main():
         geant4_extract_metadata_stats()
         calculate_extra_metadata(params)
         geant4_calculate_dose_and_SAFs()
+        calculate_marrow_endosteum_SAFs(params)
 
     combine_target_organs_and_calculate_true_dose_and_SAFs(params)
     check_uncertainty(params)

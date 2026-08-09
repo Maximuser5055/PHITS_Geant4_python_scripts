@@ -55,6 +55,18 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
         output_csv = ( results_dir / f"{output_prefix}_{simulation.lower()}_target_regions_dose_SAFs_{phantom}.csv")
 
+        # ==========================================================
+        # Skip phantom if input file does not exist
+        # ==========================================================
+
+        if not input_csv.is_file():
+
+            print(f"\n[SKIP] {phantom} input file not found:")
+            print(f"       {input_csv}")
+            print(f"       Skipping {phantom}...")
+
+            continue
+
         print(f"\nProcessing {phantom}...")
 
         df = pd.read_csv(input_csv)
@@ -253,6 +265,9 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
         # ==========================================================
         # Save output
         # ==========================================================
+        if not output_rows:
+            print(f"\n[WARNING] No target-region data generated for {phantom}.")
+            continue
 
         output = pd.DataFrame(output_rows)
 
@@ -270,7 +285,9 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
         output.sort_values(
             [
+                "Phantom",
                 "Source Organ ID",
+                "Source Type",
                 "Source Energy (MeV)",
                 "Target Region Name",
             ],

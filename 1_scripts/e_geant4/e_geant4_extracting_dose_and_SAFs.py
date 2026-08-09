@@ -16,7 +16,7 @@ def geant4_calculate_dose_and_SAFs():
 
     input_root = config.GEANT4_GENERATED_INPUTS_DIR
     output_root = config.RESULTS_DIR
-    source_type_map = config.SOURCE_TYPE_MAP
+    source_type_map = config.GEANT4_SOURCE_TYPE_MAP
 
     # -------------------------------------------------------------
     # File names
@@ -41,7 +41,9 @@ def geant4_calculate_dose_and_SAFs():
     )
 
     deposit_files = sorted(
-        input_root.rglob("Geant4_deposit_*.csv")
+        file
+        for file in input_root.rglob("Geant4_deposit_*.csv")
+        if not file.stem.lower().endswith("_photon_fluence")
     )
 
     if not deposit_files:
@@ -244,15 +246,11 @@ def geant4_calculate_dose_and_SAFs():
     ].copy()
 
     sort_columns = [
-
-        "Source Type",
-
-        "Source Energy (MeV)",
-
+        "Phantom",
         "Source Organ ID",
-
+        "Source Type",
+        "Source Energy (MeV)",
         "Target Organ ID"
-
     ]
 
     adult_male.sort_values(

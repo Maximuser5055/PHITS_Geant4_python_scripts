@@ -203,8 +203,7 @@ G4bool TETPSPhotonFluence::ProcessHits(
 
 
     if (
-        track->GetDefinition()
-        != G4Gamma::GammaDefinition()
+        track->GetDefinition()!= G4Gamma::GammaDefinition()
     )
     {
         return false;

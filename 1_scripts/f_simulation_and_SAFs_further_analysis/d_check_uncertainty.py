@@ -61,13 +61,36 @@ def check_uncertainty(params):
 
     for csv_file in csv_files:
 
-        if csv_file.exists():
-            dfs.append(pd.read_csv(csv_file))
+        if not csv_file.exists():
+
+            print(
+                f"\n[SKIP] Phantom result file not found:"
+            )
+
+            print(
+                f"       {csv_file}"
+            )
+
+            continue
+
+        print(
+            f"\nReading: {csv_file.name}"
+        )
+
+        dfs.append(
+            pd.read_csv(csv_file)
+        )
 
     if not dfs:
-        raise FileNotFoundError("No tally CSV files found.")
 
-    df = pd.concat(dfs, ignore_index=True)
+        raise FileNotFoundError(
+            "No phantom tally CSV files found."
+        )
+
+    df = pd.concat(
+        dfs,
+        ignore_index=True
+    )
 
     # -------------------------------------------------------------------------
     # Ignore rows with zero dose
@@ -81,6 +104,7 @@ def check_uncertainty(params):
 
     group_columns = [
         "Phantom",
+        "Source Organ ID",
         "Source Organ Name",
         "Source Type",
         "Source Energy (MeV)"
@@ -99,9 +123,9 @@ def check_uncertainty(params):
     rerun = rerun.sort_values(
         by=[
             "Phantom",
+            "Source Organ ID",
             "Source Type",
             "Source Energy (MeV)",
-            "Source Organ Name",
         ]
     )
 
@@ -124,7 +148,7 @@ def check_uncertainty(params):
 
         if simulation_code == "GEANT4":
             particle = next(
-                k for k, v in config.SOURCE_TYPE_MAP.items()
+                k for k, v in config.GEANT4_SOURCE_TYPE_MAP.items()
                 if v == particle
             )
 
@@ -200,9 +224,9 @@ def check_uncertainty(params):
         .sort_values(
             by=[
                 "Phantom",
+                "Source Organ ID",
                 "Source Type",
                 "Energy (MeV)",
-                "Source Organ",
             ]
         )
     )

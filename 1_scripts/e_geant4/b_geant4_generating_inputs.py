@@ -30,9 +30,9 @@ def geant4_generate_inputs(params):
 
         threads = params["threads"]
         nps = params["nps"]      
-        particle = config.GEANT4_SOURCE_TYPES[0]
+        source_type = params["source_type"]
 
-        for energy in config.SOURCE_ENERGIES:
+        for energy in params["source_energies"]:
 
             for region, organ_name in SOURCE_ORGANS[phantom].items():
 
@@ -46,7 +46,7 @@ def geant4_generate_inputs(params):
                     f"Geant4_MRCP_"
                     f"{phantom}_"
                     f"source_{safe_name}_"
-                    f"{particle}_"
+                    f"{source_type}_"
                     f"energy_{energy}"
                 )
 
@@ -65,7 +65,7 @@ def geant4_generate_inputs(params):
 
                 mac_text = mac_text.replace(
                     "{{PARTICLE}}",
-                    particle
+                    source_type
                 )
 
                 mac_text = mac_text.replace(
@@ -110,8 +110,8 @@ def geant4_generate_inputs(params):
 
     num_phantoms = len(phantoms)
     num_organs_per_phantom = len(SOURCE_ORGANS[phantoms[0]])
-    num_source_types = len(config.GEANT4_SOURCE_TYPES)
-    num_energy_bins = len(config.SOURCE_ENERGIES)
+    num_source_types = int(params["source_type"] in config.GEANT4_SOURCE_TYPES)
+    num_energy_bins = len(params["source_energies"])
 
     print(
         f"Generated {total_files} Geant4 input file(s) [{int(total_files/2)} .in and {int(total_files/2)} .mac files]"

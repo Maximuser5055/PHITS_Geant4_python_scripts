@@ -1,0 +1,41 @@
+Organ ID 1400 volume = 1.181578715838e+05 cm3-ish/internal units
+Organ ID 2500 volume = 3.894296746482e+04 cm3-ish/internal units
+Organ ID 2700 volume = 3.279595934172e+05 cm3-ish/internal units
+Organ ID 2900 volume = 3.673175931004e+05 cm3-ish/internal units
+Organ ID 4000 volume = 4.428585094612e+04 cm3-ish/internal units
+Organ ID 4200 volume = 5.527846347260e+05 cm3-ish/internal units
+Organ ID 4400 volume = 3.908984566816e+05 cm3-ish/internal units
+Organ ID 4600 volume = 1.304498390978e+05 cm3-ish/internal units
+Organ ID 4800 volume = 7.522904792852e+04 cm3-ish/internal units
+Organ ID 5000 volume = 3.226371712924e+05 cm3-ish/internal units
+Organ ID 5200 volume = 2.631627839356e+05 cm3-ish/internal units
+Organ ID 5400 volume = 1.860832516541e+05 cm3-ish/internal units
+Organ ID 5600 volume = 5.900104103462e+04 cm3-ish/internal units
+
+============================================================
+PHOTON FLUENCE MAP DEBUG
+============================================================
+Number of entries in fluxMap = 10236
+nEnergyBins = 100
+
+
+============================================================
+PHOTON FLUENCE MAP DEBUG
+============================================================
+Number of entries in fluxMap = 10236
+nEnergyBins = 100
+
+
+============================================================
+ORGAN ID 1400 FLUENCE CHECK
+============================================================
+Events processed        = 1000000
+Worker threads          = 32
+nEnergyBins             = 100
+Nonzero energy bins     = 54
+Total track length      = 1.535036562810e+05
+Mean track length/event = 1.535036562810e-01
+Spongiosa volume        = 1.181578715838e+05
+Fluence                 = 1.299140329996e+00 photons/m2/source
+============================================================
+

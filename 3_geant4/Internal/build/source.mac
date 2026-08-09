@@ -1,5 +1,5 @@
 # ParticleGun macro:
-# 1 MeV-gamma source
+# {{ENERGY}} MeV-{{PARTICLE}} source
 /gun/particle {{PARTICLE}}
 /gun/energy {{ENERGY}} MeV
 

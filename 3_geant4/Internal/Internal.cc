@@ -190,13 +190,13 @@ int main(int argc,char** argv)
 	setupSeconds = setupTimer.GetRealElapsed();
 
 	runTimer.Start();
+	/*
 	if ( ! ui ){
 		// batch mode
 		G4String command = "/control/execute ";
 		UImanager->ApplyCommand(command+macro);
-	}
+	}*/
 
-	/*
 	if (!ui) {
 		// batch mode
 		namespace fs = std::filesystem;
@@ -211,7 +211,7 @@ int main(int argc,char** argv)
 		// Execute the .in using its full path
 		UImanager->ApplyCommand("/control/execute " + G4String(macroPath.string()));
 	}
-	*/
+
 	else {
 		// interactive mode
 		UImanager->ApplyCommand("/control/execute init_vis.mac");
@@ -219,10 +219,6 @@ int main(int argc,char** argv)
 		delete visManager;
 		delete ui;
 	}
-
-	// Job termination
-	//
-	delete runManager;
 
 	runTimer.Stop();
 	runSeconds = runTimer.GetRealElapsed();
@@ -250,7 +246,9 @@ int main(int argc,char** argv)
 		);
 	}
 
-	timingPath = timingPath.parent_path() / filename;
+	timingPath =
+		timingPath.parent_path() / filename;
+
 	timingPath.replace_extension(".txt");
 
 	std::ofstream timing(timingPath);
@@ -260,24 +258,37 @@ int main(int argc,char** argv)
 		timing << "Geant4 Timing Summary\n";
 		timing << "=====================\n\n";
 
-		timing << "Macro      : " << macro << "\n";
-		timing << "Output     : " << output << "\n\n";
+		timing << "Macro      : "
+			<< macro << "\n";
 
-		timing << "Starting Datetime    : " << startDateTime << "\n";
-		timing << "Termination Datetime : " << endDateTime << "\n\n";
+		timing << "Output     : "
+			<< output << "\n\n";
+
+		timing << "Starting Datetime    : "
+			<< startDateTime << "\n";
+
+		timing << "Termination Datetime : "
+			<< endDateTime << "\n\n";
 
 		timing << "Setup Time (s)       : "
-			<< setupSeconds
-			<< " s\n";
+			<< setupSeconds << "\n";
 
 		timing << "Execution Time (s)   : "
-			<< runSeconds
-			<< " s\n";
+			<< runSeconds << "\n";
 
 		timing << "Total Wall Time (s)  : "
-			<< totalSeconds
-			<< " s\n";
+			<< totalSeconds << "\n";
 	}
+	else
+	{
+		G4cerr
+			<< "ERROR: Unable to create timing file: "
+			<< timingPath
+			<< G4endl;
+	}
+
+	// Job termination
+	delete runManager;
 }
 
 

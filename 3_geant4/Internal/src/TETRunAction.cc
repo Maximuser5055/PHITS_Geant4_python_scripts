@@ -185,7 +185,6 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
     auto fluxMap =
         *fRun->GetPhotonFluenceMap();
 
-
     // ========================================================
     // Skeletal spongiosa IDs
     // ========================================================

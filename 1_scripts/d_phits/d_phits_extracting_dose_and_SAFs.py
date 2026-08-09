@@ -11,6 +11,12 @@ from c_database.b_organ_database import ORGANS
 def phits_calculate_dose_and_safs():
 
     # -------------------------------------------------------------------------
+    # Constants
+    # -------------------------------------------------------------------------
+
+    MeV_to_J = config.MEV_TO_J
+
+    # -------------------------------------------------------------------------
     # Root directories
     # -------------------------------------------------------------------------
 
@@ -105,9 +111,7 @@ def phits_calculate_dose_and_safs():
 
             target_organ = organ_database.get(region)
 
-            MEV_TO_J = 1.6021766339999e-13
-
-            source_energy_joule = source_energy * MEV_TO_J
+            source_energy_joule = source_energy * MeV_to_J
 
             saf = dose / source_energy_joule
 
@@ -182,9 +186,10 @@ def phits_calculate_dose_and_safs():
 
     # Sort each dataframe
     sort_columns = [
+        "Phantom",
+        "Source Organ ID",
         "Source Type",
         "Source Energy (MeV)",
-        "Source Organ ID",
         "Target Organ ID"
     ]
 

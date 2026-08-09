@@ -35,8 +35,8 @@ def phits_generate_inputs(params):
         threads =  params["threads"]
         maxcas =  params["maxcas"]
         maxbch =  params["maxbch"]
-        source_type = config.PHITS_SOURCE_TYPES # TBA
-        source_energies = config.SOURCE_ENERGIES #TBA
+        source_type = params["source_type"]
+        source_energies = params["source_energies"]
         target_regions = "all"
         sexinfo = config.SEXINFO.get(phantom)
 
@@ -48,11 +48,11 @@ def phits_generate_inputs(params):
                 safe_name = organ_name.replace(",", "").replace(" ", "_")
 
                 phits_output_file = (
-                    f"phits_MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.out"
+                    f"phits_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out"
                 )
 
                 deposit_output_file = (
-                    f"phits_deposit_MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.out"
+                    f"phits_deposit_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out"
                 )
 
                 text = template
@@ -64,7 +64,7 @@ def phits_generate_inputs(params):
                 text = text.replace("{{MAXBCH}}", f"{maxbch}")
                 text = text.replace("{{NUCLEARDATAFILE}}", str(nuclear_data_file))
                 text = text.replace("{{EGS5DIRECTORY}}", str(EGS5_data_directory))
-                text = text.replace("{{SOURCETYPE}}", source_type[0])
+                text = text.replace("{{SOURCETYPE}}", source_type)
                 text = text.replace("{{SOURCEREGION}}", str(region))
                 text = text.replace("{{SOURCEENERGY}}", f"{energy}")
                 text = text.replace("{{SEX}}", str(phantom))
@@ -72,11 +72,11 @@ def phits_generate_inputs(params):
                 text = text.replace("{{PHITSOUTPUTFILE}}", phits_output_file)
                 text = text.replace("{{DEPOSITOUTPUTFILE}}", deposit_output_file)
 
-                filename = f"PHITS_MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.inp"
+                filename = f"PHITS_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.inp"
 
                 phantom_source = Path(infl_file_directory)
 
-                filename = f"PHITS_MRCP_{phantom}_source_{safe_name}_{source_type[0]}_energy_{energy}.inp"
+                filename = f"PHITS_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.inp"
                 job_name = filename.removesuffix(".inp")
 
                 # Job directory
@@ -102,8 +102,8 @@ def phits_generate_inputs(params):
 
     num_phantoms = len(phantoms)
     num_organs_per_phantom = len(SOURCE_ORGANS[phantoms[0]])
-    num_source_types = len(config.PHITS_SOURCE_TYPES)
-    num_energy_bins = len(config.SOURCE_ENERGIES)
+    num_source_types = int(params["source_type"] in config.PHITS_SOURCE_TYPES)
+    num_energy_bins = len(params["source_energies"])
 
     print(
         f"Generated {total_files} PHITS input file(s) "

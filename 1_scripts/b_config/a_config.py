@@ -79,6 +79,8 @@ TARGET_REGION_CSV = OTHER_INPUT_FILES_DIR / "target_regions_Filipino.csv"
 
 SKELETAL_MASSES_CSV = OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116.csv"
 
+SKELETAL_RESPONSE_FUNCTIONS_CSV = OTHER_INPUT_FILES_DIR / "ICRP116-Table-D-1-Updated.csv"
+
 ############################
 # PHITS Directories and Files
 ############################
@@ -148,6 +150,7 @@ SEXINFO = {
 
 PHITS_SOURCE_TYPES = [
     "photon",
+    "electron"
 ]
 
 ############################
@@ -158,7 +161,7 @@ REBUILD = False
 
 GEANT4_SOURCE_TYPES = [
     "gamma",
-    #"e-", # electron
+    "e-",
 ]
 
 PHANTOM_INPUT_GENERATION = "Both"
@@ -168,9 +171,9 @@ PHANTOM_NAMES = {
     "AF": "Adult Female"
 }
 
-NPS = 100000000
+NPS = 10
 
-SOURCE_TYPE_MAP = {
+GEANT4_SOURCE_TYPE_MAP = {
     "gamma": "photon",
     "e-": "electron",
 }
@@ -179,10 +182,28 @@ SOURCE_TYPE_MAP = {
 # General Settings
 ############################
 
+MEV_TO_J = 1.6021766339999e-13
+
 THREADS = 8
 
-SOURCE_ENERGIES = [
-    1.0,
-]
+SOURCE_ENERGIES = [0.1, 0.5, 1.0, 10.0]
+
+SELECTED_SOURCE_TYPE = "gamma"
+
+MARROW_MASS_KG = {
+    1400: .0269,
+    2500: .0093,
+    2700: .0889,
+    2900: .0784,
+    4000: .0094,
+    4200: .2052,
+    4400: .1888,
+    4600: .0328,
+    4800: .0456,
+    5000: .1888,
+    5200: .1439,
+    5400: .1159,
+    5600: .0363,
+}
 
 UNCERTAINTY_LIMIT = 5.0

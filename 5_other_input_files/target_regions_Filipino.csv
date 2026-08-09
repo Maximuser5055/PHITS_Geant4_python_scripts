@@ -36,30 +36,7 @@ Rectosigmoid colon wall (sigmoid + rectum),RS-wall,8400_8401_8402_8600
 Extrathoracic lymph nodes,LN-ET,10000
 Alveolar-interstitium,AI,9700_9900
 Thoracic lymph nodes,LN-Th,10100
-Right lung lobe,RLung,9900
-Left lung lobe,LLung,9700
-Right adrenal gland,RAdrenal,200
-Left adrenal gland,LAdrenal,100
-Right breast adipose,RBreast-a,6400
-Right breast glandular,RBreast-g,6500
-Left breast adipose,LBreast-a,6200
-Left breast glandular,LBreast-g,6300
-RBreast-a + RBreast-g,RBreast,6400_6500
-LBreast-a + LBreast-g,LBreast,6200_6300
-RBreast-a + LBreast-a,Breast-a,6200_6400
-RBreast-g + LBreast-g,Breast-g,6300_6500
 Entire lens of eye,Lens-ent,6600_6601_6800_6801
-Sensitive lens of eye,Lens-sen,6600_6800
-Right kidney cortex,RKidney-C,9200
-Right kidney medulla,RKidney-M,9300
-Right kidney pelvis,RKidney-P,9400
-Right kidney C+M+P,RKidney,9200_9300_9400
-Left kidney cortex,LKidney-C,8900
-Left kidney medulla,LKidney-M,9000
-Left kidney pelvis,LKidney-P,9100
-Left kidney C+M+P,LKidney,8900_9000_9100
-Right ovary,ROvary,11200
-Left ovary,LOvary,11100
 Pituitary gland,P-gland,11400
 Spinal cord,Sp-cord,12600
 Ureters,Ureters,13500_13600

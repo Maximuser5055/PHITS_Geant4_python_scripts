@@ -3,6 +3,7 @@
 # Import necessary libraries
 import b_config.a_config as config
 from pathlib import Path
+import shutil
 
 def get_user_parameters():
 
@@ -37,10 +38,14 @@ def get_user_parameters():
 
     elif config.IS_LINUX or config.IS_WSL:
         print("[1] PHITS")
-        print("[2] Geant4")
+        print("[2] GEANT4")
 
         while True:
-            choice = input("Select transport code (1-2): ").strip()
+            choice = input(f"Select transport code (1-2) [Current = {config.SIMULATION_CODE}]: ").strip()
+
+            if choice == "":
+                simulation_code = config.SIMULATION_CODE
+                break
 
             if choice == "1":
                 simulation_code = "PHITS"
@@ -77,6 +82,55 @@ def get_user_parameters():
         maxbch = input(f"PHITS maxbch (no. of batches) [Current = {config.MAXBCH}]: ").strip()
         maxbch = int(maxbch) if maxbch else config.MAXBCH
 
+        # ========================================================
+        # SOURCE TYPE
+        # ========================================================
+
+        print("\nSource type:")
+
+        for i, source_type_option in enumerate(
+            config.PHITS_SOURCE_TYPES,
+            start=1
+        ):
+
+            print(
+                f"[{i}] {source_type_option}"
+            )
+
+        while True:
+
+            choice = input(
+                f"Select source type "
+                f"(1-{len(config.PHITS_SOURCE_TYPES)}) [Current = {config.SELECTED_SOURCE_TYPE}]: "
+            ).strip()
+
+            if choice == "":
+                source_type = config.SELECTED_SOURCE_TYPE
+                break
+
+            try:
+
+                index = int(choice) - 1
+
+                if (
+                    0 <= index
+                    < len(config.PHITS_SOURCE_TYPES)
+                ):
+
+                    source_type = (
+                        config.PHITS_SOURCE_TYPES[index]
+                    )
+
+                    break
+
+            except ValueError:
+                pass
+
+            print(
+                f"Invalid choice. Please enter "
+                f"1-{len(config.PHITS_SOURCE_TYPES)}."
+            )
+
     elif simulation_code == "GEANT4":
 
         threads = input(f"\nParallelization Threads [Current = {config.THREADS}]: ").strip()
@@ -85,6 +139,107 @@ def get_user_parameters():
         nps = input(f"GEANT4 nps (no. of particle histories) [Current = {config.NPS}]: ").strip()
         nps = int(nps) if nps else config.NPS
 
+        # ========================================================
+        # SOURCE TYPE
+        # ========================================================
+
+        print("\nSource type:")
+
+        for i, source_type_option in enumerate(
+            config.GEANT4_SOURCE_TYPES,
+            start=1
+        ):
+
+            display_name = (
+                config.GEANT4_SOURCE_TYPE_MAP[
+                    source_type_option
+                ]
+            )
+
+            print(
+                f"[{i}] {display_name}"
+            )
+
+        while True:
+
+            current_source_type = config.GEANT4_SOURCE_TYPE_MAP.get(
+                config.SELECTED_SOURCE_TYPE,
+                config.SELECTED_SOURCE_TYPE
+            )
+                        
+            choice = input(
+                f"Select source type "
+                f"(1-{len(config.GEANT4_SOURCE_TYPES)}) [Current = {current_source_type}]: "
+            ).strip()
+            
+            if choice == "":
+                source_type = config.SELECTED_SOURCE_TYPE
+                break
+        
+            try:
+
+                index = int(choice) - 1
+
+                if (
+                    0 <= index
+                    < len(config.GEANT4_SOURCE_TYPES)
+                ):
+
+                    source_type = (
+                        config.GEANT4_SOURCE_TYPES[index]
+                    )
+
+                    break
+
+            except ValueError:
+                pass
+
+            print(
+                f"Invalid choice. Please enter "
+                f"1-{len(config.GEANT4_SOURCE_TYPES)}."
+            )
+
+    # ============================================================
+    # SOURCE ENERGIES
+    # ============================================================
+
+    while True:
+
+        energy_input = input(
+            "\nSource energies in MeV "
+            f"[Current = {config.SOURCE_ENERGIES}]: "
+        ).strip()
+
+        if energy_input == "":
+            source_energies = config.SOURCE_ENERGIES.copy()
+            break
+
+        try:
+
+            source_energies = [
+                float(x.strip())
+                for x in energy_input.split(",")
+            ]
+
+            if not source_energies:
+                raise ValueError
+
+            if any(energy <= 0 for energy in source_energies):
+                raise ValueError
+
+            # Remove duplicate energies while preserving order
+            source_energies = list(
+                dict.fromkeys(source_energies)
+            )
+
+            break
+
+        except ValueError:
+
+            print(
+                "\nError: Please enter positive "
+                "comma-delimited energies."
+            )
 
     while True:
         source_dir = input(
@@ -104,17 +259,34 @@ def get_user_parameters():
         print(f"\nError: '{source_csv}' was not found. Please try again.\n")
 
     while True:
-        phantom_input_generation = input(
-            f"Phantom Input Generation (AM/AF/Both) [Current = {config.PHANTOM_INPUT_GENERATION}]: "
-        ).strip().upper()
+        print("\nPhantom Input Generation:")
+        print("[1] AM")
+        print("[2] AF")
+        print("[3] Both")
 
-        if phantom_input_generation == "":
-            phantom_input_generation = config.PHANTOM_INPUT_GENERATION
+        choice = input(
+            f"Select phantom input generation "
+            f"[Current = {config.PHANTOM_INPUT_GENERATION}]: "
+        ).strip()
 
-        if phantom_input_generation in ("AM", "AF", "Both"):
+
+        if choice == "":
+            phantom_input_generation = (config.PHANTOM_INPUT_GENERATION)
             break
 
-        print("\nError: Please enter AM, AF, or Both.\n")
+        if choice == "1":
+            phantom_input_generation = "AM"
+            break
+
+        elif choice == "2":
+            phantom_input_generation = "AF"
+            break
+
+        elif choice == "3":
+            phantom_input_generation = "Both"
+            break
+
+        print("\nError: Please enter 1, 2, or 3.\n")
 
     uncertainty_limit = input(
         f"Maximum allowed statistical uncertainty (%) "
@@ -132,7 +304,9 @@ def get_user_parameters():
     config.update_config("THREADS", threads)
     config.update_config("SOURCE_CSV", source_csv)
     config.update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
-    
+    config.update_config("SOURCE_ENERGIES", source_energies)
+    config.update_config("SELECTED_SOURCE_TYPE",source_type)
+
     if simulation_code == "PHITS":
         config.update_config("PHITS_ROOT", phits_root)
         config.update_config("PARALLELIZATION", parallelization)
@@ -141,6 +315,41 @@ def get_user_parameters():
 
     elif simulation_code == "GEANT4":
         config.update_config("NPS", nps)
+
+    ############################
+    # Fresh start
+    ############################
+
+    if simulation_code == "PHITS":
+        generated_inputs_dir = config.GENERATED_INPUTS_DIR
+
+    elif simulation_code == "GEANT4":
+        generated_inputs_dir = config.GEANT4_GENERATED_INPUTS_DIR
+
+    if generated_inputs_dir.exists():
+
+        while True:
+
+            choice = input(
+                f"\nWARNING: Existing generated inputs were found in:\n"
+                f"    {generated_inputs_dir}\n\n"
+                f"Delete this entire folder and create a fresh start? "
+                f"(Y/N): "
+            ).strip().upper()
+
+            if choice in ("Y", "YES"):
+                shutil.rmtree(generated_inputs_dir)
+                print("\nGenerated inputs folder deleted.")
+
+                break
+
+            elif choice in ("N", "NO"):
+                print("\nKeeping existing generated inputs.")
+
+                break
+
+            else:
+                print("\nInvalid choice. Please enter Y or N.")
 
     ############################
     # Create required directories
@@ -160,6 +369,8 @@ def get_user_parameters():
     "threads": threads,
     "source_csv": source_csv,
     "phantom": phantom_input_generation,
+    "source_type": source_type,
+    "source_energies": source_energies,
     }
 
     if simulation_code == "PHITS":
