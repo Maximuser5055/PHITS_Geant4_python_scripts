@@ -14,7 +14,6 @@ def get_user_parameters():
     print("=" * 50)
 
     print(f"\nOperating System : {config.SYSTEM}")
-    print(f"Running in WSL   : {config.IS_WSL}")
 
     print("\nMonte Carlo particle transport code options for the working OS:")
 
@@ -30,13 +29,13 @@ def get_user_parameters():
                 break
 
             elif choice == "2":
-                print("\nGeant4 is only supported on Linux or WSL2.")
+                print("\nGeant4 is only supported on Linux")
                 print("Please use PHITS instead.\n")
 
             else:
                 print("Invalid choice. Please enter 1.")
 
-    elif config.IS_LINUX or config.IS_WSL:
+    elif config.IS_LINUX:
         print("[1] PHITS")
         print("[2] GEANT4")
 

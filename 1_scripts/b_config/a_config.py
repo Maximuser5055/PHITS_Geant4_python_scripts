@@ -11,24 +11,19 @@ import platform
 SYSTEM = None
 IS_WINDOWS = False
 IS_LINUX = False
-IS_WSL = False
 
 def detect_operating_system():
 
-    global SYSTEM, IS_WINDOWS, IS_LINUX, IS_WSL
+    global SYSTEM, IS_WINDOWS, IS_LINUX
 
-    SYSTEM = platform.system()  # "Windows", "Linux"
+    SYSTEM = platform.system()
+
     IS_WINDOWS = SYSTEM == "Windows"
     IS_LINUX = SYSTEM == "Linux"
 
-    # Detect if running inside WSL
-    IS_WSL = (
-        IS_LINUX and
-        ("microsoft" in platform.release().lower() or
-         "microsoft" in platform.version().lower())
-    )
+    return SYSTEM, IS_WINDOWS, IS_LINUX
 
-    return SYSTEM, IS_WINDOWS, IS_LINUX, IS_WSL
+detect_operating_system()
 
 def update_config(setting, value):
     config_file = Path(__file__)
@@ -85,7 +80,22 @@ SKELETAL_RESPONSE_FUNCTIONS_CSV = OTHER_INPUT_FILES_DIR / "ICRP116-Table-D-1-Upd
 # PHITS Directories and Files
 ############################
 
-PHITS_ROOT = Path(r"C:\phits")
+PHITS_ROOT_WINDOWS = Path(r"C:\phits")
+
+PHITS_ROOT_LINUX = Path(r"/home/clarence/Software/phits/phits")
+
+if IS_WINDOWS:
+    PHITS_ROOT = PHITS_ROOT_WINDOWS
+    PHITS_EXECUTABLE = "phits.bat"
+
+elif IS_LINUX:
+    PHITS_ROOT = PHITS_ROOT_LINUX
+    PHITS_EXECUTABLE = PHITS_ROOT / "bin/phits.sh"
+
+else:
+    raise RuntimeError(
+        f"Unsupported operating system: {SYSTEM}"
+    )
 
 CELL_FILES = {
     "AM": ROOT / "2_phits/phantoms/MRCP-AM.cell",
@@ -101,8 +111,6 @@ NUCLEAR_DATA_FILE = PHITS_ROOT / "data/xsdir.jnd"
 EGS5_DATA_DIR = PHITS_ROOT / "XS/egs"
 
 GENERATED_INPUTS_DIR = ROOT / "2_phits/generated_inputs"
-
-PHITS_BAT = "phits.bat"
 
 PHITS_METADATA_FILE = RESULTS_DIR / "a_phits_all_simulations_log.csv"
 
@@ -126,7 +134,7 @@ GEANT4_METADATA_FILE = RESULTS_DIR / "b_geant4_all_simulations_log.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "GEANT4"
+SIMULATION_CODE = "PHITS"
 
 ############################
 # PHITS Settings
@@ -184,11 +192,11 @@ GEANT4_SOURCE_TYPE_MAP = {
 
 MEV_TO_J = 1.6021766339999e-13
 
-THREADS = 8
+THREADS = 12
 
 SOURCE_ENERGIES = [0.1, 0.5, 1.0, 10.0]
 
-SELECTED_SOURCE_TYPE = "gamma"
+SELECTED_SOURCE_TYPE = "photon"
 
 MARROW_MASS_KG = {
     1400: .0269,

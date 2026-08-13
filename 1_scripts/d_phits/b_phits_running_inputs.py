@@ -28,7 +28,7 @@ def run_phits():
     # Configuration
     # ==========================================================
 
-    phits = config.PHITS_BAT
+    phits_executable = config.PHITS_EXECUTABLE
 
     input_root = config.GENERATED_INPUTS_DIR
     rerun_csv = config.RERUN_CSV
@@ -643,7 +643,7 @@ def run_phits():
 
         process = subprocess.Popen(
             [
-                phits,
+                phits_executable,
                 input_file.name
             ],
             cwd=input_file.parent
@@ -664,10 +664,7 @@ def run_phits():
                 f"(return code {returncode})"
             )
 
-        return (
-            input_file,
-            returncode
-        )
+        return (input_file, returncode)
 
     # ==========================================================
     # Run jobs in parallel
@@ -709,6 +706,4 @@ def run_phits():
                     f"{returncode})"
                 )
 
-    print(
-        "\nAll PHITS jobs finished."
-    )
+    print("\nAll PHITS jobs finished.")
