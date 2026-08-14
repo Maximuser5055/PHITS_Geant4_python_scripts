@@ -85,12 +85,12 @@ PHITS_ROOT_WINDOWS = Path(r"C:\phits")
 PHITS_ROOT_LINUX = Path(r"/home/clarence/Software/phits/phits")
 
 if IS_WINDOWS:
-    PHITS_ROOT = PHITS_ROOT_WINDOWS
-    PHITS_EXECUTABLE = "phits.bat"
+    PHITS_INSTALLATION_DIR = PHITS_ROOT_WINDOWS
+    PHITS_EXECUTABLE = PHITS_INSTALLATION_DIR / "bin/phits.bat"
 
 elif IS_LINUX:
-    PHITS_ROOT = PHITS_ROOT_LINUX
-    PHITS_EXECUTABLE = PHITS_ROOT / "bin/phits.sh"
+    PHITS_INSTALLATION_DIR = PHITS_ROOT_LINUX
+    PHITS_EXECUTABLE = PHITS_INSTALLATION_DIR / "bin/phits.sh"
 
 else:
     raise RuntimeError(
@@ -106,10 +106,6 @@ INPUT_TEMPLATE_FILE = ROOT / "2_phits/template_input_files/1_template_MRCP_inter
 
 INCLUDE_FILES_DIR = ROOT / "2_phits/phantoms"
 
-NUCLEAR_DATA_FILE = PHITS_ROOT / "data/xsdir.jnd"
-
-EGS5_DATA_DIR = PHITS_ROOT / "XS/egs"
-
 GENERATED_INPUTS_DIR = ROOT / "2_phits/generated_inputs"
 
 PHITS_METADATA_FILE = RESULTS_DIR / "a_phits_all_simulations_log.csv"
@@ -124,6 +120,8 @@ INTERNAL_DIR = GEANT4_DIR / "Internal"
 
 GEANT4_BUILD_DIR = INTERNAL_DIR / "build"
 
+INCLUDE_DIR = INTERNAL_DIR / "include"
+
 GEANT4_EXECUTABLE_FILE = GEANT4_BUILD_DIR / "Internal"
 
 GEANT4_GENERATED_INPUTS_DIR = GEANT4_BUILD_DIR / "generated_inputs"
@@ -134,7 +132,7 @@ GEANT4_METADATA_FILE = RESULTS_DIR / "b_geant4_all_simulations_log.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "PHITS"
+SIMULATION_CODE = "GEANT4"
 
 ############################
 # PHITS Settings
@@ -142,9 +140,9 @@ SIMULATION_CODE = "PHITS"
 
 PARALLELIZATION = "OMP"
     
-MAXCAS = 500
+MAXCAS = 100
 
-MAXBCH = 20
+MAXBCH = 10
 
 PHANTOMS = [
     "AM",
@@ -159,6 +157,22 @@ SEXINFO = {
 PHITS_SOURCE_TYPES = [
     "photon",
     "electron"
+]
+
+SPONGIOSA_IDS = [
+    1400,
+    2500,
+    2700,
+    2900,
+    4000,
+    4200,
+    4400,
+    4600,
+    4800,
+    5000,
+    5200,
+    5400,
+    5600,
 ]
 
 ############################
@@ -179,7 +193,7 @@ PHANTOM_NAMES = {
     "AF": "Adult Female"
 }
 
-NPS = 10
+NPS = 1000
 
 GEANT4_SOURCE_TYPE_MAP = {
     "gamma": "photon",
@@ -194,10 +208,11 @@ MEV_TO_J = 1.6021766339999e-13
 
 THREADS = 12
 
-SOURCE_ENERGIES = [0.1, 0.5, 1.0, 10.0]
+SOURCE_ENERGIES = [10.0]
 
-SELECTED_SOURCE_TYPE = "photon"
+SELECTED_SOURCE_TYPE = "electron"
 
+# Mass fraction from ICRP 116 Table 3.2
 MARROW_MASS_KG = {
     1400: .0269,
     2500: .0093,
@@ -213,5 +228,17 @@ MARROW_MASS_KG = {
     5400: .1159,
     5600: .0363,
 }
+
+FLUENCE_SOURCE_TYPES = [
+    "photon",
+    "gamma",
+]
+
+# Logarithmic bins for fluence-to-dose response functions for RBM and endosteum dosimetry
+ENERGY_BINS = 100
+
+ENERGY_MIN = 0.01
+
+ENERGY_MAX = 10
 
 UNCERTAINTY_LIMIT = 5.0

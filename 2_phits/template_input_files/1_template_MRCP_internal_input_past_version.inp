@@ -15,7 +15,8 @@ ${{PARALLELIZATION}}={{THREADS}}
  maxbnk   =     1000000     # (D=10000) maximum bank memory length
  itetra   =           0     # (D=0) tetra data is read(=1)/write(=2) on binary
  file(6)  = {{PHITSOUTPUTFILE}} # (D=phits.out) general output file name
- file(1)  = {{PHITSINSTALLATION}} # PHITS installation folder name
+ file(7)  = {{NUCLEARDATAFILE}} # nuclear data input file name
+ file(20) = {{EGS5DIRECTORY}}       # Directory library data for EGS5
  negs     =           1     # (D=-1) 1:EGS
  ipegs    =           0     # [EGS](D=0) 0:Full
 
@@ -51,18 +52,5 @@ infl:{../phantoms/MRCP-{{SEX}}.cell}
  reg    = {{TARGETREGIONS}}               # all regions become tallying region
  axis   = reg               # axis of output
  unit   = 0                 # unit is [Gy/source]
-
-[T-Track] {{TTRACKSTATUS}}
-# Count fluence in a certain region.
-file   = {{FLUENCEOUTPUTFILE}}
-mesh   = reg
-reg    = {{SPONGIOSAREGIONS}}
-axis   = eng    # energy-based spectrum
-part   = {{FLUENCESOURCETYPE}}
-unit   = 1
-e-type = 3
-ne     = {{ENERGYBINS}}
-emin   = {{ENERGYMIN}}
-emax   = {{ENERGYMAX}}
-   
+        
 [ End ]

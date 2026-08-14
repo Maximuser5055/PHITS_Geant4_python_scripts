@@ -770,19 +770,20 @@ def calculate_from_fluence(
 
 def calculate_marrow_endosteum_SAFs(params):
 
-    simulation = params[
-        "simulation_code"
-    ].upper()
-
-    if simulation != "GEANT4":
+    if params["source_type"].lower() not in {"gamma", "photon"}:
 
         print(
-            "\nSkipping ICRP 116 marrow "
-            "fluence calculation."
+            f"\nSkipping ICRP 116 RBM calculation for source type: "
+            f"{params["source_type"]}"
         )
 
-        return
+        print(
+            "Implemented ICRP 116 skeletal fluence-to-dose "
+            "response functions are for photon sources."
+        )
 
+        return None
+    
     print()
     print("=" * 90)
     print(
@@ -817,69 +818,6 @@ def calculate_marrow_endosteum_SAFs(params):
         f"\nFound {len(fluence_files)} "
         "photon-fluence file(s)."
     )
-
-    # --------------------------------------------------------
-    # Calculate each source energy
-    # --------------------------------------------------------
-
-    results = []
-
-    for fluence_file in fluence_files:
-
-        match = fluence_filename_pattern.match(
-            fluence_file.name
-        )
-
-        if not match:
-            print(
-                f"\n[WARNING] Could not parse "
-                f"fluence filename:\n"
-                f"  {fluence_file.name}"
-            )
-            continue
-
-        phantom_code = match.group(1)
-
-        source_organ = match.group(2)
-
-        geant4_source_type = (
-            match.group(3).lower()
-        )
-
-        source_energy = float(
-            match.group(4)
-        )
-
-        source_type = (
-            config.GEANT4_SOURCE_TYPE_MAP.get(
-                geant4_source_type,
-                geant4_source_type
-            )
-        )
-
-        try:
-
-            result = calculate_from_fluence(
-                fluence_file,
-                response_functions,
-                source_energy,
-                source_organ,
-                source_type,
-                phantom_code
-            )
-
-            results.append(result)
-
-        except Exception as error:
-
-            print(
-                f"\n[WARNING] Could not process "
-                f"{fluence_file.name}:"
-            )
-
-            print(
-                f"  {error}"
-            )
 
     # --------------------------------------------------------
     # Calculate every fluence file
@@ -971,10 +909,16 @@ def calculate_marrow_endosteum_SAFs(params):
         ignore_index=True
     )
 
-    output_file = (
-        config.RESULTS_DIR /
-        "o_geant4_RBM_ICRP116.csv"
-    )
+    if params["simulation_code"] == "PHITS":
+        output_filename = "o_phits_RBM_ICRP116.csv"
+
+    elif params["simulation_code"] == "GEANT4":
+        output_filename = "p_geant4_rbm_icrp116.csv"
+
+    else:
+        raise ValueError(f"Unsupported simulation code: {params['simulation_code']}")
+
+    output_file = config.RESULTS_DIR / output_filename
 
     combined_results.to_csv(
         output_file,
@@ -998,4 +942,4 @@ def calculate_marrow_endosteum_SAFs(params):
         f"{output_file}"
     )
 
-    return results
+    return combined_results

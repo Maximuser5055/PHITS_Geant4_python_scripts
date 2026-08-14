@@ -5,6 +5,7 @@ import os
 import subprocess
 from pathlib import Path
 import json
+import re
 import b_config.a_config as config
 
 def find_geant4make():
@@ -23,6 +24,43 @@ def executable_exists():
     executable = config.GEANT4_EXECUTABLE_FILE
     return executable.is_file()
 
+def geant4_change_fluence_settings(params):
+
+    photon_fluence_file = (config.INCLUDE_DIR / "TETPSPhotonFluence.hh")
+
+    text = photon_fluence_file.read_text()
+
+    enable_photon_fluence = (params["source_type"].lower()in config.FLUENCE_SOURCE_TYPES)
+
+    text = re.sub(
+        r"static constexpr G4bool ENABLE_PHOTON_FLUENCE\s*=\s*[^;]+;",
+        f"static constexpr G4bool ENABLE_PHOTON_FLUENCE = "
+        f"{str(enable_photon_fluence).lower()};",
+        text
+    )
+
+    text = re.sub(
+        r"static constexpr G4int nEnergyBins\s*=\s*[^;]+;",
+        f"static constexpr G4int nEnergyBins = {config.ENERGY_BINS};",
+        text
+    )
+
+    text = re.sub(
+        r"static constexpr G4double Emin\s*=\s*[^;]+;",
+        f"static constexpr G4double Emin = {config.ENERGY_MIN};",
+        text
+    )
+
+    text = re.sub(
+        r"static constexpr G4double Emax\s*=\s*[^;]+;",
+        f"static constexpr G4double Emax = {config.ENERGY_MAX};",
+        text
+    )
+
+    photon_fluence_file.write_text(text)
+
+    return photon_fluence_file
+
 def source_snapshot(project_dir):
     snapshot = {}
 
@@ -36,8 +74,9 @@ def source_snapshot(project_dir):
 
     return snapshot
 
-def build_geant4():
+def build_geant4(params):
 
+    geant4_change_fluence_settings(params)
     geant4make_path = find_geant4make()
     project_dir = config.INTERNAL_DIR.resolve()
     executable = project_dir / "build" / "Internal"

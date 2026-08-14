@@ -92,7 +92,7 @@ def phits_extract_metadata_stats():
 
         # Determine the corresponding PHITS input file   
         input_files = output_file.with_name(
-            output_file.stem.replace("phits_", "") + ".inp"
+            output_file.stem.replace("phits_", "PHITS") + ".inp"
         )
 
         # For extracting the particle transport times per batch

@@ -57,10 +57,14 @@ public:
 
 
     // ========================================================
-    // Number of energy bins
+    // Enable fluence for photons
+    // Number of energy bins, energy min and max
     // ========================================================
 
-    static constexpr G4int nEnergyBins = 1000;
+    static constexpr G4bool ENABLE_PHOTON_FLUENCE = false;
+    static constexpr G4int nEnergyBins = 100;
+    static constexpr G4double Emin = 0.01;
+    static constexpr G4double Emax = 10;
 
     // ========================================================
     // Get energy-bin boundaries
@@ -88,13 +92,6 @@ private:
     G4int HCID;
 
     G4THitsMap<G4double>* evtMap;
-
-
-    // ========================================================
-    // Energy-bin boundaries
-    //
-    // 101 boundaries -> 100 bins
-    // ========================================================
 
     static std::vector<G4double>
         energyEdges;

@@ -61,8 +61,8 @@ def get_user_parameters():
 
     if simulation_code == "PHITS":
 
-        phits_root = input(f"\nPHITS root [Current = {config.PHITS_ROOT}]: ").strip()
-        phits_root = Path(phits_root) if phits_root else config.PHITS_ROOT
+        phits_root = input(f"\nPHITS installation directory [Current = {config.PHITS_INSTALLATION_DIR}]: ").strip()
+        phits_root = Path(phits_root) if phits_root else config.PHITS_INSTALLATION_DIR
 
         parallelization = (
             input(f"Parallelization (OMP/MPI) [Current = {config.PARALLELIZATION}]: ")
@@ -307,7 +307,7 @@ def get_user_parameters():
     config.update_config("SELECTED_SOURCE_TYPE",source_type)
 
     if simulation_code == "PHITS":
-        config.update_config("PHITS_ROOT", phits_root)
+        config.update_config("PHITS_INSTALLATION_DIR", phits_root)
         config.update_config("PARALLELIZATION", parallelization)
         config.update_config("MAXCAS", maxcas)
         config.update_config("MAXBCH", maxbch)

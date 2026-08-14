@@ -29,6 +29,7 @@
 //
 
 #include "TETDetectorConstruction.hh"
+#include "TETPSPhotonFluence.hh"
 
 TETDetectorConstruction::TETDetectorConstruction(TETModelImport* _tetData)
 :worldPhysical(0), container_logic(0), tetData(_tetData), tetLogic(0)
@@ -116,8 +117,11 @@ void TETDetectorConstruction::ConstructSDandField()
 	MFDet->RegisterPrimitive(new TETPSEnergyDeposit("eDep", tetData));
 
 	// Photon fluence scorer
-    MFDet->RegisterPrimitive(new TETPSPhotonFluence("photonFluence",tetData));
-	
+	if (TETPSPhotonFluence::ENABLE_PHOTON_FLUENCE) 
+	{
+    	MFDet->RegisterPrimitive(new TETPSPhotonFluence("photonFluence",tetData));
+	}
+
 	// attach the detector to logical volume for parameterised geometry (phantom geometry)
 	SetSensitiveDetector(tetLogic, MFDet);
 }

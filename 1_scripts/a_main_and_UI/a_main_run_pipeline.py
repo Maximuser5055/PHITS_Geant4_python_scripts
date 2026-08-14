@@ -9,8 +9,6 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from a_main_and_UI.b_input_user_parameters import get_user_parameters
 
-from b_config.a_config import detect_operating_system
-
 from c_database.a_parse_cell_and_csv import parse_cell_csv_inputs
 
 from d_phits.a_phits_generating_inputs import phits_generate_inputs
@@ -30,8 +28,6 @@ from f_simulation_and_SAFs_further_analysis.b_calculate_marrow_endosteum_SAFs im
 
 def main():
 
-    #detect_operating_system()
-
     params = get_user_parameters()
     
     if params["simulation_code"] == "PHITS":
@@ -46,7 +42,7 @@ def main():
     elif params["simulation_code"] == "GEANT4":
 
         parse_cell_csv_inputs()
-        build_geant4()
+        build_geant4(params)
         geant4_generate_inputs(params)
         run_geant4(params)
         geant4_extract_metadata_stats()

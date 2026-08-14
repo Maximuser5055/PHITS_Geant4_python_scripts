@@ -47,22 +47,12 @@ TETPSPhotonFluence::~TETPSPhotonFluence()
 
 // ============================================================
 // Create logarithmic energy bins
-//
-// 100 bins
-//
-// Minimum energy = 0.01 MeV = 10 keV
-// Maximum energy = 10 MeV
-//
-// 101 boundaries -> 100 bins
 // ============================================================
 
 void TETPSPhotonFluence::InitializeEnergyBins()
 {
     if (!energyEdges.empty())
         return;
-
-    const G4double Emin = 0.010;  // 10 keV
-    const G4double Emax = 10;   // 10 MeV
 
     energyEdges.resize(nEnergyBins + 1);
 
@@ -223,12 +213,12 @@ G4bool TETPSPhotonFluence::ProcessHits(
 
 
     // --------------------------------------------------------
-    // Only score between 1 keV and 10 MeV
+    // Only score between energy min and max
     // --------------------------------------------------------
 
     if (
-        energyMeV < 0.01 ||
-        energyMeV > 10
+        energyMeV < Emin ||
+        energyMeV > Emax
     )
     {
         return false;

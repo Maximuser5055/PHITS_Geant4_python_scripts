@@ -16,9 +16,19 @@ def phits_generate_inputs(params):
     # Read input template and define paths for phantom and interaction model files
     template = config.INPUT_TEMPLATE_FILE.read_text()
     infl_file_directory = config.INCLUDE_FILES_DIR
-    nuclear_data_file = config.NUCLEAR_DATA_FILE
-    EGS5_data_directory = config.EGS5_DATA_DIR
+    phits_installation_dir = config.PHITS_INSTALLATION_DIR
     base_output_dir = config.GENERATED_INPUTS_DIR
+
+    # T-track configuration
+    spongiosa_regions = " ".join(str(region)for region in config.SPONGIOSA_IDS)
+    fluence_source_type = config.FLUENCE_SOURCE_TYPES
+    energy_bins = config.ENERGY_BINS
+    energy_min = config.ENERGY_MIN
+    energy_max = config.ENERGY_MAX
+    if params["source_type"].lower() in config.FLUENCE_SOURCE_TYPES:
+        ttrack_status = ""
+    else:
+        ttrack_status = "off"
 
     # Adult male or female phantom or both
     if params["phantom"] == "AM":
@@ -55,6 +65,10 @@ def phits_generate_inputs(params):
                     f"phits_deposit_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out"
                 )
 
+                fluence_output_file = (
+                    f"phits_fluence_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out"
+                )
+
                 text = template
 
                 text = text.replace("{{SEXINFO}}", sexinfo)
@@ -62,8 +76,7 @@ def phits_generate_inputs(params):
                 text = text.replace("{{THREADS}}", str(threads))
                 text = text.replace("{{MAXCAS}}", f"{maxcas}")
                 text = text.replace("{{MAXBCH}}", f"{maxbch}")
-                text = text.replace("{{NUCLEARDATAFILE}}", str(nuclear_data_file))
-                text = text.replace("{{EGS5DIRECTORY}}", str(EGS5_data_directory))
+                text = text.replace("{{PHITSINSTALLATION}}", str(phits_installation_dir))
                 text = text.replace("{{SOURCETYPE}}", source_type)
                 text = text.replace("{{SOURCEREGION}}", str(region))
                 text = text.replace("{{SOURCEENERGY}}", f"{energy}")
@@ -71,6 +84,13 @@ def phits_generate_inputs(params):
                 text = text.replace("{{TARGETREGIONS}}", target_regions)
                 text = text.replace("{{PHITSOUTPUTFILE}}", phits_output_file)
                 text = text.replace("{{DEPOSITOUTPUTFILE}}", deposit_output_file)
+                text = text.replace("{{TTRACKSTATUS}}", ttrack_status)
+                text = text.replace("{{FLUENCEOUTPUTFILE}}", fluence_output_file)
+                text = text.replace("{{SPONGIOSAREGIONS}}", spongiosa_regions)
+                text = text.replace("{{FLUENCESOURCETYPE}}", fluence_source_type[0])
+                text = text.replace("{{ENERGYBINS}}", str(energy_bins))
+                text = text.replace("{{ENERGYMIN}}", str(energy_min))
+                text = text.replace("{{ENERGYMAX}}", str(energy_max))
 
                 filename = f"PHITS_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.inp"
 

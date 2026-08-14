@@ -29,6 +29,7 @@
 //
 
 #include "TETRunAction.hh"
+#include "TETPSPhotonFluence.hh"
 
 #include <filesystem>
 
@@ -88,26 +89,29 @@ void TETRunAction::EndOfRunAction(const G4Run* aRun)
 		csv.close();
 	}
 
-	std::filesystem::path fluxPath(outputFile.c_str());
+    if (TETPSPhotonFluence::ENABLE_PHOTON_FLUENCE) 
+    {
+        std::filesystem::path fluxPath(outputFile.c_str());
 
-	fluxPath.replace_extension(".csv");
+        fluxPath.replace_extension(".csv");
 
-	fluxPath = fluxPath.parent_path() / (fluxPath.stem().string() + "_photon_fluence.csv");
+        fluxPath = fluxPath.parent_path() / (fluxPath.stem().string() + "_photon_fluence.csv");
 
-	std::ofstream fluxFile(fluxPath);
-
-	if (!fluxFile) {
-		G4cerr
+        std::ofstream fluxFile(fluxPath);
+        
+        if (!fluxFile) 
+        {
+		    G4cerr
 			<< "Unable to create "
 			<< fluxPath
 			<< G4endl;
-	}
-	else
-	{
-		PrintPhotonFluence(fluxFile);
-
-		fluxFile.close();
-	}
+	    }
+	    else
+	    {
+		    PrintPhotonFluence(fluxFile);
+		    fluxFile.close();
+	    }
+    }
 }
 
 void TETRunAction::PrintResult(std::ostream &out)
