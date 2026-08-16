@@ -15,7 +15,7 @@ from d_phits.a_phits_generating_inputs import phits_generate_inputs
 from d_phits.b_phits_running_inputs import run_phits
 from d_phits.c_phits_extracting_metadata import phits_extract_metadata_stats
 from d_phits.d_phits_extracting_dose_and_SAFs import phits_calculate_dose_and_safs
-#from d_phits.e_phits_calculate_marrow_endosteum_SAFs import phits_calculate_marrow_endosteum_SAFs
+from d_phits.e_phits_calculate_marrow_endosteum_SAFs import phits_calculate_marrow_endosteum_SAFs
 
 from e_geant4.a_geant4_setup_and_build_executable import build_geant4
 from e_geant4.b_geant4_generating_inputs import geant4_generate_inputs
@@ -41,7 +41,7 @@ def main():
         phits_extract_metadata_stats()
         calculate_extra_metadata(params)
         phits_calculate_dose_and_safs()
-        #phits_calculate_marrow_endosteum_SAFs(params)
+        phits_calculate_marrow_endosteum_SAFs(params)
 
     elif params["simulation_code"] == "GEANT4":
 

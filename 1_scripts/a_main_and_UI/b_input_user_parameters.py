@@ -86,53 +86,38 @@ def get_user_parameters():
         # ========================================================
 
         print("\nSource type:")
+        print("[1] photon / gamma")
+        print("[2] electron / e-")
 
-        for i, source_type_option in enumerate(
-            config.PHITS_SOURCE_TYPES,
-            start=1
-        ):
-            print(f"[{i}] {source_type_option}")
-
-        current_source_type = next((
-                phits_type
-                for geant4_type, phits_type
-                in config.GEANT4_SOURCE_TYPE_MAP.items()
-                if geant4_type == config.SELECTED_SOURCE_TYPE
-            ),  config.SELECTED_SOURCE_TYPE)
+        current_source_type = (
+            "photon / gamma"
+            if config.SELECTED_SOURCE_TYPE in {"gamma", "photon"}
+            else "electron / e-"
+        )
 
         while True:
 
             choice = input(
-                f"Select source type "
-                f"(1-{len(config.PHITS_SOURCE_TYPES)}) [Current = {config.SELECTED_SOURCE_TYPE}]: "
+                f"Select source type (1-2) "
+                f"[Current = {current_source_type}]: "
             ).strip()
 
             if choice == "":
-                source_type = current_source_type
+                if config.SELECTED_SOURCE_TYPE in {"gamma", "photon"}:
+                    source_type = "photon"
+                else:
+                    source_type = "electron"
                 break
 
-            try:
+            if choice == "1":
+                source_type = "photon"
+                break
 
-                index = int(choice) - 1
+            elif choice == "2":
+                source_type = "electron"
+                break
 
-                if (
-                    0 <= index
-                    < len(config.PHITS_SOURCE_TYPES)
-                ):
-
-                    source_type = (
-                        config.PHITS_SOURCE_TYPES[index]
-                    )
-
-                    break
-
-            except ValueError:
-                pass
-
-            print(
-                f"Invalid choice. Please enter "
-                f"1-{len(config.PHITS_SOURCE_TYPES)}."
-            )
+            print("Invalid choice. Please enter 1 or 2.")
 
     elif simulation_code == "GEANT4":
 
@@ -147,54 +132,38 @@ def get_user_parameters():
         # ========================================================
 
         print("\nSource type:")
+        print("[1] photon / gamma")
+        print("[2] electron / e-")
 
-        for i, source_type_option in enumerate(
-            config.GEANT4_SOURCE_TYPES,
-            start=1):
-
-            print(f"[{i}] {source_type_option}")
-
-        current_source_type = next((
-                geant4_type
-                for geant4_type, particle_name
-                in config.GEANT4_SOURCE_TYPE_MAP.items()
-                if particle_name == config.SELECTED_SOURCE_TYPE
-            ),  config.SELECTED_SOURCE_TYPE
+        current_source_type = (
+            "photon / gamma"
+            if config.SELECTED_SOURCE_TYPE in {"gamma", "photon"}
+            else "electron / e-"
         )
-        
+
         while True:
-                        
+
             choice = input(
-                f"Select source type "
-                f"(1-{len(config.GEANT4_SOURCE_TYPES)}) [Current = {current_source_type}]: "
+                f"Select source type (1-2) "
+                f"[Current = {current_source_type}]: "
             ).strip()
-            
+
             if choice == "":
-                source_type = current_source_type
+                if config.SELECTED_SOURCE_TYPE in {"gamma", "photon"}:
+                    source_type = "gamma"
+                else:
+                    source_type = "e-"
                 break
-        
-            try:
 
-                index = int(choice) - 1
+            if choice == "1":
+                source_type = "gamma"
+                break
 
-                if (
-                    0 <= index
-                    < len(config.GEANT4_SOURCE_TYPES)
-                ):
+            elif choice == "2":
+                source_type = "e-"
+                break
 
-                    source_type = (
-                        config.GEANT4_SOURCE_TYPES[index]
-                    )
-
-                    break
-
-            except ValueError:
-                pass
-
-            print(
-                f"Invalid choice. Please enter "
-                f"1-{len(config.GEANT4_SOURCE_TYPES)}."
-            )
+            print("Invalid choice. Please enter 1 or 2.")
 
     # ============================================================
     # SOURCE ENERGIES
@@ -203,7 +172,7 @@ def get_user_parameters():
     while True:
 
         energy_input = input(
-            "\nSource energies in MeV "
+            "Source energies in MeV "
             f"[Current = {config.SOURCE_ENERGIES}]: "
         ).strip()
 
@@ -240,7 +209,7 @@ def get_user_parameters():
 
     while True:
         source_dir = input(
-            f"Directory containing source_organs.csv "
+            f"\nDirectory containing source_organs.csv "
             f"[Current = {config.SOURCE_CSV.parent}]: "
         ).strip()
 
@@ -302,7 +271,7 @@ def get_user_parameters():
     config.update_config("SOURCE_CSV", source_csv)
     config.update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
     config.update_config("SOURCE_ENERGIES", source_energies)
-    config.update_config("SELECTED_SOURCE_TYPE",source_type)
+    config.update_config("SELECTED_SOURCE_TYPE", source_type)
 
     if simulation_code == "PHITS":
         config.update_config("PHITS_INSTALLATION_DIR", phits_root)

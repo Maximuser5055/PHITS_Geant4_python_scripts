@@ -38,7 +38,7 @@ def phits_calculate_dose_and_safs():
 
         "file_name":
             re.compile(
-                    r"deposit_MRCP_(AM|AF)_source_(.+?)_([A-Za-z0-9+-]+)_energy_([0-9Ee.+-]+)\.out",
+                    r"phits_deposit_MRCP_(AM|AF)_source_(.+?)_([A-Za-z0-9+-]+)_energy_([0-9Ee.+-]+)\.out",
                 re.IGNORECASE
             ),
 
@@ -57,7 +57,7 @@ def phits_calculate_dose_and_safs():
     # Find all deposit tally files
     # -------------------------------------------------------------------------
 
-    deposit_files = sorted(input_root.rglob("deposit_*.out"))
+    deposit_files = sorted(input_root.rglob("phits_deposit_*.out"))
 
     print(f"Found {len(deposit_files)} deposit tally file(s).\n")
 
@@ -177,6 +177,9 @@ def phits_calculate_dose_and_safs():
     # -------------------------------------------------------------------------
     # Combine all tallies
     # -------------------------------------------------------------------------
+
+    if not all_tallies:
+        raise RuntimeError("No PHITS deposit tally files were successfully processed.")
 
     combined_df = pd.concat(all_tallies, ignore_index=True)
 
