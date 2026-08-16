@@ -61,7 +61,7 @@ public:
     // Number of energy bins, energy min and max
     // ========================================================
 
-    static constexpr G4bool ENABLE_PHOTON_FLUENCE = false;
+    static constexpr G4bool ENABLE_PHOTON_FLUENCE = true;
     static constexpr G4int nEnergyBins = 100;
     static constexpr G4double Emin = 0.01;
     static constexpr G4double Emax = 10;

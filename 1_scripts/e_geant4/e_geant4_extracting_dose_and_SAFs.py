@@ -32,7 +32,7 @@ def geant4_calculate_dose_and_SAFs():
     MEV_TO_J = 1.602176634e-13
 
     filename_pattern = re.compile(
-        r"Geant4_deposit_MRCP_"
+        r"geant4_deposit_MRCP_"
         r"(AM|AF)_source_"
         r"(.+?)_"
         r"(.+?)_energy_"
@@ -42,7 +42,7 @@ def geant4_calculate_dose_and_SAFs():
 
     deposit_files = sorted(
         file
-        for file in input_root.rglob("Geant4_deposit_*.csv")
+        for file in input_root.rglob("geant4_deposit_*.csv")
         if not file.stem.lower().endswith("_photon_fluence")
     )
 

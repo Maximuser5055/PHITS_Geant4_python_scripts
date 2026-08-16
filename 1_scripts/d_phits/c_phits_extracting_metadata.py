@@ -9,7 +9,10 @@ import b_config.a_config as config
 def phits_extract_metadata_stats():
     # PHITS output file
     root = config.GENERATED_INPUTS_DIR 
-    output_files = sorted(root.rglob("phits_*.out"))
+    output_files = [file for file in sorted(root.rglob("phits_*.out"))
+                    if "_deposit_" not in file.name
+                    and "_fluence_" not in file.name
+                    ]
 
     # Define metadata output file
     metadata_output_file = config.RESULTS_DIR / "a_phits_all_simulations_log.csv"
@@ -91,9 +94,7 @@ def phits_extract_metadata_stats():
     def extract_metadata(output_file: Path):
 
         # Determine the corresponding PHITS input file   
-        input_files = output_file.with_name(
-            output_file.stem.replace("phits_", "PHITS") + ".inp"
-        )
+        input_files = output_file.with_suffix(".inp")
 
         # For extracting the particle transport times per batch
         batch_cpu_times = []
@@ -246,9 +247,9 @@ def phits_extract_metadata_stats():
 
         }
 
-        print(f"\nProcessing:")
-        print(f"{output_files.name}")
-        print(f"{input_files.name}")
+        print("\nProcessing:")
+        print(output_file.name)
+        print(input_files.name)
 
         return ordered_results
 

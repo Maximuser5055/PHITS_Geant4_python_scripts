@@ -36,11 +36,11 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
         
         if simulation == "PHITS":
             input_prefix = "e" if phantom == "AM" else "f"
-            output_prefix = "i" if phantom == "AM" else "j"
+            output_prefix = "k" if phantom == "AM" else "l"
 
         elif simulation == "GEANT4":
             input_prefix = "g" if phantom == "AM" else "h"
-            output_prefix = "k" if phantom == "AM" else "l"
+            output_prefix = "m" if phantom == "AM" else "n"
 
         else:
             raise ValueError(

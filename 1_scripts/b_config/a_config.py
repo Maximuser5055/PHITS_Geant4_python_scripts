@@ -140,7 +140,7 @@ SIMULATION_CODE = "GEANT4"
 
 PARALLELIZATION = "OMP"
     
-MAXCAS = 100
+MAXCAS = 1000
 
 MAXBCH = 10
 
@@ -159,11 +159,23 @@ PHITS_SOURCE_TYPES = [
     "electron"
 ]
 
-SPONGIOSA_IDS = [
+SKELETAL_IDS = [
     1400,
+    1500,
+    1700,
+    1800,
+    2000,
+    2100,
+    2300,
     2500,
     2700,
     2900,
+    3000,
+    3200,
+    3300,
+    3500,
+    3600,
+    3800,
     4000,
     4200,
     4400,
@@ -172,7 +184,7 @@ SPONGIOSA_IDS = [
     5000,
     5200,
     5400,
-    5600,
+    5600
 ]
 
 ############################
@@ -206,28 +218,11 @@ GEANT4_SOURCE_TYPE_MAP = {
 
 MEV_TO_J = 1.6021766339999e-13
 
-THREADS = 12
+THREADS = 16
 
 SOURCE_ENERGIES = [10.0]
 
-SELECTED_SOURCE_TYPE = "electron"
-
-# Mass fraction from ICRP 116 Table 3.2
-MARROW_MASS_KG = {
-    1400: .0269,
-    2500: .0093,
-    2700: .0889,
-    2900: .0784,
-    4000: .0094,
-    4200: .2052,
-    4400: .1888,
-    4600: .0328,
-    4800: .0456,
-    5000: .1888,
-    5200: .1439,
-    5400: .1159,
-    5600: .0363,
-}
+SELECTED_SOURCE_TYPE = "gamma"
 
 FLUENCE_SOURCE_TYPES = [
     "photon",

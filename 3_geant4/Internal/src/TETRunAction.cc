@@ -190,15 +190,27 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
         *fRun->GetPhotonFluenceMap();
 
     // ========================================================
-    // Skeletal spongiosa IDs
+    // Skeletal IDs
     // ========================================================
 
     std::vector<G4int> spongiosaIDs =
     {
         1400,
+        1500,
+        1700,
+        1800,
+        2000,
+        2100,
+        2300,
         2500,
         2700,
         2900,
+        3000,
+        3200,
+        3300,
+        3500,
+        3600,
+        3800,
         4000,
         4200,
         4400,

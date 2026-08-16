@@ -434,8 +434,8 @@ def run_geant4(params):
 
         outfile = infile.with_name(
             infile.stem.replace(
-                "Geant4_",
-                "Geant4_deposit_"
+                "geant4_",
+                "geant4_deposit_"
             ) + ".out"
         )
 
@@ -535,8 +535,8 @@ def run_geant4(params):
 
         outfile = infile.with_name(
             infile.stem.replace(
-                "Geant4_",
-                "Geant4_deposit_"
+                "geant4_",
+                "geant4_deposit_"
             ) + ".out"
         )
 

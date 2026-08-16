@@ -20,7 +20,7 @@ def phits_generate_inputs(params):
     base_output_dir = config.GENERATED_INPUTS_DIR
 
     # T-track configuration
-    spongiosa_regions = " ".join(str(region)for region in config.SPONGIOSA_IDS)
+    skeletal_regions = " ".join(str(region)for region in config.SKELETAL_IDS)
     fluence_source_type = config.FLUENCE_SOURCE_TYPES
     energy_bins = config.ENERGY_BINS
     energy_min = config.ENERGY_MIN
@@ -86,17 +86,13 @@ def phits_generate_inputs(params):
                 text = text.replace("{{DEPOSITOUTPUTFILE}}", deposit_output_file)
                 text = text.replace("{{TTRACKSTATUS}}", ttrack_status)
                 text = text.replace("{{FLUENCEOUTPUTFILE}}", fluence_output_file)
-                text = text.replace("{{SPONGIOSAREGIONS}}", spongiosa_regions)
+                text = text.replace("{{SKELETALREGIONS}}", skeletal_regions)
                 text = text.replace("{{FLUENCESOURCETYPE}}", fluence_source_type[0])
                 text = text.replace("{{ENERGYBINS}}", str(energy_bins))
                 text = text.replace("{{ENERGYMIN}}", str(energy_min))
                 text = text.replace("{{ENERGYMAX}}", str(energy_max))
 
-                filename = f"PHITS_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.inp"
-
-                phantom_source = Path(infl_file_directory)
-
-                filename = f"PHITS_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.inp"
+                filename = f"phits_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.inp"
                 job_name = filename.removesuffix(".inp")
 
                 # Job directory
@@ -109,7 +105,7 @@ def phits_generate_inputs(params):
 
                 for ext in ("cell", "material", "node", "ele"):
                     shutil.copy2(
-                        phantom_source / f"MRCP-{phantom}.{ext}",
+                        infl_file_directory / f"MRCP-{phantom}.{ext}",
                         phantom_dir / f"MRCP-{phantom}.{ext}"
                     )
 
@@ -122,7 +118,7 @@ def phits_generate_inputs(params):
 
     num_phantoms = len(phantoms)
     num_organs_per_phantom = len(SOURCE_ORGANS[phantoms[0]])
-    num_source_types = int(params["source_type"] in config.PHITS_SOURCE_TYPES)
+    num_source_types = int(params["source_type"].lower() in config.PHITS_SOURCE_TYPES)
     num_energy_bins = len(params["source_energies"])
 
     print(

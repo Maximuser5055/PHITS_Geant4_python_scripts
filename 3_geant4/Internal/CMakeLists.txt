@@ -44,9 +44,7 @@ target_link_libraries(Internal ${Geant4_LIBRARIES})
 #
 set(Internal_SCRIPTS
   example.in
-  example_example.in
   init_vis.mac
-  example_source.mac
   source.mac
   vis.mac
   )

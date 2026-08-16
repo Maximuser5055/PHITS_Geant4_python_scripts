@@ -1,5 +1,0 @@
-# ParticleGun macro:
-# 10.0 MeV-electron source
-/gun/particle electron
-/gun/energy 10.0 MeV
-

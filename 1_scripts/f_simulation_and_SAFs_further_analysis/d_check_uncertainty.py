@@ -29,11 +29,11 @@ def check_uncertainty(params):
         input_dir = config.GENERATED_INPUTS_DIR
 
         csv_files = [
-            results_dir / "i_phits_target_regions_dose_SAFs_AM.csv",
-            results_dir / "j_phits_target_regions_dose_SAFs_AF.csv",
+            results_dir / "k_phits_target_regions_dose_SAFs_AM.csv",
+            results_dir / "l_phits_target_regions_dose_SAFs_AF.csv",
         ]
 
-        rerun_file = results_dir / "m_phits_rerun_required.csv"
+        rerun_file = results_dir / "o_phits_rerun_required.csv"
 
         input_extension = ".inp"
 
@@ -42,11 +42,11 @@ def check_uncertainty(params):
         input_dir = config.GEANT4_GENERATED_INPUTS_DIR
 
         csv_files = [
-            results_dir / "k_geant4_target_regions_dose_SAFs_AM.csv",
-            results_dir / "l_geant4_target_regions_dose_SAFs_AF.csv",
+            results_dir / "m_geant4_target_regions_dose_SAFs_AM.csv",
+            results_dir / "n_geant4_target_regions_dose_SAFs_AF.csv",
         ]
 
-        rerun_file = results_dir / "n_geant4_rerun_required.csv"
+        rerun_file = results_dir / "p_geant4_rerun_required.csv"
 
         input_extension = ".in"
 

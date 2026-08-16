@@ -43,7 +43,7 @@ def geant4_generate_inputs(params):
                 )
 
                 basename = (
-                    f"Geant4_MRCP_"
+                    f"geant4_MRCP_"
                     f"{phantom}_"
                     f"source_{safe_name}_"
                     f"{source_type}_"

@@ -91,10 +91,14 @@ def get_user_parameters():
             config.PHITS_SOURCE_TYPES,
             start=1
         ):
+            print(f"[{i}] {source_type_option}")
 
-            print(
-                f"[{i}] {source_type_option}"
-            )
+        current_source_type = next((
+                phits_type
+                for geant4_type, phits_type
+                in config.GEANT4_SOURCE_TYPE_MAP.items()
+                if geant4_type == config.SELECTED_SOURCE_TYPE
+            ),  config.SELECTED_SOURCE_TYPE)
 
         while True:
 
@@ -104,7 +108,7 @@ def get_user_parameters():
             ).strip()
 
             if choice == "":
-                source_type = config.SELECTED_SOURCE_TYPE
+                source_type = current_source_type
                 break
 
             try:
@@ -146,25 +150,19 @@ def get_user_parameters():
 
         for i, source_type_option in enumerate(
             config.GEANT4_SOURCE_TYPES,
-            start=1
-        ):
+            start=1):
 
-            display_name = (
-                config.GEANT4_SOURCE_TYPE_MAP[
-                    source_type_option
-                ]
-            )
+            print(f"[{i}] {source_type_option}")
 
-            print(
-                f"[{i}] {display_name}"
-            )
-
+        current_source_type = next((
+                geant4_type
+                for geant4_type, particle_name
+                in config.GEANT4_SOURCE_TYPE_MAP.items()
+                if particle_name == config.SELECTED_SOURCE_TYPE
+            ),  config.SELECTED_SOURCE_TYPE
+        )
+        
         while True:
-
-            current_source_type = config.GEANT4_SOURCE_TYPE_MAP.get(
-                config.SELECTED_SOURCE_TYPE,
-                config.SELECTED_SOURCE_TYPE
-            )
                         
             choice = input(
                 f"Select source type "
@@ -172,7 +170,7 @@ def get_user_parameters():
             ).strip()
             
             if choice == "":
-                source_type = config.SELECTED_SOURCE_TYPE
+                source_type = current_source_type
                 break
         
             try:

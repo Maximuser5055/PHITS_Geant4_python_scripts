@@ -12,7 +12,7 @@ def geant4_extract_metadata_stats():
 
     root = config.GEANT4_GENERATED_INPUTS_DIR
 
-    timing_files = sorted(root.rglob("Geant4_timing_*.txt"))
+    timing_files = sorted(root.rglob("geant4_timing_*.txt"))
 
     metadata_output_file = (
         config.RESULTS_DIR /
@@ -44,7 +44,7 @@ def geant4_extract_metadata_stats():
     }
 
     filename_pattern = re.compile(
-        r"Geant4_MRCP_(AM|AF)_source_(.+?)_(.+?)_energy_([0-9Ee.+-]+)\.in",
+        r"geant4_MRCP_(AM|AF)_source_(.+?)_(.+?)_energy_([0-9Ee.+-]+)\.in",
         re.IGNORECASE
     )
 
@@ -97,7 +97,7 @@ def geant4_extract_metadata_stats():
 
         input_files = timing_file.with_name(
             timing_file.name
-                .replace("Geant4_timing_", "Geant4_")
+                .replace("geant4_timing_", "geant4_")
                 .replace(".txt", ".in")
         )
 
