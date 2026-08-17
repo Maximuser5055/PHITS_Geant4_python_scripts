@@ -29,9 +29,8 @@ def run_phits():
     # ==========================================================
 
     phits_executable = config.PHITS_EXECUTABLE
-
     input_root = config.GENERATED_INPUTS_DIR
-    rerun_csv = config.RERUN_CSV
+    rerun_csv = config.PHITS_RERUN_CSV_FILE
 
     # Pattern for OMP/MPI threads
     parallelization_pattern = re.compile(

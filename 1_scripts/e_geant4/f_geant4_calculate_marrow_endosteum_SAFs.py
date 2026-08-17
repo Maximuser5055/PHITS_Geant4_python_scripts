@@ -346,6 +346,7 @@ def calculate_from_fluence(
         "Energy High (MeV)",
         "Energy Center (MeV)",
         "Fluence (photons/m2/source)",
+        "Relative Error",
     ]
 
     missing = [
@@ -475,86 +476,84 @@ def calculate_from_fluence(
 
         total_fluence = (
             site["Fluence (photons/m2/source)"]
-                .sum())
+            .sum()
+        )
 
         # ----------------------------------------------------
-        # Keep bins inside ICRP range
+        # RBM energy range
         # ----------------------------------------------------
 
-        in_range = (
-            site["Energy Center (MeV)"]
-            >= icrp_min_E
-        ) & (
-            site["Energy Center (MeV)"]
-            <= icrp_max_E
-        )
+        rbm_table_E = response_df[
+            response_df["AM_Gy_m2"].notna()
+        ]["Energy_MeV"]
 
-        covered = site[in_range].copy()
-
-        excluded_fluence = (
-            site.loc[
-                ~in_range,
-                "Fluence (photons/m2/source)"]
-                .sum()
-        )
-
-        if covered.empty:
-            raise RuntimeError(
-                f"No usable energy bins "
-                f"for skeletal ID "
-                f"{organ_id}."
-            )
-
-        # ====================================================
-        # ENERGY AND FLUENCE
-        # ====================================================
-
-        E = covered["Energy Center (MeV)"].to_numpy(dtype=float)
-
-        Phi = covered["Fluence (photons/m2/source)"].to_numpy(dtype=float)
-
-        # ====================================================
-        # ICRP RESPONSE FUNCTIONS
-        # ====================================================
-
-        R_AM = interpolate_response(
-            E,
-            response_df,
-            "AM_Gy_m2"
-        )
-
-        R_TM50 = interpolate_response(
-            E,
-            response_df,
-            "TM50_Gy_m2"
-        )
-
-        # ====================================================
-        # DOSE
-        # Phi is already bin-integrated.
-        # Therefore:
-        # D = sum(Phi * R)
-        # ====================================================
-
-        # RBM Dose
-        if R_AM is None:
+        if rbm_table_E.empty:
             marrow_dose = np.nan
-        else:
-            marrow_dose = np.sum(Phi * R_AM)
-
-        # Endosteum Dose
-        if R_TM50 is None:
-            endosteum_dose = np.nan
-        else:
-            endosteum_dose = np.sum(Phi * R_TM50)
-
-        # ====================================================
-        # MASS
-        # ====================================================
-
-        if R_AM is None:
+            marrow_relative_error = np.nan
+            excluded_marrow_fluence = np.nan
             marrow_mass_kg = np.nan
         else:
+
+            rbm_in_range = (
+                (site["Energy Center (MeV)"] >= rbm_table_E.min())
+                &
+                (site["Energy Center (MeV)"] <= rbm_table_E.max())
+            )
+
+            rbm_covered = site[rbm_in_range].copy()
+
+            if rbm_covered.empty:
+                raise RuntimeError(
+                    f"No usable Geant4 energy bins inside ICRP AM range "
+                    f"for skeletal ID {organ_id}."
+                )
+
+            E = rbm_covered[
+                "Energy Center (MeV)"
+            ].to_numpy(dtype=float)
+
+            Phi = rbm_covered[
+                "Fluence (photons/m2/source)"
+            ].to_numpy(dtype=float)
+
+            relative_error = rbm_covered[
+                "Relative Error"
+            ].to_numpy(dtype=float)
+
+            R_AM = interpolate_response(
+                E,
+                response_df,
+                "AM_Gy_m2"
+            )
+
+            dose_contribution = Phi * R_AM
+
+            marrow_dose = np.sum(
+                dose_contribution
+            )
+
+            marrow_sigma = np.sqrt(
+                np.sum(
+                    (
+                        dose_contribution
+                        * relative_error
+                    ) ** 2
+                )
+            )
+
+            marrow_relative_error = (
+                marrow_sigma / marrow_dose
+                if marrow_dose > 0
+                else np.nan
+            )
+
+            excluded_marrow_fluence = (
+                site.loc[
+                    ~rbm_in_range,
+                    "Fluence (photons/m2/source)"
+                ].sum()
+            )
+
             marrow_mass_kg = (
                 float(
                     skeletal_masses.loc[
@@ -565,9 +564,81 @@ def calculate_from_fluence(
                 / 1000.0
             )
 
-        if R_TM50 is None:
+        # ----------------------------------------------------
+        # Endosteum energy range
+        # ----------------------------------------------------
+
+        endo_table_E = response_df[
+            response_df["TM50_Gy_m2"].notna()
+        ]["Energy_MeV"]
+
+        if endo_table_E.empty:
+            endosteum_dose = np.nan
+            endosteum_relative_error = np.nan
+            excluded_endosteum_fluence = np.nan
             endosteum_mass_kg = np.nan
         else:
+
+            endo_in_range = (
+                (site["Energy Center (MeV)"] >= endo_table_E.min())
+                &
+                (site["Energy Center (MeV)"] <= endo_table_E.max())
+            )
+
+            endo_covered = site[endo_in_range].copy()
+
+            if endo_covered.empty:
+                raise RuntimeError(
+                    f"No usable Geant4 energy bins inside ICRP TM50 range "
+                    f"for skeletal ID {organ_id}."
+                )
+
+            E = endo_covered[
+                "Energy Center (MeV)"
+            ].to_numpy(dtype=float)
+
+            Phi = endo_covered[
+                "Fluence (photons/m2/source)"
+            ].to_numpy(dtype=float)
+
+            relative_error = endo_covered[
+                "Relative Error"
+            ].to_numpy(dtype=float)
+
+            R_TM50 = interpolate_response(
+                E,
+                response_df,
+                "TM50_Gy_m2"
+            )
+
+            dose_contribution = Phi * R_TM50
+
+            endosteum_dose = np.sum(
+                dose_contribution
+            )
+
+            endosteum_sigma = np.sqrt(
+                np.sum(
+                    (
+                        dose_contribution
+                        * relative_error
+                    ) ** 2
+                )
+            )
+
+            endosteum_relative_error = (
+                endosteum_sigma / endosteum_dose
+                if endosteum_dose > 0
+                else np.nan
+            )
+
+            excluded_endosteum_fluence = (
+                site.loc[
+                    ~endo_in_range,
+                    "Fluence (photons/m2/source)"
+                ].sum()
+            )
+
             endosteum_mass_kg = (
                 float(
                     skeletal_masses.loc[
@@ -594,24 +665,39 @@ def calculate_from_fluence(
                 endosteum_mass_kg,
 
             "Total fluence (photons/m2/source)":
-                total_fluence,
+                total_fluence / 1.0e4,
 
-            "Excluded fluence (photons/m2/source)":
-                excluded_fluence,
+            "Marrow excluded fluence (photons/m2/source)":
+                excluded_marrow_fluence / 1.0e4,
 
-            "Excluded fraction":
-                (
-                    excluded_fluence
-                    / total_fluence
-                    if total_fluence > 0
-                    else 0.0
-                ),
+            "Endosteum excluded fluence (photons/m2/source)":
+                excluded_endosteum_fluence / 1.0e4,
 
             "Marrow dose (Gy/source)":
                 marrow_dose,
 
+            "Marrow Relative Error":
+                marrow_relative_error,
+
+            "Marrow Statistical Uncertainty (%)":
+                (
+                    marrow_relative_error * 100
+                    if np.isfinite(marrow_relative_error)
+                    else np.nan
+                ),
+
             "Endosteum dose (Gy/source)":
                 endosteum_dose,
+
+            "Endosteum Relative Error":
+                endosteum_relative_error,
+
+            "Endosteum Statistical Uncertainty (%)":
+                (
+                    endosteum_relative_error * 100
+                    if np.isfinite(endosteum_relative_error)
+                    else np.nan
+                ),
         })
 
     # ========================================================
@@ -628,10 +714,16 @@ def calculate_from_fluence(
         results["Marrow dose (Gy/source)"].notna()
     ].copy()
 
+    rbm_results = rbm_results[
+        rbm_results["Marrow mass (kg)"].notna()
+    ].copy()
+
     if rbm_results.empty:
 
         total_marrow_mass_kg = np.nan
         rbm_dose = np.nan
+        rbm_relative_error = np.nan
+        rbm_statistical_uncertainty = np.nan
 
     else:
 
@@ -657,6 +749,27 @@ def calculate_from_fluence(
             ].sum()
         )
 
+        rbm_sigma = np.sqrt(
+            np.sum(
+                (
+                    rbm_results["Marrow mass fraction"]
+                    * rbm_results["Marrow dose (Gy/source)"]
+                    * rbm_results["Marrow Relative Error"]
+                ) ** 2
+            )
+        )
+
+        rbm_relative_error = (
+            rbm_sigma / rbm_dose
+            if rbm_dose > 0
+            else np.nan
+        )
+
+        rbm_statistical_uncertainty = (
+            rbm_relative_error * 100
+            if np.isfinite(rbm_relative_error)
+            else np.nan
+        )
 
     # ========================================================
     # ENDOSTEUM MASS WEIGHTING
@@ -666,10 +779,16 @@ def calculate_from_fluence(
         results["Endosteum dose (Gy/source)"].notna()
     ].copy()
 
+    endosteum_results = endosteum_results[
+        endosteum_results["Endosteum mass (kg)"].notna()
+    ].copy()
+
     if endosteum_results.empty:
 
         total_endosteum_mass_kg = np.nan
         endosteum_dose = np.nan
+        endosteum_relative_error = np.nan
+        endosteum_statistical_uncertainty = np.nan
 
     else:
 
@@ -697,6 +816,27 @@ def calculate_from_fluence(
             ].sum()
         )
 
+        endosteum_sigma = np.sqrt(
+            np.sum(
+                (
+                    endosteum_results["Endosteum mass fraction"]
+                    * endosteum_results["Endosteum dose (Gy/source)"]
+                    * endosteum_results["Endosteum Relative Error"]
+                ) ** 2
+            )
+        )
+
+        endosteum_relative_error = (
+            endosteum_sigma / endosteum_dose
+            if endosteum_dose > 0
+            else np.nan
+        )
+
+        endosteum_statistical_uncertainty = (
+            endosteum_relative_error * 100
+            if np.isfinite(endosteum_relative_error)
+            else np.nan
+        )
 
     # ========================================================
     # PUT MASS FRACTIONS BACK INTO RESULTS
@@ -769,9 +909,23 @@ def calculate_from_fluence(
     )
 
     results[
+        "RBM Relative Error"
+    ] = rbm_relative_error
+
+    results[
+        "RBM Statistical Uncertainty (%)"
+    ] = rbm_statistical_uncertainty
+
+    results[
         "RBM SAF (kg^-1)"
+    ] = rbm_saf
+
+    results[
+        "RBM SAF Statistical Uncertainty (kg^-1)"
     ] = (
-        rbm_saf
+        rbm_relative_error * rbm_saf
+        if np.isfinite(rbm_relative_error)
+        else np.nan
     )
 
     results[
@@ -781,9 +935,23 @@ def calculate_from_fluence(
     )
 
     results[
+        "Endosteum Relative Error"
+    ] = endosteum_relative_error
+
+    results[
+        "Endosteum Statistical Uncertainty (%)"
+    ] = endosteum_statistical_uncertainty
+
+    results[
         "Endosteum SAF (kg^-1)"
+    ] = endosteum_saf
+
+    results[
+        "Endosteum SAF Statistical Uncertainty (kg^-1)"
     ] = (
-        endosteum_saf
+        endosteum_relative_error * endosteum_saf
+        if np.isfinite(endosteum_relative_error)
+        else np.nan
     )
 
     # ========================================================
@@ -798,7 +966,6 @@ def calculate_from_fluence(
                 "Marrow mass (kg)",
                 "Endosteum mass (kg)",
                 "Total fluence (photons/m2/source)",
-                "Excluded fraction",
                 "Marrow dose (Gy/source)",
                 "Endosteum dose (Gy/source)",
                 "Marrow mass fraction",
@@ -1055,6 +1222,10 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         ignore_index=True
     )
 
+    # ========================================================
+    # SORT RESULTS
+    # ========================================================
+
     combined_results.sort_values(
         by=[
             "Phantom",
@@ -1066,6 +1237,95 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         inplace=True,
         ignore_index=True
     )
+
+
+    # ========================================================
+    # KEEP OVERALL RESULTS ONLY ON FIRST ROW
+    # ========================================================
+
+    summary_columns = [
+        "Total Active Marrow Mass (kg)",
+        "Total Endosteum Mass (kg)",
+
+        "RBM Dose (Gy/source)",
+        "RBM Relative Error",
+        "RBM Statistical Uncertainty (%)",
+        "RBM SAF (kg^-1)",
+        "RBM SAF Statistical Uncertainty (kg^-1)",
+
+        "Endosteum Dose (Gy/source)",
+        "Endosteum Relative Error",
+        "Endosteum Statistical Uncertainty (%)",
+        "Endosteum SAF (kg^-1)",
+        "Endosteum SAF Statistical Uncertainty (kg^-1)",
+    ]
+
+    simulation_columns = [
+        "Phantom",
+        "Source Organ",
+        "Source Type",
+        "Source Energy (MeV)",
+    ]
+
+    for _, group in combined_results.groupby(
+        simulation_columns,
+        sort=False
+    ):
+
+        # Keep the summary values only
+        # on the first skeletal-region row.
+        remaining_indices = group.index[1:]
+
+        combined_results.loc[
+            remaining_indices,
+            summary_columns
+        ] = np.nan
+
+    # ========================================================
+    # MATCH PHITS CSV COLUMN ORDER
+    # ========================================================
+
+    column_order = [
+        "Phantom",
+        "Source Organ",
+        "Source Type",
+        "Source Energy (MeV)",
+        "Organ ID",
+
+        "Marrow mass (kg)",
+        "Endosteum mass (kg)",
+
+        "Total fluence (photons/m2/source)",
+
+        "Marrow excluded fluence (photons/m2/source)",
+        "Endosteum excluded fluence (photons/m2/source)",
+
+        "Marrow dose (Gy/source)",
+        "Marrow Relative Error",
+        "Marrow Statistical Uncertainty (%)",
+
+        "Endosteum dose (Gy/source)",
+        "Endosteum Relative Error",
+        "Endosteum Statistical Uncertainty (%)",
+
+        "Marrow mass fraction",
+        "Endosteum mass fraction",
+
+        "Total Active Marrow Mass (kg)",
+        "Total Endosteum Mass (kg)",
+
+        "RBM Dose (Gy/source)",
+        "RBM Relative Error",
+        "RBM Statistical Uncertainty (%)",
+        "RBM SAF (kg^-1)",
+        "RBM SAF Statistical Uncertainty (kg^-1)",
+
+        "Endosteum Dose (Gy/source)",
+        "Endosteum SAF (kg^-1)",
+        "Endosteum SAF Statistical Uncertainty (kg^-1)",
+    ]
+
+    combined_results = combined_results[column_order]
 
     # ========================================================
     # OUTPUT FILE

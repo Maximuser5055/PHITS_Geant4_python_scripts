@@ -62,7 +62,13 @@ DATABASE_FILE = ROOT / "1_scripts/c_database/b_organ_database.py"
 
 RESULTS_DIR = ROOT / "4_results"
 
-RERUN_CSV = ROOT / "4_results/5_rerun_required.csv"
+RESULTS_PHITS_DIR = RESULTS_DIR / "a_phits"
+
+RESULTS_GEANT4_DIR = RESULTS_DIR / "b_geant4"
+
+RESULTS_SAF_DATABASE_DIR = RESULTS_DIR / "c_saf_database"
+
+RESULTS_S_VALUES_DIR = RESULTS_DIR / "d_s_values"
 
 OTHER_INPUT_FILES_DIR = ROOT / "5_other_input_files"
 
@@ -110,6 +116,8 @@ GENERATED_INPUTS_DIR = ROOT / "2_phits/generated_inputs"
 
 PHITS_METADATA_FILE = RESULTS_DIR / "a_phits_all_simulations_log.csv"
 
+PHITS_RERUN_CSV_FILE = RESULTS_DIR / "o_phits_rerun_required.csv"
+
 ############################
 # Geant4 Directories and Files
 ############################
@@ -127,6 +135,8 @@ GEANT4_EXECUTABLE_FILE = GEANT4_BUILD_DIR / "Internal"
 GEANT4_GENERATED_INPUTS_DIR = GEANT4_BUILD_DIR / "generated_inputs"
 
 GEANT4_METADATA_FILE = RESULTS_DIR / "b_geant4_all_simulations_log.csv"
+
+GEANT4_RERUN_CSV_FILE = RESULTS_DIR / "p_geant4_rerun_required.csv"
 
 ############################
 # PHITS or Geant4

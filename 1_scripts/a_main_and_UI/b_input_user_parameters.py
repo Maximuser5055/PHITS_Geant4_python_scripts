@@ -324,6 +324,10 @@ def get_user_parameters():
     DIRECTORIES = [
         config.GENERATED_INPUTS_DIR,
         config.RESULTS_DIR,
+        config.RESULTS_PHITS_DIR,
+        config.RESULTS_GEANT4_DIR,
+        config.RESULTS_SAF_DATABASE_DIR,
+        config.RESULTS_S_VALUES_DIR,
     ]
 
     for directory in DIRECTORIES:

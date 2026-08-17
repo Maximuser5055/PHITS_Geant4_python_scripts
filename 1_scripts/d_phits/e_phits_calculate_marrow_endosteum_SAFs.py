@@ -782,24 +782,16 @@ def calculate_from_fluence(
         # TOTAL FLUENCE
         # ====================================================
 
-        total_fluence_cm2 = (
-            site[
-                "Fluence (1/cm2/source)"
-            ].sum()
-        )
+        total_fluence_cm2 = (site["Fluence (1/cm2/source)"].sum())
 
+        total_fluence_m2 = (total_fluence_cm2 * CM2_TO_M2)
+        
         # ====================================================
         # CONVERT cm^-2 -> m^-2
         # ====================================================
 
-        site[
-            "Fluence (1/m2/source)"
-        ] = (
-            site[
-                "Fluence (1/cm2/source)"
-            ]
-            * CM2_TO_M2
-        )
+        site["Fluence (1/m2/source)"] = (
+            site["Fluence (1/cm2/source)"] * CM2_TO_M2)
 
         # ====================================================
         # RBM
@@ -815,7 +807,7 @@ def calculate_from_fluence(
 
             marrow_dose = np.nan
             marrow_mass_kg = np.nan
-            excluded_marrow_fluence_cm2 = np.nan
+            excluded_marrow_fluence_m2 = np.nan
             marrow_relative_error = np.nan
             marrow_statistical_uncertainty = np.nan
 
@@ -883,12 +875,12 @@ def calculate_from_fluence(
                 else np.nan
             )
 
-            excluded_marrow_fluence_cm2 = (
+            excluded_marrow_fluence_m2 = (
                 rbm_site.loc[
                     ~rbm_in_range,
                     "Fluence (1/cm2/source)"
                 ].sum()
-            )
+            ) * CM2_TO_M2
 
             marrow_mass_kg = (
                 float(
@@ -914,7 +906,7 @@ def calculate_from_fluence(
 
             endosteum_dose = np.nan
             endosteum_mass_kg = np.nan
-            excluded_endosteum_fluence_cm2 = np.nan
+            excluded_endosteum_fluence_m2 = np.nan
             endosteum_relative_error = np.nan
             endosteum_statistical_uncertainty = np.nan
 
@@ -982,12 +974,12 @@ def calculate_from_fluence(
                 else np.nan
             )
 
-            excluded_endosteum_fluence_cm2 = (
+            excluded_endosteum_fluence_m2 = (
                 endo_site.loc[
                     ~endo_in_range,
                     "Fluence (1/cm2/source)"
                 ].sum()
-            )
+            ) * CM2_TO_M2
 
             endosteum_mass_kg = (
                 float(
@@ -1014,14 +1006,14 @@ def calculate_from_fluence(
             "Endosteum mass (kg)":
                 endosteum_mass_kg,
 
-            "Total fluence (1/cm2/source)":
-                total_fluence_cm2,
+            "Total fluence (photons/m2/source)":
+                total_fluence_m2,
 
-            "Marrow excluded fluence (1/cm2/source)":
-                excluded_marrow_fluence_cm2,
+            "Marrow excluded fluence (photons/m2/source)":
+                excluded_marrow_fluence_m2,
 
-            "Endosteum excluded fluence (1/cm2/source)":
-                excluded_endosteum_fluence_cm2,
+            "Endosteum excluded fluence (photons/m2/source)":
+                excluded_endosteum_fluence_m2,
 
             "Marrow dose (Gy/source)":
                 marrow_dose,
@@ -1065,6 +1057,9 @@ def calculate_from_fluence(
 
         total_marrow_mass_kg = np.nan
         rbm_dose = np.nan
+        rbm_sigma = np.nan
+        rbm_relative_error = np.nan
+        rbm_statistical_uncertainty = np.nan
 
     else:
 
@@ -1148,6 +1143,9 @@ def calculate_from_fluence(
 
         total_endosteum_mass_kg = np.nan
         endosteum_dose = np.nan
+        endosteum_sigma = np.nan
+        endosteum_relative_error = np.nan
+        endosteum_statistical_uncertainty = np.nan
 
     else:
 
@@ -1372,7 +1370,7 @@ def calculate_from_fluence(
                 "Organ ID",
                 "Marrow mass (kg)",
                 "Endosteum mass (kg)",
-                "Total fluence (1/cm2/source)",
+                "Total fluence (photons/m2/source)",
                 "Marrow dose (Gy/source)",
                 "Endosteum dose (Gy/source)",
                 "Marrow mass fraction",

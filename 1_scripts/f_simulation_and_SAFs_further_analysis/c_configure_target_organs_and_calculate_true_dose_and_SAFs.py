@@ -37,11 +37,13 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
         if simulation == "PHITS":
             input_prefix = "e" if phantom == "AM" else "f"
             output_prefix = "k" if phantom == "AM" else "l"
-
+            fluence_csv = (results_dir / "i_phits_rbm_endosteum_icrp116.csv")
+            
         elif simulation == "GEANT4":
             input_prefix = "g" if phantom == "AM" else "h"
             output_prefix = "m" if phantom == "AM" else "n"
-
+            fluence_csv = (results_dir / "j_geant4_rbm_endosteum_icrp116.csv")
+            
         else:
             raise ValueError(
                 f"Unsupported simulation code: {simulation}"
@@ -73,6 +75,8 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
         df["Target Organ ID"] = df["Target Organ ID"].astype(int)
 
+        fluence_df = pd.read_csv(fluence_csv) if fluence_csv.is_file() else pd.DataFrame()
+        
         output_rows = []
 
         grouping_columns = [
@@ -223,7 +227,7 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
                     combined_relative_error * 100
                 )
 
-                output_rows.append({
+                row = {
 
                     "Phantom":
                         group_key[0],
@@ -259,8 +263,184 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
                         combined_relative_error,
 
                     "Statistical Uncertainty (%)":
-                        statistical_uncertainty
-                })
+                        statistical_uncertainty,
+                }
+
+                # Add calculation method ONLY for RBM and endosteum
+                if target_name in {
+                    RBM_REGION,
+                    ENDOSTEUM_REGION,
+                }:
+                    row["Calculation Method"] = (
+                        "Direct dose calculation"
+                    )
+
+                output_rows.append(row)
+
+            # ==========================================================
+            # Append fluence-to-dose response-function results
+            # ==========================================================
+
+            if not fluence_df.empty:
+
+                # Select the same source simulation
+                # as the current direct-dose group.
+                source_fluence = fluence_df[
+                    (fluence_df["Phantom"] == group_key[0])
+                    &
+                    (fluence_df["Source Organ"] == group_key[2]
+                    )
+                    &
+                    (fluence_df["Source Type"] == group_key[3]
+                    )
+                    &
+                    (fluence_df["Source Energy (MeV)"] == group_key[4]
+                    )
+                ]
+
+                # ------------------------------------------------------
+                # Keep the complete skeletal-region table.
+                # ------------------------------------------------------
+
+                if not source_fluence.empty:
+
+                    fluence_result = source_fluence.iloc[0]
+
+                    # --------------------------------------------------
+                    # RBM
+                    # --------------------------------------------------
+
+                    if pd.notna(fluence_result["RBM Dose (Gy/source)"]):
+
+                        output_rows.append({
+
+                            "Phantom":
+                                fluence_result["Phantom"],
+
+                            "Source Organ ID":
+                                group_key[1],
+
+                            "Source Organ Name":
+                                fluence_result["Source Organ"],
+
+                            "Source Type":
+                                fluence_result["Source Type"],
+
+                            "Source Energy (MeV)":
+                                fluence_result[
+                                    "Source Energy (MeV)"
+                                ],
+
+                            "Target Organ IDs":
+                                "_".join(
+                                    source_fluence.loc[
+                                        source_fluence["Marrow mass (kg)"].notna(),
+                                        "Organ ID"
+                                    ]
+                                    .astype(int)
+                                    .astype(str)
+                                    .tolist()
+                                ),
+
+                            "Target Region Name":
+                                RBM_REGION,
+
+                            "Target Region Mass (g)":
+                                fluence_result[
+                                    "Total Active Marrow Mass (kg)"
+                                ] * 1000.0,
+
+                            "Dose (Gy/source)":
+                                fluence_result[
+                                    "RBM Dose (Gy/source)"
+                                ],
+
+                            "SAF (kg^-1)":
+                                fluence_result[
+                                    "RBM SAF (kg^-1)"
+                                ],
+
+                            "Relative Error":
+                                fluence_result[
+                                    "RBM Relative Error"
+                                ],
+
+                            "Statistical Uncertainty (%)":
+                                fluence_result[
+                                    "RBM Statistical Uncertainty (%)"
+                                ],
+
+                            "Calculation Method":
+                                "Fluence-to-dose response functions",
+                        })
+
+                    # --------------------------------------------------
+                    # Endosteum
+                    # --------------------------------------------------
+
+                    if pd.notna(fluence_result["Endosteum Dose (Gy/source)"]):
+
+                        output_rows.append({
+
+                            "Phantom":
+                                fluence_result["Phantom"],
+
+                            "Source Organ ID":
+                                group_key[1],
+
+                            "Source Organ Name":
+                                fluence_result["Source Organ"],
+
+                            "Source Type":
+                                fluence_result["Source Type"],
+
+                            "Source Energy (MeV)":
+                                fluence_result[
+                                    "Source Energy (MeV)"
+                                ],
+
+                            "Target Organ IDs":
+                                "_".join(
+                                    source_fluence.loc[
+                                        source_fluence["Endosteum mass (kg)"].notna(),
+                                        "Organ ID"
+                                    ]
+                                    .astype(int)
+                                    .astype(str)
+                                    .tolist()
+                                ),
+
+                            "Target Region Name":
+                                ENDOSTEUM_REGION,
+
+                            "Target Region Mass (g)":
+                                fluence_result[
+                                    "Total Endosteum Mass (kg)"
+                                ] * 1000.0,
+
+                            "Dose (Gy/source)":
+                                fluence_result[
+                                    "Endosteum Dose (Gy/source)"
+                                ],
+
+                            "SAF (kg^-1)":
+                                fluence_result[
+                                    "Endosteum SAF (kg^-1)"
+                                ],
+
+                            "Relative Error":
+                                fluence_result[
+                                    "Endosteum Relative Error"
+                                ],
+
+                            "Statistical Uncertainty (%)":
+                                fluence_result[
+                                    "Endosteum Statistical Uncertainty (%)"
+                                ],
+
+                            "Calculation Method":
+                                "Fluence-to-dose response functions",
+                        })
 
         # ==========================================================
         # Save output
@@ -280,6 +460,15 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
         output["Target Region Name"] = pd.Categorical(
             output["Target Region Name"],
             categories=target_region_order,
+            ordered=True,
+        )
+
+        output["Calculation Method"] = pd.Categorical(
+            output["Calculation Method"],
+            categories=[
+                "Direct dose calculation",
+                "Fluence-to-dose response functions",
+            ],
             ordered=True,
         )
 

@@ -32,6 +32,7 @@
 #include "TETPSPhotonFluence.hh"
 
 #include <filesystem>
+#include <algorithm>
 
 TETRunAction::TETRunAction(TETModelImport* _tetData, G4String _output)
 :tetData(_tetData), fRun(0), numOfEvent(0), runID(0), outputFile(_output)
@@ -172,6 +173,8 @@ void TETRunAction::PrintCSV(std::ostream& out)
              (meanDose * meanDose)) /
             numOfEvent;
 
+        variance = std::max(variance, 0.0);
+
         G4double relativeE =
             (meanDose > 0.0)
                 ? std::sqrt(variance) / meanDose
@@ -222,7 +225,6 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
         5600
     };
 
-
     // ========================================================
     // CSV header
     // ========================================================
@@ -232,12 +234,11 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
         << "Energy Low (MeV),"
         << "Energy High (MeV),"
         << "Energy Center (MeV),"
-        << "Fluence (photons/m2/source)"
+        << "Fluence (photons/m2/source),"
+        << "Relative Error"
         << "\n";
 
-
     out.precision(12);
-
 
     // ========================================================
     // Loop over skeletal regions
@@ -249,21 +250,13 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
         // Total volume of this skeletal region
         // ----------------------------------------------------
 
-        G4double volume =
-            tetData->GetVolume(
-                organID
-            );
-
+        G4double volume = tetData->GetVolume(organID);
 
         // ----------------------------------------------------
         // Loop over energy bins
         // ----------------------------------------------------
 
-        for (
-            G4int bin = 0;
-            bin < TETPSPhotonFluence::nEnergyBins;
-            bin++
-        )
+        for (G4int bin = 0; bin < TETPSPhotonFluence::nEnergyBins; bin++)
         {
             // ------------------------------------------------
             // Construct key
@@ -274,7 +267,6 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
                 * TETPSPhotonFluence::nEnergyBins
                 + bin;
 
-
             // ------------------------------------------------
             // Find track length
             // ------------------------------------------------
@@ -282,16 +274,17 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
             auto itr =
                 fluxMap.find(key);
 
-
             G4double totalTrackLength = 0.0;
-
+            G4double squareTrackLength = 0.0;
 
             if (itr != fluxMap.end())
             {
                 totalTrackLength =
                     itr->second.first;
-            }
 
+                squareTrackLength =
+                    itr->second.second;
+            }
 
             // ------------------------------------------------
             // Mean track length per source particle
@@ -301,6 +294,19 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
                 totalTrackLength
                 / numOfEvent;
 
+            // ------------------------------------------------
+            // Statistical variance
+            // ------------------------------------------------
+
+            G4double variance =
+                ((squareTrackLength / numOfEvent) -
+                 (meanTrackLength * meanTrackLength)) / 
+                 numOfEvent;
+
+            G4double relativeE =
+                (meanTrackLength > 0.0 && variance > 0.0)
+                    ? std::sqrt(variance) / meanTrackLength
+                    : 0.0;
 
             // ------------------------------------------------
             // Track-length fluence estimator
@@ -357,6 +363,8 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
                 << energyCenter
                 << ","
                 << fluence_m2
+                << ","
+                << relativeE
                 << "\n";
         }
     }

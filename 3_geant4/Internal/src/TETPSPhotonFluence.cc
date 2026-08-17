@@ -179,10 +179,7 @@ void TETPSPhotonFluence::Initialize(
 // Process photon steps
 // ============================================================
 
-G4bool TETPSPhotonFluence::ProcessHits(
-    G4Step* aStep,
-    G4TouchableHistory*
-)
+G4bool TETPSPhotonFluence::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
     // --------------------------------------------------------
     // Only score photons

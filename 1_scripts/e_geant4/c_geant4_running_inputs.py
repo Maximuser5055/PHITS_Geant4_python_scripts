@@ -18,8 +18,7 @@ def run_geant4(params):
     executable = config.GEANT4_EXECUTABLE_FILE
     input_root = config.GEANT4_GENERATED_INPUTS_DIR
     current_working_dir = config.GEANT4_BUILD_DIR
-    
-    rerun_csv = config.RERUN_CSV
+    rerun_csv = config.GEANT4_RERUN_CSV_FILE
     
     #########################################
     # User Interface

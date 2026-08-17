@@ -95,9 +95,3 @@ void TETRun::Merge(const G4Run* run)
 
 	G4Run::Merge(run);
 }
-
-
-
-
-
-
