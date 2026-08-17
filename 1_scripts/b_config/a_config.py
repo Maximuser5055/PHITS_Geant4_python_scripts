@@ -132,7 +132,7 @@ GEANT4_METADATA_FILE = RESULTS_DIR / "b_geant4_all_simulations_log.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "PHITS"
+SIMULATION_CODE = "GEANT4"
 
 ############################
 # PHITS Settings
@@ -222,7 +222,7 @@ THREADS = 16
 
 SOURCE_ENERGIES = [10.0]
 
-SELECTED_SOURCE_TYPE = "photon"
+SELECTED_SOURCE_TYPE = "gamma"
 
 FLUENCE_SOURCE_TYPES = [
     "photon",

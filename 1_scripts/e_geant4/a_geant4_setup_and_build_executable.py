@@ -57,7 +57,9 @@ def geant4_change_fluence_settings(params):
         text
     )
 
-    photon_fluence_file.write_text(text)
+    # Only write if the contents actually changed
+    if text != photon_fluence_file.read_text():
+        photon_fluence_file.write_text(text)
 
     return photon_fluence_file
 

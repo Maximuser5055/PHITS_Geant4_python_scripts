@@ -494,7 +494,7 @@ def run_phits():
         ).exists()
 
         deposit_exists = any(
-            f.name.startswith("deposit_")
+            f.name.startswith("phits_deposit_")
             and f.suffix == ".out"
             for f in job_dir.iterdir()
         )

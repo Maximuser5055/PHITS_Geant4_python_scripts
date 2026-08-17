@@ -193,7 +193,7 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
     // Skeletal IDs
     // ========================================================
 
-    std::vector<G4int> spongiosaIDs =
+    std::vector<G4int> skeletalIDs =
     {
         1400,
         1500,
@@ -228,7 +228,7 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
     // ========================================================
 
     out
-        << "Spongiosa ID,"
+        << "Skeletal ID,"
         << "Energy Low (MeV),"
         << "Energy High (MeV),"
         << "Energy Center (MeV),"
@@ -243,10 +243,10 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
     // Loop over skeletal regions
     // ========================================================
 
-    for (G4int organID : spongiosaIDs)
+    for (G4int organID : skeletalIDs)
     {
         // ----------------------------------------------------
-        // Total volume of this spongiosa region
+        // Total volume of this skeletal region
         // ----------------------------------------------------
 
         G4double volume =
