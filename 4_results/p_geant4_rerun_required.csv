@@ -1,0 +1,3 @@
+Phantom,Source Organ ID,Source Organ Name,Source Type,Source Energy (MeV),Maximum Statistical Uncertainty (%),Input File,Job Directory
+Adult Female,9500,Liver,photon,10.0,99.94998749,AF/geant4_MRCP_AF_source_Liver_gamma_energy_10.0/geant4_MRCP_AF_source_Liver_gamma_energy_10.0.in,AF/geant4_MRCP_AF_source_Liver_gamma_energy_10.0
+Adult Male,9500,Liver,photon,10.0,99.94998749,AM/geant4_MRCP_AM_source_Liver_gamma_energy_10.0/geant4_MRCP_AM_source_Liver_gamma_energy_10.0.in,AM/geant4_MRCP_AM_source_Liver_gamma_energy_10.0

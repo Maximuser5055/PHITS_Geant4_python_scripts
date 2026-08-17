@@ -1,0 +1,3 @@
+Starting Datetime,Termination Datetime,Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch,Setup Time (s),Execution Time (s),Individual Wall Time (s)
+2026-08-17T16:29:33,2026-08-17T16:32:48,Adult Female,Liver,photon,10.0,OMP-16,1000,10,188.28799999999998,188.242,376.53
+2026-08-17T16:29:33,2026-08-17T16:32:44,Adult Male,Liver,photon,10.0,OMP-16,1000,10,187.038,162.252,349.29

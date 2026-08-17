@@ -1,0 +1,18 @@
+Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),Overall Wall Time (s),Overall Wall Time (dhms)
+Type + Energy,gamma,0.1,,,1,4463.77,0d 01h 14m 24s,,4463.77,4463.77,,
+Type + Energy,gamma,0.5,,,2,7444.4,0d 02h 04m 04s,3330.13,5089.65,9799.16,,
+Type + Energy,gamma,1.0,,,2,7583.48,0d 02h 06m 23s,3572.33,5057.46,10109.5,,
+Type + Energy,gamma,10.0,,,2,8806.22,0d 02h 26m 46s,3741.71,6160.43,11452.0,,
+Phantom + Type + Energy,gamma,0.1,Adult Male,,1,4463.77,0d 01h 14m 24s,,4463.77,4463.77,,
+Phantom + Type + Energy,gamma,0.5,Adult Male,,2,7444.4,0d 02h 04m 04s,3330.13,5089.65,9799.16,,
+Phantom + Type + Energy,gamma,1.0,Adult Male,,2,7583.48,0d 02h 06m 23s,3572.33,5057.46,10109.5,,
+Phantom + Type + Energy,gamma,10.0,Adult Male,,2,8806.22,0d 02h 26m 46s,3741.71,6160.43,11452.0,,
+Source Organ + Type + Energy,gamma,0.1,,Liver,1,4463.77,0d 01h 14m 24s,,4463.77,4463.77,,
+Source Organ + Type + Energy,gamma,0.5,,Liver,1,5089.65,0d 01h 24m 50s,,5089.65,5089.65,,
+Source Organ + Type + Energy,gamma,1.0,,Liver,1,5057.46,0d 01h 24m 17s,,5057.46,5057.46,,
+Source Organ + Type + Energy,gamma,10.0,,Liver,1,6160.43,0d 01h 42m 40s,,6160.43,6160.43,,
+Source Organ + Type + Energy,gamma,0.1,,Thyroid,0,,,,,,,
+Source Organ + Type + Energy,gamma,0.5,,Thyroid,1,9799.16,0d 02h 43m 19s,,9799.16,9799.16,,
+Source Organ + Type + Energy,gamma,1.0,,Thyroid,1,10109.5,0d 02h 48m 30s,,10109.5,10109.5,,
+Source Organ + Type + Energy,gamma,10.0,,Thyroid,1,11452.0,0d 03h 10m 52s,,11452.0,11452.0,,
+All simulations,,,,,7,7447.42,0d 02h 04m 07s,2900.68,4463.77,11452.0,44212.0,0d 12h 16m 52s

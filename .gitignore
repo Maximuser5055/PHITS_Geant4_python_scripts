@@ -4,17 +4,21 @@
 # Keep these folders
 !1_scripts/
 !2_phits/
-!2_phits/template_input_files/
 !3_geant4/
+!4_results
 !5_other_input_files/
 
 # Keep everything inside them
 !1_scripts/**
-!2_phits/template_input_files/**
+!2_phits/**
 !3_geant4/**
+!4_results/**
 !5_other_input_files/**
 
 # Ignore these
+2_phits/phantoms/
+2_phits/generated_inputs/AF/phantoms/
+2_phits/generated_inputs/AM/phantoms/
 3_geant4/phantoms/
 
 # Keep these files

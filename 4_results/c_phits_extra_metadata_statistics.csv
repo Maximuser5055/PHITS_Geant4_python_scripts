@@ -1,0 +1,6 @@
+Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),Overall Wall Time (s),Overall Wall Time (dhms)
+Type + Energy,photon,10.0,,,2,362.91,0d 00h 06m 03s,19.26,349.29,376.53,,
+Phantom + Type + Energy,photon,10.0,Adult Female,,1,376.53,0d 00h 06m 17s,,376.53,376.53,,
+Phantom + Type + Energy,photon,10.0,Adult Male,,1,349.29,0d 00h 05m 49s,,349.29,349.29,,
+Source Organ + Type + Energy,photon,10.0,,Liver,2,362.91,0d 00h 06m 03s,19.26,349.29,376.53,,
+All simulations,,,,,2,362.91,0d 00h 06m 03s,19.26,349.29,376.53,195.0,0d 00h 03m 15s

@@ -1,0 +1,68 @@
+$OMP=16
+
+# ----------------------------------------------------------------------------
+#    name               : MRCP PHANTOM                                        
+#    sex                : MALE                                              
+#    author             : HUREL
+# ----------------------------------------------------------------------------
+
+[ Parameters ]
+ icntl    =           0     # (D=0) 3:ECH 5:NOR 6:SRC 7,8:GSH 11:DSH 12:DUMP
+ maxcas   =  1000     # (D=10) number of particles per one batch
+ maxbch   =  10     # (D=10) number of batches
+ itetvol  =           0     # (D=0) =1 Volume calculation for tetrahedrons
+ ntetelem =        2000     # Number of tetra element allowed in sub-block
+ maxbnk   =     1000000     # (D=10000) maximum bank memory length
+ itetra   =           0     # (D=0) tetra data is read(=1)/write(=2) on binary
+ file(6)  = phits_MRCP_AM_source_Thyroid_photon_energy_10.0.out # (D=phits.out) general output file name
+ file(1)  = /home/clarence/Software/phits/phits # PHITS installation folder name
+ negs     =           1     # (D=-1) 1:EGS
+ ipegs    =           0     # [EGS](D=0) 0:Full
+
+[ Source ]
+  totfact =    1.00         # (D=1.0) global factor
+   s-type =    24            # rectangular-solid source
+     proj = photon        # kind of incident particle 
+   tetreg = 13200          # Liver as source
+       e0 = 10.0         # energy of beam [MeV/u]
+      dir =   all           # z-direction of beam [isotropic]
+
+[ Material ]
+$ ----------------------------------------------------------------------------
+$ MATERIAL DATA FOR EACH ORGAN/TISSUE
+$ ----------------------------------------------------------------------------
+infl:{../phantoms/MRCP-AM.material}
+
+[ Surface ]
+  10  rpp -37.8854 37.8854 -24.56301 24.56301 -98.00236 98.00236  $ Phantom box
+  20  rpp -38.0854 38.0854 -24.76301 24.76301 -98.20236 98.20236
+  90  box -1000 -1000 -1000 2000 0 0 0 2000 0 0 0 2000         $ World boundary
+  
+[ Cell ]
+$ ----------------------------------------------------------------------------
+$ CELLS FOR PHANTOM
+$ ----------------------------------------------------------------------------
+infl:{../phantoms/MRCP-AM.cell}
+
+[ T-deposit ]
+# Deposit energy in a certain region.
+ file   = phits_deposit_MRCP_AM_source_Thyroid_photon_energy_10.0.out # file name of output for the axis
+ mesh   = reg               # mesh type is region-wise
+ reg    = all               # all regions become tallying region
+ axis   = reg               # axis of output
+ unit   = 0                 # unit is [Gy/source]
+
+[T-Track] 
+# Count fluence in a certain region.
+file   = phits_fluence_MRCP_AM_source_Thyroid_photon_energy_10.0.out
+mesh   = reg
+reg    = 1400 1500 1700 1800 2000 2100 2300 2500 2700 2900 3000 3200 3300 3500 3600 3800 4000 4200 4400 4600 4800 5000 5200 5400 5600
+axis   = eng    # energy-based spectrum
+part   = photon
+unit   = 1
+e-type = 3 # logarithmic energy binning of photon fluence
+ne     = 100 # number of bins
+emin   = 0.01
+emax   = 10
+   
+[ End ]
