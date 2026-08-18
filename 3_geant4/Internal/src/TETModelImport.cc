@@ -274,7 +274,7 @@ void TETModelImport::PrintMaterialInfomation()
 	// Write to a csv file
 	namespace fs = std::filesystem;
 	fs::create_directories("../../../4_results/geant4");
-	std::ofstream summaryFile("../../../4_results/geant4/h_organ_summary.csv");
+	std::ofstream summaryFile("../../../4_results/b_geant4/0_organ_summary.csv");
 	summaryFile << "OrganID,NumTet,Volume_cm3,Density_gcm3,Mass_g,Organ\n";
 
 	// Print the overal information for each organ

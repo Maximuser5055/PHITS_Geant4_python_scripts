@@ -19,21 +19,22 @@ def check_uncertainty(params):
     simulation_code = params["simulation_code"].upper()
 
     # -------------------------------------------------------------------------
-    # Directories
+    # Directories and configs
     # -------------------------------------------------------------------------
 
-    results_dir = config.RESULTS_DIR
-
+    results_phits_dir = config.RESULTS_PHITS_DIR
+    results_geant4_dir = config.RESULTS_GEANT4_DIR
+    
     if simulation_code == "PHITS":
 
         input_dir = config.GENERATED_INPUTS_DIR
 
         csv_files = [
-            results_dir / "k_phits_target_regions_dose_SAFs_AM.csv",
-            results_dir / "l_phits_target_regions_dose_SAFs_AF.csv",
+            results_phits_dir / "f_phits_target_regions_dose_SAFs_AM.csv",
+            results_phits_dir / "g_phits_target_regions_dose_SAFs_AF.csv",
         ]
 
-        rerun_file = results_dir / "o_phits_rerun_required.csv"
+        rerun_file = config.PHITS_RERUN_CSV_FILE
 
         input_extension = ".inp"
 
@@ -42,11 +43,11 @@ def check_uncertainty(params):
         input_dir = config.GEANT4_GENERATED_INPUTS_DIR
 
         csv_files = [
-            results_dir / "m_geant4_target_regions_dose_SAFs_AM.csv",
-            results_dir / "n_geant4_target_regions_dose_SAFs_AF.csv",
+            results_geant4_dir / "f_geant4_target_regions_dose_SAFs_AM.csv",
+            results_geant4_dir / "g_geant4_target_regions_dose_SAFs_AF.csv",
         ]
 
-        rerun_file = results_dir / "p_geant4_rerun_required.csv"
+        rerun_file = config.GEANT4_RERUN_CSV_FILE
 
         input_extension = ".in"
 

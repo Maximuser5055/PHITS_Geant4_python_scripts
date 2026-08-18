@@ -234,8 +234,8 @@ int main(int argc,char** argv)
 
 	std::string filename = timingPath.filename().string();
 
-	const std::string depositPrefix = "Geant4_deposit_";
-	const std::string timingPrefix  = "Geant4_timing_";
+	const std::string depositPrefix = "geant4_deposit_";
+	const std::string timingPrefix  = "geant4_timing_";
 
 	if (filename.rfind(depositPrefix, 0) == 0)
 	{

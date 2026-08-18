@@ -106,7 +106,7 @@ def build_geant4(params):
         previous = json.loads(snapshot_file.read_text())
 
         if previous != current:
-            print("\nSource tree changed (file edited, added, or removed).")
+            print("\nSource tree changed (.hh and .cc files were edited, added, or removed).")
             need_cmake = True
 
     if need_cmake:
