@@ -1,3 +1,3 @@
 Starting Datetime,Termination Datetime,Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Setup Time (s),Execution Time (s),Individual Wall Time (s)
-2026-08-18T11:43:13,2026-08-18T11:44:17,Adult Female,Liver,gamma,10.0,MT-16,1000,1,8.81476,54.8027,63.6175
-2026-08-18T11:43:13,2026-08-18T11:44:20,Adult Male,Liver,gamma,10.0,MT-16,1000,1,8.37004,58.6411,67.0112
+2026-08-18T15:10:46,2026-08-18T15:11:49,Adult Female,Liver,gamma,10.0,MT-16,1000,1,9.0606,54.3534,63.414
+2026-08-18T15:10:46,2026-08-18T15:11:52,Adult Male,Liver,gamma,10.0,MT-16,1000,1,8.60413,57.4516,66.0557
