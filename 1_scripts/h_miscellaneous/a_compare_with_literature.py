@@ -18,10 +18,10 @@ import b_config.a_config as config
 # ============================================================
 
 LITERATURE_FILE = config.OTHER_INPUT_FILES_DIR / "literature_1_comparison_source_liver.csv"
-AM_FILE = config.RESULTS_DIR / "k_geant4_target_regions_dose_SAFs_AM.csv"
-AF_FILE = config.RESULTS_DIR / "l_geant4_target_regions_dose_SAFs_AF.csv"
-OUTPUT_COMPARISON_FILE = config.RESULTS_DIR / "q_liver_SAF_1_MeV_comparison_literature_1.csv"
-OUTPUT_PNG = config.RESULTS_DIR/ "r_liver_SAF_1_MeV_comparison.png"
+AM_FILE = config.RESULTS_DIR / "x_geant4_target_regions_dose_SAFs_AM.csv"
+AF_FILE = config.RESULTS_DIR / "x_geant4_target_regions_dose_SAFs_AF.csv"
+OUTPUT_COMPARISON_FILE = config.RESULTS_DIR / "x_liver_SAF_1_MeV_comparison_literature_1.csv"
+OUTPUT_PNG = config.RESULTS_DIR/ "x_liver_SAF_1_MeV_comparison.png"
 
 ENERGY_MEV = 1.0
 SOURCE_ORGAN = "Liver"

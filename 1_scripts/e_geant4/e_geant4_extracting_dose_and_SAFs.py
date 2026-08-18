@@ -11,25 +11,26 @@ from c_database.b_organ_database import ORGANS
 def geant4_calculate_dose_and_SAFs():
 
     # -------------------------------------------------------------
-    # Directories 
+    # Constants
+    # -------------------------------------------------------------
+
+    MeV_to_J = config.MEV_TO_J
+
+    # -------------------------------------------------------------
+    # Directories and Configs
     # -------------------------------------------------------------
 
     input_root = config.GEANT4_GENERATED_INPUTS_DIR
-    output_root = config.RESULTS_DIR
+    output_root = config.RESULTS_GEANT4_DIR
     source_type_map = config.GEANT4_SOURCE_TYPE_MAP
-
+    phantom_names = config.PHANTOM_NAMES
+    
     # -------------------------------------------------------------
     # File names
     # -------------------------------------------------------------
 
-    geant4_am_file = "g_geant4_all_dose_and_SAFs_AM.csv"
-    geant4_af_file = "h_geant4_all_dose_and_SAFs_AF.csv"
-
-    # -------------------------------------------------------------
-    # Constants
-    # -------------------------------------------------------------
-
-    MEV_TO_J = 1.602176634e-13
+    geant4_am_file = "c_geant4_all_dose_and_SAFs_AM.csv"
+    geant4_af_file = "d_geant4_all_dose_and_SAFs_AF.csv"
 
     filename_pattern = re.compile(
         r"geant4_deposit_MRCP_"
@@ -94,7 +95,7 @@ def geant4_calculate_dose_and_SAFs():
 
         phantom_code = match.group(1)
 
-        phantom = config.PHANTOM_NAMES[phantom_code]
+        phantom = phantom_names[phantom_code]
 
         source_organ = match.group(2)
 
@@ -152,7 +153,7 @@ def geant4_calculate_dose_and_SAFs():
 
             df["Dose (Gy/source)"] /
 
-            (source_energy * MEV_TO_J)
+            (source_energy * MeV_to_J)
 
         )
 

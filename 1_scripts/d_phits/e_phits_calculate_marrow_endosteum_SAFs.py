@@ -58,6 +58,16 @@ MeV_to_J = config.MEV_TO_J
 # ICRP response functions use m^2.
 CM2_TO_M2 = 1.0e4
 
+# ============================================================
+# Configs
+# ============================================================
+
+mass_file = config.SKELETAL_MASSES_CSV
+phits_generated_inputs_dir = config.GENERATED_INPUTS_DIR
+fluence_to_dose_response_functions = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
+phantom_names = config.PHANTOM_NAMES
+geant4_source_type_map = config.GEANT4_SOURCE_TYPE_MAP
+geant4_results_dir = config.RESULTS_GEANT4_DIR
 
 # ============================================================
 # PHITS FLUENCE FILENAME PATTERN
@@ -79,8 +89,6 @@ fluence_filename_pattern = re.compile(
 # ============================================================
 
 def load_skeletal_masses():
-
-    mass_file = config.SKELETAL_MASSES_CSV
 
     if not mass_file.exists():
 
@@ -145,7 +153,7 @@ def load_skeletal_masses():
 
 def find_fluence_files():
 
-    root = config.GENERATED_INPUTS_DIR
+    root = phits_generated_inputs_dir
 
     return sorted(
         root.rglob(
@@ -160,7 +168,7 @@ def find_fluence_files():
 
 def load_icrp_response_functions():
 
-    icrp_file = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
+    icrp_file = fluence_to_dose_response_functions
 
     if not icrp_file.exists():
 
@@ -1280,31 +1288,10 @@ def calculate_from_fluence(
     # SOURCE INFORMATION
     # ========================================================
 
-    results.insert(
-        0,
-        "Phantom",
-        config.PHANTOM_NAMES[
-            phantom_code
-        ]
-    )
-
-    results.insert(
-        1,
-        "Source Organ",
-        source_organ
-    )
-
-    results.insert(
-        2,
-        "Source Type",
-        source_type
-    )
-
-    results.insert(
-        3,
-        "Source Energy (MeV)",
-        source_energy
-    )
+    results.insert(0, "Phantom", phantom_names[phantom_code])
+    results.insert(1, "Source Organ", source_organ)
+    results.insert(2, "Source Type", source_type)
+    results.insert(3, "Source Energy (MeV)", source_energy)
 
     # ========================================================
     # TOTALS

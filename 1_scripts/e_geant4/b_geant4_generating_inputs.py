@@ -11,6 +11,8 @@ def geant4_generate_inputs(params):
 
     total_files = 0
 
+    geant4_source_types = config.GEANT4_SOURCE_TYPES
+
     # Read templates
     input_template = (config.GEANT4_BUILD_DIR / "example.in").read_text()
     source_template = (config.GEANT4_BUILD_DIR / "source.mac").read_text()
@@ -110,7 +112,7 @@ def geant4_generate_inputs(params):
 
     num_phantoms = len(phantoms)
     num_organs_per_phantom = len(SOURCE_ORGANS[phantoms[0]])
-    num_source_types = int(params["source_type"] in config.GEANT4_SOURCE_TYPES)
+    num_source_types = int(params["source_type"] in geant4_source_types)
     num_energy_bins = len(params["source_energies"])
 
     print(

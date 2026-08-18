@@ -14,10 +14,7 @@ def geant4_extract_metadata_stats():
 
     timing_files = sorted(root.rglob("geant4_timing_*.txt"))
 
-    metadata_output_file = (
-        config.RESULTS_DIR /
-        "b_geant4_all_simulations_log.csv"
-    )
+    metadata_output_file = (config.RESULTS_GEANT4_DIR / "a_geant4_all_simulations_log.csv")
 
     PHANTOM_NAMES = {
         "AM": "Adult Male",

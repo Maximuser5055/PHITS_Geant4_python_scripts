@@ -8,25 +8,20 @@ import b_config.a_config as config
 def calculate_extra_metadata(params):
     if params["simulation_code"].upper() == "PHITS":
         input_prefix = "a_phits"
-        output_prefix = "c_phits"
-
+        output_prefix = "b_phits"
+        input_file = config.RESULTS_PHITS_DIR / f"{input_prefix}_all_simulations_log.csv"
+        output_file = config.RESULTS_PHITS_DIR / f"{output_prefix}_extra_metadata_statistics.csv"
+        
     elif params["simulation_code"].upper() == "GEANT4":
-        input_prefix = "b_geant4"
-        output_prefix = "d_geant4"
+        input_prefix = "a_geant4"
+        output_prefix = "b_geant4"
+        input_file = config.RESULTS_GEANT4_DIR / f"{input_prefix}_all_simulations_log.csv"
+        output_file = config.RESULTS_GEANT4_DIR / f"{output_prefix}_extra_metadata_statistics.csv"
 
     else:
         raise ValueError(
             f"Unknown SIMULATION_CODE: {params["simulation_code"].upper()}"
         )
-
-    # Input metadata log
-    input_file = config.RESULTS_DIR / f"{input_prefix}_all_simulations_log.csv"
-
-    # Output statistics
-    output_file = config.RESULTS_DIR / f"{output_prefix}_extra_metadata_statistics.csv"
-
-    # Output directory
-    results_dir = input_file.parent
 
     df = pd.read_csv(input_file)
 

@@ -8,6 +8,14 @@ import json
 import re
 import b_config.a_config as config
 
+# Configurations
+executable = config.GEANT4_EXECUTABLE_FILE
+geant4_include_dir = config.INCLUDE_DIR
+fluence_source_types = config.FLUENCE_SOURCE_TYPES
+energy_bins = config.ENERGY_BINS
+energy_min = config.ENERGY_MIN
+energy_max = config.ENERGY_MAX
+
 def find_geant4make():
     """Search for geant4make.sh"""
     home = Path.home()
@@ -21,16 +29,15 @@ def find_geant4make():
     raise FileNotFoundError("Could not find geant4make.sh")
 
 def executable_exists():
-    executable = config.GEANT4_EXECUTABLE_FILE
     return executable.is_file()
 
 def geant4_change_fluence_settings(params):
 
-    photon_fluence_file = (config.INCLUDE_DIR / "TETPSPhotonFluence.hh")
+    photon_fluence_file = (geant4_include_dir / "TETPSPhotonFluence.hh")
 
     text = photon_fluence_file.read_text()
 
-    enable_photon_fluence = (params["source_type"].lower()in config.FLUENCE_SOURCE_TYPES)
+    enable_photon_fluence = (params["source_type"].lower()in fluence_source_types)
 
     text = re.sub(
         r"static constexpr G4bool ENABLE_PHOTON_FLUENCE\s*=\s*[^;]+;",
@@ -41,19 +48,19 @@ def geant4_change_fluence_settings(params):
 
     text = re.sub(
         r"static constexpr G4int nEnergyBins\s*=\s*[^;]+;",
-        f"static constexpr G4int nEnergyBins = {config.ENERGY_BINS};",
+        f"static constexpr G4int nEnergyBins = {energy_bins};",
         text
     )
 
     text = re.sub(
         r"static constexpr G4double Emin\s*=\s*[^;]+;",
-        f"static constexpr G4double Emin = {config.ENERGY_MIN};",
+        f"static constexpr G4double Emin = {energy_min};",
         text
     )
 
     text = re.sub(
         r"static constexpr G4double Emax\s*=\s*[^;]+;",
-        f"static constexpr G4double Emax = {config.ENERGY_MAX};",
+        f"static constexpr G4double Emax = {energy_max};",
         text
     )
 

@@ -31,6 +31,7 @@ def run_phits():
     phits_executable = config.PHITS_EXECUTABLE
     input_root = config.GENERATED_INPUTS_DIR
     rerun_csv = config.PHITS_RERUN_CSV_FILE
+    source_csv = config.SOURCE_CSV
 
     # Pattern for OMP/MPI threads
     parallelization_pattern = re.compile(
@@ -93,8 +94,6 @@ def run_phits():
     # ==========================================================
 
     if choice != "4":
-
-        source_csv = config.SOURCE_CSV
 
         if not source_csv.is_file():
 

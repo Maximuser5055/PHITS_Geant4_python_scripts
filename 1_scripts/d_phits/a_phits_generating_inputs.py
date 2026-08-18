@@ -19,6 +19,10 @@ def phits_generate_inputs(params):
     phits_installation_dir = config.PHITS_INSTALLATION_DIR
     base_output_dir = config.GENERATED_INPUTS_DIR
 
+    # Configs
+    sex_info = config.SEXINFO
+    phits_source_types = config.PHITS_SOURCE_TYPES
+    
     # T-track configuration
     skeletal_regions = " ".join(str(region)for region in config.SKELETAL_IDS)
     fluence_source_type = config.FLUENCE_SOURCE_TYPES
@@ -48,7 +52,7 @@ def phits_generate_inputs(params):
         source_type = params["source_type"]
         source_energies = params["source_energies"]
         target_regions = "all"
-        sexinfo = config.SEXINFO.get(phantom)
+        sexinfo = sex_info.get(phantom)
 
         # Loop through source energies and regions to generate input files
         for energy in source_energies:
@@ -118,7 +122,7 @@ def phits_generate_inputs(params):
 
     num_phantoms = len(phantoms)
     num_organs_per_phantom = len(SOURCE_ORGANS[phantoms[0]])
-    num_source_types = int(params["source_type"].lower() in config.PHITS_SOURCE_TYPES)
+    num_source_types = int(params["source_type"].lower() in phits_source_types)
     num_energy_bins = len(params["source_energies"])
 
     print(

@@ -52,6 +52,18 @@ import b_config.a_config as config
 MeV_to_J = config.MEV_TO_J
 
 # ============================================================
+# Configs
+# ============================================================
+
+mass_file = config.SKELETAL_MASSES_CSV
+geant4_generated_inputs_dir = config.GEANT4_GENERATED_INPUTS_DIR
+fluence_to_dose_response_functions = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
+phantom_names = config.PHANTOM_NAMES
+geant4_source_type_map = config.GEANT4_SOURCE_TYPE_MAP
+geant4_results_dir = config.RESULTS_GEANT4_DIR
+geant4_output_fluence = "e_geant4_rbm_endosteum_icrp116.csv"
+
+# ============================================================
 # GEANT4 PHOTON-FLUENCE FILENAME PATTERN
 # ============================================================
 
@@ -70,8 +82,6 @@ fluence_filename_pattern = re.compile(
 # ============================================================
 
 def load_skeletal_masses():
-
-    mass_file = config.SKELETAL_MASSES_CSV
 
     if not mass_file.exists():
         raise FileNotFoundError(f"Could not find skeletal tissue mass file:\n {mass_file}")
@@ -115,7 +125,7 @@ def load_skeletal_masses():
 
 def find_fluence_files():
 
-    root = config.GEANT4_GENERATED_INPUTS_DIR
+    root = geant4_generated_inputs_dir
 
     return sorted(root.rglob("*_gamma_energy_*_photon_fluence.csv"))
 
@@ -125,7 +135,7 @@ def find_fluence_files():
 
 def load_icrp_response_functions():
 
-    icrp_file = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
+    icrp_file = fluence_to_dose_response_functions
 
     if not icrp_file.exists():
 
@@ -878,7 +888,7 @@ def calculate_from_fluence(
     # ADD SOURCE INFORMATION
     # ========================================================
 
-    results.insert(0, "Phantom", config.PHANTOM_NAMES[phantom_code])
+    results.insert(0, "Phantom", phantom_names[phantom_code])
 
     results.insert(1, "Source Organ", source_organ)
 
@@ -1103,7 +1113,7 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         raise FileNotFoundError(
             "No Geant4 photon-fluence CSV "
             "files were found in:\n"
-            f"{config.GEANT4_GENERATED_INPUTS_DIR}"
+            f"{geant4_generated_inputs_dir}"
         )
 
     print(
@@ -1151,7 +1161,7 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         # ----------------------------------------------------
 
         source_type = (
-            config.GEANT4_SOURCE_TYPE_MAP.get(
+            geant4_source_type_map.get(
                 geant4_source_type,
                 geant4_source_type
             )
@@ -1332,7 +1342,7 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
     # ========================================================
 
     if (params["simulation_code"]== "GEANT4"):
-        output_filename = ("j_geant4_rbm_endosteum_icrp116.csv")
+        output_filename = geant4_output_fluence
 
     else:
 
@@ -1341,10 +1351,7 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
             f"{params['simulation_code']}"
         )
 
-    output_file = (
-        config.RESULTS_DIR
-        / output_filename
-    )
+    output_file = (geant4_results_dir / output_filename)
 
     combined_results.to_csv(
         output_file,

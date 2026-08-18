@@ -15,7 +15,7 @@ def phits_extract_metadata_stats():
                     ]
 
     # Define metadata output file
-    metadata_output_file = config.RESULTS_DIR / "a_phits_all_simulations_log.csv"
+    metadata_output_file = config.RESULTS_PHITS_DIR / "a_phits_all_simulations_log.csv"
 
     # Phantom models
     PHANTOM_NAMES = {
