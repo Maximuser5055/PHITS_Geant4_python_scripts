@@ -15,6 +15,7 @@ fluence_source_types = config.FLUENCE_SOURCE_TYPES
 energy_bins = config.ENERGY_BINS
 energy_min = config.ENERGY_MIN
 energy_max = config.ENERGY_MAX
+internal_dir = config.INTERNAL_DIR
 
 def find_geant4make():
     """Search for geant4make.sh"""
@@ -87,7 +88,7 @@ def build_geant4(params):
 
     geant4_change_fluence_settings(params)
     geant4make_path = find_geant4make()
-    project_dir = config.INTERNAL_DIR.resolve()
+    project_dir = internal_dir.resolve()
     executable = project_dir / "build" / "Internal"
     build_dir = project_dir / "build"
     build_dir.mkdir(parents=True, exist_ok=True)

@@ -15,11 +15,13 @@ def run_geant4(params):
 
     geant4make_path = find_geant4make()
 
+    # Configs
     executable = config.GEANT4_EXECUTABLE_FILE
     input_root = config.GEANT4_GENERATED_INPUTS_DIR
     current_working_dir = config.GEANT4_BUILD_DIR
     rerun_csv = config.GEANT4_RERUN_CSV_FILE
-    
+    source_csv = config.SOURCE_CSV
+
     #########################################
     # User Interface
     #########################################
@@ -69,8 +71,6 @@ def run_geant4(params):
     #########################################
 
     if choice != "4":
-
-        source_csv = config.SOURCE_CSV
 
         if not source_csv.is_file():
 

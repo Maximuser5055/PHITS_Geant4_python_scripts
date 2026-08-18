@@ -66,8 +66,8 @@ mass_file = config.SKELETAL_MASSES_CSV
 phits_generated_inputs_dir = config.GENERATED_INPUTS_DIR
 fluence_to_dose_response_functions = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
 phantom_names = config.PHANTOM_NAMES
-geant4_source_type_map = config.GEANT4_SOURCE_TYPE_MAP
-geant4_results_dir = config.RESULTS_GEANT4_DIR
+phits_results_dir = config.RESULTS_PHITS_DIR
+phits_output_fluence = "e_phits_rbm_endosteum_icrp116.csv"
 
 # ============================================================
 # PHITS FLUENCE FILENAME PATTERN
@@ -1532,7 +1532,7 @@ def phits_calculate_marrow_endosteum_SAFs(
         raise FileNotFoundError(
             "No PHITS photon-fluence "
             "output files were found in:\n"
-            f"{config.GENERATED_INPUTS_DIR}"
+            f"{phits_generated_inputs_dir}"
         )
 
     print(
@@ -1703,14 +1703,9 @@ def phits_calculate_marrow_endosteum_SAFs(
     # OUTPUT FILE
     # ========================================================
 
-    if (
-        params["simulation_code"]
-        == "PHITS"
-    ):
-
-        output_filename = (
-            "i_phits_rbm_endosteum_icrp116.csv"
-        )
+    if (params["simulation_code"] == "PHITS"):
+        output_filename = phits_output_fluence
+        
 
     else:
 
@@ -1719,11 +1714,7 @@ def phits_calculate_marrow_endosteum_SAFs(
             f"{params['simulation_code']}"
         )
 
-    output_file = (
-        config.RESULTS_DIR
-        /
-        output_filename
-    )
+    output_file = (phits_results_dir / output_filename)
 
     combined_results.to_csv(
         output_file,
