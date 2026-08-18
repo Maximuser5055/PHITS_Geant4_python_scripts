@@ -21,7 +21,7 @@ def phits_calculate_dose_and_safs():
     # -------------------------------------------------------------------------
 
     input_root = config.GENERATED_INPUTS_DIR
-    output_root = config.RESULTS_DIR
+    output_root = config.RESULTS_PHITS_DIR
 
     # -------------------------------------------------------------------------
     # File names
