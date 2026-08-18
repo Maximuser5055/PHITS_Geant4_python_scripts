@@ -17,6 +17,8 @@ GEANT4_DATABASE_FILE = (config.RESULTS_SAF_DATABASE_DIR / "geant4_all_safs_uncer
 
 phits_results_dir = config.RESULTS_PHITS_DIR
 geant4_results_dir = config.RESULTS_GEANT4_DIR
+target_region_csv = config.TARGET_REGION_CSV
+target_region_mapping = pd.read_csv(target_region_csv)
 
 # ============================================================
 # EXPECTED COLUMNS
@@ -91,6 +93,267 @@ def validate_columns(df, filename):
                 for column in missing
             )
         )
+
+# ============================================================
+# REMOVE RESULTS ALREADY PRESENT IN DATABASE
+# ============================================================
+
+def filter_new_results(current_results,existing_database):
+
+    # --------------------------------------------------------
+    # Load target-region definitions
+    # --------------------------------------------------------
+
+    expected_target_regions = set(
+        target_region_mapping[
+            "Target region"
+        ]
+        .dropna()
+        .astype(str)
+    )
+
+    # --------------------------------------------------------
+    # Columns that uniquely identify a source simulation
+    # --------------------------------------------------------
+
+    simulation_columns = [
+        "Phantom",
+        "Source Organ ID",
+        "Source Type",
+        "Source Energy (MeV)",
+    ]
+
+    # --------------------------------------------------------
+    # If there is no existing database, everything is new
+    # --------------------------------------------------------
+
+    if existing_database.empty:
+
+        return current_results.copy()
+
+    new_rows = []
+
+    skipped_groups = 0
+    partial_groups = 0
+
+    # --------------------------------------------------------
+    # Group current results by source simulation
+    # --------------------------------------------------------
+
+    for group_key, current_group in current_results.groupby(simulation_columns, dropna=False):
+
+        # ----------------------------------------------------
+        # Find corresponding rows already in database
+        # ----------------------------------------------------
+
+        database_group = existing_database.copy()
+
+        for column, value in zip(
+            simulation_columns,
+            group_key
+        ):
+
+            if pd.isna(value):
+
+                database_group = database_group[
+                    database_group[column].isna()
+                ]
+
+            else:
+
+                database_group = database_group[
+                    database_group[column] == value
+                ]
+
+        # ----------------------------------------------------
+        # No existing results for this source simulation
+        # ----------------------------------------------------
+
+        if database_group.empty:
+
+            new_rows.append(current_group)
+
+            continue
+
+        # ====================================================
+        # Determine which target regions already exist
+        # ====================================================
+
+        existing_regions = set(
+            database_group[
+                "Target Region Name"
+            ]
+            .dropna()
+            .astype(str)
+        )
+
+        # ----------------------------------------------------
+        # Check whether all normal target regions exist
+        # ----------------------------------------------------
+
+        normal_target_regions = (
+            expected_target_regions
+            - {
+                "Red (active) marrow",
+                "50-um endosteal region",
+            }
+        )
+
+        missing_normal_regions = (
+            normal_target_regions
+            - existing_regions
+        )
+
+        # ----------------------------------------------------
+        # RBM/endosteum need to be checked by calculation
+        # method because each can legitimately have two rows.
+        # ----------------------------------------------------
+
+        skeletal_regions = {
+            "Red (active) marrow",
+            "50-um endosteal region",
+        }
+
+        missing_skeletal_rows = []
+
+        for region in skeletal_regions:
+
+            region_current = current_group[
+                current_group[
+                    "Target Region Name"
+                ].astype(str) == region
+            ]
+
+            # -----------------------------------------------
+            # If current batch has no row for this region,
+            # there is nothing to add.
+            # -----------------------------------------------
+
+            if region_current.empty:
+                continue
+
+            for method in region_current[
+                "Calculation Method"
+            ].dropna().unique():
+
+                existing_method = database_group[
+                    (
+                        database_group[
+                            "Target Region Name"
+                        ].astype(str) == region
+                    )
+                    &
+                    (
+                        database_group[
+                            "Calculation Method"
+                        ].astype(str) == str(method)
+                    )
+                ]
+
+                if existing_method.empty:
+
+                    missing_skeletal_rows.append(
+                        region_current[
+                            region_current[
+                                "Calculation Method"
+                            ].astype(str) == str(method)
+                        ]
+                    )
+
+        # ====================================================
+        # Determine whether the entire source simulation
+        # is already complete
+        # ====================================================
+
+        if (
+            not missing_normal_regions
+            and not missing_skeletal_rows
+        ):
+
+            print(
+                f"\n[SKIP] Existing database already contains "
+                f"complete results:"
+            )
+
+            print(
+                f"       Phantom       : {group_key[0]}"
+            )
+
+            print(
+                f"       Source Organ  : {group_key[1]}"
+            )
+
+            print(
+                f"       Source Type   : {group_key[2]}"
+            )
+
+            print(
+                f"       Source Energy : {group_key[3]} MeV"
+            )
+
+            skipped_groups += 1
+
+            continue
+
+        # ====================================================
+        # Existing group is incomplete
+        # ====================================================
+
+        partial_groups += 1
+
+        # ----------------------------------------------------
+        # Add missing normal target regions
+        # ----------------------------------------------------
+
+        if missing_normal_regions:
+
+            missing_normal_rows = current_group[
+                current_group[
+                    "Target Region Name"
+                ].astype(str).isin(
+                    missing_normal_regions
+                )
+            ]
+
+            if not missing_normal_rows.empty:
+
+                new_rows.append(
+                    missing_normal_rows
+                )
+
+        # ----------------------------------------------------
+        # Add missing RBM/endosteum calculation-method rows
+        # ----------------------------------------------------
+
+        if missing_skeletal_rows:
+
+            new_rows.extend(
+                missing_skeletal_rows
+            )
+
+    # --------------------------------------------------------
+    # Combine new rows
+    # --------------------------------------------------------
+
+    if not new_rows:
+
+        return pd.DataFrame(
+            columns=current_results.columns
+        )
+
+    filtered_results = pd.concat(
+        new_rows,
+        ignore_index=True
+    )
+
+    print()
+    print(f"Existing complete simulations skipped : {skipped_groups}")
+
+    print(f"Partially existing simulations updated : {partial_groups}")
+
+    print(f"New rows to append : {len(filtered_results)}")
+
+    return filtered_results
 
 # ============================================================
 # UPDATE SAF DATABASE
@@ -189,21 +452,28 @@ def update_master_saf_database(params):
         existing_database = pd.DataFrame(columns=REQUIRED_COLUMNS)
 
     # --------------------------------------------------------
-    # Concatenate existing database + current results
+    # Remove results that are already represented in the
+    # existing database.
+    #
+    # For RBM and endosteum, Calculation Method is also checked
+    # because each can have:
+    #   Direct dose calculation
+    #   Fluence-to-dose response functions
+    # --------------------------------------------------------
+
+    filtered_current_results = filter_new_results(current_results, existing_database)
+
+    # --------------------------------------------------------
+    # Concatenate only genuinely new rows
     # --------------------------------------------------------
 
     combined_database = pd.concat(
         [existing_database,
-         current_results],
-        ignore_index=True
-    )
+         filtered_current_results
+        ], ignore_index=True)
 
     # --------------------------------------------------------
-    # Remove exact duplicate rows
-    #
-    # This does NOT remove RBM/endosteum rows with
-    # different calculation methods because those rows
-    # are different.
+    # Exact duplicate protection
     # --------------------------------------------------------
 
     rows_before = len(combined_database)
@@ -214,31 +484,50 @@ def update_master_saf_database(params):
         .copy()
     )
 
-    duplicate_rows_removed = (rows_before - len(combined_database))
-
-    # --------------------------------------------------------
-    # Sort database
-    # --------------------------------------------------------
-
-    sort_columns = [
-        "Phantom",
-
-        "Source Organ ID",
-        "Source Type",
-        "Source Energy (MeV)",
-
-        "Target Region Name",
-    ]
-
-    combined_database.sort_values(
-        by=sort_columns,
-        inplace=True,
-        kind="stable"
+    duplicate_rows_removed = (
+        rows_before
+        - len(combined_database)
     )
 
-    combined_database.reset_index(
-        drop=True,
-        inplace=True
+    # --------------------------------------------------------
+    # Sort database using the same target-region order as the
+    # TARGET_REGION_CSV, matching the target-region
+    # generation script.
+    # --------------------------------------------------------
+
+    target_region_order = (
+        target_region_mapping[
+            "Target region"
+        ]
+        .tolist()
+    )
+
+    combined_database["Target Region Name"] = pd.Categorical(
+        combined_database["Target Region Name"],
+        categories=target_region_order,
+        ordered=True,
+    )
+
+    combined_database["Calculation Method"] = pd.Categorical(
+        combined_database["Calculation Method"],
+        categories=[
+            "Direct dose calculation",
+            "Fluence-to-dose response functions",
+        ],
+        ordered=True,
+    )
+
+    combined_database.sort_values(
+        by=[
+            "Phantom",
+            "Source Organ ID",
+            "Source Type",
+            "Source Energy (MeV)",
+            "Target Region Name",
+            "Calculation Method",
+        ],
+        inplace=True,
+        ignore_index=True,
     )
 
     # --------------------------------------------------------

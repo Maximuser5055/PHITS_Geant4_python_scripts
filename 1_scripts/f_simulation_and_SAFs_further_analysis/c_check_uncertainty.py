@@ -196,7 +196,7 @@ def check_uncertainty(params):
 
         print(f"\nAll simulations satisfy the {uncertainty_limit:.1f}% criterion.")
 
-        raise SystemExit
+        return
 
     # -------------------------------------------------------------------------
     # Add PASS / FAIL column
@@ -261,7 +261,7 @@ def check_uncertainty(params):
 
     if answer not in ("y", "yes"):
         print("\nNo input files were modified.")
-        raise SystemExit
+        return
 
     # -------------------------------------------------------------------------
     # Ask for new simulation parameters
