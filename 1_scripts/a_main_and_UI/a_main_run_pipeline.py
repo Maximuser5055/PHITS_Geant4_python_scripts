@@ -29,7 +29,7 @@ from f_simulation_and_SAFs_further_analysis.b_configure_target_organs_and_calcul
 # Not updated
 from f_simulation_and_SAFs_further_analysis.c_check_uncertainty import check_uncertainty
 # ===========
-from f_simulation_and_SAFs_further_analysis.d_create_master_saf_database import update_master_saf_database
+from f_simulation_and_SAFs_further_analysis.d_create_and_update_master_saf_database import update_master_saf_database
 
 def main():
 

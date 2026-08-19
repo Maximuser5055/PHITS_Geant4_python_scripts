@@ -12,8 +12,8 @@ import b_config.a_config as config
 # DATABASE FILES AND CONFIGS
 # ============================================================
 
-PHITS_DATABASE_FILE = (config.RESULTS_SAF_DATABASE_DIR / "phits_all_safs_uncertainties.csv")
-GEANT4_DATABASE_FILE = (config.RESULTS_SAF_DATABASE_DIR / "geant4_all_safs_uncertainties.csv")
+PHITS_DATABASE_FILE = config.RESULTS_SAF_DATABASE_DIR / "a_phits_all_safs_and_uncertainties.csv"
+GEANT4_DATABASE_FILE = config.RESULTS_SAF_DATABASE_DIR / "b_geant4_all_safs_and_uncertainties.csv"
 
 phits_results_dir = config.RESULTS_PHITS_DIR
 geant4_results_dir = config.RESULTS_GEANT4_DIR
@@ -129,7 +129,27 @@ def filter_new_results(current_results,existing_database):
 
     if existing_database.empty:
 
-        return current_results.copy()
+        statistics = {
+            "current_rows": len(current_results),
+
+            "current_simulations":
+                current_results[
+                    simulation_columns
+                ].drop_duplicates().shape[0],
+
+            "skipped_simulations": 0,
+
+            "partial_simulations": 0,
+
+            "new_simulations":
+                current_results[
+                    simulation_columns
+                ].drop_duplicates().shape[0],
+
+            "rows_to_append": len(current_results),
+        }
+
+        return current_results.copy(), statistics
 
     new_rows = []
 
@@ -176,8 +196,27 @@ def filter_new_results(current_results,existing_database):
             continue
 
         # ====================================================
-        # Determine which target regions already exist
+        # Determine whether the source + target-organ results
+        # are already complete
         # ====================================================
+
+        # ----------------------------------------------------
+        # Target regions actually present in the CURRENT
+        # result files for this source simulation
+        # ----------------------------------------------------
+
+        current_regions = set(
+            current_group[
+                "Target Region Name"
+            ]
+            .dropna()
+            .astype(str)
+        )
+
+        # ----------------------------------------------------
+        # Target regions already present in the DATABASE
+        # for this same source simulation
+        # ----------------------------------------------------
 
         existing_regions = set(
             database_group[
@@ -188,25 +227,21 @@ def filter_new_results(current_results,existing_database):
         )
 
         # ----------------------------------------------------
-        # Check whether all normal target regions exist
+        # Normal target regions that are present in the
+        # current results but missing from the database
         # ----------------------------------------------------
 
-        normal_target_regions = (
-            expected_target_regions
+        missing_normal_regions = (
+            current_regions
             - {
                 "Red (active) marrow",
                 "50-um endosteal region",
             }
-        )
-
-        missing_normal_regions = (
-            normal_target_regions
-            - existing_regions
-        )
+        ) - existing_regions
 
         # ----------------------------------------------------
-        # RBM/endosteum need to be checked by calculation
-        # method because each can legitimately have two rows.
+        # RBM and endosteum:
+        # check Target Region + Calculation Method
         # ----------------------------------------------------
 
         skeletal_regions = {
@@ -224,17 +259,18 @@ def filter_new_results(current_results,existing_database):
                 ].astype(str) == region
             ]
 
-            # -----------------------------------------------
-            # If current batch has no row for this region,
-            # there is nothing to add.
-            # -----------------------------------------------
-
+            # No current result for this skeletal region
             if region_current.empty:
                 continue
 
-            for method in region_current[
-                "Calculation Method"
-            ].dropna().unique():
+            for method in (
+                region_current[
+                    "Calculation Method"
+                ]
+                .dropna()
+                .astype(str)
+                .unique()
+            ):
 
                 existing_method = database_group[
                     (
@@ -246,7 +282,7 @@ def filter_new_results(current_results,existing_database):
                     (
                         database_group[
                             "Calculation Method"
-                        ].astype(str) == str(method)
+                        ].astype(str) == method
                     )
                 ]
 
@@ -256,7 +292,7 @@ def filter_new_results(current_results,existing_database):
                         region_current[
                             region_current[
                                 "Calculation Method"
-                            ].astype(str) == str(method)
+                            ].astype(str) == method
                         ]
                     )
 
@@ -337,23 +373,47 @@ def filter_new_results(current_results,existing_database):
 
     if not new_rows:
 
-        return pd.DataFrame(
+        filtered_results = pd.DataFrame(
             columns=current_results.columns
         )
 
-    filtered_results = pd.concat(
-        new_rows,
-        ignore_index=True
-    )
+    else:
 
-    print()
-    print(f"Existing complete simulations skipped : {skipped_groups}")
+        filtered_results = pd.concat(
+            new_rows,
+            ignore_index=True
+        )
 
-    print(f"Partially existing simulations updated : {partial_groups}")
+    statistics = {
 
-    print(f"New rows to append : {len(filtered_results)}")
+        "current_rows":
+            len(current_results),
 
-    return filtered_results
+        "current_simulations":
+            current_results[
+                simulation_columns
+            ].drop_duplicates().shape[0],
+
+        "skipped_simulations":
+            skipped_groups,
+
+        "partial_simulations":
+            partial_groups,
+
+        "new_simulations":
+            (
+                current_results[
+                    simulation_columns
+                ].drop_duplicates().shape[0]
+                - skipped_groups
+                - partial_groups
+            ),
+
+        "rows_to_append":
+            len(filtered_results),
+    }
+
+    return filtered_results, statistics
 
 # ============================================================
 # UPDATE SAF DATABASE
@@ -461,7 +521,9 @@ def update_master_saf_database(params):
     #   Fluence-to-dose response functions
     # --------------------------------------------------------
 
-    filtered_current_results = filter_new_results(current_results, existing_database)
+    filtered_current_results, filter_statistics = (
+        filter_new_results(current_results, existing_database)
+    )
 
     # --------------------------------------------------------
     # Concatenate only genuinely new rows
@@ -541,24 +603,81 @@ def update_master_saf_database(params):
     # ========================================================
 
     print()
-    print("-" * 90)
-
-    print(f"Current result rows : {len(current_results)}")
-
-    print(f"Existing database rows : {len(existing_database)}"
-    )
-
-    print(f"Duplicate rows removed : {duplicate_rows_removed}"
-    )
-
-    print(f"Final database rows : {len(combined_database)}"
-    )
+    print("=" * 90)
+    print("SAF DATABASE UPDATE SUMMARY")
+    print("=" * 90)
 
     print()
-    print("SAF database updated:")
+
+    print(f"Current result rows       : {filter_statistics['current_rows']}")
+
+    print(f"Current source simulations: {filter_statistics['current_simulations']}")
+
+    print(f"Existing database rows    : {len(existing_database)}")
+
+    print()
+
+    print(f"New source simulations    : {filter_statistics['new_simulations']}")
+
+    print(f"Partial simulations       : {filter_statistics['partial_simulations']}")
+
+    print(f"Skipped simulations       : {filter_statistics['skipped_simulations']}")
+
+    print()
+
+    print(f"Rows to append            : {filter_statistics['rows_to_append']}")
+
+    print(f"Exact duplicates removed  : {duplicate_rows_removed}")
+
+    print(f"Final database rows       : {len(combined_database)}")
+
+    print()
+
+    print("Database:")
 
     print(f"  {database_file}")
 
+    # --------------------------------------------------------
+    # Current batch breakdown
+    # --------------------------------------------------------
+
+    print()
+    print("Current batch:")
+
+    batch_summary = (current_results[
+            ["Phantom",
+             "Source Type",
+             "Source Energy (MeV)",
+            ]
+        ]
+        .drop_duplicates()
+        .sort_values(
+            ["Phantom",
+             "Source Type",
+             "Source Energy (MeV)",
+            ]
+        )
+    )
+
+    for _, row in batch_summary.iterrows():
+
+        mask = (
+            (current_results["Phantom"] == row["Phantom"])
+            &
+            (current_results["Source Type"] == row["Source Type"])
+            &
+            (current_results["Source Energy (MeV)"] == row["Source Energy (MeV)"])
+        )
+
+        source_count = (current_results.loc[mask,"Source Organ ID"].nunique())
+        row_count = (current_results.loc[mask].shape[0])
+
+        print(f"  {row['Phantom']} | {row['Source Type']} | {row['Source Energy (MeV)']:g} MeV")
+
+        print(f"      Source organs : {source_count}")
+
+        print(f"      Result rows   : {row_count}")
+        
     # --------------------------------------------------------
     # Basic database summary
     # --------------------------------------------------------
@@ -585,72 +704,6 @@ def update_master_saf_database(params):
     print(f"  Target regions: "
           f"{combined_database['Target Region Name'].nunique()}"
     )
-
-    # --------------------------------------------------------
-    # User inspection
-    # --------------------------------------------------------
-
-    print()
-    print("=" * 90)
-    print("DATABASE INSPECTION")
-    print("=" * 90)
-
-    print()
-    print("Please inspect the updated SAF database before "
-          "deleting the current result files."
-    )
-
-    print()
-    print(f"Database file:\n{database_file}")
-
-    print()
-    print("Current result files will NOT be deleted yet.")
-
-    # --------------------------------------------------------
-    # Ask whether to delete current results
-    # --------------------------------------------------------
-
-    while True:
-
-        answer = input(
-            "\nDelete the current result files? [y/n]: "
-        ).strip().lower()
-
-        if answer in ("y", "yes"):
-
-            print()
-            print("Deleting current result files...")
-
-            deleted = 0
-
-            for file in current_files:
-
-                try:
-
-                    file.unlink()
-                    print(f"  Deleted: {file.name}")
-
-                    deleted += 1
-
-                except OSError as error:
-
-                    print(f"  [WARNING] Could not delete {file.name}: {error}")
-
-            print()
-            print(f"Deleted {deleted} current result file(s).")
-
-            break
-
-        elif answer in ("", "n", "no"):
-
-            print()
-            print("Current result files were kept.")
-
-            break
-
-        else:
-
-            print("Please enter y or n.")
 
     print()
     print("=" * 90)

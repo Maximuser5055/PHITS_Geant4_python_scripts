@@ -1,6 +1,6 @@
 Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),Overall Wall Time (s),Overall Wall Time (dhms)
-Type + Energy,gamma,10.0,,,2,64.75,0d 00h 01m 05s,1.71,63.54,65.96,,
-Phantom + Type + Energy,gamma,10.0,Adult Female,,1,63.54,0d 00h 01m 04s,,63.54,63.54,,
-Phantom + Type + Energy,gamma,10.0,Adult Male,,1,65.96,0d 00h 01m 06s,,65.96,65.96,,
-Source Organ + Type + Energy,gamma,10.0,,Thyroid,2,64.75,0d 00h 01m 05s,1.71,63.54,65.96,,
-All simulations,,,,,2,64.75,0d 00h 01m 05s,1.71,63.54,65.96,66.0,0d 00h 01m 06s
+Type + Energy,gamma,10.0,,,2,67.94,0d 00h 01m 08s,1.91,66.6,69.29,,
+Phantom + Type + Energy,gamma,10.0,Adult Female,,1,66.6,0d 00h 01m 07s,,66.6,66.6,,
+Phantom + Type + Energy,gamma,10.0,Adult Male,,1,69.29,0d 00h 01m 09s,,69.29,69.29,,
+Source Organ + Type + Energy,gamma,10.0,,Thyroid,2,67.94,0d 00h 01m 08s,1.91,66.6,69.29,,
+All simulations,,,,,2,67.94,0d 00h 01m 08s,1.91,66.6,69.29,69.0,0d 00h 01m 09s
