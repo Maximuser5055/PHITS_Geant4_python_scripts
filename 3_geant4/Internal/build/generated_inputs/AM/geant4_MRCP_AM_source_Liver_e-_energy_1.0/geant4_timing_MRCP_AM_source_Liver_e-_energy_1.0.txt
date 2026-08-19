@@ -1,0 +1,12 @@
+Geant4 Timing Summary
+=====================
+
+Macro      : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AM/geant4_MRCP_AM_source_Liver_e-_energy_1.0/geant4_MRCP_AM_source_Liver_e-_energy_1.0.in
+Output     : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/AM/geant4_MRCP_AM_source_Liver_e-_energy_1.0/geant4_deposit_MRCP_AM_source_Liver_e-_energy_1.0.out
+
+Starting Datetime    : 2026-08-19T23:35:11
+Termination Datetime : 2026-08-19T23:36:18
+
+Setup Time (s)       : 7.24153
+Execution Time (s)   : 59.4438
+Total Wall Time (s)  : 66.6853

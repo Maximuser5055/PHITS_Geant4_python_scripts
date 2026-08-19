@@ -1,3 +1,5 @@
 Starting Datetime,Termination Datetime,Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Setup Time (s),Execution Time (s),Individual Wall Time (s)
-2026-08-19T16:31:41,2026-08-19T16:32:48,Adult Female,Thyroid,gamma,10.0,MT-16,1000,1,9.10061,57.4965,66.5971
-2026-08-19T16:31:41,2026-08-19T16:32:50,Adult Male,Thyroid,gamma,10.0,MT-16,1000,1,8.64195,60.6507,69.2927
+2026-08-19T23:34:03,2026-08-19T23:35:08,Adult Female,Liver,e-,1.0,MT-16,100,1,9.09512,55.5246,64.6197
+2026-08-19T23:34:03,2026-08-19T23:35:08,Adult Female,Thyroid,e-,1.0,MT-16,100,1,9.09235,55.7518,64.8441
+2026-08-19T23:35:11,2026-08-19T23:36:18,Adult Male,Liver,e-,1.0,MT-16,100,1,7.24153,59.4438,66.6853
+2026-08-19T23:35:11,2026-08-19T23:36:19,Adult Male,Thyroid,e-,1.0,MT-16,100,1,7.19179,60.4026,67.5944

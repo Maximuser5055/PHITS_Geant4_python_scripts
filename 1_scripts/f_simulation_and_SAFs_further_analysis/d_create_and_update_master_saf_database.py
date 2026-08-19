@@ -129,32 +129,56 @@ def filter_new_results(current_results,existing_database):
 
     if existing_database.empty:
 
+        current_source_sets = (
+            current_results[
+                [
+                    "Source Organ ID",
+                    "Source Type",
+                    "Source Energy (MeV)",
+                ]
+            ]
+            .drop_duplicates()
+            .shape[0]
+        )
+
+        current_phantom_types = (
+            current_results[
+                "Phantom"
+            ]
+            .nunique()
+        )
+
         statistics = {
-            "current_rows": len(current_results),
 
-            "current_simulations":
-                current_results[
-                    simulation_columns
-                ].drop_duplicates().shape[0],
+            "current_rows":
+                len(current_results),
 
-            "skipped_simulations": 0,
+            "current_source_sets":
+                current_source_sets,
 
-            "partial_simulations": 0,
+            "current_phantom_types":
+                current_phantom_types,
 
-            "new_simulations":
-                current_results[
-                    simulation_columns
-                ].drop_duplicates().shape[0],
+            "new_source_sets":
+                current_source_sets,
 
-            "rows_to_append": len(current_results),
+            "partial_source_sets":
+                0,
+
+            "skipped_source_sets":
+                0,
+
+            "rows_to_append":
+                len(current_results),
         }
 
         return current_results.copy(), statistics
 
     new_rows = []
 
-    skipped_groups = 0
-    partial_groups = 0
+    new_source_sets = set()
+    partial_source_sets = set()
+    skipped_source_sets = set()
 
     # --------------------------------------------------------
     # Group current results by source simulation
@@ -168,22 +192,15 @@ def filter_new_results(current_results,existing_database):
 
         database_group = existing_database.copy()
 
-        for column, value in zip(
-            simulation_columns,
-            group_key
-        ):
+        for column, value in zip(simulation_columns, group_key):
 
             if pd.isna(value):
 
-                database_group = database_group[
-                    database_group[column].isna()
-                ]
+                database_group = database_group[database_group[column].isna()]
 
             else:
 
-                database_group = database_group[
-                    database_group[column] == value
-                ]
+                database_group = database_group[database_group[column] == value]
 
         # ----------------------------------------------------
         # No existing results for this source simulation
@@ -192,6 +209,8 @@ def filter_new_results(current_results,existing_database):
         if database_group.empty:
 
             new_rows.append(current_group)
+            source_set_key = (group_key[1], group_key[2], group_key[3],)
+            new_source_sets.add(source_set_key)
 
             continue
 
@@ -327,7 +346,9 @@ def filter_new_results(current_results,existing_database):
                 f"       Source Energy : {group_key[3]} MeV"
             )
 
-            skipped_groups += 1
+            source_set_key = (group_key[1], group_key[2], group_key[3],)
+
+            skipped_source_sets.add(source_set_key)
 
             continue
 
@@ -335,7 +356,9 @@ def filter_new_results(current_results,existing_database):
         # Existing group is incomplete
         # ====================================================
 
-        partial_groups += 1
+        source_set_key = (group_key[1], group_key[2], group_key[3],)
+
+        partial_source_sets.add(source_set_key)
 
         # ----------------------------------------------------
         # Add missing normal target regions
@@ -384,33 +407,33 @@ def filter_new_results(current_results,existing_database):
             ignore_index=True
         )
 
+    all_source_sets = (
+        new_source_sets
+        |
+        partial_source_sets
+        |
+        skipped_source_sets
+    )
+
+    skipped_source_sets = skipped_source_sets - partial_source_sets
+
+    new_source_sets = new_source_sets - partial_source_sets - skipped_source_sets
+
     statistics = {
 
-        "current_rows":
-            len(current_results),
+        "current_rows": len(current_results),
 
-        "current_simulations":
-            current_results[
-                simulation_columns
-            ].drop_duplicates().shape[0],
+        "current_source_sets": len(all_source_sets),
 
-        "skipped_simulations":
-            skipped_groups,
+        "current_phantom_types": current_results["Phantom"].nunique(),
 
-        "partial_simulations":
-            partial_groups,
+        "new_source_sets": len(new_source_sets),
 
-        "new_simulations":
-            (
-                current_results[
-                    simulation_columns
-                ].drop_duplicates().shape[0]
-                - skipped_groups
-                - partial_groups
-            ),
+        "partial_source_sets": len(partial_source_sets),
 
-        "rows_to_append":
-            len(filtered_results),
+        "skipped_source_sets": len(skipped_source_sets),
+
+        "rows_to_append": len(filtered_results),
     }
 
     return filtered_results, statistics
@@ -609,39 +632,10 @@ def update_master_saf_database(params):
 
     print()
 
-    print(f"Current result rows       : {filter_statistics['current_rows']}")
-
-    print(f"Current source simulations: {filter_statistics['current_simulations']}")
-
-    print(f"Existing database rows    : {len(existing_database)}")
-
-    print()
-
-    print(f"New source simulations    : {filter_statistics['new_simulations']}")
-
-    print(f"Partial simulations       : {filter_statistics['partial_simulations']}")
-
-    print(f"Skipped simulations       : {filter_statistics['skipped_simulations']}")
-
-    print()
-
-    print(f"Rows to append            : {filter_statistics['rows_to_append']}")
-
-    print(f"Exact duplicates removed  : {duplicate_rows_removed}")
-
-    print(f"Final database rows       : {len(combined_database)}")
-
-    print()
-
-    print("Database:")
-
-    print(f"  {database_file}")
-
     # --------------------------------------------------------
     # Current batch breakdown
     # --------------------------------------------------------
 
-    print()
     print("Current batch:")
 
     batch_summary = (current_results[
@@ -677,7 +671,38 @@ def update_master_saf_database(params):
         print(f"      Source organs : {source_count}")
 
         print(f"      Result rows   : {row_count}")
-        
+
+    print()
+    
+    print(f"Current result rows       : {filter_statistics['current_rows']}")
+
+    print(f"Current source sets       : {filter_statistics['current_source_sets']}")
+
+    print(f"Phantom types             : {filter_statistics['current_phantom_types']}")
+
+    print(f"Existing database rows    : {len(existing_database)}")
+
+    print()
+
+    print(f"New source sets           : {filter_statistics['new_source_sets']}")
+
+    print(f"Partial source sets       : {filter_statistics['partial_source_sets']}")
+
+    print(f"Skipped source sets       : {filter_statistics['skipped_source_sets']}")
+
+    print()
+
+    print(f"Rows to append            : {filter_statistics['rows_to_append']}")
+
+    print(f"Exact duplicates removed  : {duplicate_rows_removed}")
+
+    print(f"Final database rows       : {len(combined_database)}")
+    print()
+
+    print("Database:")
+
+    print(f"  {database_file}")
+      
     # --------------------------------------------------------
     # Basic database summary
     # --------------------------------------------------------
@@ -685,25 +710,27 @@ def update_master_saf_database(params):
     print()
     print("Database summary:")
 
-    print(f"  Phantoms      : "
+    print(f"  Phantoms           : "
           f"{combined_database['Phantom'].nunique()}"
     )
 
-    print(f"  Source organs : "
+    print(f"  Source organs      : "
           f"{combined_database['Source Organ ID'].nunique()}"
     )
 
-    print(f"  Source types  : "
+    print(f"  Source types       : "
           f"{combined_database['Source Type'].nunique()}"
     )
 
-    print(f"  Energies      : "
+    print(f"  Energies           : "
           f"{combined_database['Source Energy (MeV)'].nunique()}"
     )
 
-    print(f"  Target regions: "
+    print(f"  Target regions     : "
           f"{combined_database['Target Region Name'].nunique()}"
     )
+
+    print(f"  Total database rows: {len(combined_database)}")
 
     print()
     print("=" * 90)

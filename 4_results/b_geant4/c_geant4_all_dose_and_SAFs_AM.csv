@@ -1,188 +1,375 @@
 Phantom,Source Organ ID,Source Organ Name,Source Type,Source Energy (MeV),Target Organ ID,Target Organ Name,Target Organ Mass (g),Dose (Gy/source),SAF (kg^-1),Relative Error,Statistical Uncertainty (%)
-Adult Male,13200,Thyroid,photon,10.0,100,Adrenal_left,8.6827395219656,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,200,Adrenal_right,8.682743131804001,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,300,ET1_0~8 um,0.022309011006,2.6135476720000003e-14,0.01631248151132482,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,301,ET1_8~40 um,0.08953171142029999,2.2583883350000003e-14,0.014095751286559714,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,302,ET1_40~50 um,0.0280764945985,1.8375098220000002e-14,0.011468834228424497,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,303,ET1_50 um~surface,11.2912058306315,5.4208613760000007e-14,0.03383435546969997,0.7364282684,73.64282684
-Adult Male,13200,Thyroid,photon,10.0,400,ET2_-15~0 um,0.1412003875,1.153497445e-13,0.07199564770335252,0.9672891967,96.72891967
-Adult Male,13200,Thyroid,photon,10.0,401,ET2_0~40 um,0.38983244306199993,4.1492279130000006e-14,0.02589744367099701,0.8603251512,86.03251512
-Adult Male,13200,Thyroid,photon,10.0,402,ET2_40~50 um,0.09782525440189999,4.793100806e-14,0.029916182175456062,0.9144703307,91.44703306999999
-Adult Male,13200,Thyroid,photon,10.0,403,ET2_50~55 um,0.0489742500194,4.637031348e-14,0.028942073237102826,0.8646032352,86.46032352
-Adult Male,13200,Thyroid,photon,10.0,404,ET2_55~65 um,0.09805441229749999,5.1129389590000003e-14,0.03191245490976446,0.9100325728,91.00325728
-Adult Male,13200,Thyroid,photon,10.0,405,ET2_65 um~surface,28.8084848041248,3.279868462e-14,0.020471328768611942,0.8285251013,82.85251013
-Adult Male,13200,Thyroid,photon,10.0,500,Oral mucosa_tongue,0.08596550424,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,501,Oral mucosa_mouth floor,0.023515567425,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,600,Oral mucosa_lips_and cheeks,0.02307768477,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,700,Trachea,10.363608784414097,2.122350827e-13,0.1324667194591063,0.2747365851,27.47365851
-Adult Male,13200,Thyroid,photon,10.0,800,BB1_-11~-6 um,0.0251639823,1.4345884380000003e-14,0.00895399675389405,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,801,BB1_-6~0 um,0.031163358601999997,2.4860379560000002e-14,0.015516628461828854,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,802,BB1_0~10 um,0.052011207849299995,1.784735636e-14,0.011139443667608195,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,803,BB1_10~35 um,0.13041112597489998,2.534913864e-14,0.01582168788513338,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,804,BB1_35~40 um,0.026156756824199996,2.415542584e-14,0.01507663095778334,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,805,BB1_40~50 um,0.0523710067448,1.829904897e-14,0.0114213680200264,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,806,BB1_50~60 um,0.05246035062729999,3.779010621e-14,0.023586729083456572,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,807,BB1_60~70 um,0.0525500910324,1.189478426e-14,0.007424140389754768,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,808,BB1_70 um~surface,2.7766745083531,1.786117303e-14,0.011148067354726579,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,900,Blood in large arteries_head,1.50465238386,4.024833069e-14,0.025121032123354828,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,910,Blood in large veins_head,6.9444700345,7.196076788000001e-14,0.04491437857282126,0.6397373437,63.97373437
-Adult Male,13200,Thyroid,photon,10.0,1000,Blood in large arteries_trunk,193.18284020919003,4.483833083e-15,0.002798588487591362,0.4131262912,41.31262912
-Adult Male,13200,Thyroid,photon,10.0,1010,Blood in large veins_trunk,444.02205465595,1.097526153e-14,0.006850219443407938,0.3054488401,30.54488401
-Adult Male,13200,Thyroid,photon,10.0,1100,Blood in large arteries_arms,32.465638925742,3.864025104e-15,0.00241173477505617,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,1110,Blood in large veins_arms,167.307070400928,2.1854222689999998e-16,0.0001364033292349298,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,1200,Blood in large arteries_legs,108.84645360805001,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,1210,Blood in large veins_legs,389.724782683546,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,1300,Humeri_upper_cortical,159.3350570061488,3.352986593e-15,0.002092769624675608,0.6745550837,67.45550836999999
-Adult Male,13200,Thyroid,photon,10.0,1400,Humeri_upper_spongiosa,145.68865566282543,2.801163385e-15,0.0017483486686525817,0.5848607664,58.48607663999999
-Adult Male,13200,Thyroid,photon,10.0,1500,Humeri_upper_medullary cavity,34.2439825379625,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,1600,Humeri_lower_cortical,106.581519229584,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,1700,Humeri_lower_spongiosa,50.889789317883505,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,1800,Humeri_lower_medullary cavity,37.396955221245,2.29915545e-15,0.0014350199604771813,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,1900,Ulnae and radii_cortical,273.4979437885408,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,2000,Ulnae and radii_spongiosa,154.98098548207722,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,2100,Ulnae and radii_medullary cavity,22.9963457601513,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,2200,Wrists and hand bones_cortical,181.5289884774912,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,2300,Wrists and hand bones_spongiosa,118.9268865564322,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,2400,Clavicles_cortical,48.2518122680944,5.4781164360000006e-14,0.034191713446248787,0.3812476198,38.12476198
-Adult Male,13200,Thyroid,photon,10.0,2500,Clavicles_spongiosa,45.0570133567736,2.0386704060000002e-14,0.012724379838884402,0.5428077455,54.28077455
-Adult Male,13200,Thyroid,photon,10.0,2600,Cranium_cortical,568.4694168021568,2.354759766e-15,0.0014697254447665017,0.4451357203,44.51357203
-Adult Male,13200,Thyroid,photon,10.0,2700,Cranium_spongiosa,382.072926331038,3.966330882e-15,0.0024755890192318503,0.5205972264,52.05972264
-Adult Male,13200,Thyroid,photon,10.0,2800,Femora_upper_cortical,253.54758457984477,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,2900,Femora_upper_spongiosa,413.23229223795,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3000,Femora_upper_medullary cavity,26.0453504720556,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3100,Femora_lower_cortical,307.76097346363036,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3200,Femora_lower_spongiosa,373.65195452952497,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3300,Femora_lower_medullary cavity,82.1788824563496,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3400,Tibiae_fibulae_and patellae_cortical,536.6511904030032,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3500,Tibiae_fibulae_and patellae_spongiosa,621.4076462600432,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3600,Tibiae_fibulae_and patellae_medullary cavity,79.8149379747906,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3700,Ankles and foot_cortical,234.88234278038877,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3800,Ankles and foot_spongiosa,432.61504238399,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,3900,Mandible_cortical,76.87705057623359,5.374736194e-15,0.0033546464727685792,0.8514805871,85.14805871
-Adult Male,13200,Thyroid,photon,10.0,4000,Mandible_spongiosa,56.287316552493095,7.166217243e-15,0.004472800995174448,0.8434482995,84.34482995
-Adult Male,13200,Thyroid,photon,10.0,4100,Pelvis_cortical,402.5946743318192,1.869106309e-16,0.00011666043988756089,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,4200,Pelvis_spongiosa,619.671575527846,4.694921033999999e-16,0.0002930339223758953,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,4300,Ribs_cortical,368.79699288447677,7.639922561e-15,0.004768464599266198,0.3066449533,30.66449533
-Adult Male,13200,Thyroid,photon,10.0,4400,Ribs_spongiosa,457.351194317472,7.018216942e-15,0.004380426473002999,0.3571652389,35.716523890000005
-Adult Male,13200,Thyroid,photon,10.0,4500,Scapulae_cortical,223.3331223438448,7.797990132e-15,0.004867122617143651,0.3379909923,33.79909923
-Adult Male,13200,Thyroid,photon,10.0,4600,Scapulae_spongiosa,156.67025675645783,1.0269898560000001e-14,0.006409966505603552,0.4329789408,43.29789408
-Adult Male,13200,Thyroid,photon,10.0,4700,Cervical spine_cortical,103.94340658852639,4.9152118210000006e-14,0.030678339183670224,0.2537395144,25.37395144
-Adult Male,13200,Thyroid,photon,10.0,4800,Cervical spine_spongiosa,78.91527127699649,7.573311195e-14,0.04726889054731073,0.3112169643,31.12169643
-Adult Male,13200,Thyroid,photon,10.0,4900,Thoracic spine_cortical,289.44012909388636,3.60825343e-15,0.0022520946526300577,0.4811440274,48.11440274
-Adult Male,13200,Thyroid,photon,10.0,5000,Thoracic spine_spongiosa,345.22177328276103,4.280525503e-15,0.0026716938770436887,0.5663708759,56.63708759
-Adult Male,13200,Thyroid,photon,10.0,5100,Lumbar spine_cortical,188.0474514135168,6.372856202e-17,3.9776239815019026e-05,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,5200,Lumbar spine_spongiosa,291.5843646006448,1.647914464e-17,1.0285473080991784e-05,0.7703318057,77.03318057
-Adult Male,13200,Thyroid,photon,10.0,5300,Sacrum_cortical,110.3202882637184,7.122913866999999e-16,0.00044457731537485664,0.8984033762,89.84033762
-Adult Male,13200,Thyroid,photon,10.0,5400,Sacrum_spongiosa,192.22399895868529,5.012193783e-18,3.1283652979552268e-06,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,5500,Sternum_cortical,9.99052342484,9.138006939e-16,0.0005703495323225747,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,5600,Sternum_spongiosa,61.4200837170186,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,5700,Cartilage_costal,56.3314637893434,4.969082917e-15,0.003101457611820539,0.6767424371,67.67424371
-Adult Male,13200,Thyroid,photon,10.0,5800,Cartilage_discs,82.0629794582262,1.8368410970000002e-14,0.011464660375268677,0.5367904245,53.679042450000004
-Adult Male,13200,Thyroid,photon,10.0,6100,Brain,1517.389677890517,2.148430928e-15,0.0013409451132964994,0.5992399186,59.92399186
-Adult Male,13200,Thyroid,photon,10.0,6200,Breast_left_adipose tissue,7.7690252574697,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6300,Breast_left_glandular tissue,5.1801340681112995,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6400,Breast_right_adipose tissue,7.769029192597299,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6500,Breast_right_glandular tissue,5.1801364431615,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6600,Eye lens_sensitive_left,0.038889488078,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6601,Eye lens_insensitive_left,0.189270568824,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6700,Cornea_left,1.1132850686100002,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6701,Aqueous_left,0.30757160465499994,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6702,Vitreous_left,6.121993940095599,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6800, Eye lens_sensitive_right,0.03888931392,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6801,Eye lens_insensitive_right,0.18927065245799998,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6900,Cornea_right,1.11328169546,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6901,Aqueous_right,0.3075715920475,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,6902,Vitreous_right,6.1219952201852,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7000,Gallbladder wall,10.363612759847,5.878092476e-16,0.00036688167529475815,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,7100,Gallbladder contents,57.999999325813,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7200,Stomach wall_0~60 um,1.7837383883823,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7201,Stomach wall_60~100 um,1.1928211312201,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7202,Stomach wall_100~300 um,6.0080173574287,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7203,Stomach wall_300 um~surface,185.286098491145,2.0446145060000002e-15,0.0012761479992973905,0.9829203246,98.29203246
-Adult Male,13200,Thyroid,photon,10.0,7300,Stomach contents,249.999986524184,3.078093131e-15,0.0019211946209173039,0.9738087752,97.38087752
-Adult Male,13200,Thyroid,photon,10.0,7400,Small intestine wall_0~130 um,14.547479039272899,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7401,Small intestine wall_130~150 um,2.2644420346114,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7402,Small intestine wall_150~200 um,5.691843593203999,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7403,Small intestine wall_200 um~surface,840.0963485350355,2.573117333e-15,0.0016060135183572778,0.552233835,55.2233835
-Adult Male,13200,Thyroid,photon,10.0,7500,Small intestine contents_-500~0 um,53.33739729292,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7501,Small intestine contents_centre~500 um,296.66260810888,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7600,Ascending colon wall_0~280 um,3.0714502217129,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7601,Ascending colon wall_280~300 um,0.2233495663671,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7602,Ascending colon wall_300 um~surface,116.6341777582855,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7700,Ascending colon contents,55.000000637088,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7800,Transverse colon wall_right_0~280 um,3.9926975410255996,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7801,Transverse colon wall_right_280~300 um,0.28861134506159997,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7802,Transverse colon wall_right_300 um~surface,75.6713489706476,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,7900,Transverse colon contents_right,95.000002169592,1.214871308e-16,7.582630293184488e-05,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,8000,Transverse colon wall_left_0~280 um,2.8236702141742,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8001,Transverse colon wall_left_280~300 um,0.20497231901709997,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8002,Transverse colon wall_left_300 um~surface,76.92402449694919,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8100,Transverse colon contents_left,39.999992907160006,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8200,Descending colon wall_0~280 um,2.7794343898889,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8201,Descending colon wall_280~300 um,0.2033227535767,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8202,Descending colon wall_300 um~surface,116.94622050877759,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8300,Descending colon contents,35.000009177224,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8400,Sigmoid colon wall_0~280 um,4.45094235654,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8401,Sigmoid colon wall_280~300 um,0.3235627550783,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8402,Sigmoid colon wall_300 um~surface,48.514513234441196,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8500,Sigmoid colon contents,74.999995449392,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8600,Rectum wall,39.9763266181388,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,8700,Heart wall,385.83881449935967,5.4125421200000006e-15,0.0033782430757883205,0.4879328053,48.79328053
-Adult Male,13200,Thyroid,photon,10.0,8800,Blood in heart chamber,510.00000952219403,3.410279733e-15,0.0021285291899970455,0.6324060868,63.24060868
-Adult Male,13200,Thyroid,photon,10.0,8900,Kidney_left_cortex,162.3384466140762,1.259887925e-17,7.86360191669153e-06,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,9000,Kidney_left_medulla,38.3592819188826,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,9100,Kidney_left_pelvis,7.651796291895599,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,9200,Kidney_right_cortex,166.54194565314927,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,9300,Kidney_right_medulla,39.36213815849639,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,9400,Kidney_right_pelvis,7.892486789253299,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,9500,Liver,2360.0000048976,1.8120987200000002e-15,0.0011310230604699438,0.4820063175,48.20063175
-Adult Male,13200,Thyroid,photon,10.0,9700,Lung (AI)_left,545.8768933536566,9.619854524e-15,0.006004240930654216,0.3725563429,37.25563429
-Adult Male,13200,Thyroid,photon,10.0,9900,Lung (AI)_right,652.861449557889,1.6594719730000002e-14,0.010357609378293452,0.2886095141,28.860951410000002
-Adult Male,13200,Thyroid,photon,10.0,10000,Lymphatic nodes_ET,15.9491859978336,8.047207504e-15,0.005022671866028787,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,10100,Lymphatic nodes_thoracic,15.949205446699201,1.596930895e-14,0.009967258672429868,0.7083410189,70.83410189
-Adult Male,13200,Thyroid,photon,10.0,10200,Lymphatic nodes_head,5.5097251938576,9.005769518000001e-14,0.05620959216910264,0.54306757,54.306757000000005
-Adult Male,13200,Thyroid,photon,10.0,10300,Lymphatic nodes_trunk,130.20352238279762,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,10400,Lymphatic nodes_arms,11.0194524245736,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,10500,Lymphatic nodes_legs,11.019453548111999,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,10600,Muscle_head,1200.8220403903501,1.79854767e-14,0.01122565160315596,0.1894507135,18.94507135
-Adult Male,13200,Thyroid,photon,10.0,10700,Muscle_trunk,14841.46933433199,4.862032984e-15,0.003034642298996543,0.1111373437,11.11373437
-Adult Male,13200,Thyroid,photon,10.0,10800,Muscle_arms,2843.4306164274153,2.034624768e-16,0.00012699128952595415,0.9131983031,91.31983031
-Adult Male,13200,Thyroid,photon,10.0,10900,Muscle_legs,10890.898799507057,6.070138697e-17,3.7886825760563283e-05,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,11000,Oesophagus wall_0~190 um,1.9193930012387,3.87135039e-14,0.024163068589603716,0.7082366927,70.82366927
-Adult Male,13200,Thyroid,photon,10.0,11001,Oesophagus wall_190~200 um,0.10307141705759999,1.6002414060000002e-14,0.009987921256877473,0.8901786941,89.01786940999999
-Adult Male,13200,Thyroid,photon,10.0,11002,Oesophagus wall_200 um~surface,49.78305164127259,4.5865141890000006e-14,0.02862676993078833,0.5021071379,50.21071378999999
-Adult Male,13200,Thyroid,photon,10.0,11003,Oesophagus contents,22.869997657103998,9.673198599e-15,0.00603753568347234,0.7103211597,71.03211596999999
-Adult Male,13200,Thyroid,photon,10.0,11300,Pancreas,173.6312955899076,3.613440584e-15,0.0022553322195062206,0.9720451387,97.20451387
-Adult Male,13200,Thyroid,photon,10.0,11400,Pituitary gland,0.6218196488647999,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,11500,Prostate,17.6181441863475,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,11600,RST_head,975.6228575319597,1.0057924660000001e-14,0.00627766280356366,0.2034770638,20.347706379999998
-Adult Male,13200,Thyroid,photon,10.0,11700,RST_trunk,11176.899806392705,3.816379921e-15,0.0023819969908512833,0.1128946015,11.28946015
-Adult Male,13200,Thyroid,photon,10.0,11800,RST_arms,1549.8418807835817,7.65805757e-16,0.0004779783581590092,0.7359285522,73.59285522
-Adult Male,13200,Thyroid,photon,10.0,11900,RST_legs,4510.137865147503,3.544386809e-17,2.2122322431773903e-05,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,12000,Salivary glands_left,44.04535868806389,6.109448185e-15,0.0038132176286627714,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,12100,Salivary glands_right,44.045362366878095,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,12200,Skin_head_insensitive,259.2303086462463,6.0033372340000004e-15,0.0037469883823061513,0.2431883077,24.318830769999998
-Adult Male,13200,Thyroid,photon,10.0,12201,Skin_head_sensitive_50~100 um,8.4700015308315,6.811854727e-15,0.004251625309248159,0.3717349298,37.17349298
-Adult Male,13200,Thyroid,photon,10.0,12300,Skin_trunk_insensitive,1271.1442995947916,3.814790766e-15,0.0023810051183159606,0.1827566711,18.27566711
-Adult Male,13200,Thyroid,photon,10.0,12301,Skin_trunk_sensitive_50~100 um,38.4178622540229,5.058638925e-15,0.00315735407548099,0.2296804456,22.96804456
-Adult Male,13200,Thyroid,photon,10.0,12400,Skin_arms_insensitive,575.7079454801828,4.538340558999999e-16,0.00028326093781993593,0.6329785435,63.29785435
-Adult Male,13200,Thyroid,photon,10.0,12401,Skin_arms_sensitive_50~100 um,18.8430205182516,1.171526508e-15,0.0007312093330653785,0.7493762454,74.93762454
-Adult Male,13200,Thyroid,photon,10.0,12500,Skin_legs_insensitive,1259.9653957292753,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,12501,Skin_legs_sensitive_50~100 um,37.7898459967809,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,12600,Spinal cord,37.951723316125,3.337307529e-14,0.020829835226521022,0.530494797,53.0494797
-Adult Male,13200,Thyroid,photon,10.0,12700,Spleen,228.399995069508,1.930327357e-16,0.0001204815571539611,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,12800,Teeth,50.726620875840005,1.624489363e-15,0.0010139265100530116,0.8459155332,84.59155332
-Adult Male,13200,Thyroid,photon,10.0,12801,Teeth_retention region,0.043137991728,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,12900,Testis_left,18.6167532173229,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,13000,Testis_right,18.616749836779498,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,13100,Thymus,25.909028548764397,9.672872387000001e-14,0.060373320779565205,0.564183526,56.4183526
-Adult Male,13200,Thyroid,photon,10.0,13200,Thyroid,23.350524289154098,3.910689819e-13,0.2440860599269134,0.2342223591,23.42223591
-Adult Male,13200,Thyroid,photon,10.0,13300,Tongue_upper (food),20.993037544080003,1.0313064039999999e-16,6.436908279115897e-05,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,13301,Tongue_lower,54.55215826284,1.062473161e-15,0.0006631435875752924,0.9176998846,91.76998846
-Adult Male,13200,Thyroid,photon,10.0,13400,Tonsils,3.1090947489247,1.878118724e-14,0.0117222950587614,0.9994998749,99.94998749
-Adult Male,13200,Thyroid,photon,10.0,13500,Ureter_left,8.8090670465834,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,13600,Ureter_right,7.772708595126299,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,13700,Urinary bladder wall_insensitive,49.781123236104,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,13701,Urinary bladder wall_sensitive_118/116~193/185 um,1.317737831592,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,13800,Urinary bladder contents,200.000002986056,0.0,0.0,0.0,0.0
-Adult Male,13200,Thyroid,photon,10.0,14000,Air inside body,0.1401650804136,5.843929588000001e-14,0.03647493955401403,0.3458454834,34.58454834
+Adult Male,9500,Liver,electron,1.0,100,Adrenal_left,8.6827395219656,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,200,Adrenal_right,8.682743131804001,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,300,ET1_0~8 um,0.022309011006,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,301,ET1_8~40 um,0.08953171142029999,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,302,ET1_40~50 um,0.0280764945985,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,303,ET1_50 um~surface,11.2912058306315,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,400,ET2_-15~0 um,0.1412003875,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,401,ET2_0~40 um,0.38983244306199993,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,402,ET2_40~50 um,0.09782525440189999,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,403,ET2_50~55 um,0.0489742500194,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,404,ET2_55~65 um,0.09805441229749999,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,405,ET2_65 um~surface,28.8084848041248,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,500,Oral mucosa_tongue,0.08596550424,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,501,Oral mucosa_mouth floor,0.023515567425,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,600,Oral mucosa_lips_and cheeks,0.02307768477,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,700,Trachea,10.363608784414097,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,800,BB1_-11~-6 um,0.0251639823,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,801,BB1_-6~0 um,0.031163358601999997,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,802,BB1_0~10 um,0.052011207849299995,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,803,BB1_10~35 um,0.13041112597489998,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,804,BB1_35~40 um,0.026156756824199996,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,805,BB1_40~50 um,0.0523710067448,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,806,BB1_50~60 um,0.05246035062729999,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,807,BB1_60~70 um,0.0525500910324,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,808,BB1_70 um~surface,2.7766745083531,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,900,Blood in large arteries_head,1.50465238386,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,910,Blood in large veins_head,6.9444700345,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1000,Blood in large arteries_trunk,193.18284020919003,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1010,Blood in large veins_trunk,444.02205465595,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1100,Blood in large arteries_arms,32.465638925742,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1110,Blood in large veins_arms,167.307070400928,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1200,Blood in large arteries_legs,108.84645360805001,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1210,Blood in large veins_legs,389.724782683546,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1300,Humeri_upper_cortical,159.3350570061488,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1400,Humeri_upper_spongiosa,145.68865566282543,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1500,Humeri_upper_medullary cavity,34.2439825379625,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1600,Humeri_lower_cortical,106.581519229584,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1700,Humeri_lower_spongiosa,50.889789317883505,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1800,Humeri_lower_medullary cavity,37.396955221245,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,1900,Ulnae and radii_cortical,273.4979437885408,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2000,Ulnae and radii_spongiosa,154.98098548207722,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2100,Ulnae and radii_medullary cavity,22.9963457601513,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2200,Wrists and hand bones_cortical,181.5289884774912,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2300,Wrists and hand bones_spongiosa,118.9268865564322,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2400,Clavicles_cortical,48.2518122680944,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2500,Clavicles_spongiosa,45.0570133567736,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2600,Cranium_cortical,568.4694168021568,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2700,Cranium_spongiosa,382.072926331038,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2800,Femora_upper_cortical,253.54758457984477,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,2900,Femora_upper_spongiosa,413.23229223795,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3000,Femora_upper_medullary cavity,26.0453504720556,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3100,Femora_lower_cortical,307.76097346363036,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3200,Femora_lower_spongiosa,373.65195452952497,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3300,Femora_lower_medullary cavity,82.1788824563496,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3400,Tibiae_fibulae_and patellae_cortical,536.6511904030032,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3500,Tibiae_fibulae_and patellae_spongiosa,621.4076462600432,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3600,Tibiae_fibulae_and patellae_medullary cavity,79.8149379747906,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3700,Ankles and foot_cortical,234.88234278038877,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3800,Ankles and foot_spongiosa,432.61504238399,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,3900,Mandible_cortical,76.87705057623359,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,4000,Mandible_spongiosa,56.287316552493095,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,4100,Pelvis_cortical,402.5946743318192,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,4200,Pelvis_spongiosa,619.671575527846,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,4300,Ribs_cortical,368.79699288447677,6.823514526e-18,4.2589027833746486e-05,0.9949874371,99.49874371
+Adult Male,9500,Liver,electron,1.0,4400,Ribs_spongiosa,457.351194317472,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,4500,Scapulae_cortical,223.3331223438448,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,4600,Scapulae_spongiosa,156.67025675645783,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,4700,Cervical spine_cortical,103.94340658852639,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,4800,Cervical spine_spongiosa,78.91527127699649,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,4900,Thoracic spine_cortical,289.44012909388636,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,5000,Thoracic spine_spongiosa,345.22177328276103,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,5100,Lumbar spine_cortical,188.0474514135168,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,5200,Lumbar spine_spongiosa,291.5843646006448,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,5300,Sacrum_cortical,110.3202882637184,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,5400,Sacrum_spongiosa,192.22399895868529,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,5500,Sternum_cortical,9.99052342484,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,5600,Sternum_spongiosa,61.4200837170186,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,5700,Cartilage_costal,56.3314637893434,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,5800,Cartilage_discs,82.0629794582262,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6100,Brain,1517.389677890517,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6200,Breast_left_adipose tissue,7.7690252574697,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6300,Breast_left_glandular tissue,5.1801340681112995,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6400,Breast_right_adipose tissue,7.769029192597299,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6500,Breast_right_glandular tissue,5.1801364431615,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6600,Eye lens_sensitive_left,0.038889488078,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6601,Eye lens_insensitive_left,0.189270568824,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6700,Cornea_left,1.1132850686100002,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6701,Aqueous_left,0.30757160465499994,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6702,Vitreous_left,6.121993940095599,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6800, Eye lens_sensitive_right,0.03888931392,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6801,Eye lens_insensitive_right,0.18927065245799998,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6900,Cornea_right,1.11328169546,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6901,Aqueous_right,0.3075715920475,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,6902,Vitreous_right,6.1219952201852,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7000,Gallbladder wall,10.363612759847,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7100,Gallbladder contents,57.999999325813,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7200,Stomach wall_0~60 um,1.7837383883823,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7201,Stomach wall_60~100 um,1.1928211312201,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7202,Stomach wall_100~300 um,6.0080173574287,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7203,Stomach wall_300 um~surface,185.286098491145,3.684341716e-15,0.022995852253829774,0.9949874371,99.49874371
+Adult Male,9500,Liver,electron,1.0,7300,Stomach contents,249.999986524184,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7400,Small intestine wall_0~130 um,14.547479039272899,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7401,Small intestine wall_130~150 um,2.2644420346114,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7402,Small intestine wall_150~200 um,5.691843593203999,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7403,Small intestine wall_200 um~surface,840.0963485350355,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7500,Small intestine contents_-500~0 um,53.33739729292,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7501,Small intestine contents_centre~500 um,296.66260810888,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7600,Ascending colon wall_0~280 um,3.0714502217129,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7601,Ascending colon wall_280~300 um,0.2233495663671,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7602,Ascending colon wall_300 um~surface,116.6341777582855,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7700,Ascending colon contents,55.000000637088,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7800,Transverse colon wall_right_0~280 um,3.9926975410255996,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7801,Transverse colon wall_right_280~300 um,0.28861134506159997,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7802,Transverse colon wall_right_300 um~surface,75.6713489706476,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,7900,Transverse colon contents_right,95.000002169592,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8000,Transverse colon wall_left_0~280 um,2.8236702141742,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8001,Transverse colon wall_left_280~300 um,0.20497231901709997,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8002,Transverse colon wall_left_300 um~surface,76.92402449694919,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8100,Transverse colon contents_left,39.999992907160006,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8200,Descending colon wall_0~280 um,2.7794343898889,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8201,Descending colon wall_280~300 um,0.2033227535767,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8202,Descending colon wall_300 um~surface,116.94622050877759,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8300,Descending colon contents,35.000009177224,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8400,Sigmoid colon wall_0~280 um,4.45094235654,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8401,Sigmoid colon wall_280~300 um,0.3235627550783,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8402,Sigmoid colon wall_300 um~surface,48.514513234441196,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8500,Sigmoid colon contents,74.999995449392,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8600,Rectum wall,39.9763266181388,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8700,Heart wall,385.83881449935967,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8800,Blood in heart chamber,510.00000952219403,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,8900,Kidney_left_cortex,162.3384466140762,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,9000,Kidney_left_medulla,38.3592819188826,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,9100,Kidney_left_pelvis,7.651796291895599,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,9200,Kidney_right_cortex,166.54194565314927,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,9300,Kidney_right_medulla,39.36213815849639,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,9400,Kidney_right_pelvis,7.892486789253299,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,9500,Liver,2360.0000048976,6.697816774e-14,0.4180448417399912,0.006765025857,0.6765025857
+Adult Male,9500,Liver,electron,1.0,9700,Lung (AI)_left,545.8768933536566,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,9900,Lung (AI)_right,652.861449557889,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,10000,Lymphatic nodes_ET,15.9491859978336,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,10100,Lymphatic nodes_thoracic,15.949205446699201,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,10200,Lymphatic nodes_head,5.5097251938576,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,10300,Lymphatic nodes_trunk,130.20352238279762,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,10400,Lymphatic nodes_arms,11.0194524245736,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,10500,Lymphatic nodes_legs,11.019453548111999,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,10600,Muscle_head,1200.8220403903501,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,10700,Muscle_trunk,14841.46933433199,5.95161232e-19,3.7147042302954786e-06,0.9949874371,99.49874371
+Adult Male,9500,Liver,electron,1.0,10800,Muscle_arms,2843.4306164274153,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,10900,Muscle_legs,10890.898799507057,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11000,Oesophagus wall_0~190 um,1.9193930012387,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11001,Oesophagus wall_190~200 um,0.10307141705759999,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11002,Oesophagus wall_200 um~surface,49.78305164127259,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11003,Oesophagus contents,22.869997657103998,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11300,Pancreas,173.6312955899076,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11400,Pituitary gland,0.6218196488647999,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11500,Prostate,17.6181441863475,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11600,RST_head,975.6228575319597,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11700,RST_trunk,11176.899806392705,9.184003964e-17,0.0005732204408119318,0.7835625441,78.35625441
+Adult Male,9500,Liver,electron,1.0,11800,RST_arms,1549.8418807835817,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,11900,RST_legs,4510.137865147503,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12000,Salivary glands_left,44.04535868806389,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12100,Salivary glands_right,44.045362366878095,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12200,Skin_head_insensitive,259.2303086462463,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12201,Skin_head_sensitive_50~100 um,8.4700015308315,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12300,Skin_trunk_insensitive,1271.1442995947916,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12301,Skin_trunk_sensitive_50~100 um,38.4178622540229,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12400,Skin_arms_insensitive,575.7079454801828,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12401,Skin_arms_sensitive_50~100 um,18.8430205182516,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12500,Skin_legs_insensitive,1259.9653957292753,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12501,Skin_legs_sensitive_50~100 um,37.7898459967809,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12600,Spinal cord,37.951723316125,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12700,Spleen,228.399995069508,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12800,Teeth,50.726620875840005,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12801,Teeth_retention region,0.043137991728,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,12900,Testis_left,18.6167532173229,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13000,Testis_right,18.616749836779498,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13100,Thymus,25.909028548764397,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13200,Thyroid,23.350524289154098,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13300,Tongue_upper (food),20.993037544080003,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13301,Tongue_lower,54.55215826284,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13400,Tonsils,3.1090947489247,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13500,Ureter_left,8.8090670465834,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13600,Ureter_right,7.772708595126299,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13700,Urinary bladder wall_insensitive,49.781123236104,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13701,Urinary bladder wall_sensitive_118/116~193/185 um,1.317737831592,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,13800,Urinary bladder contents,200.000002986056,0.0,0.0,0.0,0.0
+Adult Male,9500,Liver,electron,1.0,14000,Air inside body,0.1401650804136,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,100,Adrenal_left,8.6827395219656,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,200,Adrenal_right,8.682743131804001,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,300,ET1_0~8 um,0.022309011006,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,301,ET1_8~40 um,0.08953171142029999,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,302,ET1_40~50 um,0.0280764945985,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,303,ET1_50 um~surface,11.2912058306315,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,400,ET2_-15~0 um,0.1412003875,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,401,ET2_0~40 um,0.38983244306199993,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,402,ET2_40~50 um,0.09782525440189999,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,403,ET2_50~55 um,0.0489742500194,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,404,ET2_55~65 um,0.09805441229749999,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,405,ET2_65 um~surface,28.8084848041248,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,500,Oral mucosa_tongue,0.08596550424,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,501,Oral mucosa_mouth floor,0.023515567425,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,600,Oral mucosa_lips_and cheeks,0.02307768477,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,700,Trachea,10.363608784414097,1.230328651e-13,0.7679107439786048,0.9949874371,99.49874371
+Adult Male,13200,Thyroid,electron,1.0,800,BB1_-11~-6 um,0.0251639823,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,801,BB1_-6~0 um,0.031163358601999997,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,802,BB1_0~10 um,0.052011207849299995,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,803,BB1_10~35 um,0.13041112597489998,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,804,BB1_35~40 um,0.026156756824199996,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,805,BB1_40~50 um,0.0523710067448,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,806,BB1_50~60 um,0.05246035062729999,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,807,BB1_60~70 um,0.0525500910324,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,808,BB1_70 um~surface,2.7766745083531,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,900,Blood in large arteries_head,1.50465238386,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,910,Blood in large veins_head,6.9444700345,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1000,Blood in large arteries_trunk,193.18284020919003,8.125733949999999e-18,5.0716842185582056e-05,0.9949874371,99.49874371
+Adult Male,13200,Thyroid,electron,1.0,1010,Blood in large veins_trunk,444.02205465595,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1100,Blood in large arteries_arms,32.465638925742,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1110,Blood in large veins_arms,167.307070400928,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1200,Blood in large arteries_legs,108.84645360805001,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1210,Blood in large veins_legs,389.724782683546,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1300,Humeri_upper_cortical,159.3350570061488,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1400,Humeri_upper_spongiosa,145.68865566282543,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1500,Humeri_upper_medullary cavity,34.2439825379625,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1600,Humeri_lower_cortical,106.581519229584,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1700,Humeri_lower_spongiosa,50.889789317883505,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1800,Humeri_lower_medullary cavity,37.396955221245,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,1900,Ulnae and radii_cortical,273.4979437885408,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,2000,Ulnae and radii_spongiosa,154.98098548207722,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,2100,Ulnae and radii_medullary cavity,22.9963457601513,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,2200,Wrists and hand bones_cortical,181.5289884774912,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,2300,Wrists and hand bones_spongiosa,118.9268865564322,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,2400,Clavicles_cortical,48.2518122680944,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,2500,Clavicles_spongiosa,45.0570133567736,4.3580632769999996e-17,0.000272008914904714,0.9949874371,99.49874371
+Adult Male,13200,Thyroid,electron,1.0,2600,Cranium_cortical,568.4694168021568,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,2700,Cranium_spongiosa,382.072926331038,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,2800,Femora_upper_cortical,253.54758457984477,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,2900,Femora_upper_spongiosa,413.23229223795,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3000,Femora_upper_medullary cavity,26.0453504720556,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3100,Femora_lower_cortical,307.76097346363036,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3200,Femora_lower_spongiosa,373.65195452952497,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3300,Femora_lower_medullary cavity,82.1788824563496,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3400,Tibiae_fibulae_and patellae_cortical,536.6511904030032,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3500,Tibiae_fibulae_and patellae_spongiosa,621.4076462600432,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3600,Tibiae_fibulae_and patellae_medullary cavity,79.8149379747906,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3700,Ankles and foot_cortical,234.88234278038877,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3800,Ankles and foot_spongiosa,432.61504238399,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,3900,Mandible_cortical,76.87705057623359,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,4000,Mandible_spongiosa,56.287316552493095,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,4100,Pelvis_cortical,402.5946743318192,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,4200,Pelvis_spongiosa,619.671575527846,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,4300,Ribs_cortical,368.79699288447677,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,4400,Ribs_spongiosa,457.351194317472,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,4500,Scapulae_cortical,223.3331223438448,2.23997431e-16,0.0013980819982424857,0.9949874371,99.49874371
+Adult Male,13200,Thyroid,electron,1.0,4600,Scapulae_spongiosa,156.67025675645783,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,4700,Cervical spine_cortical,103.94340658852639,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,4800,Cervical spine_spongiosa,78.91527127699649,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,4900,Thoracic spine_cortical,289.44012909388636,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,5000,Thoracic spine_spongiosa,345.22177328276103,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,5100,Lumbar spine_cortical,188.0474514135168,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,5200,Lumbar spine_spongiosa,291.5843646006448,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,5300,Sacrum_cortical,110.3202882637184,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,5400,Sacrum_spongiosa,192.22399895868529,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,5500,Sternum_cortical,9.99052342484,5.916062087e-15,0.03692515520108608,0.9949874371,99.49874371
+Adult Male,13200,Thyroid,electron,1.0,5600,Sternum_spongiosa,61.4200837170186,1.5127941649999998e-16,0.0009442118508639379,0.9949874371,99.49874371
+Adult Male,13200,Thyroid,electron,1.0,5700,Cartilage_costal,56.3314637893434,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,5800,Cartilage_discs,82.0629794582262,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6100,Brain,1517.389677890517,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6200,Breast_left_adipose tissue,7.7690252574697,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6300,Breast_left_glandular tissue,5.1801340681112995,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6400,Breast_right_adipose tissue,7.769029192597299,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6500,Breast_right_glandular tissue,5.1801364431615,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6600,Eye lens_sensitive_left,0.038889488078,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6601,Eye lens_insensitive_left,0.189270568824,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6700,Cornea_left,1.1132850686100002,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6701,Aqueous_left,0.30757160465499994,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6702,Vitreous_left,6.121993940095599,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6800, Eye lens_sensitive_right,0.03888931392,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6801,Eye lens_insensitive_right,0.18927065245799998,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6900,Cornea_right,1.11328169546,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6901,Aqueous_right,0.3075715920475,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,6902,Vitreous_right,6.1219952201852,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7000,Gallbladder wall,10.363612759847,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7100,Gallbladder contents,57.999999325813,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7200,Stomach wall_0~60 um,1.7837383883823,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7201,Stomach wall_60~100 um,1.1928211312201,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7202,Stomach wall_100~300 um,6.0080173574287,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7203,Stomach wall_300 um~surface,185.286098491145,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7300,Stomach contents,249.999986524184,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7400,Small intestine wall_0~130 um,14.547479039272899,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7401,Small intestine wall_130~150 um,2.2644420346114,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7402,Small intestine wall_150~200 um,5.691843593203999,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7403,Small intestine wall_200 um~surface,840.0963485350355,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7500,Small intestine contents_-500~0 um,53.33739729292,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7501,Small intestine contents_centre~500 um,296.66260810888,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7600,Ascending colon wall_0~280 um,3.0714502217129,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7601,Ascending colon wall_280~300 um,0.2233495663671,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7602,Ascending colon wall_300 um~surface,116.6341777582855,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7700,Ascending colon contents,55.000000637088,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7800,Transverse colon wall_right_0~280 um,3.9926975410255996,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7801,Transverse colon wall_right_280~300 um,0.28861134506159997,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7802,Transverse colon wall_right_300 um~surface,75.6713489706476,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,7900,Transverse colon contents_right,95.000002169592,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8000,Transverse colon wall_left_0~280 um,2.8236702141742,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8001,Transverse colon wall_left_280~300 um,0.20497231901709997,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8002,Transverse colon wall_left_300 um~surface,76.92402449694919,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8100,Transverse colon contents_left,39.999992907160006,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8200,Descending colon wall_0~280 um,2.7794343898889,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8201,Descending colon wall_280~300 um,0.2033227535767,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8202,Descending colon wall_300 um~surface,116.94622050877759,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8300,Descending colon contents,35.000009177224,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8400,Sigmoid colon wall_0~280 um,4.45094235654,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8401,Sigmoid colon wall_280~300 um,0.3235627550783,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8402,Sigmoid colon wall_300 um~surface,48.514513234441196,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8500,Sigmoid colon contents,74.999995449392,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8600,Rectum wall,39.9763266181388,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8700,Heart wall,385.83881449935967,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8800,Blood in heart chamber,510.00000952219403,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,8900,Kidney_left_cortex,162.3384466140762,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,9000,Kidney_left_medulla,38.3592819188826,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,9100,Kidney_left_pelvis,7.651796291895599,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,9200,Kidney_right_cortex,166.54194565314927,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,9300,Kidney_right_medulla,39.36213815849639,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,9400,Kidney_right_pelvis,7.892486789253299,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,9500,Liver,2360.0000048976,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,9700,Lung (AI)_left,545.8768933536566,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,9900,Lung (AI)_right,652.861449557889,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,10000,Lymphatic nodes_ET,15.9491859978336,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,10100,Lymphatic nodes_thoracic,15.949205446699201,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,10200,Lymphatic nodes_head,5.5097251938576,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,10300,Lymphatic nodes_trunk,130.20352238279762,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,10400,Lymphatic nodes_arms,11.0194524245736,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,10500,Lymphatic nodes_legs,11.019453548111999,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,10600,Muscle_head,1200.8220403903501,6.545976081e-16,0.004085676911076715,0.9771507764,97.71507764
+Adult Male,13200,Thyroid,electron,1.0,10700,Muscle_trunk,14841.46933433199,5.64246891e-16,0.0035217520904129926,0.3278681492,32.786814920000005
+Adult Male,13200,Thyroid,electron,1.0,10800,Muscle_arms,2843.4306164274153,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,10900,Muscle_legs,10890.898799507057,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11000,Oesophagus wall_0~190 um,1.9193930012387,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11001,Oesophagus wall_190~200 um,0.10307141705759999,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11002,Oesophagus wall_200 um~surface,49.78305164127259,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11003,Oesophagus contents,22.869997657103998,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11300,Pancreas,173.6312955899076,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11400,Pituitary gland,0.6218196488647999,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11500,Prostate,17.6181441863475,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11600,RST_head,975.6228575319597,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11700,RST_trunk,11176.899806392705,2.100355031e-15,0.013109384985576634,0.1836286734,18.36286734
+Adult Male,13200,Thyroid,electron,1.0,11800,RST_arms,1549.8418807835817,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,11900,RST_legs,4510.137865147503,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12000,Salivary glands_left,44.04535868806389,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12100,Salivary glands_right,44.045362366878095,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12200,Skin_head_insensitive,259.2303086462463,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12201,Skin_head_sensitive_50~100 um,8.4700015308315,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12300,Skin_trunk_insensitive,1271.1442995947916,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12301,Skin_trunk_sensitive_50~100 um,38.4178622540229,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12400,Skin_arms_insensitive,575.7079454801828,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12401,Skin_arms_sensitive_50~100 um,18.8430205182516,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12500,Skin_legs_insensitive,1259.9653957292753,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12501,Skin_legs_sensitive_50~100 um,37.7898459967809,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12600,Spinal cord,37.951723316125,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12700,Spleen,228.399995069508,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12800,Teeth,50.726620875840005,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12801,Teeth_retention region,0.043137991728,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,12900,Testis_left,18.6167532173229,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13000,Testis_right,18.616749836779498,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13100,Thymus,25.909028548764397,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13200,Thyroid,23.350524289154098,5.397128467e-12,33.686226302813104,0.04291305467,4.291305467
+Adult Male,13200,Thyroid,electron,1.0,13300,Tongue_upper (food),20.993037544080003,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13301,Tongue_lower,54.55215826284,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13400,Tonsils,3.1090947489247,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13500,Ureter_left,8.8090670465834,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13600,Ureter_right,7.772708595126299,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13700,Urinary bladder wall_insensitive,49.781123236104,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13701,Urinary bladder wall_sensitive_118/116~193/185 um,1.317737831592,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,13800,Urinary bladder contents,200.000002986056,0.0,0.0,0.0,0.0
+Adult Male,13200,Thyroid,electron,1.0,14000,Air inside body,0.1401650804136,3.782092755e-14,0.23605966250786278,0.9949874371,99.49874371

@@ -1,0 +1,90 @@
+# Header
+# Document: Specific Absorbed Fractions (kg^-1)
+# Phantom type: Adult Male Reference Computational Phantom
+# Source type: photons
+# Number of source energies: 1
+# Number of source organs: 2
+# Number of target organs: 42
+# Source energies (MeV): 10
+# End Header
+Source Organ,Target Organ,10 MeV
+Liver,Red (active) marrow,0.0038758998816547
+Liver,Colon wall,0.0003843754399606
+Liver,RLung + LLung,0.0194499268985683
+Liver,Stomach wall,0.046604494348199
+Liver,Breast-a + Breast-g,0.0
+Liver,Testes,0.0
+Liver,Urinary bladder wall,0.0
+Liver,Oesophagus wall,0.0525002991934508
+Liver,Liver,0.0180396300112324
+Liver,Thyroid,0.0
+Liver,50-um endosteal region,0.0016389792205389
+Liver,Brain,0.0
+Liver,Salivary glands,0.0
+Liver,Skin,0.0002691640970898
+Liver,RAdrenal + LAdrenal,0.0
+Liver,ET region,0.0
+Liver,Gallbladder wall,0.0258320874251387
+Liver,Heart wall,0.0
+Liver,RKidney + LKidney,0.0175024946633942
+Liver,Systemic lymph nodes,0.0090822192871402
+Liver,Muscle,0.001094844842148
+Liver,Oral mucosa,0.0
+Liver,Pancreas,0.0289476270130168
+Liver,Prostate,0.0
+Liver,Small intestine wall,0.007086172591676
+Liver,Spleen,0.0
+Liver,Thymus,0.0
+Liver,Tongue,0.0
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),0.0
+Liver,Left colon wall (left transverse + descending),0.0009481015376265
+Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Alveolar-interstitium,0.0194499268985683
+Liver,Thoracic lymph nodes,0.0
+Liver,Entire lens of eye,0.0
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,0.0
+Liver,Ureters,0.0
+Liver,Adipose/residual tissue,0.0029498189511726
+Thyroid,Red (active) marrow,0.0047415584262637
+Thyroid,Colon wall,0.0
+Thyroid,RLung + LLung,0.0076558331906893
+Thyroid,Stomach wall,0.0120171279116013
+Thyroid,Breast-a + Breast-g,0.0
+Thyroid,Testes,0.0
+Thyroid,Urinary bladder wall,0.0
+Thyroid,Oesophagus wall,0.0507443454218349
+Thyroid,Liver,0.0
+Thyroid,Thyroid,0.2713893149311944
+Thyroid,50-um endosteal region,0.0025551034162263
+Thyroid,Brain,0.0
+Thyroid,Salivary glands,0.0623826204320982
+Thyroid,Skin,0.0014126976733632
+Thyroid,RAdrenal + LAdrenal,0.0
+Thyroid,ET region,0.0
+Thyroid,Gallbladder wall,0.0
+Thyroid,Heart wall,0.0091919996943363
+Thyroid,RKidney + LKidney,0.0
+Thyroid,Systemic lymph nodes,0.0
+Thyroid,Muscle,0.0023288973803892
+Thyroid,Oral mucosa,0.0
+Thyroid,Pancreas,0.0
+Thyroid,Prostate,0.0
+Thyroid,Small intestine wall,0.0
+Thyroid,Spleen,0.0
+Thyroid,Thymus,0.0112760609015353
+Thyroid,Tongue,0.0
+Thyroid,Tonsils,0.0
+Thyroid,Right colon wall (ascending + right transverse),0.0
+Thyroid,Left colon wall (left transverse + descending),0.0
+Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Thyroid,Extrathoracic lymph nodes,0.0
+Thyroid,Alveolar-interstitium,0.0076558331906893
+Thyroid,Thoracic lymph nodes,0.0478778207609316
+Thyroid,Entire lens of eye,0.0
+Thyroid,Pituitary gland,0.0
+Thyroid,Spinal cord,0.0026964558821547
+Thyroid,Ureters,0.0
+Thyroid,Adipose/residual tissue,0.0038142301008927

@@ -1,0 +1,90 @@
+# Header
+# Document: Statistical Uncertainties (%)
+# Phantom type: Adult Female Reference Computational Phantom
+# Source type: photons
+# Number of source energies: 1
+# Number of source organs: 2
+# Number of target organs: 42
+# Source energies (MeV): 10
+# End Header
+Source Organ,Target Organ,10 MeV
+Liver,Red (active) marrow,18.923061743410035
+Liver,Colon wall,71.08780783397007
+Liver,RLung + LLung,71.4275959896194
+Liver,Stomach wall,99.49874371
+Liver,Breast-a + Breast-g,79.02390331004521
+Liver,ROvary + LOvary,0.0
+Liver,Urinary bladder wall,0.0
+Liver,Oesophagus wall,0.0
+Liver,Liver,35.385640089999995
+Liver,Thyroid,0.0
+Liver,50-um endosteal region,17.936829948993267
+Liver,Brain,0.0
+Liver,Salivary glands,0.0
+Liver,Skin,41.71178167695962
+Liver,RAdrenal + LAdrenal,0.0
+Liver,ET region,0.0
+Liver,Gallbladder wall,0.0
+Liver,Heart wall,0.0
+Liver,RKidney + LKidney,69.48923594851813
+Liver,Systemic lymph nodes,0.0
+Liver,Muscle,50.10929359569114
+Liver,Oral mucosa,0.0
+Liver,Pancreas,99.49874371
+Liver,Small intestine wall,84.61274083
+Liver,Spleen,0.0
+Liver,Thymus,0.0
+Liver,Uterus/cervix,0.0
+Liver,Tongue,0.0
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),99.49874371
+Liver,Left colon wall (left transverse + descending),0.0
+Liver,Rectosigmoid colon wall (sigmoid + rectum),99.49874371
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Alveolar-interstitium,71.4275959896194
+Liver,Thoracic lymph nodes,0.0
+Liver,Entire lens of eye,0.0
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,0.0
+Liver,Ureters,0.0
+Liver,Adipose/residual tissue,26.7458521327138
+Thyroid,Red (active) marrow,18.40451701724273
+Thyroid,Colon wall,0.0
+Thyroid,RLung + LLung,65.40571641001989
+Thyroid,Stomach wall,0.0
+Thyroid,Breast-a + Breast-g,99.0018166938873
+Thyroid,ROvary + LOvary,0.0
+Thyroid,Urinary bladder wall,0.0
+Thyroid,Oesophagus wall,99.49874371
+Thyroid,Liver,99.49874371000004
+Thyroid,Thyroid,85.76897983
+Thyroid,50-um endosteal region,16.906102949375885
+Thyroid,Brain,96.60636845000002
+Thyroid,Salivary glands,0.0
+Thyroid,Skin,33.68823480092627
+Thyroid,RAdrenal + LAdrenal,0.0
+Thyroid,ET region,0.0
+Thyroid,Gallbladder wall,0.0
+Thyroid,Heart wall,99.49874371
+Thyroid,RKidney + LKidney,0.0
+Thyroid,Systemic lymph nodes,99.49874371
+Thyroid,Muscle,27.89401199952352
+Thyroid,Oral mucosa,0.0
+Thyroid,Pancreas,0.0
+Thyroid,Small intestine wall,0.0
+Thyroid,Spleen,0.0
+Thyroid,Thymus,0.0
+Thyroid,Uterus/cervix,0.0
+Thyroid,Tongue,0.0
+Thyroid,Tonsils,0.0
+Thyroid,Right colon wall (ascending + right transverse),0.0
+Thyroid,Left colon wall (left transverse + descending),0.0
+Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Thyroid,Extrathoracic lymph nodes,0.0
+Thyroid,Alveolar-interstitium,65.40571641001989
+Thyroid,Thoracic lymph nodes,0.0
+Thyroid,Entire lens of eye,0.0
+Thyroid,Pituitary gland,0.0
+Thyroid,Spinal cord,0.0
+Thyroid,Ureters,0.0
+Thyroid,Adipose/residual tissue,27.04613466262436

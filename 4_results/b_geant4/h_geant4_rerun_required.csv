@@ -1,3 +1,5 @@
 Phantom,Source Organ ID,Source Organ Name,Source Type,Source Energy (MeV),Maximum Statistical Uncertainty (%),Input File,Job Directory
-Adult Female,13200,Thyroid,photon,10.0,99.94998749,AF/geant4_MRCP_AF_source_Thyroid_gamma_energy_10.0/geant4_MRCP_AF_source_Thyroid_gamma_energy_10.0.in,AF/geant4_MRCP_AF_source_Thyroid_gamma_energy_10.0
-Adult Male,13200,Thyroid,photon,10.0,99.94998749,AM/geant4_MRCP_AM_source_Thyroid_gamma_energy_10.0/geant4_MRCP_AM_source_Thyroid_gamma_energy_10.0.in,AM/geant4_MRCP_AM_source_Thyroid_gamma_energy_10.0
+Adult Female,9500,Liver,electron,1.0,99.49874371,AF/geant4_MRCP_AF_source_Liver_e-_energy_1.0/geant4_MRCP_AF_source_Liver_e-_energy_1.0.in,AF/geant4_MRCP_AF_source_Liver_e-_energy_1.0
+Adult Female,13200,Thyroid,electron,1.0,99.49874371,AF/geant4_MRCP_AF_source_Thyroid_e-_energy_1.0/geant4_MRCP_AF_source_Thyroid_e-_energy_1.0.in,AF/geant4_MRCP_AF_source_Thyroid_e-_energy_1.0
+Adult Male,9500,Liver,electron,1.0,99.49874371000004,AM/geant4_MRCP_AM_source_Liver_e-_energy_1.0/geant4_MRCP_AM_source_Liver_e-_energy_1.0.in,AM/geant4_MRCP_AM_source_Liver_e-_energy_1.0
+Adult Male,13200,Thyroid,electron,1.0,92.9119419579776,AM/geant4_MRCP_AM_source_Thyroid_e-_energy_1.0/geant4_MRCP_AM_source_Thyroid_e-_energy_1.0.in,AM/geant4_MRCP_AM_source_Thyroid_e-_energy_1.0

@@ -64,6 +64,8 @@ RESULTS_DIR = ROOT / "4_results"
 
 RESULTS_SAF_DATABASE_DIR = RESULTS_DIR / "c_saf_database"
 
+RESULTS_PUBLISHABLE_SAF_DATABASE_DIR = RESULTS_SAF_DATABASE_DIR / "publishable"
+
 RESULTS_S_VALUES_DIR = RESULTS_DIR / "d_s_values"
 
 OTHER_INPUT_FILES_DIR = ROOT / "5_other_input_files"
@@ -138,7 +140,7 @@ GEANT4_RERUN_CSV_FILE = RESULTS_GEANT4_DIR / "h_geant4_rerun_required.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "PHITS"
+SIMULATION_CODE = "GEANT4"
 
 ############################
 # PHITS Settings
@@ -211,7 +213,7 @@ PHANTOM_NAMES = {
     "AF": "Adult Female"
 }
 
-NPS = 1000
+NPS = 100
 
 GEANT4_SOURCE_TYPE_MAP = {
     "gamma": "photon",
@@ -226,9 +228,9 @@ MEV_TO_J = 1.6021766339999e-13
 
 THREADS = 16
 
-SOURCE_ENERGIES = [10.0]
+SOURCE_ENERGIES = [1.0]
 
-SELECTED_SOURCE_TYPE = "photon"
+SELECTED_SOURCE_TYPE = "e-"
 
 FLUENCE_SOURCE_TYPES = [
     "photon",
