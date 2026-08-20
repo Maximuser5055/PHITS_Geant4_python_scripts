@@ -10,16 +10,11 @@ import b_config.a_config as config
 
 def geant4_extract_metadata_stats():
 
+    # Configs
     root = config.GEANT4_GENERATED_INPUTS_DIR
-
+    phantom_names = config.PHANTOM_NAMES
     timing_files = sorted(root.rglob("geant4_timing_*.txt"))
-
     metadata_output_file = (config.RESULTS_GEANT4_DIR / "a_geant4_all_simulations_log.csv")
-
-    PHANTOM_NAMES = {
-        "AM": "Adult Male",
-        "AF": "Adult Female",
-    }
 
     timing_patterns = {
 
@@ -105,7 +100,7 @@ def geant4_extract_metadata_stats():
                 f"Cannot parse filename:\n{input_files.name}"
             )
 
-        phantom = PHANTOM_NAMES[match.group(1)]
+        phantom = phantom_names[match.group(1)]
         source_organ = match.group(2)
         source_type = match.group(3)
         source_energy = float(match.group(4))

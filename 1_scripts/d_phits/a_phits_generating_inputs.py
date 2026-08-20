@@ -41,18 +41,16 @@ def phits_generate_inputs(params):
 
     if phantom_selection.startswith("MRCP"):
         phantoms = ["MRCP_AM", "MRCP_AF"]
-        phantom_prefix = "MRCP"
 
     elif phantom_selection.startswith("MFCP"):
         phantoms = ["MFCP_AM", "MFCP_AF"]
-        phantom_prefix = "MFCP"
         
     else:
         raise ValueError(f"Unknown phantom selection: {phantom_selection}")
 
     for phantom in phantoms:
 
-        AM_or_AF = phantom.split("_")[-1]
+        phantom_prefix, AM_or_AF = phantom.split("_")
         
         # Replace placeholders with actual values
         parallelization =  params["parallelization"]

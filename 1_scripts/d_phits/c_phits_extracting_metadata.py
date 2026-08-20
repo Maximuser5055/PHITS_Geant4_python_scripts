@@ -17,11 +17,8 @@ def phits_extract_metadata_stats():
     # Define metadata output file
     metadata_output_file = config.RESULTS_PHITS_DIR / "a_phits_all_simulations_log.csv"
 
-    # Phantom models
-    PHANTOM_NAMES = {
-        "AM": "Adult Male",
-        "AF": "Adult Female"
-    }
+    # Configs
+    phantom_names = config.PHANTOM_NAMES
 
     # Regex patterns
     patterns = {
@@ -33,7 +30,7 @@ def phits_extract_metadata_stats():
             re.compile(r"Starting Time\s*=\s*(.+)"),
 
         "file(6)":
-            re.compile(r"file\(6\)\s*=\s*phits_MRCP_(AM|AF)_source_(.+?)_.+?_energy_.+?\.out",re.IGNORECASE),
+            re.compile(r"file\(6\)\s*=\s*phits_(MRCP|MFCP)_(AM|AF)_source_(.+?)_.+?_energy_.+?\.out",re.IGNORECASE),
 
         "maxcas":
             re.compile(r"maxcas\s*=\s*(\d+)"),
@@ -137,8 +134,14 @@ def phits_extract_metadata_stats():
                 match = patterns["file(6)"].search(line)
 
                 if match:
-                    results["phantom"] = PHANTOM_NAMES[match.group(1)]
-                    results["source_organ"] = match.group(2)
+                    
+                    phantom_prefix = match.group(1).upper()
+                    sex = match.group(2).upper()
+
+                    phantom_key = f"{phantom_prefix}_{sex}"
+
+                    results["phantom"] = phantom_names[phantom_key]
+                    results["source_organ"] = match.group(3)
 
             # Particle transport times per batch
             if "bat[" in line:

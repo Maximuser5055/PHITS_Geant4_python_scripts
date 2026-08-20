@@ -47,23 +47,26 @@ def run_phits():
     print("PHITS Specific Absorbed Fraction (SAF) Simulation Launcher")
     print("=" * 50)
 
-    print("[1] Adult Male (MRCP-AM)")
-    print("[2] Adult Female (MRCP-AF)")
-    print("[3] Both")
-    print("[4] Re-run failed simulations")
+    print("[1] ICRP 145 MRCP - Adult Male (AM)")
+    print("[2] ICRP 145 MRCP - Adult Female (AF)")
+    print("[3] ICRP 145 MRCP - Both (AM + AF)")
+    print("[4] Filipino MFCP - Adult Male (AM)")
+    print("[5] Filipino MFCP - Adult Female (AF)")
+    print("[6] Filipino MFCP - Both (AM + AF)")
+    print("[7] Re-run failed simulations")
 
     while True:
 
         choice = input(
-            "Enter your choice (1-4): "
+            "Enter your choice (1-7): "
         ).strip()
 
-        if choice in {"1", "2", "3", "4"}:
+        if choice in {"1", "2", "3", "4", "5", "6", "7"}:
             break
 
         print(
             "Invalid choice. "
-            "Please enter 1, 2, 3, or 4."
+            "Please enter 1, 2, 3, 4, 5, 6, or 7."
         )
 
     # ==========================================================
@@ -71,28 +74,38 @@ def run_phits():
     # ==========================================================
 
     if choice == "1":
-
-        selected_phantoms = ["AM"]
+        selected_phantoms = ["MRCP_AM"]
 
     elif choice == "2":
+        selected_phantoms = ["MRCP_AF"]
 
-        selected_phantoms = ["AF"]
+    elif choice == "7":
+        selected_phantoms = ["MRCP_AM", "MRCP_AF"]
 
-    elif choice == "3":
+    elif choice == "4":
+        selected_phantoms = ["MFCP_AM"]
 
-        selected_phantoms = ["AM", "AF"]
+    elif choice == "5":
+        selected_phantoms = ["MFCP_AF"]
+
+    elif choice == "6":
+        selected_phantoms = ["MFCP_AM", "MFCP_AF"]
 
     else:
-
         # Rerun mode gets the actual phantom from
         # the paths listed in RERUN_CSV.
-        selected_phantoms = ["AM", "AF"]
+        selected_phantoms = [
+            "MRCP_AM",
+            "MRCP_AF",
+            "MFCP_AM",
+            "MFCP_AF",
+        ]
 
     # ==========================================================
     # Source Organ Selection
     # ==========================================================
 
-    if choice != "4":
+    if choice != "7":
 
         if not source_csv.is_file():
 
@@ -258,7 +271,7 @@ def run_phits():
     # Find input files
     # ==========================================================
 
-    if choice == "4":
+    if choice == "7":
 
         # ======================================================
         # Re-run failed simulations
@@ -397,11 +410,6 @@ def run_phits():
 
                 # --------------------------------------------------
                 # Match source organ name in filename
-                #
-                # Example:
-                #
-                # PHITS_MRCP_AM_source_Liver_photon_energy_0.1.inp
-                #                              ^^^^^
                 # --------------------------------------------------
 
                 matched = False
