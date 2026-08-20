@@ -264,17 +264,17 @@ def get_user_parameters():
             break
 
         elif choice == "5":
-            phantom_input_generation = "MRCP_Only"
+            phantom_input_generation = "MRCP Only"
             break
 
         elif choice == "6":
-            phantom_input_generation = "MFCP_Only"
+            phantom_input_generation = "MFCP Only"
             break
 
         print("\nError: Please enter 1, 2, 3, 4, 5, or 6.\n")
 
     uncertainty_limit = input(
-        f"Maximum allowed statistical uncertainty (%) "
+        f"\nMaximum allowed statistical uncertainty (%) "
         f"[Current = {config.UNCERTAINTY_LIMIT}]: "
     ).strip()
 

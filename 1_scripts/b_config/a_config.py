@@ -145,7 +145,7 @@ GEANT4_RERUN_CSV_FILE = RESULTS_GEANT4_DIR / "h_geant4_rerun_required.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "GEANT4"
+SIMULATION_CODE = "PHITS"
 
 ############################
 # PHITS Settings
@@ -215,7 +215,7 @@ GEANT4_SOURCE_TYPES = [
     "e-",
 ]
 
-PHANTOM_INPUT_GENERATION = "MFCP_Only"
+PHANTOM_INPUT_GENERATION = "MRCP Only"
 
 PHANTOM_NAMES = {
     "MRCP_AM": "ICRP 145 Adult Male",
@@ -241,7 +241,7 @@ THREADS = 8
 
 SOURCE_ENERGIES = [10.0]
 
-SELECTED_SOURCE_TYPE = "gamma"
+SELECTED_SOURCE_TYPE = "photon"
 
 FLUENCE_SOURCE_TYPES = [
     "photon",

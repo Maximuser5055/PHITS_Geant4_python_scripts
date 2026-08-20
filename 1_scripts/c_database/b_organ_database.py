@@ -1,5 +1,5 @@
 ORGANS = {
-    "AM": {
+    "MRCP_AM": {
         100: {
             "organ_id": 100,
             "name": "Adrenal_left",
@@ -1498,7 +1498,7 @@ ORGANS = {
 
     },
 
-    "AF": {
+    "MRCP_AF": {
         100: {
             "organ_id": 100,
             "name": "Adrenal_left",
@@ -3000,12 +3000,12 @@ ORGANS = {
 }
 
 SOURCE_ORGANS = {
-    "AM": {
+    "MRCP_AM": {
         9500: "Liver",
         6100: "Brain",
     },
 
-    "AF": {
+    "MRCP_AF": {
         9500: "Liver",
         6100: "Brain",
     },

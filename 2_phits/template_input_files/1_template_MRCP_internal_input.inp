@@ -31,7 +31,7 @@ ${{PARALLELIZATION}}={{THREADS}}
 $ ----------------------------------------------------------------------------
 $ MATERIAL DATA FOR EACH ORGAN/TISSUE
 $ ----------------------------------------------------------------------------
-infl:{../phantoms/MRCP-{{SEX}}.material}
+infl:{../phantoms/{{SEX}}.material}
 
 [ Surface ]
   10  rpp -37.8854 37.8854 -24.56301 24.56301 -98.00236 98.00236  $ Phantom box
@@ -42,7 +42,7 @@ infl:{../phantoms/MRCP-{{SEX}}.material}
 $ ----------------------------------------------------------------------------
 $ CELLS FOR PHANTOM
 $ ----------------------------------------------------------------------------
-infl:{../phantoms/MRCP-{{SEX}}.cell}
+infl:{../phantoms/{{SEX}}.cell}
 
 [ T-deposit ]
 # Deposit energy in a certain region.

@@ -33,16 +33,27 @@ def phits_generate_inputs(params):
     else:
         ttrack_status = "off"
 
-    # Adult male or female phantom or both
-    if params["phantom"] == "AM":
-        phantoms = ["AM"]
-    elif params["phantom"] == "AF":
-        phantoms = ["AF"]
+    # ============================================================
+    # PHANTOM SELECTION
+    # ============================================================
+
+    phantom_selection = params["phantom"]
+
+    if phantom_selection.startswith("MRCP"):
+        phantoms = ["MRCP_AM", "MRCP_AF"]
+        phantom_prefix = "MRCP"
+
+    elif phantom_selection.startswith("MFCP"):
+        phantoms = ["MFCP_AM", "MFCP_AF"]
+        phantom_prefix = "MFCP"
+        
     else:
-        phantoms = ["AM", "AF"]
+        raise ValueError(f"Unknown phantom selection: {phantom_selection}")
 
     for phantom in phantoms:
 
+        AM_or_AF = phantom.split("_")[-1]
+        
         # Replace placeholders with actual values
         parallelization =  params["parallelization"]
         threads =  params["threads"]
@@ -61,15 +72,15 @@ def phits_generate_inputs(params):
                 safe_name = organ_name.replace(",", "").replace(" ", "_")
 
                 phits_output_file = (
-                    f"phits_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out"
+                    f"phits_{phantom_prefix}_{AM_or_AF}_source_{safe_name}_{source_type}_energy_{energy}.out"
                 )
 
                 deposit_output_file = (
-                    f"phits_deposit_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out"
+                    f"phits_deposit_{phantom_prefix}_{AM_or_AF}_source_{safe_name}_{source_type}_energy_{energy}.out"
                 )
 
                 fluence_output_file = (
-                    f"phits_fluence_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out"
+                    f"phits_fluence_{phantom_prefix}_{AM_or_AF}_source_{safe_name}_{source_type}_energy_{energy}.out"
                 )
 
                 text = template
@@ -83,7 +94,7 @@ def phits_generate_inputs(params):
                 text = text.replace("{{SOURCETYPE}}", source_type)
                 text = text.replace("{{SOURCEREGION}}", str(region))
                 text = text.replace("{{SOURCEENERGY}}", f"{energy}")
-                text = text.replace("{{SEX}}", str(phantom))
+                text = text.replace("{{SEX}}", str(phantom_prefix) + "-" + str(AM_or_AF))
                 text = text.replace("{{TARGETREGIONS}}", target_regions)
                 text = text.replace("{{PHITSOUTPUTFILE}}", phits_output_file)
                 text = text.replace("{{DEPOSITOUTPUTFILE}}", deposit_output_file)
@@ -95,7 +106,7 @@ def phits_generate_inputs(params):
                 text = text.replace("{{ENERGYMIN}}", str(energy_min))
                 text = text.replace("{{ENERGYMAX}}", str(energy_max))
 
-                filename = f"phits_MRCP_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.inp"
+                filename = f"phits_{phantom_prefix}_{AM_or_AF}_source_{safe_name}_{source_type}_energy_{energy}.inp"
                 job_name = filename.removesuffix(".inp")
 
                 # Job directory
@@ -108,8 +119,8 @@ def phits_generate_inputs(params):
 
                 for ext in ("cell", "material", "node", "ele"):
                     shutil.copy2(
-                        infl_file_directory / f"MRCP-{phantom}.{ext}",
-                        phantom_dir / f"MRCP-{phantom}.{ext}"
+                        infl_file_directory / f"{phantom_prefix}-{AM_or_AF}.{ext}",
+                        phantom_dir / f"{phantom_prefix}-{AM_or_AF}.{ext}"
                     )
 
                 # Write the input file

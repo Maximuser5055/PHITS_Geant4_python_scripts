@@ -41,9 +41,6 @@ def parse_cell_csv_inputs(params):
         raise ValueError(
             f"Unknown phantom selection: {phantom_selection}"
         )
-
-    phantoms = [(f"{phantom_prefix}_AM", male_organs), 
-                (f"{phantom_prefix}_AF", female_organs)]
     
     def parse_cell(cell_file_path):
         # Initialize an empty dictionary to store organ data
@@ -75,6 +72,9 @@ def parse_cell_csv_inputs(params):
     male_organs = parse_cell(male_cell_file_path)
     female_organs = parse_cell(female_cell_file_path)
 
+    phantoms = [(f"{phantom_prefix}_AM", male_organs), 
+                (f"{phantom_prefix}_AF", female_organs)]
+    
     names = pd.read_csv(csv_file_path)
 
     name_dict = dict(zip(names.organ_id, names.name))
