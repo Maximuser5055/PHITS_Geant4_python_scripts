@@ -17,8 +17,10 @@
 
 # Ignore these
 2_phits/phantoms/
-2_phits/generated_inputs/AF/phantoms/
-2_phits/generated_inputs/AM/phantoms/
+2_phits/generated_inputs/MRCP_AF/phantoms/
+2_phits/generated_inputs/MRCP_AM/phantoms/
+2_phits/generated_inputs/MFCP_AF/phantoms/
+2_phits/generated_inputs/MFCP_AM/phantoms/
 3_geant4/phantoms/
 
 # Keep these files
