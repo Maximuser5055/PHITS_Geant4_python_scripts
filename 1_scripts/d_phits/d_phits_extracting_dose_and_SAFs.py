@@ -11,10 +11,11 @@ from c_database.b_organ_database import ORGANS
 def phits_calculate_dose_and_safs(params):
 
     # -------------------------------------------------------------------------
-    # Constants
+    # Constants and configs
     # -------------------------------------------------------------------------
 
     MeV_to_J = config.MEV_TO_J
+    phantom_names = config.PHANTOM_NAMES
 
     # -------------------------------------------------------------------------
     # Root directories
@@ -27,8 +28,8 @@ def phits_calculate_dose_and_safs(params):
     # File names
     # -------------------------------------------------------------------------
 
-    phits_am_file = "c_phits_all_dose_and_SAFs_AM.csv"
-    phits_af_file = "d_phits_all_dose_and_SAFs_AF.csv"
+    phits_mrcp_file = "c_phits_MRCP_dose_and_SAFs.csv"
+    phits_mfcp_file = "d_phits_MFCP_dose_and_SAFs.csv"
     
     # -------------------------------------------------------------------------
     # Regex patterns
@@ -38,7 +39,7 @@ def phits_calculate_dose_and_safs(params):
 
         "file_name":
             re.compile(
-                    r"phits_deposit_MRCP_(AM|AF)_source_(.+?)_([A-Za-z0-9+-]+)_energy_([0-9Ee.+-]+)\.out",
+                    r"phits_deposit_(MRCP|MFCP)_(AM|AF)_source_(.+?)_([A-Za-z0-9+-]+)_energy_([0-9Ee.+-]+)\.out",
                 re.IGNORECASE
             ),
 
@@ -54,10 +55,39 @@ def phits_calculate_dose_and_safs(params):
     }
 
     # -------------------------------------------------------------------------
+    # Determine selected phantom family
+    # -------------------------------------------------------------------------
+
+    phantom_selection = params["phantom"]
+
+    if phantom_selection.startswith("MRCP"):
+
+        phantom_family = "MRCP"
+
+        output_file = (
+            output_root / phits_mrcp_file
+        )
+
+    elif phantom_selection.startswith("MFCP"):
+
+        phantom_family = "MFCP"
+
+        output_file = (
+            output_root / phits_mfcp_file
+        )
+
+    else:
+
+        raise ValueError(
+            f"Unknown phantom selection: "
+            f"{phantom_selection}"
+        )
+
+    # -------------------------------------------------------------------------
     # Find all deposit tally files
     # -------------------------------------------------------------------------
 
-    deposit_files = sorted(input_root.rglob("phits_deposit_*.out"))
+    deposit_files = sorted(input_root.rglob(f"phits_deposit_{phantom_family}_*.out"))
 
     print(f"Found {len(deposit_files)} deposit tally file(s).\n")
 
@@ -81,11 +111,18 @@ def phits_calculate_dose_and_safs(params):
         if not filename_match:
             raise ValueError(f"Could not parse filename:\n{deposit_file.name}")
 
-        phantom = filename_match.group(1)
-        source_organ = filename_match.group(2)
-        source_type = filename_match.group(3)
-        source_energy = float(filename_match.group(4))
+        phantom_prefix = filename_match.group(1).upper()
+        sex = filename_match.group(2).upper()
+        phantom = f"{phantom_prefix}_{sex}"
+
+        source_organ = filename_match.group(3)
+        source_type = filename_match.group(4)
+        source_energy = float(filename_match.group(5))
         number_of_particles = params["maxcas"] * params["maxbch"]
+
+        if phantom not in ORGANS:
+            raise KeyError(f"Phantom '{phantom}' was not found in ORGANS.")
+
         organ_database = ORGANS[phantom]
 
         results = []
@@ -107,9 +144,13 @@ def phits_calculate_dose_and_safs(params):
 
             relative_error = float(match.group(5))
 
-            source_organ_id = ORGAN_NAME_TO_ID[phantom][source_organ]
-
             target_organ = organ_database.get(region)
+
+            # Skip regions not in organ database
+            if target_organ is None:
+                continue
+
+            source_organ_id = ORGAN_NAME_TO_ID[phantom][source_organ]
 
             source_energy_joule = source_energy * MeV_to_J
 
@@ -122,7 +163,7 @@ def phits_calculate_dose_and_safs(params):
             results.append({
 
                 "Phantom":
-                    "Adult Male" if phantom == "AM" else "Adult Female",
+                    phantom_names[phantom],
 
                 "Source Organ ID":
                     source_organ_id,
@@ -186,11 +227,6 @@ def phits_calculate_dose_and_safs(params):
 
     combined_df = pd.concat(all_tallies, ignore_index=True)
 
-    # Separate Adult Male and Adult Female
-    adult_male = combined_df[combined_df["Phantom"] == "Adult Male"].copy()
-    adult_female = combined_df[combined_df["Phantom"] == "Adult Female"].copy()
-
-    # Sort each dataframe
     sort_columns = [
         "Phantom",
         "Source Organ ID",
@@ -199,24 +235,14 @@ def phits_calculate_dose_and_safs(params):
         "Target Organ ID"
     ]
 
-    adult_male = adult_male.sort_values(by=sort_columns)
-    adult_female = adult_female.sort_values(by=sort_columns)
+    combined_df.sort_values(by=sort_columns, inplace=True)
 
-    adult_male.reset_index(drop=True, inplace=True)
-    adult_female.reset_index(drop=True, inplace=True)
+    combined_df.reset_index(drop=True, inplace=True)
 
     # -------------------------------------------------------------------------
     # Save
     # -------------------------------------------------------------------------
 
-    adult_male.to_csv(
-        output_root / phits_am_file,
-        index=False
-    )
-
-    adult_female.to_csv(
-        output_root / phits_af_file,
-        index=False
-    )
+    combined_df.to_csv(output_file, index=False)
 
     print("\nFinished extracting all deposit tallies.")

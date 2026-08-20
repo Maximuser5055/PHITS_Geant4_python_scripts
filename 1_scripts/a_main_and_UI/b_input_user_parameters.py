@@ -225,7 +225,7 @@ def get_user_parameters():
         print(f"\nError: '{source_csv}' was not found. Please try again.\n")
 
     while True:
-        print("\nPhantom Input Generation:")
+        print("\nPhantom Input Generation and Simulation:")
         print("ICRP 145 Mesh-type Reference Computational Phantoms")
         print("[1] MRCP AF (Adult Female)")
         print("[2] MRCP AM (Adult Male)")
@@ -264,11 +264,11 @@ def get_user_parameters():
             break
 
         elif choice == "5":
-            phantom_input_generation = "MRCP Only"
+            phantom_input_generation = "MRCP_AF_AM"
             break
 
         elif choice == "6":
-            phantom_input_generation = "MFCP Only"
+            phantom_input_generation = "MFCP_AF_AM"
             break
 
         print("\nError: Please enter 1, 2, 3, 4, 5, or 6.\n")

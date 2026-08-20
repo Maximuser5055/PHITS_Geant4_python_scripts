@@ -39,7 +39,7 @@ def main():
     if params["simulation_code"] == "PHITS":
 
         phits_generate_inputs(params)
-        run_phits()
+        run_phits(params)
         phits_extract_metadata_stats()
         calculate_extra_metadata(params)
         phits_calculate_dose_and_safs(params)

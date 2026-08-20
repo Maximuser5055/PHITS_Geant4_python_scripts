@@ -67,14 +67,15 @@ phits_generated_inputs_dir = config.GENERATED_INPUTS_DIR
 fluence_to_dose_response_functions = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
 phantom_names = config.PHANTOM_NAMES
 phits_results_dir = config.RESULTS_PHITS_DIR
-phits_output_fluence = "e_phits_rbm_endosteum_icrp116.csv"
+phits_mrcp_output_file = "e_phits_MRCP_rbm_endosteum_icrp116.csv"
+phits_mfcp_output_file = "f_phits_MFCP_rbm_endosteum_icrp116.csv"
 
 # ============================================================
 # PHITS FLUENCE FILENAME PATTERN
 # ============================================================
 
 fluence_filename_pattern = re.compile(
-    r"phits_fluence_MRCP_"
+    r"phits_fluence_(MRCP|MFCP)_"
     r"(AM|AF)_source_"
     r"(.+?)_"
     r"(photon|electron)_energy_"
@@ -157,7 +158,7 @@ def find_fluence_files():
 
     return sorted(
         root.rglob(
-            "phits_fluence_MRCP_*_photon_energy_*.out"
+            "phits_fluence_*_*_photon_energy_*.out"
         )
     )
 
@@ -682,32 +683,21 @@ def calculate_from_fluence(
     # SELECT MASS COLUMNS
     # ========================================================
 
-    if phantom_code == "AM":
+    sex = phantom_code.split("_")[-1]
 
-        marrow_column = (
-            "Ref_AM_Marrow_Mass(g)"
-        )
+    if sex == "AM":
 
-        endosteum_column = (
-            "Ref_AM_Endosteum_Mass(g)"
-        )
+        marrow_column = ("Ref_AM_Marrow_Mass(g)")
+        endosteum_column = ("Ref_AM_Endosteum_Mass(g)")
 
-    elif phantom_code == "AF":
+    elif sex == "AF":
 
-        marrow_column = (
-            "Ref_AF_Marrow_Mass(g)"
-        )
-
-        endosteum_column = (
-            "Ref_AF_Endosteum_Mass(g)"
-        )
+        marrow_column = ("Ref_AF_Marrow_Mass(g)")
+        endosteum_column = ("Ref_AF_Endosteum_Mass(g)")
 
     else:
 
-        raise ValueError(
-            f"Unsupported phantom code: "
-            f"{phantom_code}"
-        )
+        raise ValueError(f"Unsupported phantom key: {phantom_code}")
 
     # ========================================================
     # SKELETAL IDS
@@ -1502,16 +1492,30 @@ def phits_calculate_marrow_endosteum_SAFs(
     # FIND PHITS FLUENCE FILES
     # ========================================================
 
+    phantom_selection = params["phantom"]
+
+    if phantom_selection.startswith("MRCP"):
+        selected_family = "MRCP"
+
+    elif phantom_selection.startswith("MFCP"):
+        selected_family = "MFCP"
+
+    else:
+        raise ValueError(
+            f"Unknown phantom selection: "
+            f"{phantom_selection}"
+        )
+
     fluence_files = [
         f
         for f in find_fluence_files()
-
-        if any(
+        if f.name.upper().startswith(
+            f"PHITS_FLUENCE_{selected_family}_"
+        )
+        and any(
             f"energy_{energy}.out"
             in f.name
-
-            for energy
-            in params["source_energies"]
+            for energy in params["source_energies"]
         )
     ]
 
@@ -1552,21 +1556,27 @@ def phits_calculate_marrow_endosteum_SAFs(
 
             continue
 
-        phantom_code = (
-            match.group(1)
-        )
+        phantom_prefix = match.group(1).upper()
+        sex = match.group(2).upper()
 
-        source_organ = (
-            match.group(2)
-        )
+        phantom_code = (f"{phantom_prefix}_{sex}")
 
-        source_type = (
-            match.group(3).lower()
-        )
+        source_organ = match.group(3)
 
-        source_energy = float(
-            match.group(4)
-        )
+        source_type = match.group(4).lower()
+
+        source_energy = float(match.group(5))
+
+        # Check that the phantom exists in the configuration
+        if phantom_code not in phantom_names:
+
+            print(
+                f"\n[WARNING] Unknown phantom key "
+                f"'{phantom_code}' in file:"
+            )
+            print(f"  {fluence_file.name}")
+
+            continue
 
         try:
 
@@ -1611,22 +1621,7 @@ def phits_calculate_marrow_endosteum_SAFs(
     # COMBINE
     # ========================================================
 
-    combined_results = pd.concat(
-        all_results,
-        ignore_index=True
-    )
-
-    combined_results.sort_values(
-        by=[
-            "Phantom",
-            "Source Organ",
-            "Source Type",
-            "Source Energy (MeV)",
-            "Organ ID",
-        ],
-        inplace=True,
-        ignore_index=True
-    )
+    combined_results = pd.concat(all_results, ignore_index=True)
 
     # ============================================================
     # Keep overall simulation results only on the first row
@@ -1670,23 +1665,84 @@ def phits_calculate_marrow_endosteum_SAFs(
         ] = np.nan
 
     # ========================================================
-    # OUTPUT FILE
+    # SELECT PHANTOM FAMILY
     # ========================================================
 
-    if (params["simulation_code"] == "PHITS"):
-        output_filename = phits_output_fluence
-        
+    if phantom_selection.startswith("MRCP"):
+
+        phantom_family = "MRCP"
+
+        selected_phantoms = [
+            config.PHANTOM_NAMES["MRCP_AM"],
+            config.PHANTOM_NAMES["MRCP_AF"],
+        ]
+
+        output_file = (
+            phits_results_dir
+            / phits_mrcp_output_file
+        )
+
+    elif phantom_selection.startswith("MFCP"):
+
+        phantom_family = "MFCP"
+
+        selected_phantoms = [
+            config.PHANTOM_NAMES["MFCP_AM"],
+            config.PHANTOM_NAMES["MFCP_AF"],
+        ]
+
+        output_file = (
+            phits_results_dir
+            / phits_mfcp_output_file
+        )
 
     else:
 
         raise ValueError(
-            "Unsupported simulation code: "
-            f"{params['simulation_code']}"
+            f"Unknown phantom selection: "
+            f"{phantom_selection}"
         )
 
-    output_file = (phits_results_dir / output_filename)
 
-    combined_results.to_csv(
+    # ========================================================
+    # KEEP ONLY SELECTED PHANTOM FAMILY
+    # ========================================================
+
+    family_results = combined_results[
+        combined_results["Phantom"].isin(
+            selected_phantoms
+        )
+    ].copy()
+
+
+    # ========================================================
+    # SORT RESULTS
+    # ========================================================
+
+    sort_columns = [
+        "Phantom",
+        "Source Organ",
+        "Source Type",
+        "Source Energy (MeV)",
+        "Organ ID",
+    ]
+
+    family_results.sort_values(
+        by=sort_columns,
+        inplace=True,
+    )
+
+    family_results.reset_index(
+        drop=True,
+        inplace=True,
+    )
+
+
+    # ========================================================
+    # SAVE SELECTED PHANTOM FAMILY
+    # ========================================================
+
+    family_results.to_csv(
         output_file,
         index=False
     )
@@ -1711,7 +1767,14 @@ def phits_calculate_marrow_endosteum_SAFs(
     )
 
     print(
-        f"Results saved to:\n"
+        f"{phantom_family} result rows : "
+        f"{len(family_results)}"
+    )
+
+    print()
+
+    print(
+        f"{phantom_family} results saved to:\n"
         f"{output_file}"
     )
 

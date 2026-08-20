@@ -1,10 +1,11 @@
 # This script runs PHITS simulations for all generated input files in parallel.
 #
 # Features:
-#   - Select Adult Male, Adult Female, or Both
+#   - Use phantom selection from params["phantom"]
 #   - Select source organ(s) from SOURCE_CSV
 #   - Display source-organ IDs and names
 #   - Select all source organs
+#   - Run new PHITS simulations
 #   - Re-run failed simulations from RERUN_CSV
 #   - Skip completed simulations
 #   - Re-run completed simulations
@@ -21,7 +22,7 @@ import pandas as pd
 import b_config.a_config as config
 from c_database.b_organ_database import SOURCE_ORGANS
 
-def run_phits():
+def run_phits(params):
 
     # ==========================================================
     # Configuration
@@ -47,65 +48,50 @@ def run_phits():
     print("PHITS Specific Absorbed Fraction (SAF) Simulation Launcher")
     print("=" * 50)
 
-    print("[1] ICRP 145 MRCP - Adult Male (AM)")
-    print("[2] ICRP 145 MRCP - Adult Female (AF)")
-    print("[3] ICRP 145 MRCP - Both (AM + AF)")
-    print("[4] Filipino MFCP - Adult Male (AM)")
-    print("[5] Filipino MFCP - Adult Female (AF)")
-    print("[6] Filipino MFCP - Both (AM + AF)")
-    print("[7] Re-run failed simulations")
+    # ----------------------------------------------------------
+    # Select operation
+    # ----------------------------------------------------------
+
+    print("[1] Run new simulations")
+    print("[2] Re-run failed simulations")
 
     while True:
 
-        choice = input(
-            "Enter your choice (1-7): "
-        ).strip()
+        choice = input("Enter your choice (1-2): ").strip()
 
-        if choice in {"1", "2", "3", "4", "5", "6", "7"}:
+        if choice in {"1", "2"}:
             break
 
-        print(
-            "Invalid choice. "
-            "Please enter 1, 2, 3, 4, 5, 6, or 7."
-        )
+        print("Invalid choice. Please enter 1 or 2.")
 
-    # ==========================================================
-    # Determine phantom(s)
-    # ==========================================================
+    phantom_selection = params["phantom"]
 
-    if choice == "1":
+    if phantom_selection == "MRCP_AM":
         selected_phantoms = ["MRCP_AM"]
 
-    elif choice == "2":
+    elif phantom_selection == "MRCP_AF":
         selected_phantoms = ["MRCP_AF"]
 
-    elif choice == "7":
+    elif phantom_selection == "MRCP_AF_AM":
         selected_phantoms = ["MRCP_AM", "MRCP_AF"]
 
-    elif choice == "4":
+    elif phantom_selection == "MFCP_AM":
         selected_phantoms = ["MFCP_AM"]
 
-    elif choice == "5":
+    elif phantom_selection == "MFCP_AF":
         selected_phantoms = ["MFCP_AF"]
 
-    elif choice == "6":
+    elif phantom_selection == "MFCP_AF_AM":
         selected_phantoms = ["MFCP_AM", "MFCP_AF"]
 
     else:
-        # Rerun mode gets the actual phantom from
-        # the paths listed in RERUN_CSV.
-        selected_phantoms = [
-            "MRCP_AM",
-            "MRCP_AF",
-            "MFCP_AM",
-            "MFCP_AF",
-        ]
-
+        raise ValueError(f"Unknown phantom selection: {phantom_selection}")
+    
     # ==========================================================
     # Source Organ Selection
     # ==========================================================
 
-    if choice != "7":
+    if choice == "1":
 
         if not source_csv.is_file():
 
@@ -271,7 +257,7 @@ def run_phits():
     # Find input files
     # ==========================================================
 
-    if choice == "7":
+    if choice == "2":
 
         # ======================================================
         # Re-run failed simulations
@@ -493,28 +479,18 @@ def run_phits():
 
         job_dir = inp_file.parent
 
-        batch_exists = (
-            job_dir /
-            "batch.out"
-        ).exists()
+        batch_exists = (job_dir / "batch.out").exists()
 
-        deposit_exists = any(
-            f.name.startswith("phits_deposit_")
-            and f.suffix == ".out"
-            for f in job_dir.iterdir()
-        )
+        stem = inp_file.stem
 
-        phits_exists = any(
-            f.name.startswith("phits_")
-            and f.suffix == ".out"
-            for f in job_dir.iterdir()
-        )
+        required_outputs = [
+            job_dir / f"{stem}.out",
+            job_dir / f"phits_deposit_{stem}.out",
+            job_dir / f"phits_fluence_{stem}.out",
+        ]
 
-        return (
-            batch_exists
-            and deposit_exists
-            and phits_exists
-        )
+        return (batch_exists and 
+                all(output.exists()for output in required_outputs))
 
     # ==========================================================
     # Filter completed jobs

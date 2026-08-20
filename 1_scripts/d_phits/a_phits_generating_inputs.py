@@ -39,14 +39,28 @@ def phits_generate_inputs(params):
 
     phantom_selection = params["phantom"]
 
-    if phantom_selection.startswith("MRCP"):
+    if phantom_selection == "MRCP_AM":
+        phantoms = ["MRCP_AM"]
+
+    elif phantom_selection == "MRCP_AF":
+        phantoms = ["MRCP_AF"]
+
+    elif phantom_selection == "MRCP_AF_AM":
         phantoms = ["MRCP_AM", "MRCP_AF"]
 
-    elif phantom_selection.startswith("MFCP"):
+    elif phantom_selection == "MFCP_AM":
+        phantoms = ["MFCP_AM"]
+
+    elif phantom_selection == "MFCP_AF":
+        phantoms = ["MFCP_AF"]
+
+    elif phantom_selection == "MFCP_AF_AM":
         phantoms = ["MFCP_AM", "MFCP_AF"]
-        
+
     else:
-        raise ValueError(f"Unknown phantom selection: {phantom_selection}")
+        raise ValueError(
+            f"Unknown phantom selection: {phantom_selection}"
+        )
 
     for phantom in phantoms:
 
