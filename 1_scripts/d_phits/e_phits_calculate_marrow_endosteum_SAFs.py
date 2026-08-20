@@ -658,7 +658,8 @@ def calculate_from_fluence(
     source_energy,
     source_organ,
     source_type,
-    phantom_code
+    phantom_code,
+    params
 ):
 
     print()
@@ -790,9 +791,8 @@ def calculate_from_fluence(
         # TOTAL FLUENCE
         # ====================================================
 
-        total_fluence_cm2 = (site["Fluence (1/cm2/source)"].sum())
-
-        total_fluence_m2 = (total_fluence_cm2 * CM2_TO_M2)
+        total_fluence_m2 = (site["Fluence (1/cm2/source)"].sum()
+                             * CM2_TO_M2)
         
         # ====================================================
         # CONVERT cm^-2 -> m^-2
@@ -804,8 +804,6 @@ def calculate_from_fluence(
         # ====================================================
         # RBM
         # ====================================================
-
-        rbm_site = site.copy()
 
         table_E = response_df[
             response_df["AM_Gy_m2"].notna()
@@ -822,14 +820,12 @@ def calculate_from_fluence(
         else:
 
             rbm_in_range = (
-                (rbm_site["Energy Center (MeV)"] >= table_E.min())
+                (site["Energy Center (MeV)"] >= table_E.min())
                 &
-                (rbm_site["Energy Center (MeV)"] <= table_E.max())
+                (site["Energy Center (MeV)"] <= table_E.max())
             )
 
-            rbm_covered = rbm_site[
-                rbm_in_range
-            ]
+            rbm_covered = site[rbm_in_range]
 
             if rbm_covered.empty:
 
@@ -884,7 +880,7 @@ def calculate_from_fluence(
             )
 
             excluded_marrow_fluence_m2 = (
-                rbm_site.loc[
+                site.loc[
                     ~rbm_in_range,
                     "Fluence (1/cm2/source)"
                 ].sum()
@@ -904,8 +900,6 @@ def calculate_from_fluence(
         # ENDOSTEUM
         # ====================================================
 
-        endo_site = site.copy()
-
         table_E = response_df[
             response_df["TM50_Gy_m2"].notna()
         ]["Energy_MeV"]
@@ -921,14 +915,12 @@ def calculate_from_fluence(
         else:
 
             endo_in_range = (
-                (endo_site["Energy Center (MeV)"] >= table_E.min())
+                (site["Energy Center (MeV)"] >= table_E.min())
                 &
-                (endo_site["Energy Center (MeV)"] <= table_E.max())
+                (site["Energy Center (MeV)"] <= table_E.max())
             )
 
-            endo_covered = endo_site[
-                endo_in_range
-            ]
+            endo_covered = site[endo_in_range]
 
             if endo_covered.empty:
 
@@ -983,7 +975,7 @@ def calculate_from_fluence(
             )
 
             excluded_endosteum_fluence_m2 = (
-                endo_site.loc[
+                site.loc[
                     ~endo_in_range,
                     "Fluence (1/cm2/source)"
                 ].sum()
@@ -1287,11 +1279,13 @@ def calculate_from_fluence(
     # ========================================================
     # SOURCE INFORMATION
     # ========================================================
-
+    number_of_particles = params["maxcas"] * params["maxbch"]
+    
     results.insert(0, "Phantom", phantom_names[phantom_code])
     results.insert(1, "Source Organ", source_organ)
     results.insert(2, "Source Type", source_type)
     results.insert(3, "Source Energy (MeV)", source_energy)
+    results.insert(4, "Number of Particles", number_of_particles)
 
     # ========================================================
     # TOTALS
@@ -1322,7 +1316,7 @@ def calculate_from_fluence(
     ] = rbm_saf
 
     results[
-        "RBM SAF Statistical Uncertainty (kg^-1)"
+        "RBM SAF Uncertainty (kg^-1)"
     ] = rbm_saf_sigma
 
     results[
@@ -1342,7 +1336,7 @@ def calculate_from_fluence(
     ] = endosteum_saf
 
     results[
-        "Endosteum SAF Statistical Uncertainty (kg^-1)"
+        "Endosteum SAF Uncertainty (kg^-1)"
     ] = endosteum_saf_sigma
 
     # ========================================================
@@ -1408,13 +1402,7 @@ def calculate_from_fluence(
         f"{endosteum_saf:.6e} kg^-1"
     )
 
-    return (
-        results,
-        rbm_dose,
-        rbm_saf,
-        endosteum_dose,
-        endosteum_saf
-    )
+    return results
 
 
 # ============================================================
@@ -1582,38 +1570,20 @@ def phits_calculate_marrow_endosteum_SAFs(
 
         try:
 
-            (
-                result,
-                rbm_dose,
-                rbm_saf,
-                endosteum_dose,
-                endosteum_saf
-
-            ) = calculate_from_fluence(
-
+            result = calculate_from_fluence(
                 fluence_file,
-
                 response_functions,
-
                 skeletal_masses,
-
                 rbm_ids,
-
                 endosteum_ids,
-
                 source_energy,
-
                 source_organ,
-
                 source_type,
-
-                phantom_code
-
+                phantom_code,
+                params
             )
 
-            all_results.append(
-                result
-            )
+            all_results.append(result)
 
         except Exception as error:
 
@@ -1670,13 +1640,13 @@ def phits_calculate_marrow_endosteum_SAFs(
         "RBM Relative Error",
         "RBM Statistical Uncertainty (%)",
         "RBM SAF (kg^-1)",
-        "RBM SAF Statistical Uncertainty (kg^-1)",
+        "RBM SAF Uncertainty (kg^-1)",
 
         "Endosteum Dose (Gy/source)",
         "Endosteum Relative Error",
         "Endosteum Statistical Uncertainty (%)",
         "Endosteum SAF (kg^-1)",
-        "Endosteum SAF Statistical Uncertainty (kg^-1)",
+        "Endosteum SAF Uncertainty (kg^-1)",
     ]
 
     simulation_columns = [

@@ -331,7 +331,8 @@ def calculate_from_fluence(
     source_energy,
     source_organ,
     source_type,
-    phantom_code
+    phantom_code,
+    params
 ):
 
     print()
@@ -887,14 +888,13 @@ def calculate_from_fluence(
     # ========================================================
     # ADD SOURCE INFORMATION
     # ========================================================
+    number_of_particles = params["nps"]
 
     results.insert(0, "Phantom", phantom_names[phantom_code])
-
     results.insert(1, "Source Organ", source_organ)
-
     results.insert(2, "Source Type", source_type)
-
     results.insert(3, "Source Energy (MeV)",source_energy)
+    results.insert(4, "Number of Particles", number_of_particles)
 
     # ========================================================
     # ADD TOTALS TO EVERY ROW
@@ -931,7 +931,7 @@ def calculate_from_fluence(
     ] = rbm_saf
 
     results[
-        "RBM SAF Statistical Uncertainty (kg^-1)"
+        "RBM SAF Uncertainty (kg^-1)"
     ] = (
         rbm_relative_error * rbm_saf
         if np.isfinite(rbm_relative_error)
@@ -957,7 +957,7 @@ def calculate_from_fluence(
     ] = endosteum_saf
 
     results[
-        "Endosteum SAF Statistical Uncertainty (kg^-1)"
+        "Endosteum SAF Uncertainty (kg^-1)"
     ] = (
         endosteum_relative_error * endosteum_saf
         if np.isfinite(endosteum_relative_error)
@@ -1030,14 +1030,7 @@ def calculate_from_fluence(
         f"{source_energy:g} MeV."
     )
 
-    return (
-        results,
-        rbm_dose,
-        rbm_saf,
-        endosteum_dose,
-        endosteum_saf
-    )
-
+    return results
 
 # ============================================================
 # MAIN PIPELINE FUNCTION
@@ -1168,33 +1161,18 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         )
 
         try:
-            (
-                result,
-                rbm_dose,
-                rbm_saf,
-                endosteum_dose,
-                endosteum_saf
 
-            ) = calculate_from_fluence(
-
+            result = calculate_from_fluence(
                 fluence_file,
-
                 response_functions,
-
                 skeletal_masses,
-
                 rbm_ids,
-
                 endosteum_ids,
-
                 source_energy,
-
                 source_organ,
-
                 source_type,
-
-                phantom_code
-
+                phantom_code,
+                params
             )
 
             all_results.append(
@@ -1261,13 +1239,13 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         "RBM Relative Error",
         "RBM Statistical Uncertainty (%)",
         "RBM SAF (kg^-1)",
-        "RBM SAF Statistical Uncertainty (kg^-1)",
+        "RBM SAF Uncertainty (kg^-1)",
 
         "Endosteum Dose (Gy/source)",
         "Endosteum Relative Error",
         "Endosteum Statistical Uncertainty (%)",
         "Endosteum SAF (kg^-1)",
-        "Endosteum SAF Statistical Uncertainty (kg^-1)",
+        "Endosteum SAF Uncertainty (kg^-1)",
     ]
 
     simulation_columns = [
@@ -1300,6 +1278,7 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         "Source Organ",
         "Source Type",
         "Source Energy (MeV)",
+        "Number of Particles",
         "Organ ID",
 
         "Marrow mass (kg)",
@@ -1328,11 +1307,11 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         "RBM Relative Error",
         "RBM Statistical Uncertainty (%)",
         "RBM SAF (kg^-1)",
-        "RBM SAF Statistical Uncertainty (kg^-1)",
+        "RBM SAF Uncertainty (kg^-1)",
 
         "Endosteum Dose (Gy/source)",
         "Endosteum SAF (kg^-1)",
-        "Endosteum SAF Statistical Uncertainty (kg^-1)",
+        "Endosteum SAF Uncertainty (kg^-1)",
     ]
 
     combined_results = combined_results[column_order]

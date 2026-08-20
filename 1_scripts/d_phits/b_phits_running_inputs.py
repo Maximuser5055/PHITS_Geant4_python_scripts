@@ -21,13 +21,12 @@ import pandas as pd
 import b_config.a_config as config
 from c_database.b_organ_database import SOURCE_ORGANS
 
-
 def run_phits():
 
     # ==========================================================
     # Configuration
     # ==========================================================
-
+    
     phits_executable = config.PHITS_EXECUTABLE
     input_root = config.GENERATED_INPUTS_DIR
     rerun_csv = config.PHITS_RERUN_CSV_FILE

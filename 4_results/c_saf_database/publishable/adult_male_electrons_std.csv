@@ -2,89 +2,88 @@
 # Document: Statistical Uncertainties (%)
 # Phantom type: Adult Male Reference Computational Phantom
 # Source type: electrons
-# Number of source energies: 2
+# Number of source energies: 1
 # Number of source organs: 2
 # Number of target organs: 42
-# Source energies (MeV): 1, 10
 # End Header
-Source Organ,Target Organ,1 MeV,10 MeV
-Liver,Red (active) marrow,0.0,63.75884066450321
-Liver,Colon wall,0.0,0.0
-Liver,RLung + LLung,0.0,45.76669394703418
-Liver,Stomach wall,99.49874371000004,99.34634991
-Liver,Breast-a + Breast-g,0.0,0.0
-Liver,Testes,0.0,0.0
-Liver,Urinary bladder wall,0.0,0.0
-Liver,Oesophagus wall,0.0,0.0
-Liver,Liver,0.6765025857,3.748527485
-Liver,Thyroid,0.0,0.0
-Liver,50-um endosteal region,0.0,64.12894870416119
-Liver,Brain,0.0,0.0
-Liver,Salivary glands,0.0,0.0
-Liver,Skin,0.0,59.67663630150268
-Liver,RAdrenal + LAdrenal,0.0,0.0
-Liver,ET region,0.0,0.0
-Liver,Gallbladder wall,0.0,52.69822851
-Liver,Heart wall,0.0,62.106882510000005
-Liver,RKidney + LKidney,0.0,97.3431689615236
-Liver,Systemic lymph nodes,0.0,0.0
-Liver,Muscle,99.49874371000004,31.00327922400919
-Liver,Oral mucosa,0.0,0.0
-Liver,Pancreas,0.0,54.59517481999999
-Liver,Prostate,0.0,0.0
-Liver,Small intestine wall,0.0,96.30113789885816
-Liver,Spleen,0.0,99.49874371
-Liver,Thymus,0.0,0.0
-Liver,Tongue,0.0,0.0
-Liver,Tonsils,0.0,0.0
-Liver,Right colon wall (ascending + right transverse),0.0,0.0
-Liver,Left colon wall (left transverse + descending),0.0,0.0
-Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0
-Liver,Extrathoracic lymph nodes,0.0,0.0
-Liver,Alveolar-interstitium,0.0,45.76669394703418
-Liver,Thoracic lymph nodes,0.0,0.0
-Liver,Entire lens of eye,0.0,0.0
-Liver,Pituitary gland,0.0,0.0
-Liver,Spinal cord,0.0,99.49874371
-Liver,Ureters,0.0,0.0
-Liver,Adipose/residual tissue,78.35625440999999,18.76754399549534
-Thyroid,Red (active) marrow,92.9119419579776,31.184348415829337
-Thyroid,Colon wall,0.0,0.0
-Thyroid,RLung + LLung,0.0,53.50315942327869
-Thyroid,Stomach wall,0.0,0.0
-Thyroid,Breast-a + Breast-g,0.0,0.0
-Thyroid,Testes,0.0,0.0
-Thyroid,Urinary bladder wall,0.0,0.0
-Thyroid,Oesophagus wall,0.0,27.809052935854154
-Thyroid,Liver,0.0,0.0
-Thyroid,Thyroid,4.291305467,8.332373278
-Thyroid,50-um endosteal region,88.7294276325765,28.77764977451677
-Thyroid,Brain,0.0,0.0
-Thyroid,Salivary glands,0.0,99.49874371
-Thyroid,Skin,0.0,14.49399219405509
-Thyroid,RAdrenal + LAdrenal,0.0,0.0
-Thyroid,ET region,0.0,95.51982571304993
-Thyroid,Gallbladder wall,0.0,0.0
-Thyroid,Heart wall,0.0,0.0
-Thyroid,RKidney + LKidney,0.0,0.0
-Thyroid,Systemic lymph nodes,0.0,52.90602727
-Thyroid,Muscle,31.12410874928669,9.7164307625706
-Thyroid,Oral mucosa,0.0,0.0
-Thyroid,Pancreas,0.0,0.0
-Thyroid,Prostate,0.0,0.0
-Thyroid,Small intestine wall,0.0,0.0
-Thyroid,Spleen,0.0,99.49874371
-Thyroid,Thymus,0.0,0.0
-Thyroid,Tongue,0.0,0.0
-Thyroid,Tonsils,0.0,0.0
-Thyroid,Right colon wall (ascending + right transverse),0.0,0.0
-Thyroid,Left colon wall (left transverse + descending),0.0,0.0
-Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0
-Thyroid,Extrathoracic lymph nodes,0.0,0.0
-Thyroid,Alveolar-interstitium,0.0,53.50315942327869
-Thyroid,Thoracic lymph nodes,0.0,99.49874371
-Thyroid,Entire lens of eye,0.0,0.0
-Thyroid,Pituitary gland,0.0,0.0
-Thyroid,Spinal cord,0.0,0.0
-Thyroid,Ureters,0.0,0.0
-Thyroid,Adipose/residual tissue,18.36286734,7.207863491442209
+Source Organ,Target Organ,10 MeV
+Brain,Red (active) marrow,5.708290693273129
+Brain,Colon wall,0.0
+Brain,RLung + LLung,69.2399507799465
+Brain,Stomach wall,0.0
+Brain,Breast-a + Breast-g,0.0
+Brain,Testes,0.0
+Brain,Urinary bladder wall,0.0
+Brain,Oesophagus wall,0.0
+Brain,Liver,88.13776658
+Brain,Thyroid,0.0
+Brain,50-um endosteal region,5.381924526535363
+Brain,Brain,1.4221525800000006
+Brain,Salivary glands,70.18377376422683
+Brain,Skin,8.542310892796518
+Brain,RAdrenal + LAdrenal,0.0
+Brain,ET region,40.368905198596245
+Brain,Gallbladder wall,0.0
+Brain,Heart wall,0.0
+Brain,RKidney + LKidney,0.0
+Brain,Systemic lymph nodes,0.0
+Brain,Muscle,12.254518850043205
+Brain,Oral mucosa,99.94998749
+Brain,Pancreas,0.0
+Brain,Prostate,0.0
+Brain,Small intestine wall,0.0
+Brain,Spleen,0.0
+Brain,Thymus,0.0
+Brain,Tongue,88.27922886567234
+Brain,Tonsils,99.94998749
+Brain,Right colon wall (ascending + right transverse),0.0
+Brain,Left colon wall (left transverse + descending),0.0
+Brain,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Brain,Extrathoracic lymph nodes,47.65995915
+Brain,Alveolar-interstitium,69.2399507799465
+Brain,Thoracic lymph nodes,0.0
+Brain,Entire lens of eye,0.0
+Brain,Pituitary gland,72.98361815999999
+Brain,Spinal cord,0.0
+Brain,Ureters,0.0
+Brain,Adipose/residual tissue,7.272640787177368
+Liver,Red (active) marrow,13.079804316141308
+Liver,Colon wall,19.39712374824442
+Liver,RLung + LLung,12.155989257049644
+Liver,Stomach wall,16.941946790900406
+Liver,Breast-a + Breast-g,72.41039561
+Liver,Testes,0.0
+Liver,Urinary bladder wall,0.0
+Liver,Oesophagus wall,66.40315812
+Liver,Liver,1.52131151
+Liver,Thyroid,0.0
+Liver,50-um endosteal region,12.777328973237143
+Liver,Brain,99.94998749
+Liver,Salivary glands,0.0
+Liver,Skin,12.386617641440695
+Liver,RAdrenal + LAdrenal,48.3219278328088
+Liver,ET region,0.0
+Liver,Gallbladder wall,20.926114740000003
+Liver,Heart wall,20.41647108
+Liver,RKidney + LKidney,23.61013715495083
+Liver,Systemic lymph nodes,58.37383189999999
+Liver,Muscle,8.33696437757116
+Liver,Oral mucosa,0.0
+Liver,Pancreas,26.383909300000003
+Liver,Prostate,0.0
+Liver,Small intestine wall,53.15902050884374
+Liver,Spleen,80.4949486
+Liver,Thymus,99.94998749
+Liver,Tongue,0.0
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),21.774508268023528
+Liver,Left colon wall (left transverse + descending),42.2355307350819
+Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Alveolar-interstitium,12.155989257049644
+Liver,Thoracic lymph nodes,99.13135015
+Liver,Entire lens of eye,0.0
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,99.94998749
+Liver,Ureters,0.0
+Liver,Adipose/residual tissue,5.820123780177851

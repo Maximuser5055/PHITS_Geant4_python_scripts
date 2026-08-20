@@ -296,13 +296,16 @@ def get_user_parameters():
 
         while True:
 
+            
             choice = input(
                 f"\nWARNING: Existing generated inputs were found in:\n"
                 f"    {generated_inputs_dir}\n\n"
-                f"Delete this entire folder and create a fresh start? "
+                "Note: It is best to delete the entire inputs folder."
+                f"\nDelete this entire folder and create a fresh start? "
                 f"(Y/N): "
             ).strip().upper()
 
+            
             if choice in ("Y", "YES"):
                 shutil.rmtree(generated_inputs_dir)
                 print("\nGenerated inputs folder deleted.")

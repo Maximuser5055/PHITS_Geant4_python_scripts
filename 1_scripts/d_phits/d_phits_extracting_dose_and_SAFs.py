@@ -8,7 +8,7 @@ import pandas as pd
 import b_config.a_config as config
 from c_database.b_organ_database import ORGANS
 
-def phits_calculate_dose_and_safs():
+def phits_calculate_dose_and_safs(params):
 
     # -------------------------------------------------------------------------
     # Constants
@@ -85,7 +85,7 @@ def phits_calculate_dose_and_safs():
         source_organ = filename_match.group(2)
         source_type = filename_match.group(3)
         source_energy = float(filename_match.group(4))
-
+        number_of_particles = params["maxcas"] * params["maxbch"]
         organ_database = ORGANS[phantom]
 
         results = []
@@ -135,6 +135,9 @@ def phits_calculate_dose_and_safs():
 
                 "Source Energy (MeV)":
                     source_energy,
+
+                "Number of Particles":
+                    number_of_particles,
 
                 "Target Organ ID":
                     target_organ["organ_id"],

@@ -10,7 +10,6 @@ import b_config.a_config as config
 male_cell_file_path = config.CELL_FILES["AM"]
 female_cell_file_path = config.CELL_FILES["AF"]
 csv_file_path = config.ORGAN_ID_CSV
-source_organs_csv_file_path = config.SOURCE_CSV
 
 # Organ database file path
 database_file_path = config.DATABASE_FILE
@@ -24,7 +23,10 @@ pattern = re.compile(
     r"u=\d+\s+"              # Universe (ignore)
     r"VOL=(\d+\.\d+)"        # Volume
 )
-def parse_cell_csv_inputs():
+def parse_cell_csv_inputs(source_csv_path):
+
+    source_organs_csv_file_path = source_csv_path
+
     def parse_cell(cell_file_path):
         # Initialize an empty dictionary to store organ data
         organs = {}
@@ -37,7 +39,6 @@ def parse_cell_csv_inputs():
 
                 if match:
 
-                    organ_id = int(match.group(1))
                     organ_id = int(match.group(2))
                     density = abs(float(match.group(3)))
                     volume = float(match.group(4))
@@ -79,14 +80,21 @@ def parse_cell_csv_inputs():
         .tolist()
     )
 
-    # Write the organ data to a Python file in the specified format
+    # -------------------------------------------------------------------------
+    # Write the organ database
+    # -------------------------------------------------------------------------
+
     with open(database_file_path, "w") as f:
+
+        # =====================================================================
+        # ORGANS
+        # =====================================================================
 
         f.write("ORGANS = {\n")
 
         for phantom_name, organs in [
             ("AM", male_organs),
-            ("AF", female_organs)
+            ("AF", female_organs),
         ]:
 
             f.write(f'    "{phantom_name}": {{\n')
@@ -104,10 +112,10 @@ def parse_cell_csv_inputs():
             f.write("    },\n\n")
 
         f.write("}\n\n")
-        
-        # -------------------------------------------------------------------------
-        # Source organs
-        # -------------------------------------------------------------------------
+
+        # =====================================================================
+        # SOURCE ORGANS
+        # =====================================================================
 
         f.write("SOURCE_ORGANS = {\n")
 
@@ -123,12 +131,18 @@ def parse_cell_csv_inputs():
                 organ = organs.get(organ_id)
 
                 if organ is None:
-                    organ_name = name_dict.get(organ_id, "Unknown")
+
+                    organ_name = name_dict.get(
+                        organ_id,
+                        "Unknown"
+                    )
 
                     print(
-                        f"Warning: Source organ ID {organ_id} ({organ_name})"
-                        f"does not exist in phantom {phantom_name}. Skipping."
+                        f"Warning: Source organ ID {organ_id} "
+                        f"({organ_name}) does not exist in "
+                        f"phantom {phantom_name}. Skipping."
                     )
+
                     continue
 
                 f.write(

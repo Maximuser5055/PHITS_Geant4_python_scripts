@@ -31,6 +31,7 @@ REQUIRED_COLUMNS = [
     "Source Organ Name",
     "Source Type",
     "Source Energy (MeV)",
+    "Number of Particles",
 
     "Target Organ IDs",
     "Target Region Name",
@@ -98,7 +99,7 @@ def validate_columns(df, filename):
 # REMOVE RESULTS ALREADY PRESENT IN DATABASE
 # ============================================================
 
-def filter_new_results(current_results,existing_database):
+def filter_new_results(current_results, existing_database, override_duplicates=False):
 
     # --------------------------------------------------------
     # Load target-region definitions
@@ -320,35 +321,77 @@ def filter_new_results(current_results,existing_database):
         # is already complete
         # ====================================================
 
-        if (
-            not missing_normal_regions
-            and not missing_skeletal_rows
-        ):
+        if (not missing_normal_regions and not missing_skeletal_rows):
 
-            print(
-                f"\n[SKIP] Existing database already contains "
-                f"complete results:"
+            source_set_key = (
+                group_key[1],
+                group_key[2],
+                group_key[3],
             )
 
-            print(
-                f"       Phantom       : {group_key[0]}"
-            )
+            # --------------------------------------------------------
+            # Duplicate exists
+            #
+            # Replace existing results if requested.
+            # Otherwise keep the existing database results.
+            # --------------------------------------------------------
 
-            print(
-                f"       Source Organ  : {group_key[1]}"
-            )
+            if override_duplicates:
 
-            print(
-                f"       Source Type   : {group_key[2]}"
-            )
+                print(
+                    f"\n[REPLACE] Existing results will be "
+                    f"replaced:"
+                )
 
-            print(
-                f"       Source Energy : {group_key[3]} MeV"
-            )
+                print(
+                    f"          Phantom       : {group_key[0]}"
+                )
 
-            source_set_key = (group_key[1], group_key[2], group_key[3],)
+                print(
+                    f"          Source Organ  : {group_key[1]}"
+                )
 
-            skipped_source_sets.add(source_set_key)
+                print(
+                    f"          Source Type   : {group_key[2]}"
+                )
+
+                print(
+                    f"          Source Energy : {group_key[3]} MeV"
+                )
+
+                new_rows.append(
+                    current_group
+                )
+
+                partial_source_sets.add(
+                    source_set_key
+                )
+
+            else:
+
+                print(
+                    f"\n[SKIP] Keeping existing results:"
+                )
+
+                print(
+                    f"       Phantom       : {group_key[0]}"
+                )
+
+                print(
+                    f"       Source Organ  : {group_key[1]}"
+                )
+
+                print(
+                    f"       Source Type   : {group_key[2]}"
+                )
+
+                print(
+                    f"       Source Energy : {group_key[3]} MeV"
+                )
+
+                skipped_source_sets.add(
+                    source_set_key
+                )
 
             continue
 
@@ -535,6 +578,124 @@ def update_master_saf_database(params):
         existing_database = pd.DataFrame(columns=REQUIRED_COLUMNS)
 
     # --------------------------------------------------------
+    # Check whether any complete source simulations already
+    # exist in the database.
+    # --------------------------------------------------------
+
+    simulation_columns = [
+        "Phantom",
+        "Source Organ ID",
+        "Source Type",
+        "Source Energy (MeV)",
+    ]
+
+    if not existing_database.empty:
+
+        current_simulations = (
+            current_results[
+                simulation_columns
+            ]
+            .drop_duplicates()
+        )
+
+        existing_simulations = (
+            existing_database[
+                simulation_columns
+            ]
+            .drop_duplicates()
+        )
+
+        duplicate_simulations = (
+            current_simulations.merge(
+                existing_simulations,
+                on=simulation_columns,
+                how="inner"
+            )
+        )
+
+    else:
+
+        duplicate_simulations = pd.DataFrame(
+            columns=simulation_columns
+        )
+        
+    override_duplicates = False
+
+    if not duplicate_simulations.empty:
+
+        print()
+        print("=" * 90)
+        print("DUPLICATE SAF SIMULATIONS DETECTED")
+        print("=" * 90)
+
+        print()
+
+        print(
+            f"Found {len(duplicate_simulations)} "
+            "source simulation(s) already in the database."
+        )
+
+        print()
+        print(
+            "These may be reruns intended to improve "
+            "statistical uncertainty."
+        )
+
+        print()
+
+        for _, row in duplicate_simulations.iterrows():
+
+            print(
+                f"  {row['Phantom']} | "
+                f"{row['Source Organ ID']} | "
+                f"{row['Source Type']} | "
+                f"{row['Source Energy (MeV)']:g} MeV"
+            )
+
+        print()
+        print(
+            "[1] Keep existing database results"
+        )
+
+        print(
+            "[2] Replace with new results"
+        )
+
+        while True:
+
+            choice = input(
+                "\nEnter 1 or 2: "
+            ).strip()
+
+            if choice == "1":
+
+                override_duplicates = False
+
+                print(
+                    "\nKeeping existing database results."
+                )
+
+                break
+
+            elif choice == "2":
+
+                override_duplicates = True
+
+                print(
+                    "\nNew results will replace "
+                    "the existing duplicates."
+                )
+
+                break
+
+            else:
+
+                print(
+                    "Invalid choice. "
+                    "Please enter 1 or 2."
+                )
+                
+    # --------------------------------------------------------
     # Remove results that are already represented in the
     # existing database.
     #
@@ -545,17 +706,57 @@ def update_master_saf_database(params):
     # --------------------------------------------------------
 
     filtered_current_results, filter_statistics = (
-        filter_new_results(current_results, existing_database)
+        filter_new_results(current_results, 
+                           existing_database, 
+                           override_duplicates)
     )
 
     # --------------------------------------------------------
-    # Concatenate only genuinely new rows
+    # Remove existing simulations that are being replaced
+    # --------------------------------------------------------
+
+    database_to_keep = existing_database.copy()
+
+    if override_duplicates:
+
+        for _, key in duplicate_simulations.iterrows():
+
+            mask = (
+                (database_to_keep["Phantom"] == key["Phantom"])
+                &
+                (
+                    database_to_keep["Source Organ ID"]
+                    == key["Source Organ ID"]
+                )
+                &
+                (
+                    database_to_keep["Source Type"]
+                    == key["Source Type"]
+                )
+                &
+                (
+                    database_to_keep["Source Energy (MeV)"]
+                    == key["Source Energy (MeV)"]
+                )
+            )
+
+            database_to_keep = (
+                database_to_keep[
+                    ~mask
+                ]
+            )
+
+    # --------------------------------------------------------
+    # Concatenate existing + new results
     # --------------------------------------------------------
 
     combined_database = pd.concat(
-        [existing_database,
-         filtered_current_results
-        ], ignore_index=True)
+        [
+            database_to_keep,
+            filtered_current_results
+        ],
+        ignore_index=True
+    )
 
     # --------------------------------------------------------
     # Exact duplicate protection
@@ -726,6 +927,10 @@ def update_master_saf_database(params):
           f"{combined_database['Source Energy (MeV)'].nunique()}"
     )
 
+    print(f"  Particle counts    : "
+      f"{combined_database['Number of Particles'].nunique()}"
+    )
+    
     print(f"  Target regions     : "
           f"{combined_database['Target Region Name'].nunique()}"
     )

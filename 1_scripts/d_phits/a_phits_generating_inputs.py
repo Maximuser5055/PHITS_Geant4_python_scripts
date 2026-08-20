@@ -4,7 +4,6 @@
 # It also copies the necessary phantom files to the mother directory (AM and AF directory).
 
 # Import necessary libraries
-from pathlib import Path
 import shutil
 import b_config.a_config as config
 from c_database.b_organ_database import SOURCE_ORGANS

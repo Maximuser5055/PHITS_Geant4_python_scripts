@@ -8,7 +8,7 @@ import b_config.a_config as config
 from c_database.b_organ_database import ORGANS
 
 
-def geant4_calculate_dose_and_SAFs():
+def geant4_calculate_dose_and_SAFs(params):
 
     # -------------------------------------------------------------
     # Constants
@@ -107,6 +107,8 @@ def geant4_calculate_dose_and_SAFs():
 
         source_energy = float(match.group(4))
 
+        number_of_particles = params["nps"]
+
         source_organ_id = ORGAN_NAME_TO_ID[
             phantom_code
         ][source_organ]
@@ -197,6 +199,12 @@ def geant4_calculate_dose_and_SAFs():
             source_energy
         )
 
+        df.insert(
+            5,
+            "Number of Particles",
+            number_of_particles
+        )
+        
         # Reorder
 
         df = df[
@@ -209,6 +217,8 @@ def geant4_calculate_dose_and_SAFs():
 
                 "Source Type",
                 "Source Energy (MeV)",
+
+                "Number of Particles",
 
                 "Target Organ ID",
                 "Target Organ Name",

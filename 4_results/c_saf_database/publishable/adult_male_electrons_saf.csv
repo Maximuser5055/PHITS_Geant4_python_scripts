@@ -2,89 +2,88 @@
 # Document: Specific Absorbed Fractions (kg^-1)
 # Phantom type: Adult Male Reference Computational Phantom
 # Source type: electrons
-# Number of source energies: 2
+# Number of source energies: 1
 # Number of source organs: 2
 # Number of target organs: 42
-# Source energies (MeV): 1, 10
 # End Header
-Source Organ,Target Organ,1 MeV,10 MeV
-Liver,Red (active) marrow,0.0,0.0023111167546527
-Liver,Colon wall,0.0,0.0
-Liver,RLung + LLung,0.0,0.0139291039381497
-Liver,Stomach wall,0.0219323463899836,0.0186527529148278
-Liver,Breast-a + Breast-g,0.0,0.0
-Liver,Testes,0.0,0.0
-Liver,Urinary bladder wall,0.0,0.0
-Liver,Oesophagus wall,0.0,0.0
-Liver,Liver,0.4180448417399912,0.3345616827289427
-Liver,Thyroid,0.0,0.0
-Liver,50-um endosteal region,0.0,0.0007788971823668
-Liver,Brain,0.0,0.0
-Liver,Salivary glands,0.0,0.0
-Liver,Skin,0.0,0.0006218751698897
-Liver,RAdrenal + LAdrenal,0.0,0.0
-Liver,ET region,0.0,0.0
-Liver,Gallbladder wall,0.0,0.2295151073836113
-Liver,Heart wall,0.0,0.0185959759852557
-Liver,RKidney + LKidney,0.0,0.0092196694279338
-Liver,Systemic lymph nodes,0.0,0.0
-Liver,Muscle,1.8515085814352268e-06,0.0006186654177588
-Liver,Oral mucosa,0.0,0.0
-Liver,Pancreas,0.0,0.1063052519214374
-Liver,Prostate,0.0,0.0
-Liver,Small intestine wall,0.0,0.0017929390669214
-Liver,Spleen,0.0,0.0002451510398197
-Liver,Thymus,0.0,0.0
-Liver,Tongue,0.0,0.0
-Liver,Tonsils,0.0,0.0
-Liver,Right colon wall (ascending + right transverse),0.0,0.0
-Liver,Left colon wall (left transverse + descending),0.0,0.0
-Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0
-Liver,Extrathoracic lymph nodes,0.0,0.0
-Liver,Alveolar-interstitium,0.0,0.0139291039381497
-Liver,Thoracic lymph nodes,0.0,0.0
-Liver,Entire lens of eye,0.0,0.0
-Liver,Pituitary gland,0.0,0.0
-Liver,Spinal cord,0.0,0.0518592420690646
-Liver,Ureters,0.0,0.0
-Liver,Adipose/residual tissue,0.0003517818304015,0.0038718473382505
-Thyroid,Red (active) marrow,3.145152375232719e-05,0.0139990340522147
-Thyroid,Colon wall,0.0,0.0
-Thyroid,RLung + LLung,0.0,0.0092989730445543
-Thyroid,Stomach wall,0.0,0.0
-Thyroid,Breast-a + Breast-g,0.0,0.0
-Thyroid,Testes,0.0,0.0
-Thyroid,Urinary bladder wall,0.0,0.0
-Thyroid,Oesophagus wall,0.0,0.3438553353348105
-Thyroid,Liver,0.0,0.0
-Thyroid,Thyroid,33.686226302813104,8.332325704108872
-Thyroid,50-um endosteal region,1.0788367867401174e-05,0.005069585349035
-Thyroid,Brain,0.0,0.0
-Thyroid,Salivary glands,0.0,0.0230724018933396
-Thyroid,Skin,0.0,0.0050876997406224
-Thyroid,RAdrenal + LAdrenal,0.0,0.0
-Thyroid,ET region,0.0,0.0208437801367434
-Thyroid,Gallbladder wall,0.0,0.0
-Thyroid,Heart wall,0.0,0.0
-Thyroid,RKidney + LKidney,0.0,0.0
-Thyroid,Systemic lymph nodes,0.0,0.0144221587812067
-Thyroid,Muscle,0.0019201019128287,0.0083862405100933
-Thyroid,Oral mucosa,0.0,0.0
-Thyroid,Pancreas,0.0,0.0
-Thyroid,Prostate,0.0,0.0
-Thyroid,Small intestine wall,0.0,0.0
-Thyroid,Spleen,0.0,0.0002680915741653
-Thyroid,Thymus,0.0,0.0
-Thyroid,Tongue,0.0,0.0
-Thyroid,Tonsils,0.0,0.0
-Thyroid,Right colon wall (ascending + right transverse),0.0,0.0
-Thyroid,Left colon wall (left transverse + descending),0.0,0.0
-Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0
-Thyroid,Extrathoracic lymph nodes,0.0,0.0
-Thyroid,Alveolar-interstitium,0.0,0.0092989730445543
-Thyroid,Thoracic lymph nodes,0.0,0.0676988151607301
-Thyroid,Entire lens of eye,0.0,0.0
-Thyroid,Pituitary gland,0.0,0.0
-Thyroid,Spinal cord,0.0,0.0
-Thyroid,Ureters,0.0,0.0
-Thyroid,Adipose/residual tissue,0.0080451482838474,0.0139700676248876
+Source Organ,Target Organ,10 MeV
+Brain,Red (active) marrow,0.0122685902199679
+Brain,Colon wall,0.0
+Brain,RLung + LLung,1.847221591006895e-05
+Brain,Stomach wall,0.0
+Brain,Breast-a + Breast-g,0.0
+Brain,Testes,0.0
+Brain,Urinary bladder wall,0.0
+Brain,Oesophagus wall,0.0
+Brain,Liver,5.398833975256026e-05
+Brain,Thyroid,0.0
+Brain,50-um endosteal region,0.0235140382899382
+Brain,Brain,0.4770016489330774
+Brain,Salivary glands,0.0035155238043747
+Brain,Skin,0.0022359934093073
+Brain,RAdrenal + LAdrenal,0.0
+Brain,ET region,0.0252300658471505
+Brain,Gallbladder wall,0.0
+Brain,Heart wall,0.0
+Brain,RKidney + LKidney,0.0
+Brain,Systemic lymph nodes,0.0
+Brain,Muscle,0.0006243282664066
+Brain,Oral mucosa,0.0013212836021003
+Brain,Pancreas,0.0
+Brain,Prostate,0.0
+Brain,Small intestine wall,0.0
+Brain,Spleen,0.0
+Brain,Thymus,0.0
+Brain,Tongue,0.0021316095041404
+Brain,Tonsils,0.0650406644240241
+Brain,Right colon wall (ascending + right transverse),0.0
+Brain,Left colon wall (left transverse + descending),0.0
+Brain,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Brain,Extrathoracic lymph nodes,0.0458448110409807
+Brain,Alveolar-interstitium,1.847221591006895e-05
+Brain,Thoracic lymph nodes,0.0
+Brain,Entire lens of eye,0.0
+Brain,Pituitary gland,0.3755083748150814
+Brain,Spinal cord,0.0
+Brain,Ureters,0.0
+Brain,Adipose/residual tissue,0.0017186967865678
+Liver,Red (active) marrow,0.0059166229955881
+Liver,Colon wall,0.0160655025701063
+Liver,RLung + LLung,0.0259039419666101
+Liver,Stomach wall,0.0578435132197071
+Liver,Breast-a + Breast-g,0.0063761870751894
+Liver,Testes,0.0
+Liver,Urinary bladder wall,0.0
+Liver,Oesophagus wall,0.0128831148518432
+Liver,Liver,0.2974453843520662
+Liver,Thyroid,0.0
+Liver,50-um endosteal region,0.0019452903272256
+Liver,Brain,2.0380910092589724e-05
+Liver,Salivary glands,0.0
+Liver,Skin,0.0012164893037604
+Liver,RAdrenal + LAdrenal,0.1113449337683833
+Liver,ET region,0.0
+Liver,Gallbladder wall,0.1935953791971349
+Liver,Heart wall,0.0211115646878183
+Liver,RKidney + LKidney,0.0203840774839503
+Liver,Systemic lymph nodes,0.0022856319393781
+Liver,Muscle,0.0013962474884897
+Liver,Oral mucosa,0.0
+Liver,Pancreas,0.0376078624237405
+Liver,Prostate,0.0
+Liver,Small intestine wall,0.0006800016186746
+Liver,Spleen,0.0002797731405437
+Liver,Thymus,4.7076345553548186e-05
+Liver,Tongue,0.0
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),0.0323862296466969
+Liver,Left colon wall (left transverse + descending),0.0072409855284578
+Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Alveolar-interstitium,0.0259039419666101
+Liver,Thoracic lymph nodes,0.0048779149446767
+Liver,Entire lens of eye,0.0
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,0.0041965057081218
+Liver,Ureters,0.0
+Liver,Adipose/residual tissue,0.0038563247859942

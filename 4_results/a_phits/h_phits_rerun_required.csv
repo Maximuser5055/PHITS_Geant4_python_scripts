@@ -1,3 +1,5 @@
 Phantom,Source Organ ID,Source Organ Name,Source Type,Source Energy (MeV),Maximum Statistical Uncertainty (%),Input File,Job Directory
-Adult Female,13200,Thyroid,photon,10.0,100.0,AF/phits_MRCP_AF_source_Thyroid_photon_energy_10.0/phits_MRCP_AF_source_Thyroid_photon_energy_10.0.inp,AF/phits_MRCP_AF_source_Thyroid_photon_energy_10.0
-Adult Male,13200,Thyroid,photon,10.0,94.47137687389494,AM/phits_MRCP_AM_source_Thyroid_photon_energy_10.0/phits_MRCP_AM_source_Thyroid_photon_energy_10.0.inp,AM/phits_MRCP_AM_source_Thyroid_photon_energy_10.0
+Adult Female,9500,Liver,electron,10.0,100.0,AF/phits_MRCP_AF_source_Liver_electron_energy_10.0/phits_MRCP_AF_source_Liver_electron_energy_10.0.inp,AF/phits_MRCP_AF_source_Liver_electron_energy_10.0
+Adult Female,13200,Thyroid,electron,10.0,100.0,AF/phits_MRCP_AF_source_Thyroid_electron_energy_10.0/phits_MRCP_AF_source_Thyroid_electron_energy_10.0.inp,AF/phits_MRCP_AF_source_Thyroid_electron_energy_10.0
+Adult Male,9500,Liver,electron,10.0,100.0,AM/phits_MRCP_AM_source_Liver_electron_energy_10.0/phits_MRCP_AM_source_Liver_electron_energy_10.0.inp,AM/phits_MRCP_AM_source_Liver_electron_energy_10.0
+Adult Male,13200,Thyroid,electron,10.0,100.0,AM/phits_MRCP_AM_source_Thyroid_electron_energy_10.0/phits_MRCP_AM_source_Thyroid_electron_energy_10.0.inp,AM/phits_MRCP_AM_source_Thyroid_electron_energy_10.0

@@ -1,6 +1,7 @@
 Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),Overall Wall Time (s),Overall Wall Time (dhms)
-Type + Energy,photon,10.0,,,2,290.09,0d 00h 04m 50s,7.59,284.72,295.45,,
-Phantom + Type + Energy,photon,10.0,Adult Female,,1,284.72,0d 00h 04m 45s,,284.72,284.72,,
-Phantom + Type + Energy,photon,10.0,Adult Male,,1,295.45,0d 00h 04m 55s,,295.45,295.45,,
-Source Organ + Type + Energy,photon,10.0,,Thyroid,2,290.09,0d 00h 04m 50s,7.59,284.72,295.45,,
-All simulations,,,,,2,290.09,0d 00h 04m 50s,7.59,284.72,295.45,184.0,0d 00h 03m 04s
+Type + Energy,electron,10.0,,,4,312.51,0d 00h 05m 13s,18.31,296.04,330.6,,
+Phantom + Type + Energy,electron,10.0,Adult Female,,2,313.32,0d 00h 05m 13s,24.44,296.04,330.6,,
+Phantom + Type + Energy,electron,10.0,Adult Male,,2,311.7,0d 00h 05m 12s,20.16,297.44,325.95,,
+Source Organ + Type + Energy,electron,10.0,,Liver,2,328.28,0d 00h 05m 28s,3.29,325.95,330.6,,
+Source Organ + Type + Energy,electron,10.0,,Thyroid,2,296.74,0d 00h 04m 57s,0.99,296.04,297.44,,
+All simulations,,,,,4,312.51,0d 00h 05m 13s,18.31,296.04,330.6,203.0,0d 00h 03m 23s

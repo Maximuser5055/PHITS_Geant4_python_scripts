@@ -2,89 +2,88 @@
 # Document: Specific Absorbed Fractions (kg^-1)
 # Phantom type: Adult Female Reference Computational Phantom
 # Source type: electrons
-# Number of source energies: 2
+# Number of source energies: 1
 # Number of source organs: 2
 # Number of target organs: 42
-# Source energies (MeV): 1, 10
 # End Header
-Source Organ,Target Organ,1 MeV,10 MeV
-Liver,Red (active) marrow,0.0032659493057029,0.0113568536359333
-Liver,Colon wall,0.0,0.0001696278377842
-Liver,RLung + LLung,0.0052670245028928,0.0181883054723123
-Liver,Stomach wall,0.0330855975266371,4.375676627804722e-05
-Liver,Breast-a + Breast-g,0.0,0.0064457064804057
-Liver,ROvary + LOvary,0.0,0.0
-Liver,Urinary bladder wall,0.0,0.0
-Liver,Oesophagus wall,0.0,0.0
-Liver,Liver,0.5366498530523781,0.3769072838070347
-Liver,Thyroid,0.0,0.0
-Liver,50-um endosteal region,0.0011387968661897,0.0039562699480671
-Liver,Brain,0.0,0.0
-Liver,Salivary glands,0.0,0.0
-Liver,Skin,0.0,0.0020302648187443
-Liver,RAdrenal + LAdrenal,0.0,0.1589349323406025
-Liver,ET region,0.0,0.0
-Liver,Gallbladder wall,0.0,0.2657150091105539
-Liver,Heart wall,0.0081016410329204,0.0312721538229617
-Liver,RKidney + LKidney,0.0,0.0566992190899461
-Liver,Systemic lymph nodes,0.0,0.0
-Liver,Muscle,0.0,0.0016632283142368
-Liver,Oral mucosa,0.0,0.0
-Liver,Pancreas,0.0,0.0034474784532404
-Liver,Small intestine wall,0.0,0.0
-Liver,Spleen,0.0,0.0
-Liver,Thymus,0.0,0.0
-Liver,Uterus/cervix,0.0,0.0
-Liver,Tongue,0.0,0.0
-Liver,Tonsils,0.0,0.0
-Liver,Right colon wall (ascending + right transverse),0.0,0.0004211467968798
-Liver,Left colon wall (left transverse + descending),0.0,0.0
-Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0
-Liver,Extrathoracic lymph nodes,0.0,0.0
-Liver,Alveolar-interstitium,0.0052670245028928,0.0181883054723123
-Liver,Thoracic lymph nodes,0.0,0.0
-Liver,Entire lens of eye,0.0,0.0
-Liver,Pituitary gland,0.0,0.0
-Liver,Spinal cord,0.0,0.0
-Liver,Ureters,0.0,0.0
-Liver,Adipose/residual tissue,0.0003490596277295,0.0045225481667392
-Thyroid,Red (active) marrow,0.0,0.0143899839070888
-Thyroid,Colon wall,0.0,0.0
-Thyroid,RLung + LLung,0.0,0.0112779465220804
-Thyroid,Stomach wall,0.0,0.0
-Thyroid,Breast-a + Breast-g,0.0,0.0001833950741669
-Thyroid,ROvary + LOvary,0.0,0.0
-Thyroid,Urinary bladder wall,0.0,0.0
-Thyroid,Oesophagus wall,0.4613896783020563,0.5791617085804516
-Thyroid,Liver,0.0,0.000455953263203
-Thyroid,Thyroid,44.285096558214086,8.68021087367878
-Thyroid,50-um endosteal region,0.0,0.0054232112956938
-Thyroid,Brain,0.0,0.0001627952552577
-Thyroid,Salivary glands,0.0,0.0
-Thyroid,Skin,0.0,0.0049866336915432
-Thyroid,RAdrenal + LAdrenal,0.0,0.0
-Thyroid,ET region,0.0,0.1105686910631741
-Thyroid,Gallbladder wall,0.0,0.0
-Thyroid,Heart wall,0.0003514140844098,5.456001262592713e-05
-Thyroid,RKidney + LKidney,0.0,0.0
-Thyroid,Systemic lymph nodes,0.0,0.0
-Thyroid,Muscle,0.0019339791760555,0.0128312172092255
-Thyroid,Oral mucosa,0.0,0.0
-Thyroid,Pancreas,0.0,0.0
-Thyroid,Small intestine wall,0.0,0.0
-Thyroid,Spleen,0.0,0.0
-Thyroid,Thymus,0.0,0.3071926748621093
-Thyroid,Uterus/cervix,0.0,0.0
-Thyroid,Tongue,0.0,0.0
-Thyroid,Tonsils,0.0,0.0
-Thyroid,Right colon wall (ascending + right transverse),0.0,0.0
-Thyroid,Left colon wall (left transverse + descending),0.0,0.0
-Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0
-Thyroid,Extrathoracic lymph nodes,0.0,0.0
-Thyroid,Alveolar-interstitium,0.0,0.0112779465220804
-Thyroid,Thoracic lymph nodes,0.0,0.0414187649986686
-Thyroid,Entire lens of eye,0.0,0.0
-Thyroid,Pituitary gland,0.0,0.0
-Thyroid,Spinal cord,0.0,0.0
-Thyroid,Ureters,0.0,0.0
-Thyroid,Adipose/residual tissue,0.0032622751853632,0.0124380951403137
+Source Organ,Target Organ,10 MeV
+Thymus,Red (active) marrow,0.0441640300058181
+Thymus,Colon wall,0.0
+Thymus,RLung + LLung,0.0918923184384425
+Thymus,Stomach wall,1.2280096552995125e-05
+Thymus,Breast-a + Breast-g,0.0018535711222965
+Thymus,ROvary + LOvary,0.0
+Thymus,Urinary bladder wall,0.0
+Thymus,Oesophagus wall,0.2881074680097034
+Thymus,Liver,0.0003693689254614
+Thymus,Thyroid,0.5961040215120622
+Thymus,50-um endosteal region,0.0162973895415667
+Thymus,Brain,4.386650165065656e-06
+Thymus,Salivary glands,4.2931621653691495e-05
+Thymus,Skin,0.0029029033104099
+Thymus,RAdrenal + LAdrenal,1.1888644766171996e-05
+Thymus,ET region,2.15700638994002e-05
+Thymus,Gallbladder wall,0.0
+Thymus,Heart wall,0.1132708609954744
+Thymus,RKidney + LKidney,0.0
+Thymus,Systemic lymph nodes,0.0060416374111126
+Thymus,Muscle,0.0043383152212072
+Thymus,Oral mucosa,0.0
+Thymus,Pancreas,5.0800424867515e-05
+Thymus,Small intestine wall,1.8260237336814465e-05
+Thymus,Spleen,2.286532760032892e-05
+Thymus,Thymus,10.370737631167474
+Thymus,Uterus/cervix,0.0
+Thymus,Tongue,0.0003986618595829
+Thymus,Tonsils,0.0
+Thymus,Right colon wall (ascending + right transverse),0.0
+Thymus,Left colon wall (left transverse + descending),0.0
+Thymus,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Thymus,Extrathoracic lymph nodes,0.0
+Thymus,Alveolar-interstitium,0.0918923184384425
+Thymus,Thoracic lymph nodes,0.3168162307003359
+Thymus,Entire lens of eye,0.0
+Thymus,Pituitary gland,0.0
+Thymus,Spinal cord,0.0
+Thymus,Ureters,0.0
+Thymus,Adipose/residual tissue,0.0114685965178702
+Thyroid,Red (active) marrow,0.0188688242330556
+Thyroid,Colon wall,0.0
+Thyroid,RLung + LLung,0.0088479098053989
+Thyroid,Stomach wall,0.0001464831190161
+Thyroid,Breast-a + Breast-g,0.0004373490027051
+Thyroid,ROvary + LOvary,0.0
+Thyroid,Urinary bladder wall,0.0
+Thyroid,Oesophagus wall,0.8726582889218529
+Thyroid,Liver,0.0002080898249449
+Thyroid,Thyroid,10.354252744645278
+Thyroid,50-um endosteal region,0.0082466482437165
+Thyroid,Brain,0.0002394689497138
+Thyroid,Salivary glands,0.0178157390570035
+Thyroid,Skin,0.0058653505537375
+Thyroid,RAdrenal + LAdrenal,0.0
+Thyroid,ET region,0.0772901636894481
+Thyroid,Gallbladder wall,0.0
+Thyroid,Heart wall,5.103907229370135e-05
+Thyroid,RKidney + LKidney,0.0
+Thyroid,Systemic lymph nodes,0.0124858957953106
+Thyroid,Muscle,0.0117865258332806
+Thyroid,Oral mucosa,0.0365289731520223
+Thyroid,Pancreas,5.621339896535128e-05
+Thyroid,Small intestine wall,1.3855330778026946e-05
+Thyroid,Spleen,0.0004492270404062
+Thyroid,Thymus,0.4740033974306776
+Thyroid,Uterus/cervix,0.0
+Thyroid,Tongue,0.0115987232597547
+Thyroid,Tonsils,0.0
+Thyroid,Right colon wall (ascending + right transverse),0.0
+Thyroid,Left colon wall (left transverse + descending),0.0
+Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Thyroid,Extrathoracic lymph nodes,0.0001164875519586
+Thyroid,Alveolar-interstitium,0.0088479098053989
+Thyroid,Thoracic lymph nodes,0.0328279883340274
+Thyroid,Entire lens of eye,0.0
+Thyroid,Pituitary gland,0.0
+Thyroid,Spinal cord,0.0371885289459312
+Thyroid,Ureters,0.0
+Thyroid,Adipose/residual tissue,0.0107804963017471

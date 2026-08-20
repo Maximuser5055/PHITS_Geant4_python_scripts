@@ -17,6 +17,11 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
     simulation = params["simulation_code"].upper()
     mapping = pd.read_csv(config.TARGET_REGION_CSV)
+    if simulation == "PHITS":
+        number_of_particles = params["maxcas"] * params["maxbch"]
+    elif simulation == "GEANT4":
+        number_of_particles = params["nps"]
+
     skeletal = pd.read_csv(config.SKELETAL_MASSES_CSV)
     results_phits_dir = config.RESULTS_PHITS_DIR
     results_geant4_dir = config.RESULTS_GEANT4_DIR
@@ -239,6 +244,9 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
                     "Source Energy (MeV)":
                         group_key[4],
 
+                    "Number of Particles":
+                        number_of_particles,
+
                     "Target Organ IDs":
                         "_".join(map(str, ids)),
 
@@ -326,6 +334,9 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
                                     "Source Energy (MeV)"
                                 ],
 
+                            "Number of Particles":
+                                number_of_particles,
+
                             "Target Organ IDs":
                                 "_".join(
                                     source_fluence.loc[
@@ -393,6 +404,9 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
                                 fluence_result[
                                     "Source Energy (MeV)"
                                 ],
+
+                            "Number of Particles":
+                                number_of_particles,
 
                             "Target Organ IDs":
                                 "_".join(
