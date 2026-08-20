@@ -13,7 +13,7 @@ def main():
     params = get_user_parameters() # Get user inputs
 
     from c_database.a_parse_cell_and_csv import parse_cell_csv_inputs
-    parse_cell_csv_inputs(params["source_csv"]) # Parse immediately
+    parse_cell_csv_inputs(params) # Parse immediately
 
     from d_phits.a_phits_generating_inputs import phits_generate_inputs
     from d_phits.b_phits_running_inputs import run_phits

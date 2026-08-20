@@ -102,8 +102,13 @@ else:
     )
 
 CELL_FILES = {
-    "AM": ROOT / "2_phits/phantoms/MRCP-AM.cell",
-    "AF": ROOT / "2_phits/phantoms/MRCP-AF.cell",
+    # IRCP 145: Caucasian-based computational phantoms
+    "MRCP_AM": ROOT / "2_phits/phantoms/MRCP-AM.cell",
+    "MRCP_AF": ROOT / "2_phits/phantoms/MRCP-AF.cell",
+
+    # Filipino-based computational phantoms
+    "MFCP_AM": ROOT / "2_phits/phantoms/MFCP-AM.cell",
+    "MFCP_AF": ROOT / "2_phits/phantoms/MFCP-AF.cell",
 }
 
 INPUT_TEMPLATE_FILE = ROOT / "2_phits/template_input_files/1_template_MRCP_internal_input.inp"
@@ -153,13 +158,17 @@ MAXCAS = 1000
 MAXBCH = 10
 
 PHANTOMS = [
-    "AM",
-    "AF",
+    "MRCP_AF",
+    "MRCP_AM",
+    "MFCP_AF",
+    "MFCP_AM",
 ]
 
 SEXINFO = {
-    "AM": "MALE",
-    "AF": "FEMALE",
+    "MRCP_AF": "FEMALE",
+    "MRCP_AM": "MALE",
+    "MFCP_AF": "FEMALE",
+    "MFCP_AM": "MALE",
 }
 
 PHITS_SOURCE_TYPES = [
@@ -206,11 +215,13 @@ GEANT4_SOURCE_TYPES = [
     "e-",
 ]
 
-PHANTOM_INPUT_GENERATION = "Both"
+PHANTOM_INPUT_GENERATION = "MFCP_Only"
 
 PHANTOM_NAMES = {
-    "AM": "Adult Male",
-    "AF": "Adult Female"
+    "MRCP_AM": "ICRP 145 Adult Male",
+    "MRCP_AF": "ICRP 145 Adult Female",
+    "MFCP_AM": "Filipino Adult Male",
+    "MFCP_AF": "Filipino Adult Female"
 }
 
 NPS = 1000

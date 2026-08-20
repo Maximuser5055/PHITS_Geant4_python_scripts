@@ -226,9 +226,16 @@ def get_user_parameters():
 
     while True:
         print("\nPhantom Input Generation:")
-        print("[1] AM")
-        print("[2] AF")
-        print("[3] Both")
+        print("ICRP 145 Mesh-type Reference Computational Phantoms")
+        print("[1] MRCP AF (Adult Female)")
+        print("[2] MRCP AM (Adult Male)")
+        print("\nFilipino-based Mesh-type Computational Phantoms")
+        print("[3] MFCP AF")
+        print("[4] MFCP AM")
+
+        print("\nPhantom sets")
+        print("[5] Both MRCP phantoms (AF + AM)")
+        print("[6] Both MFCP phantoms (AF + AM)")
 
         choice = input(
             f"Select phantom input generation "
@@ -241,18 +248,30 @@ def get_user_parameters():
             break
 
         if choice == "1":
-            phantom_input_generation = "AM"
+            phantom_input_generation = "MRCP_AF"
             break
 
         elif choice == "2":
-            phantom_input_generation = "AF"
+            phantom_input_generation = "MRCP_AM"
             break
 
         elif choice == "3":
-            phantom_input_generation = "Both"
+            phantom_input_generation = "MFCP_AF"
             break
 
-        print("\nError: Please enter 1, 2, or 3.\n")
+        elif choice == "4":
+            phantom_input_generation = "MFCP_AM"
+            break
+
+        elif choice == "5":
+            phantom_input_generation = "MRCP_Only"
+            break
+
+        elif choice == "6":
+            phantom_input_generation = "MFCP_Only"
+            break
+
+        print("\nError: Please enter 1, 2, 3, 4, 5, or 6.\n")
 
     uncertainty_limit = input(
         f"Maximum allowed statistical uncertainty (%) "

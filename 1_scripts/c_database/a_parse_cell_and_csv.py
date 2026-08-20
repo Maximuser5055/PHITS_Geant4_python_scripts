@@ -7,8 +7,6 @@ import pandas as pd
 import b_config.a_config as config
 
 # Define path parameters
-male_cell_file_path = config.CELL_FILES["AM"]
-female_cell_file_path = config.CELL_FILES["AF"]
 csv_file_path = config.ORGAN_ID_CSV
 
 # Organ database file path
@@ -23,10 +21,30 @@ pattern = re.compile(
     r"u=\d+\s+"              # Universe (ignore)
     r"VOL=(\d+\.\d+)"        # Volume
 )
-def parse_cell_csv_inputs(source_csv_path):
+def parse_cell_csv_inputs(params):
 
-    source_organs_csv_file_path = source_csv_path
+    source_organs_csv_file_path = params["source_csv"]
 
+    phantom_selection = params["phantom"]
+
+    if phantom_selection.startswith("MRCP"):
+        male_cell_file_path = config.CELL_FILES["MRCP_AM"]
+        female_cell_file_path = config.CELL_FILES["MRCP_AF"]
+        phantom_prefix = "MRCP"
+
+    elif phantom_selection.startswith("MFCP"):
+        male_cell_file_path = config.CELL_FILES["MFCP_AM"]
+        female_cell_file_path = config.CELL_FILES["MFCP_AF"]
+        phantom_prefix = "MFCP"
+
+    else:
+        raise ValueError(
+            f"Unknown phantom selection: {phantom_selection}"
+        )
+
+    phantoms = [(f"{phantom_prefix}_AM", male_organs), 
+                (f"{phantom_prefix}_AF", female_organs)]
+    
     def parse_cell(cell_file_path):
         # Initialize an empty dictionary to store organ data
         organs = {}
@@ -92,10 +110,7 @@ def parse_cell_csv_inputs(source_csv_path):
 
         f.write("ORGANS = {\n")
 
-        for phantom_name, organs in [
-            ("AM", male_organs),
-            ("AF", female_organs),
-        ]:
+        for phantom_name, organs in phantoms:
 
             f.write(f'    "{phantom_name}": {{\n')
 
@@ -119,10 +134,7 @@ def parse_cell_csv_inputs(source_csv_path):
 
         f.write("SOURCE_ORGANS = {\n")
 
-        for phantom_name, organs in [
-            ("AM", male_organs),
-            ("AF", female_organs),
-        ]:
+        for phantom_name, organs in phantoms:
 
             f.write(f'    "{phantom_name}": {{\n')
 
