@@ -7,83 +7,83 @@
 # Number of target organs: 42
 # End Header
 Source Organ,Target Organ,10 MeV
-Liver,Red (active) marrow,4.647200963117518
-Liver,Colon wall,17.10179048404738
-Liver,RLung + LLung,7.932893945591841
-Liver,Stomach wall,11.690872737078346
-Liver,Breast-a + Breast-g,12.77981554997812
-Liver,ROvary + LOvary,100.0
-Liver,Urinary bladder wall,53.37722638354043
-Liver,Oesophagus wall,25.226583063947466
-Liver,Liver,3.38
-Liver,Thyroid,67.0
-Liver,50-um endosteal region,4.60053499189848
-Liver,Brain,37.96
-Liver,Salivary glands,79.59
-Liver,Skin,4.956198079099623
-Liver,RAdrenal + LAdrenal,25.67286064230965
-Liver,ET region,73.02
-Liver,Gallbladder wall,18.8
-Liver,Heart wall,12.629999999999995
-Liver,RKidney + LKidney,9.75707563496677
-Liver,Systemic lymph nodes,22.3016644404626
-Liver,Muscle,4.152841358683706
+Brain,Red (active) marrow,3.9319370468093617
+Brain,Colon wall,0.0
+Brain,RLung + LLung,92.09468978429916
+Brain,Stomach wall,0.0
+Brain,Breast-a + Breast-g,61.6329488695352
+Brain,ROvary + LOvary,0.0
+Brain,Urinary bladder wall,0.0
+Brain,Oesophagus wall,0.0
+Brain,Liver,64.10004003
+Brain,Thyroid,0.0
+Brain,50-um endosteal region,2.729712090022644
+Brain,Brain,12.11236766
+Brain,Salivary glands,44.78444429461075
+Brain,Skin,13.813651869913008
+Brain,RAdrenal + LAdrenal,0.0
+Brain,ET region,0.0
+Brain,Gallbladder wall,0.0
+Brain,Heart wall,99.94998749
+Brain,RKidney + LKidney,0.0
+Brain,Systemic lymph nodes,0.0
+Brain,Muscle,18.983357700852107
+Brain,Oral mucosa,99.94998749
+Brain,Pancreas,0.0
+Brain,Small intestine wall,0.0
+Brain,Spleen,0.0
+Brain,Thymus,71.91139491
+Brain,Uterus/cervix,0.0
+Brain,Tongue,76.22877332315876
+Brain,Tonsils,0.0
+Brain,Right colon wall (ascending + right transverse),0.0
+Brain,Left colon wall (left transverse + descending),0.0
+Brain,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Brain,Extrathoracic lymph nodes,64.49928353
+Brain,Alveolar-interstitium,92.09468978429916
+Brain,Thoracic lymph nodes,99.94998749
+Brain,Entire lens of eye,0.0
+Brain,Pituitary gland,99.94998749
+Brain,Spinal cord,0.0
+Brain,Ureters,0.0
+Brain,Adipose/residual tissue,12.651005202132806
+Liver,Red (active) marrow,6.114642777577681
+Liver,Colon wall,45.69382891035494
+Liver,RLung + LLung,25.76006390349192
+Liver,Stomach wall,31.92751262112049
+Liver,Breast-a + Breast-g,39.16592719210195
+Liver,ROvary + LOvary,99.94998749
+Liver,Urinary bladder wall,99.94998749
+Liver,Oesophagus wall,96.80748410059584
+Liver,Liver,10.57718287
+Liver,Thyroid,0.0
+Liver,50-um endosteal region,5.916249719402273
+Liver,Brain,75.1563255
+Liver,Salivary glands,99.94998749
+Liver,Skin,13.20866913254167
+Liver,RAdrenal + LAdrenal,99.94998749
+Liver,ET region,0.0
+Liver,Gallbladder wall,41.93802968
+Liver,Heart wall,53.37368374
+Liver,RKidney + LKidney,35.735839753092066
+Liver,Systemic lymph nodes,70.75839872
+Liver,Muscle,13.207315048776971
 Liver,Oral mucosa,0.0
-Liver,Pancreas,14.17
-Liver,Small intestine wall,10.78604311351129
-Liver,Spleen,18.89
-Liver,Thymus,52.06999999999999
-Liver,Uterus/cervix,64.41
-Liver,Tongue,69.38000000000001
+Liver,Pancreas,45.04389205
+Liver,Small intestine wall,30.248603876128648
+Liver,Spleen,54.21213739000002
+Liver,Thymus,0.0
+Liver,Uterus/cervix,96.97013561
+Liver,Tongue,0.0
 Liver,Tonsils,0.0
-Liver,Right colon wall (ascending + right transverse),21.547797580019303
-Liver,Left colon wall (left transverse + descending),29.073414358277688
-Liver,Rectosigmoid colon wall (sigmoid + rectum),47.312401757325446
-Liver,Extrathoracic lymph nodes,100.0
-Liver,Alveolar-interstitium,7.932893945591841
-Liver,Thoracic lymph nodes,31.64
+Liver,Right colon wall (ascending + right transverse),47.88549356317256
+Liver,Left colon wall (left transverse + descending),65.39018708737704
+Liver,Rectosigmoid colon wall (sigmoid + rectum),99.94998749
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Alveolar-interstitium,25.76006390349192
+Liver,Thoracic lymph nodes,99.94998749
 Liver,Entire lens of eye,0.0
 Liver,Pituitary gland,0.0
-Liver,Spinal cord,35.64
-Liver,Ureters,55.10166328916155
-Liver,Adipose/residual tissue,2.9075180994964875
-Thyroid,Red (active) marrow,4.6355640085314445
-Thyroid,Colon wall,31.75581650766696
-Thyroid,RLung + LLung,8.243808094561924
-Thyroid,Stomach wall,32.50405111347759
-Thyroid,Breast-a + Breast-g,13.812870970287891
-Thyroid,ROvary + LOvary,80.9645102583449
-Thyroid,Urinary bladder wall,0.0
-Thyroid,Oesophagus wall,11.03742061990636
-Thyroid,Liver,16.06
-Thyroid,Thyroid,8.969999999999999
-Thyroid,50-um endosteal region,4.593555222451924
-Thyroid,Brain,12.14
-Thyroid,Salivary glands,20.271346486970025
-Thyroid,Skin,5.03356211913969
-Thyroid,RAdrenal + LAdrenal,84.99170148236915
-Thyroid,ET region,21.38946742461059
-Thyroid,Gallbladder wall,100.0
-Thyroid,Heart wall,15.81
-Thyroid,RKidney + LKidney,41.031431966078216
-Thyroid,Systemic lymph nodes,21.330615225524426
-Thyroid,Muscle,3.2678592545188923
-Thyroid,Oral mucosa,21.68911082415087
-Thyroid,Pancreas,73.04
-Thyroid,Small intestine wall,28.37363590211347
-Thyroid,Spleen,42.720000000000006
-Thyroid,Thymus,19.670000000000005
-Thyroid,Uterus/cervix,99.48
-Thyroid,Tongue,18.475389408590807
-Thyroid,Tonsils,51.05
-Thyroid,Right colon wall (ascending + right transverse),54.38132127756823
-Thyroid,Left colon wall (left transverse + descending),56.81116200213108
-Thyroid,Rectosigmoid colon wall (sigmoid + rectum),47.96253058074221
-Thyroid,Extrathoracic lymph nodes,31.49
-Thyroid,Alveolar-interstitium,8.243808094561924
-Thyroid,Thoracic lymph nodes,35.32
-Thyroid,Entire lens of eye,0.0
-Thyroid,Pituitary gland,75.51
-Thyroid,Spinal cord,23.07
-Thyroid,Ureters,0.0
-Thyroid,Adipose/residual tissue,2.88585513224386
+Liver,Spinal cord,76.29161114
+Liver,Ureters,99.94998749
+Liver,Adipose/residual tissue,9.050818285439382

@@ -7,83 +7,83 @@
 # Number of target organs: 42
 # End Header
 Source Organ,Target Organ,10 MeV
-Thymus,Red (active) marrow,0.0441640300058181
-Thymus,Colon wall,0.0
-Thymus,RLung + LLung,0.0918923184384425
-Thymus,Stomach wall,1.2280096552995125e-05
-Thymus,Breast-a + Breast-g,0.0018535711222965
-Thymus,ROvary + LOvary,0.0
-Thymus,Urinary bladder wall,0.0
-Thymus,Oesophagus wall,0.2881074680097034
-Thymus,Liver,0.0003693689254614
-Thymus,Thyroid,0.5961040215120622
-Thymus,50-um endosteal region,0.0162973895415667
-Thymus,Brain,4.386650165065656e-06
-Thymus,Salivary glands,4.2931621653691495e-05
-Thymus,Skin,0.0029029033104099
-Thymus,RAdrenal + LAdrenal,1.1888644766171996e-05
-Thymus,ET region,2.15700638994002e-05
-Thymus,Gallbladder wall,0.0
-Thymus,Heart wall,0.1132708609954744
-Thymus,RKidney + LKidney,0.0
-Thymus,Systemic lymph nodes,0.0060416374111126
-Thymus,Muscle,0.0043383152212072
-Thymus,Oral mucosa,0.0
-Thymus,Pancreas,5.0800424867515e-05
-Thymus,Small intestine wall,1.8260237336814465e-05
-Thymus,Spleen,2.286532760032892e-05
-Thymus,Thymus,10.370737631167474
-Thymus,Uterus/cervix,0.0
-Thymus,Tongue,0.0003986618595829
-Thymus,Tonsils,0.0
-Thymus,Right colon wall (ascending + right transverse),0.0
-Thymus,Left colon wall (left transverse + descending),0.0
-Thymus,Rectosigmoid colon wall (sigmoid + rectum),0.0
-Thymus,Extrathoracic lymph nodes,0.0
-Thymus,Alveolar-interstitium,0.0918923184384425
-Thymus,Thoracic lymph nodes,0.3168162307003359
-Thymus,Entire lens of eye,0.0
-Thymus,Pituitary gland,0.0
-Thymus,Spinal cord,0.0
-Thymus,Ureters,0.0
-Thymus,Adipose/residual tissue,0.0114685965178702
-Thyroid,Red (active) marrow,0.0188688242330556
-Thyroid,Colon wall,0.0
-Thyroid,RLung + LLung,0.0088479098053989
-Thyroid,Stomach wall,0.0001464831190161
-Thyroid,Breast-a + Breast-g,0.0004373490027051
-Thyroid,ROvary + LOvary,0.0
-Thyroid,Urinary bladder wall,0.0
-Thyroid,Oesophagus wall,0.8726582889218529
-Thyroid,Liver,0.0002080898249449
-Thyroid,Thyroid,10.354252744645278
-Thyroid,50-um endosteal region,0.0082466482437165
-Thyroid,Brain,0.0002394689497138
-Thyroid,Salivary glands,0.0178157390570035
-Thyroid,Skin,0.0058653505537375
-Thyroid,RAdrenal + LAdrenal,0.0
-Thyroid,ET region,0.0772901636894481
-Thyroid,Gallbladder wall,0.0
-Thyroid,Heart wall,5.103907229370135e-05
-Thyroid,RKidney + LKidney,0.0
-Thyroid,Systemic lymph nodes,0.0124858957953106
-Thyroid,Muscle,0.0117865258332806
-Thyroid,Oral mucosa,0.0365289731520223
-Thyroid,Pancreas,5.621339896535128e-05
-Thyroid,Small intestine wall,1.3855330778026946e-05
-Thyroid,Spleen,0.0004492270404062
-Thyroid,Thymus,0.4740033974306776
-Thyroid,Uterus/cervix,0.0
-Thyroid,Tongue,0.0115987232597547
-Thyroid,Tonsils,0.0
-Thyroid,Right colon wall (ascending + right transverse),0.0
-Thyroid,Left colon wall (left transverse + descending),0.0
-Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0
-Thyroid,Extrathoracic lymph nodes,0.0001164875519586
-Thyroid,Alveolar-interstitium,0.0088479098053989
-Thyroid,Thoracic lymph nodes,0.0328279883340274
-Thyroid,Entire lens of eye,0.0
-Thyroid,Pituitary gland,0.0
-Thyroid,Spinal cord,0.0371885289459312
-Thyroid,Ureters,0.0
-Thyroid,Adipose/residual tissue,0.0107804963017471
+Brain,Red (active) marrow,0.0146718055930626
+Brain,Colon wall,0.0
+Brain,RLung + LLung,0.0002031690525529
+Brain,Stomach wall,1.5332220107278102e-05
+Brain,Breast-a + Breast-g,2.816289018065268e-05
+Brain,ROvary + LOvary,0.0
+Brain,Urinary bladder wall,0.0
+Brain,Oesophagus wall,0.0006281736066474
+Brain,Liver,4.169135329557188e-06
+Brain,Thyroid,0.0017993142184346
+Brain,50-um endosteal region,0.0289383399521258
+Brain,Brain,0.5289263043890158
+Brain,Salivary glands,0.0001810816648768
+Brain,Skin,0.0025995231596106
+Brain,RAdrenal + LAdrenal,0.0
+Brain,ET region,0.0088928006965106
+Brain,Gallbladder wall,0.0
+Brain,Heart wall,0.0
+Brain,RKidney + LKidney,0.0
+Brain,Systemic lymph nodes,0.0
+Brain,Muscle,0.0007686879955541
+Brain,Oral mucosa,0.0014346554405653
+Brain,Pancreas,0.0
+Brain,Small intestine wall,0.0
+Brain,Spleen,0.0
+Brain,Thymus,0.0
+Brain,Uterus/cervix,0.0
+Brain,Tongue,0.0030526680237651
+Brain,Tonsils,0.0
+Brain,Right colon wall (ascending + right transverse),0.0
+Brain,Left colon wall (left transverse + descending),0.0
+Brain,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Brain,Extrathoracic lymph nodes,0.0300914934077131
+Brain,Alveolar-interstitium,0.0002031690525529
+Brain,Thoracic lymph nodes,0.0
+Brain,Entire lens of eye,0.2542289375359007
+Brain,Pituitary gland,0.8310197488500404
+Brain,Spinal cord,0.0
+Brain,Ureters,0.0
+Brain,Adipose/residual tissue,0.0019067856987357
+Liver,Red (active) marrow,0.0090363080782647
+Liver,Colon wall,0.000806806543102
+Liver,RLung + LLung,0.0232741259988054
+Liver,Stomach wall,0.0694584927849472
+Liver,Breast-a + Breast-g,0.0017701350535867
+Liver,ROvary + LOvary,0.0
+Liver,Urinary bladder wall,0.0
+Liver,Oesophagus wall,0.0316263580959908
+Liver,Liver,0.3786832660799108
+Liver,Thyroid,0.0
+Liver,50-um endosteal region,0.0030296533492952
+Liver,Brain,0.0
+Liver,Salivary glands,0.0
+Liver,Skin,0.0018605391883819
+Liver,RAdrenal + LAdrenal,0.1220002555463377
+Liver,ET region,0.0
+Liver,Gallbladder wall,0.3114291226144739
+Liver,Heart wall,0.0288096946307124
+Liver,RKidney + LKidney,0.0428017397046816
+Liver,Systemic lymph nodes,0.0010627109499941
+Liver,Muscle,0.0015462563024067
+Liver,Oral mucosa,0.0
+Liver,Pancreas,0.0849703734975381
+Liver,Small intestine wall,0.0008947878626704
+Liver,Spleen,0.0001525060067128
+Liver,Thymus,0.0003394106206894
+Liver,Uterus/cervix,0.0
+Liver,Tongue,0.0
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),0.0019837594907175
+Liver,Left colon wall (left transverse + descending),1.9355706465909644e-05
+Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Alveolar-interstitium,0.0232741259988054
+Liver,Thoracic lymph nodes,0.0135924884484374
+Liver,Entire lens of eye,0.0
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,2.3403870112864432e-05
+Liver,Ureters,0.0017130367295494
+Liver,Adipose/residual tissue,0.0036790281325281

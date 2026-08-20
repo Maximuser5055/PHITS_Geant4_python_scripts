@@ -28,8 +28,11 @@
 # ============================================================
 # IMPORTS
 # ============================================================
-
 from pathlib import Path
+import sys
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
 import pandas as pd
 
 import b_config.a_config as config
@@ -58,6 +61,10 @@ CALCULATION_KEY = [
     "Target Region Name",
     "Calculation Method",
 ]
+
+# Tolerance for comparing two SAF databases
+NUMERICAL_RTOL = 1e-10
+NUMERICAL_ATOL = 1e-30
 
 # ============================================================
 # HELPER FUNCTIONS
@@ -98,14 +105,14 @@ def get_database_path(simulation_code):
     if simulation_code == "PHITS":
 
         database_path = (
-            config.RESULTS_PHITS_DIR
+            config.RESULTS_SAF_DATABASE_DIR
             / PHITS_DATABASE_NAME
         )
 
     elif simulation_code == "GEANT4":
 
         database_path = (
-            config.RESULTS_GEANT4_DIR
+            config.RESULTS_SAF_DATABASE_DIR
             / GEANT4_DATABASE_NAME
         )
 
@@ -293,45 +300,191 @@ def validate_key_columns(df, label):
             )
         )
 
-def make_calculation_keys(df):
+def records_are_equivalent(
+    current_rows,
+    other_rows,
+    comparison_columns
+):
+    """
+    Determine whether two sets of records are equivalent.
 
-    return (
-        df[
-            CALCULATION_KEY
+    Numeric values are compared using a relative and absolute
+    tolerance to avoid false conflicts caused by floating-point
+    representation differences.
+
+    Non-numeric values must match exactly.
+    """
+
+    current = (
+        current_rows[
+            comparison_columns
         ]
         .drop_duplicates()
         .reset_index(drop=True)
+        .copy()
     )
 
-def find_exact_duplicates(current_database, other_database):
-
-    combined = pd.concat(
-        [
-            current_database,
-            other_database
-        ],
-        ignore_index=True
-    )
-
-    duplicate_mask = (
-        combined.duplicated(
-            keep=False
-        )
-    )
-
-    duplicate_rows = (
-        combined[
-            duplicate_mask
+    other = (
+        other_rows[
+            comparison_columns
         ]
         .drop_duplicates()
+        .reset_index(drop=True)
+        .copy()
     )
 
-    return duplicate_rows
+    # Different number of unique records means they are different.
+    if len(current) != len(other):
+        return False
+
+    if current.empty:
+        return True
+
+    # --------------------------------------------------------
+    # Sort rows so that row ordering does not matter.
+    # --------------------------------------------------------
+
+    current = current.sort_values(
+        by=comparison_columns,
+        kind="stable"
+    ).reset_index(drop=True)
+
+    other = other.sort_values(
+        by=comparison_columns,
+        kind="stable"
+    ).reset_index(drop=True)
+
+    # --------------------------------------------------------
+    # Compare each column.
+    # --------------------------------------------------------
+
+    for column in comparison_columns:
+
+        current_values = current[column]
+        other_values = other[column]
+
+        # ----------------------------------------------------
+        # Numeric columns
+        # ----------------------------------------------------
+
+        if (
+            pd.api.types.is_numeric_dtype(
+                current_values
+            )
+            and
+            pd.api.types.is_numeric_dtype(
+                other_values
+            )
+        ):
+
+            current_numeric = (
+                pd.to_numeric(
+                    current_values,
+                    errors="coerce"
+                )
+                .to_numpy(
+                    dtype=float
+                )
+            )
+
+            other_numeric = (
+                pd.to_numeric(
+                    other_values,
+                    errors="coerce"
+                )
+                .to_numpy(
+                    dtype=float
+                )
+            )
+
+            if not (
+                pd.Series(
+                    current_numeric
+                ).combine(
+                    pd.Series(
+                        other_numeric
+                    ),
+                    lambda current_value,
+                           other_value:
+                        (
+                            pd.isna(
+                                current_value
+                            )
+                            and
+                            pd.isna(
+                                other_value
+                            )
+                        )
+                        or
+                        (
+                            pd.notna(
+                                current_value
+                            )
+                            and
+                            pd.notna(
+                                other_value
+                            )
+                            and
+                            abs(
+                                current_value
+                                - other_value
+                            )
+                            <=
+                            (
+                                NUMERICAL_ATOL
+                                +
+                                NUMERICAL_RTOL
+                                *
+                                max(
+                                    abs(
+                                        current_value
+                                    ),
+                                    abs(
+                                        other_value
+                                    )
+                                )
+                            )
+                        )
+                )
+                .all()
+            ):
+
+                return False
+
+        # ----------------------------------------------------
+        # Non-numeric columns
+        # ----------------------------------------------------
+
+        else:
+
+            current_values = (
+                current_values
+                .fillna("")
+                .astype(str)
+                .to_numpy()
+            )
+
+            other_values = (
+                other_values
+                .fillna("")
+                .astype(str)
+                .to_numpy()
+            )
+
+            if not (
+                current_values
+                ==
+                other_values
+            ).all():
+
+                return False
+
+    return True
 
 def find_conflicting_calculations(current_database, other_database):
 
     # --------------------------------------------------------
-    # Identify calculations appearing in both databases
+    # Identify calculations appearing in both databases.
     # --------------------------------------------------------
 
     current_keys = (
@@ -356,26 +509,15 @@ def find_conflicting_calculations(current_database, other_database):
 
     if common_keys.empty:
 
-        return pd.DataFrame()
+        return pd.DataFrame(
+            columns=CALCULATION_KEY
+        )
 
     # --------------------------------------------------------
-    # Merge the two databases using the calculation key
-    # --------------------------------------------------------
-
-    current_common = current_database.merge(
-        common_keys,
-        on=CALCULATION_KEY,
-        how="inner"
-    )
-
-    other_common = other_database.merge(
-        common_keys,
-        on=CALCULATION_KEY,
-        how="inner"
-    )
-
-    # --------------------------------------------------------
-    # Compare all columns other than the calculation key
+    # Columns to compare.
+    #
+    # The calculation key identifies the calculation.
+    # Everything else is checked for consistency.
     # --------------------------------------------------------
 
     comparison_columns = [
@@ -386,137 +528,55 @@ def find_conflicting_calculations(current_database, other_database):
 
     conflicts = []
 
+    # --------------------------------------------------------
+    # Compare each common calculation.
+    # --------------------------------------------------------
+
     for _, key in common_keys.iterrows():
 
-        current_rows = current_common[
-            (
-                current_common[
-                    "Phantom"
-                ]
-                == key["Phantom"]
-            )
-            &
-            (
-                current_common[
-                    "Source Organ ID"
-                ]
-                == key["Source Organ ID"]
-            )
-            &
-            (
-                current_common[
-                    "Source Type"
-                ]
-                == key["Source Type"]
-            )
-            &
-            (
-                current_common[
-                    "Source Energy (MeV)"
-                ]
-                == key[
-                    "Source Energy (MeV)"
-                ]
-            )
-            &
-            (
-                current_common[
-                    "Target Region Name"
-                ]
-                == key[
-                    "Target Region Name"
-                ]
-            )
-            &
-            (
-                current_common[
-                    "Calculation Method"
-                ]
-                == key[
-                    "Calculation Method"
-                ]
-            )
-        ]
-
-        other_rows = other_common[
-            (
-                other_common[
-                    "Phantom"
-                ]
-                == key["Phantom"]
-            )
-            &
-            (
-                other_common[
-                    "Source Organ ID"
-                ]
-                == key["Source Organ ID"]
-            )
-            &
-            (
-                other_common[
-                    "Source Type"
-                ]
-                == key["Source Type"]
-            )
-            &
-            (
-                other_common[
-                    "Source Energy (MeV)"
-                ]
-                == key[
-                    "Source Energy (MeV)"
-                ]
-            )
-            &
-            (
-                other_common[
-                    "Target Region Name"
-                ]
-                == key[
-                    "Target Region Name"
-                ]
-            )
-            &
-            (
-                other_common[
-                    "Calculation Method"
-                ]
-                == key[
-                    "Calculation Method"
-                ]
-            )
-        ]
-
-        # ----------------------------------------------------
-        # Compare rows
-        # ----------------------------------------------------
-
-        current_records = (
-            current_rows[
-                comparison_columns
-            ]
-            .drop_duplicates()
-            .to_dict(
-                "records"
-            )
+        current_mask = pd.Series(
+            True,
+            index=current_database.index
         )
 
-        other_records = (
-            other_rows[
-                comparison_columns
-            ]
-            .drop_duplicates()
-            .to_dict(
-                "records"
-            )
+        other_mask = pd.Series(
+            True,
+            index=other_database.index
         )
 
-        if current_records != other_records:
+        for column in CALCULATION_KEY:
+
+            current_mask &= (
+                current_database[column]
+                == key[column]
+            )
+
+            other_mask &= (
+                other_database[column]
+                == key[column]
+            )
+
+        current_rows = (
+            current_database[
+                current_mask
+            ]
+        )
+
+        other_rows = (
+            other_database[
+                other_mask
+            ]
+        )
+
+        if not records_are_equivalent(
+            current_rows,
+            other_rows,
+            comparison_columns
+        ):
 
             conflicts.append(
                 {
-                    **key.to_dict(),
+                    **key.to_dict()
                 }
             )
 
@@ -879,15 +939,17 @@ def concatenate_master_saf_databases():
 
     while True:
 
-        other_path_input = input(
-            "Other database path: "
-        ).strip()
+        other_path_input = (
+            input("Other database path: ")
+            .strip()
+            .strip('"')
+            .strip("'")
+            .replace("\\", "/")
+        )
 
         if not other_path_input:
 
-            print(
-                "\nA database path is required."
-            )
+            print("\nA database path is required.")
 
             continue
 
@@ -971,19 +1033,25 @@ def concatenate_master_saf_databases():
     )
 
     # ========================================================
-    # FIND EXACT DUPLICATES
+    # CLASSIFY OTHER DATABASE ROWS
     # ========================================================
 
-    exact_duplicates = (
-        find_exact_duplicate_rows(
-            current_database,
-            other_database
-        )
+    # --------------------------------------------------------
+    # New calculations:
+    # The calculation key does not exist in the current
+    # database.
+    # --------------------------------------------------------
+
+    new_rows = find_new_rows(
+        current_database,
+        other_database
     )
 
-    # ========================================================
-    # FIND CONFLICTS
-    # ========================================================
+    # --------------------------------------------------------
+    # Conflicting calculations:
+    # The calculation key exists in both databases, but the
+    # associated values/metadata are meaningfully different.
+    # --------------------------------------------------------
 
     conflicts = (
         find_conflicting_calculations(
@@ -992,14 +1060,61 @@ def concatenate_master_saf_databases():
         )
     )
 
-    # ========================================================
-    # FIND NEW CALCULATIONS
-    # ========================================================
+    # --------------------------------------------------------
+    # Equivalent calculations:
+    # The calculation key exists in both databases and the
+    # records are numerically/textually equivalent within the
+    # defined tolerance.
+    # --------------------------------------------------------
 
-    new_rows = find_new_rows(
-        current_database,
-        other_database
+    new_calculation_keys = set(
+        new_rows[
+            CALCULATION_KEY
+        ]
+        .apply(
+            tuple,
+            axis=1
+        )
     )
+
+    conflict_keys = set(
+        conflicts[
+            CALCULATION_KEY
+        ]
+        .apply(
+            tuple,
+            axis=1
+        )
+    )
+
+    other_keys = set(
+        other_database[
+            CALCULATION_KEY
+        ]
+        .apply(
+            tuple,
+            axis=1
+        )
+    )
+
+    duplicate_calculation_keys = (
+        other_keys
+        - new_calculation_keys
+        - conflict_keys
+    )
+
+    equivalent_rows = other_database[
+        other_database[
+            CALCULATION_KEY
+        ]
+        .apply(
+            tuple,
+            axis=1
+        )
+        .isin(
+            duplicate_calculation_keys
+        )
+    ].copy()
 
     # ========================================================
     # DISPLAY SUMMARY
@@ -1027,8 +1142,8 @@ def concatenate_master_saf_databases():
     )
 
     print(
-        f"Exact duplicate rows  : "
-        f"{len(exact_duplicates)}"
+        f"Equivalent calculation rows: "
+        f"{len(equivalent_rows)}"
     )
 
     print(
@@ -1081,6 +1196,60 @@ def concatenate_master_saf_databases():
     )
 
     # ========================================================
+    # REMOVE EQUIVALENT RESULTS FROM OTHER DATABASE
+    #
+    # Equivalent calculations already exist in the current
+    # database. They must NOT be concatenated again.
+    #
+    # This uses the same calculation-key classification that
+    # produced "Equivalent calculation rows" above.
+    # ========================================================
+
+    equivalent_keys = set(
+        equivalent_rows[
+            CALCULATION_KEY
+        ]
+        .apply(
+            tuple,
+            axis=1
+        )
+    )
+
+    if equivalent_keys:
+
+        other_keys_for_merge = (
+            other_for_merge[
+                CALCULATION_KEY
+            ]
+            .apply(
+                tuple,
+                axis=1
+            )
+        )
+
+        equivalent_mask = (
+            other_keys_for_merge
+            .isin(
+                equivalent_keys
+            )
+        )
+
+        equivalent_rows_removed = int(
+            equivalent_mask.sum()
+        )
+
+        other_for_merge = (
+            other_for_merge[
+                ~equivalent_mask
+            ]
+            .copy()
+        )
+
+    else:
+
+        equivalent_rows_removed = 0
+
+    # ========================================================
     # CONCATENATE
     # ========================================================
 
@@ -1098,6 +1267,9 @@ def concatenate_master_saf_databases():
 
     # ========================================================
     # REMOVE EXACT DUPLICATES
+    #
+    # This is now only a final safety check.
+    # Equivalent rows have already been removed above.
     # ========================================================
 
     combined_database = (
@@ -1168,7 +1340,12 @@ def concatenate_master_saf_databases():
     )
 
     print(
-        f"Exact duplicates removed    : "
+        f"Equivalent rows removed     : "
+        f"{equivalent_rows_removed}"
+    )
+
+    print(
+        f"Exact duplicate rows removed: "
         f"{exact_duplicates_removed}"
     )
 
@@ -1316,70 +1493,7 @@ def concatenate_master_saf_databases():
         f"    {len(combined_database)}"
     )
 
-    # ========================================================
-    # ASK WHETHER TO GENERATE PUBLISHABLE DATABASE
-    # ========================================================
-
     print()
-
-    print(
-        "The master SAF database has now been "
-        "successfully updated."
-    )
-
-    print()
-
-    while True:
-
-        choice = input(
-            "Generate the publishable SAF database "
-            "from the merged master database? [Y/n]: "
-        ).strip().lower()
-
-        if choice in {
-            "",
-            "y",
-            "yes"
-        }:
-
-            generate_publishable_database(
-                simulation_code
-            )
-
-            break
-
-        if choice in {
-            "n",
-            "no"
-        }:
-
-            print(
-                "\nPublishable database generation "
-                "skipped."
-            )
-
-            break
-
-        print(
-            "Please enter y or n."
-        )
-
-
-# ============================================================
-# GENERATE PUBLISHABLE DATABASE
-# ============================================================
-
-def generate_publishable_database(
-    simulation_code
-):
-
-    print()
-
-    print_separator()
-    print(
-        "GENERATING PUBLISHABLE SAF DATABASE"
-    )
-    print_separator()
 
     try:
 
@@ -1387,46 +1501,11 @@ def generate_publishable_database(
             create_publishable_saf_database
         )
 
-    except Exception as error:
-
-        print()
-
-        print(
-            "Could not import the publishable "
-            "database function."
-        )
-
-        print(
-            f"\nError:"
-            f"\n    {error}"
-        )
-
-        print()
-
-        print(
-            "The master SAF database was updated "
-            "successfully."
-        )
-
-        return
-
-    # --------------------------------------------------------
-    # Minimal params required by the publishable database
-    # function.
-    #
-    # If your existing function needs additional parameters,
-    # add them here.
-    # --------------------------------------------------------
-
-    params = {
-        "simulation_code":
-            simulation_code,
-    }
-
-    try:
-
         create_publishable_saf_database(
-            params
+            {
+                "simulation_code":
+                    simulation_code
+            }
         )
 
     except Exception as error:
@@ -1443,16 +1522,6 @@ def generate_publishable_database(
             f"\nError:"
             f"\n    {error}"
         )
-
-        return
-
-    print()
-
-    print(
-        "Publishable SAF database generation "
-        "completed."
-    )
-
 
 # ============================================================
 # MAIN

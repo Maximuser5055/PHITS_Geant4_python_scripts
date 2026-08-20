@@ -1,8 +1,8 @@
-$OMP=32
+$OMP=8
 
 # ----------------------------------------------------------------------------
 #    name               : MRCP PHANTOM                                        
-#    sex                : MALE                                              
+#    sex                : FEMALE                                              
 #    author             : HUREL
 # ----------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ $OMP=32
  ntetelem =        2000     # Number of tetra element allowed in sub-block
  maxbnk   =     1000000     # (D=10000) maximum bank memory length
  itetra   =           0     # (D=0) tetra data is read(=1)/write(=2) on binary
- file(6)  = phits_MRCP_AM_source_Brain_electron_energy_10.0.out # (D=phits.out) general output file name
+ file(6)  = phits_MRCP_AF_source_Liver_photon_energy_10.0.out # (D=phits.out) general output file name
  file(1)  = /home/clarence/Software/phits/phits # PHITS installation folder name
  negs     =           1     # (D=-1) 1:EGS
  ipegs    =           0     # [EGS](D=0) 0:Full
@@ -22,8 +22,8 @@ $OMP=32
 [ Source ]
   totfact =    1.00         # (D=1.0) global factor
    s-type =    24            # rectangular-solid source
-     proj = electron        # kind of incident particle 
-   tetreg = 6100          # Liver as source
+     proj = photon        # kind of incident particle 
+   tetreg = 9500          # Liver as source
        e0 = 10.0         # energy of beam [MeV/u]
       dir =   all           # z-direction of beam [isotropic]
 
@@ -31,7 +31,7 @@ $OMP=32
 $ ----------------------------------------------------------------------------
 $ MATERIAL DATA FOR EACH ORGAN/TISSUE
 $ ----------------------------------------------------------------------------
-infl:{../phantoms/MRCP-AM.material}
+infl:{../phantoms/MRCP-AF.material}
 
 [ Surface ]
   10  rpp -37.8854 37.8854 -24.56301 24.56301 -98.00236 98.00236  $ Phantom box
@@ -42,19 +42,19 @@ infl:{../phantoms/MRCP-AM.material}
 $ ----------------------------------------------------------------------------
 $ CELLS FOR PHANTOM
 $ ----------------------------------------------------------------------------
-infl:{../phantoms/MRCP-AM.cell}
+infl:{../phantoms/MRCP-AF.cell}
 
 [ T-deposit ]
 # Deposit energy in a certain region.
- file   = phits_deposit_MRCP_AM_source_Brain_electron_energy_10.0.out # file name of output for the axis
+ file   = phits_deposit_MRCP_AF_source_Liver_photon_energy_10.0.out # file name of output for the axis
  mesh   = reg               # mesh type is region-wise
  reg    = all               # all regions become tallying region
  axis   = reg               # axis of output
  unit   = 0                 # unit is [Gy/source]
 
-[T-Track] off
+[T-Track] 
 # Count fluence in a certain region.
-file   = phits_fluence_MRCP_AM_source_Brain_electron_energy_10.0.out
+file   = phits_fluence_MRCP_AF_source_Liver_photon_energy_10.0.out
 mesh   = reg
 reg    = 1400 1500 1700 1800 2000 2100 2300 2500 2700 2900 3000 3200 3300 3500 3600 3800 4000 4200 4400 4600 4800 5000 5200 5400 5600
 axis   = eng    # energy-based spectrum

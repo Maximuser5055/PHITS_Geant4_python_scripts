@@ -642,6 +642,38 @@ def write_publishable_csv(
 
 def create_publishable_saf_database(params):
 
+    print()
+    print("=" * 90)
+    print("PUBLISHABLE SAF DATABASE")
+    print("=" * 90)
+
+    while True:
+
+        choice = input(
+            "\nGenerate the publishable SAF database? [Y/n]: "
+        ).strip().lower()
+
+        if choice in {
+            "",
+            "y",
+            "yes"
+        }:
+            break
+
+        if choice in {
+            "n",
+            "no"
+        }:
+            print(
+                "\nPublishable SAF database generation "
+                "skipped."
+            )
+            return []
+
+        print(
+            "Please enter y or n."
+        )
+
     simulation_code = (
         params[
             "simulation_code"
