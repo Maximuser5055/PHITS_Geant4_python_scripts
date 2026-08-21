@@ -12,6 +12,7 @@ import b_config.a_config as config
 # DATABASE FILES AND CONFIGS
 # ============================================================
 
+# Output files
 PHITS_DATABASE_FILE = config.RESULTS_SAF_DATABASE_DIR / "a_phits_all_safs_and_uncertainties.csv"
 GEANT4_DATABASE_FILE = config.RESULTS_SAF_DATABASE_DIR / "b_geant4_all_safs_and_uncertainties.csv"
 
@@ -57,12 +58,12 @@ def find_current_result_files(simulation_code):
     if simulation_code == "PHITS":
 
         root = config.RESULTS_PHITS_DIR
-        pattern = "*_target_regions_dose_SAFs_*.csv"
+        pattern = "*_phits_*_target_regions_dose_SAFs.csv"
 
     elif simulation_code == "GEANT4":
 
         root = config.RESULTS_GEANT4_DIR
-        pattern = "*_target_regions_dose_SAFs_*.csv"
+        pattern = "*_geant4_*_target_regions_dose_SAFs.csv"
 
     else:
 
