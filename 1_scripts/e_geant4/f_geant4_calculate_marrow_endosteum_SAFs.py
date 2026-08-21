@@ -61,14 +61,15 @@ fluence_to_dose_response_functions = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
 phantom_names = config.PHANTOM_NAMES
 geant4_source_type_map = config.GEANT4_SOURCE_TYPE_MAP
 geant4_results_dir = config.RESULTS_GEANT4_DIR
-geant4_output_fluence = "e_geant4_rbm_endosteum_icrp116.csv"
+geant4_mrcp_output_file = "e_geant4_MRCP_rbm_endosteum_icrp116.csv"
+geant4_mfcp_output_file = "f_geant4_MFCP_rbm_endosteum_icrp116.csv"
 
 # ============================================================
 # GEANT4 PHOTON-FLUENCE FILENAME PATTERN
 # ============================================================
 
 fluence_filename_pattern = re.compile(
-    r"geant4_deposit_MRCP_"
+    r"geant4_deposit_(MRCP|MFCP)_"
     r"(AM|AF)_source_"
     r"(.+?)_"
     r"(gamma|e-)_energy_"
@@ -127,7 +128,7 @@ def find_fluence_files():
 
     root = geant4_generated_inputs_dir
 
-    return sorted(root.rglob("*_gamma_energy_*_photon_fluence.csv"))
+    return sorted(root.rglob("geant4_deposit_*_gamma_energy_*_photon_fluence.csv"))
 
 # ============================================================
 # LOAD ICRP 116 RESPONSE FUNCTIONS
@@ -397,17 +398,20 @@ def calculate_from_fluence(
     # SELECT MASS COLUMNS
     # ========================================================
 
-    if phantom_code == "AM":
+    sex = phantom_code.split("_")[-1]
 
-        marrow_column = ("Ref_AM_Marrow_Mass(g)")
-        endosteum_column = ("Ref_AM_Endosteum_Mass(g)")
+    if sex == "AM":
 
-    elif phantom_code == "AF":
+        marrow_column = "Ref_AM_Marrow_Mass(g)"
+        endosteum_column = "Ref_AM_Endosteum_Mass(g)"
 
-        marrow_column = ("Ref_AF_Marrow_Mass(g)")
-        endosteum_column = ("Ref_AF_Endosteum_Mass(g)")
+    elif sex == "AF":
+
+        marrow_column = "Ref_AF_Marrow_Mass(g)"
+        endosteum_column = "Ref_AF_Endosteum_Mass(g)"
 
     else:
+
         raise ValueError(f"Unsupported phantom code: {phantom_code}")
 
     # ========================================================
@@ -1091,13 +1095,41 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
     }
 
     # ========================================================
+    # SELECT PHANTOM FAMILY
+    # ========================================================
+
+    phantom_selection = params["phantom"]
+
+    if phantom_selection.startswith("MRCP"):
+
+        phantom_family = "MRCP"
+        selected_phantoms = [phantom_names["MRCP_AM"],
+                             phantom_names["MRCP_AF"],]
+        output_file = geant4_results_dir / geant4_mrcp_output_file
+
+    elif phantom_selection.startswith("MFCP"):
+
+        phantom_family = "MFCP"
+        selected_phantoms = [phantom_names["MFCP_AM"],
+                             phantom_names["MFCP_AF"],]
+        output_file = geant4_results_dir / geant4_mfcp_output_file
+    else:
+
+        raise ValueError(f"Unknown phantom selection: {phantom_selection}")
+    
+    # ========================================================
     # FIND FLUENCE FILES
     # ========================================================
 
     fluence_files = [
-        f for f in find_fluence_files()
-        if any(
-            f"energy_{energy}_photon_fluence.csv" in f.name
+        f
+        for f in find_fluence_files()
+        if f.name.upper().startswith(
+            f"GEANT4_DEPOSIT_{phantom_family}_"
+        )
+        and any(
+            f"energy_{energy}_photon_fluence.csv"
+            in f.name
             for energy in params["source_energies"]
         )
     ]
@@ -1138,13 +1170,14 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
 
             continue
 
-        phantom_code = (match.group(1))
+        phantom_code = (f"{match.group(1).upper()}_"
+                        f"{match.group(2).upper()}")
 
-        source_organ = (match.group(2))
+        source_organ = (match.group(3))
 
-        geant4_source_type = (match.group(3).lower())
+        geant4_source_type = (match.group(4).lower())
 
-        source_energy = float(match.group(4))
+        source_energy = float(match.group(5))
 
         # ----------------------------------------------------
         # Convert Geant4 particle syntax
@@ -1270,7 +1303,7 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         ] = np.nan
 
     # ========================================================
-    # MATCH PHITS CSV COLUMN ORDER
+    # COLUMN ORDER
     # ========================================================
 
     column_order = [
@@ -1317,25 +1350,20 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
     combined_results = combined_results[column_order]
 
     # ========================================================
-    # OUTPUT FILE
+    # KEEP ONLY SELECTED PHANTOM FAMILY
     # ========================================================
 
-    if (params["simulation_code"]== "GEANT4"):
-        output_filename = geant4_output_fluence
-
-    else:
-
-        raise ValueError(
-            "Unsupported simulation code: "
-            f"{params['simulation_code']}"
+    family_results = combined_results[
+        combined_results["Phantom"].isin(
+            selected_phantoms
         )
+    ].copy()
 
-    output_file = (geant4_results_dir / output_filename)
+    # ========================================================
+    # SAVE SELECTED PHANTOM FAMILY
+    # ========================================================
 
-    combined_results.to_csv(
-        output_file,
-        index=False
-    )
+    family_results.to_csv(output_file, index=False)
 
     # ========================================================
     # Final Print
@@ -1350,13 +1378,13 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
     print("=" * 90)
 
     print(
-        f"Total result rows : "
-        f"{len(combined_results)}"
+        f"{phantom_family} result rows : "
+        f"{len(family_results)}"
     )
 
     print(
-        f"Results saved to:\n"
+        f"{phantom_family} results saved to:\n"
         f"{output_file}"
     )
 
-    return combined_results
+    return family_results

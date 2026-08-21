@@ -583,7 +583,7 @@ def run_geant4(params):
         # AF phantom flag
         # ------------------------------------------------------
 
-        if phantom == "AF":
+        if phantom.endswith("_AF"):
 
             cmd += " -f"
 

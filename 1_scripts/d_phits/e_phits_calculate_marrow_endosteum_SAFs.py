@@ -1762,11 +1762,6 @@ def phits_calculate_marrow_endosteum_SAFs(
     print("=" * 90)
 
     print(
-        f"Total result rows : "
-        f"{len(combined_results)}"
-    )
-
-    print(
         f"{phantom_family} result rows : "
         f"{len(family_results)}"
     )
@@ -1778,4 +1773,4 @@ def phits_calculate_marrow_endosteum_SAFs(
         f"{output_file}"
     )
 
-    return combined_results
+    return family_results

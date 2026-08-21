@@ -36,7 +36,7 @@ def geant4_extract_metadata_stats():
     }
 
     filename_pattern = re.compile(
-        r"geant4_MRCP_(AM|AF)_source_(.+?)_(.+?)_energy_([0-9Ee.+-]+)\.in",
+        r"geant4_(MRCP|MFCP)_(AM|AF)_source_(.+?)_(.+?)_energy_([0-9Ee.+-]+)\.in",
         re.IGNORECASE
     )
 
@@ -100,10 +100,13 @@ def geant4_extract_metadata_stats():
                 f"Cannot parse filename:\n{input_files.name}"
             )
 
-        phantom = phantom_names[match.group(1)]
-        source_organ = match.group(2)
-        source_type = match.group(3)
-        source_energy = float(match.group(4))
+        phantom_code = (f"{match.group(1).upper()}_"
+                        f"{match.group(2).upper()}")
+        phantom = phantom_names[phantom_code]
+        
+        source_organ = match.group(3)
+        source_type = match.group(4)
+        source_energy = float(match.group(5))
 
         results["phantom"] = phantom
         results["source_organ"] = source_organ
