@@ -1,5 +1,5 @@
 Starting Datetime,Termination Datetime,Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Setup Time (s),Execution Time (s),Individual Wall Time (s)
-2026-08-20T17:14:46,2026-08-20T17:15:55,Adult Female,Brain,gamma,10.0,MT-8,1000,1,9.38808,59.6061,68.9942
-,,Adult Female,Liver,gamma,10.0,MT-8,1000,1,,,
-2026-08-20T17:14:46,2026-08-20T17:15:58,Adult Male,Brain,gamma,10.0,MT-8,1000,1,8.89247,62.9557,71.8482
-2026-08-20T17:14:46,2026-08-20T17:15:59,Adult Male,Liver,gamma,10.0,MT-8,1000,1,8.93216,63.5384,72.4706
+2026-08-21T17:09:56,2026-08-21T17:11:00,ICRP 145 Adult Female,Brain,gamma,10.0,MT-32,1000,1,9.079,55.104,64.1831
+2026-08-21T17:11:03,2026-08-21T17:12:07,ICRP 145 Adult Female,Liver,gamma,10.0,MT-32,1000,1,8.60134,54.7746,63.376
+2026-08-21T17:12:10,2026-08-21T17:13:17,ICRP 145 Adult Male,Brain,gamma,10.0,MT-32,1000,1,8.08804,59.1469,67.2349
+2026-08-21T17:13:21,2026-08-21T17:14:27,ICRP 145 Adult Male,Liver,gamma,10.0,MT-32,1000,1,7.7705,58.4342,66.2047

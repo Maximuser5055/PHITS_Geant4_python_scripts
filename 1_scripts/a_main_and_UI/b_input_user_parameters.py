@@ -237,9 +237,13 @@ def get_user_parameters():
         print("[5] Both MRCP phantoms (AF + AM)")
         print("[6] Both MFCP phantoms (AF + AM)")
 
+        current_phantom_display = config.PHANTOM_DISPLAY_NAMES.get(
+            config.PHANTOM_INPUT_GENERATION,
+            config.PHANTOM_INPUT_GENERATION)
+        
         choice = input(
             f"Select phantom input generation "
-            f"[Current = {config.PHANTOM_INPUT_GENERATION}]: "
+            f"[Current = {current_phantom_display}]: "
         ).strip()
 
 

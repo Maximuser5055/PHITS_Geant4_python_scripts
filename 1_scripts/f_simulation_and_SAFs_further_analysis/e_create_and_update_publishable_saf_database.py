@@ -118,21 +118,6 @@ REQUIRED_COLUMNS = [
     "Calculation Method",
 ]
 
-
-# ============================================================
-# PHANTOM DISPLAY NAMES
-# ============================================================
-
-PHANTOM_NAMES = {
-
-    "Adult Female":
-        "Adult Female Reference Computational Phantom",
-
-    "Adult Male":
-        "Adult Male Reference Computational Phantom",
-}
-
-
 # ============================================================
 # SOURCE TYPE DISPLAY NAMES
 # ============================================================
@@ -152,20 +137,17 @@ SOURCE_TYPE_NAMES = {
         "electrons",
 }
 
-
 # ============================================================
 # FILE NAME COMPONENTS
 # ============================================================
 
 PHANTOM_FILE_NAMES = {
+    "MRCP_AF": "mrcp_af",
+    "MRCP_AM": "mrcp_am",
 
-    "Adult Female":
-        "adult_female",
-
-    "Adult Male":
-        "adult_male",
+    "MFCP_AF": "mfcp_af",
+    "MFCP_AM": "mfcp_am",
 }
-
 
 SOURCE_TYPE_FILE_NAMES = {
 
@@ -576,10 +558,7 @@ def write_publishable_csv(
     document_name,
 ):
 
-    phantom_name = PHANTOM_NAMES.get(
-        phantom,
-        phantom
-    )
+    phantom_name = phantom
 
     source_type_name = SOURCE_TYPE_NAMES.get(
         source_type,
@@ -858,17 +837,13 @@ def create_publishable_saf_database(params):
                 "Statistical Uncertainty (%)"
             )
 
-            phantom_filename = (
-                PHANTOM_FILE_NAMES[
-                    phantom
-                ]
-            )
+            phantom_code = next(code
+                for code, name in config.PHANTOM_NAMES.items()
+                if name == phantom)
+            
+            phantom_filename = (PHANTOM_FILE_NAMES[phantom_code])
 
-            source_filename = (
-                SOURCE_TYPE_FILE_NAMES[
-                    source_type
-                ]
-            )
+            source_filename = (SOURCE_TYPE_FILE_NAMES[source_type])
 
             # ------------------------------------------------
             # SAF filename

@@ -147,7 +147,7 @@ GEANT4_RERUN_CSV_FILE = RESULTS_GEANT4_DIR / "h_geant4_rerun_required.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "PHITS"
+SIMULATION_CODE = "GEANT4"
 
 ############################
 # PHITS Settings
@@ -237,13 +237,22 @@ GEANT4_SOURCE_TYPE_MAP = {
 # General Settings
 ############################
 
+PHANTOM_DISPLAY_NAMES = {
+    "MRCP_AF": "MRCP AF (Adult Female)",
+    "MRCP_AM": "MRCP AM (Adult Male)",
+    "MRCP_AF_AM": "Both MRCP phantoms (AF + AM)",
+    "MFCP_AF": "MFCP AF",
+    "MFCP_AM": "MFCP AM",
+    "MFCP_AF_AM": "Both MFCP phantoms (AF + AM)",
+}
+
 MEV_TO_J = 1.6021766339999e-13
 
-THREADS = 8
+THREADS = 32
 
 SOURCE_ENERGIES = [10.0]
 
-SELECTED_SOURCE_TYPE = "photon"
+SELECTED_SOURCE_TYPE = "gamma"
 
 FLUENCE_SOURCE_TYPES = [
     "photon",

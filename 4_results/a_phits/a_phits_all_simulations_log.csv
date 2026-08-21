@@ -1,3 +1,0 @@
-Starting Datetime,Termination Datetime,Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch,Setup Time (s),Execution Time (s),Individual Wall Time (s)
-2026-08-21T00:08:29,2026-08-21T00:11:39,ICRP 145 Adult Female,Liver,photon,10.0,OMP-8,1000,10,184.732,61.338,246.07
-2026-08-21T00:08:29,2026-08-21T00:11:32,ICRP 145 Adult Male,Liver,photon,10.0,OMP-8,1000,10,179.928,49.672,229.6

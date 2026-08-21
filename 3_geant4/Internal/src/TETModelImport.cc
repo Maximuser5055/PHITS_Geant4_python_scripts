@@ -47,8 +47,8 @@ TETModelImport::TETModelImport(G4bool isAF, G4UIExecutive* ui)
 	}
 
 	// set phantom name
-	if(!isAF) phantomName = "MRCP_AM";
-	else          phantomName = "MRCP_AF";
+if(!isAF) phantomName = "MRCP_AM";
+else      phantomName = "MRCP_AF";
 
 	G4cout << "================================================================================"<<G4endl;
 	G4cout << "\t" << phantomName << " was implemented in this CODE!!   "<< G4endl;

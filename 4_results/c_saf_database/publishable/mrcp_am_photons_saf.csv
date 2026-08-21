@@ -1,0 +1,89 @@
+# Header
+# Document: Specific Absorbed Fractions (kg^-1)
+# Phantom type: ICRP 145 Adult Male
+# Source type: photons
+# Number of source energies: 1
+# Number of source organs: 2
+# Number of target organs: 42
+# End Header
+Source Organ,Target Organ,10 MeV
+Brain,Red (active) marrow,0.0028601451404661
+Brain,Colon wall,1.3568934939617323e-06
+Brain,RLung + LLung,0.0004254785267005
+Brain,Stomach wall,0.0002249299199689
+Brain,Breast-a + Breast-g,0.0
+Brain,Testes,0.0
+Brain,Urinary bladder wall,0.0
+Brain,Oesophagus wall,8.193244992031102e-05
+Brain,Liver,0.0017036800294517
+Brain,Thyroid,0.0
+Brain,50-um endosteal region,0.0047203778867726
+Brain,Brain,0.0377506727451149
+Brain,Salivary glands,0.0032616065470789
+Brain,Skin,0.0010121392245935
+Brain,RAdrenal + LAdrenal,0.0
+Brain,ET region,0.0
+Brain,Gallbladder wall,0.0029115800274492
+Brain,Heart wall,0.0009481523670753
+Brain,RKidney + LKidney,0.0
+Brain,Systemic lymph nodes,0.0013746210855424
+Brain,Muscle,0.0005880222037653
+Brain,Oral mucosa,0.0
+Brain,Pancreas,2.9079317268337413e-05
+Brain,Prostate,0.0
+Brain,Small intestine wall,0.0005008412137904
+Brain,Spleen,0.001104447513744
+Brain,Thymus,0.0
+Brain,Tongue,7.656812269671945e-05
+Brain,Tonsils,0.0622878817991838
+Brain,Right colon wall (ascending + right transverse),0.0
+Brain,Left colon wall (left transverse + descending),3.346917295631861e-06
+Brain,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Brain,Extrathoracic lymph nodes,0.0070304011498901
+Brain,Alveolar-interstitium,0.0004254785267005
+Brain,Thoracic lymph nodes,0.0
+Brain,Entire lens of eye,0.0
+Brain,Pituitary gland,0.0
+Brain,Spinal cord,0.0
+Brain,Ureters,0.0
+Brain,Adipose/residual tissue,0.0007667853639293
+Liver,Red (active) marrow,0.0036671429681077
+Liver,Colon wall,0.0040895884425523
+Liver,RLung + LLung,0.0042330948174091
+Liver,Stomach wall,0.0114319634146734
+Liver,Breast-a + Breast-g,0.0123908720372569
+Liver,Testes,0.0
+Liver,Urinary bladder wall,0.0029916254757093
+Liver,Oesophagus wall,0.0044317348828194
+Liver,Liver,0.0269674511306115
+Liver,Thyroid,6.350423158150135e-05
+Liver,50-um endosteal region,0.0014686246659348
+Liver,Brain,2.2891983756144507e-05
+Liver,Salivary glands,0.0
+Liver,Skin,0.0010218569886981
+Liver,RAdrenal + LAdrenal,0.0410860028718416
+Liver,ET region,0.0
+Liver,Gallbladder wall,0.0232385330243196
+Liver,Heart wall,0.0132091787140626
+Liver,RKidney + LKidney,0.004860572813376
+Liver,Systemic lymph nodes,0.0046801758639064
+Liver,Muscle,0.0013451858218148
+Liver,Oral mucosa,0.0
+Liver,Pancreas,0.0055255000360968
+Liver,Prostate,0.0
+Liver,Small intestine wall,0.0044493640694008
+Liver,Spleen,0.0027197420044263
+Liver,Thymus,0.0
+Liver,Tongue,0.0004995206265514
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),0.0038347405093366
+Liver,Left colon wall (left transverse + descending),0.0055565567342009
+Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0014918324030031
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Alveolar-interstitium,0.0042330948174091
+Liver,Thoracic lymph nodes,0.0208541421095285
+Liver,Entire lens of eye,0.0
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,0.003217387291519
+Liver,Ureters,0.0
+Liver,Adipose/residual tissue,0.0023188730069279
