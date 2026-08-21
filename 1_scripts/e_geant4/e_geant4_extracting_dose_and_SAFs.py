@@ -11,10 +11,11 @@ from c_database.b_organ_database import ORGANS
 def geant4_calculate_dose_and_SAFs(params):
 
     # -------------------------------------------------------------
-    # Constants
+    # Constants and configs
     # -------------------------------------------------------------
 
     MeV_to_J = config.MEV_TO_J
+    phantom_names = config.PHANTOM_NAMES
 
     # -------------------------------------------------------------
     # Directories and Configs
@@ -29,11 +30,11 @@ def geant4_calculate_dose_and_SAFs(params):
     # File names
     # -------------------------------------------------------------
 
-    geant4_am_file = "c_geant4_all_dose_and_SAFs_AM.csv"
-    geant4_af_file = "d_geant4_all_dose_and_SAFs_AF.csv"
+    geant4_mrcp_file = "c_geant4_MRCP_dose_and_SAFs.csv"
+    geant4_mfcp_file = "d_geant4_MFCP_dose_and_SAFs.csv"
 
     filename_pattern = re.compile(
-        r"geant4_deposit_MRCP_"
+        r"geant4_deposit_(MRCP|MFCP)_"
         r"(AM|AF)_source_"
         r"(.+?)_"
         r"(.+?)_energy_"
@@ -41,9 +42,36 @@ def geant4_calculate_dose_and_SAFs(params):
         re.IGNORECASE
     )
 
+    # -------------------------------------------------------------------------
+    # Determine selected phantom family
+    # -------------------------------------------------------------------------
+
+    phantom_selection = params["phantom"]
+
+    if phantom_selection.startswith("MRCP"):
+
+        phantom_family = "MRCP"
+        output_file = output_root / geant4_mrcp_file
+
+    elif phantom_selection.startswith("MFCP"):
+
+        phantom_family = "MFCP"
+        output_file = output_root / geant4_mfcp_file
+
+    else:
+
+        raise ValueError(
+            f"Unknown phantom selection: "
+            f"{phantom_selection}"
+        )
+
+    # -------------------------------------------------------------------------
+    # Find all deposit tally files
+    # -------------------------------------------------------------------------
+    #  
     deposit_files = sorted(
         file
-        for file in input_root.rglob("geant4_deposit_*.csv")
+        for file in input_root.rglob(f"geant4_deposit_{phantom_family}_*.csv")
         if not file.stem.lower().endswith("_photon_fluence")
     )
 
@@ -60,17 +88,11 @@ def geant4_calculate_dose_and_SAFs(params):
     # -------------------------------------------------------------
 
     ORGAN_NAME_TO_ID = {
-
         phantom: {
-
             organ["name"]: organ["organ_id"]
-
             for organ in ORGANS[phantom].values()
-
         }
-
         for phantom in ORGANS
-
     }
 
     # -------------------------------------------------------------
@@ -248,14 +270,6 @@ def geant4_calculate_dose_and_SAFs(params):
         ignore_index=True
     )
 
-    adult_male = combined_df[
-        combined_df["Phantom"] == "Adult Male"
-    ].copy()
-
-    adult_female = combined_df[
-        combined_df["Phantom"] == "Adult Female"
-    ].copy()
-
     sort_columns = [
         "Phantom",
         "Source Organ ID",
@@ -264,49 +278,14 @@ def geant4_calculate_dose_and_SAFs(params):
         "Target Organ ID"
     ]
 
-    adult_male.sort_values(
-        by=sort_columns,
-        inplace=True
-    )
-
-    adult_female.sort_values(
-        by=sort_columns,
-        inplace=True
-    )
-
-    adult_male.reset_index(
-        drop=True,
-        inplace=True
-    )
-
-    adult_female.reset_index(
-        drop=True,
-        inplace=True
-    )
+    combined_df.sort_values(by=sort_columns, inplace=True)
+    combined_df.reset_index(drop=True, inplace=True)
 
     # -------------------------------------------------------------
     # Save
     # -------------------------------------------------------------
 
-    am_file = (
-        output_root /
-        geant4_am_file
-    )
-
-    af_file = (
-        output_root /
-        geant4_af_file
-    )
-
-    adult_male.to_csv(
-        am_file,
-        index=False
-    )
-
-    adult_female.to_csv(
-        af_file,
-        index=False
-    )
+    combined_df.to_csv(output_file, index=False)
 
     # -------------------------------------------------------------
     # Delete individual CSVs
@@ -319,7 +298,6 @@ def geant4_calculate_dose_and_SAFs(params):
         try:
 
             file.unlink()
-
             deleted += 1
 
         except Exception as e:
@@ -331,12 +309,6 @@ def geant4_calculate_dose_and_SAFs(params):
 
     print("\nFinished extracting all Geant4 deposit CSV files.")
 
-    print(
-        f"Wrote:\n"
-        f"  {am_file}\n"
-        f"  {af_file}"
-    )
+    print(f"Wrote:\n  {output_file}\n")
 
-    print(
-        f"Deleted {deleted} individual deposit CSV file(s)."
-    )
+    print(f"Deleted {deleted} individual deposit CSV file(s).")

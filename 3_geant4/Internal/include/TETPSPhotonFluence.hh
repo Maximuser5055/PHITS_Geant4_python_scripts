@@ -16,13 +16,9 @@ class TETPSPhotonFluence
 {
 public:
 
-    TETPSPhotonFluence(
-        G4String name,
-        TETModelImport* tetData
-    );
+    TETPSPhotonFluence(G4String name, TETModelImport* tetData);
 
     virtual ~TETPSPhotonFluence();
-
 
     virtual G4bool ProcessHits(
         G4Step* aStep,
@@ -30,17 +26,11 @@ public:
     ) override;
 
 
-    virtual void Initialize(
-        G4HCofThisEvent* HCE
-    ) override;
-
+    virtual void Initialize(G4HCofThisEvent* HCE) override;
 
     virtual void clear() override;
 
-
-    virtual void EndOfEvent(
-        G4HCofThisEvent* HCE
-    ) override;
+    virtual void EndOfEvent(G4HCofThisEvent* HCE) override;
 
 
     virtual void DrawAll() override
@@ -54,7 +44,6 @@ public:
 
     G4THitsMap<G4double>*
     GetHitsMap();
-
 
     // ========================================================
     // Enable fluence for photons
@@ -70,20 +59,9 @@ public:
     // Get energy-bin boundaries
     // ========================================================
 
-    static G4double GetEnergyLow(
-        G4int bin
-    );
-
-
-    static G4double GetEnergyHigh(
-        G4int bin
-    );
-
-
-    static G4double GetEnergyCenter(
-        G4int bin
-    );
-
+    static G4double GetEnergyLow(G4int bin);
+    static G4double GetEnergyHigh(G4int bin);
+    static G4double GetEnergyCenter(G4int bin);
 
 private:
 
@@ -95,7 +73,6 @@ private:
 
     static std::vector<G4double>
         energyEdges;
-
 
     static void InitializeEnergyBins();
 };

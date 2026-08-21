@@ -49,9 +49,6 @@ typedef std::map<G4int, std::pair<G4double, G4double>> FLUXMAP;
 // -- Merge: Merge the data calculated in each thread.
 // *********************************************************************
 
-
-
-
 class TETRun : public G4Run 
 {
 public:

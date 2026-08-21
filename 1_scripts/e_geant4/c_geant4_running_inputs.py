@@ -31,46 +31,51 @@ def run_geant4(params):
     print("Geant4 SAF Simulation Launcher")
     print("=" * 50)
 
-    print("[1] Adult Male (MRCP-AM)")
-    print("[2] Adult Female (MRCP-AF)")
-    print("[3] Both")
-    print("[4] Re-run failed simulations")
+    # ----------------------------------------------------------
+    # Select operation
+    # ----------------------------------------------------------
+
+    print("[1] Run new simulations")
+    print("[2] Re-run failed simulations")
 
     while True:
 
-        choice = input("Enter your choice (1-4): ").strip()
-        if choice in {"1", "2", "3", "4"}:
+        choice = input("Enter your choice (1-2): ").strip()
+
+        if choice in {"1", "2"}:
             break
-        print("Invalid choice. Please enter 1, 2, 3, or 4.")
 
-    # ==========================================================
-    # Determine phantom(s)
-    # ==========================================================
+        print("Invalid choice. Please enter 1 or 2.")
 
-    if choice == "1":
+    phantom_selection = params["phantom"]
 
-        selected_phantoms = ["AM"]
+    if phantom_selection == "MRCP_AM":
+        selected_phantoms = ["MRCP_AM"]
 
-    elif choice == "2":
+    elif phantom_selection == "MRCP_AF":
+        selected_phantoms = ["MRCP_AF"]
 
-        selected_phantoms = ["AF"]
+    elif phantom_selection == "MRCP_AF_AM":
+        selected_phantoms = ["MRCP_AM", "MRCP_AF"]
 
-    elif choice == "3":
+    elif phantom_selection == "MFCP_AM":
+        selected_phantoms = ["MFCP_AM"]
 
-        selected_phantoms = ["AM", "AF"]
+    elif phantom_selection == "MFCP_AF":
+        selected_phantoms = ["MFCP_AF"]
+
+    elif phantom_selection == "MFCP_AF_AM":
+        selected_phantoms = ["MFCP_AM", "MFCP_AF"]
 
     else:
-
-        # Rerun mode will determine the phantom from
-        # the input-file paths.
-        selected_phantoms = ["AM", "AF"]
+        raise ValueError(f"Unknown phantom selection: {phantom_selection}")
 
 
     #########################################
     # Source Organ Selection
     #########################################
 
-    if choice != "4":
+    if choice == "1":
 
         if not source_csv.is_file():
 
@@ -234,7 +239,7 @@ def run_geant4(params):
     # Find input files
     # ==========================================================
 
-    if choice == "4":
+    if choice == "2":
 
         # ======================================================
         # Re-run failed simulations
@@ -438,7 +443,14 @@ def run_geant4(params):
             ) + ".out"
         )
 
-        return outfile.exists()
+        timing_file = infile.with_name(
+            infile.stem.replace(
+                "geant4_",
+                "geant4_timing_"
+            ) + ".txt"
+        )
+        
+        return outfile.exists() and timing_file.exists()
 
     # ==========================================================
     # Filter completed jobs

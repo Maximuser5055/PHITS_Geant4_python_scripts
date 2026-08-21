@@ -10,14 +10,12 @@
 #include <cmath>
 #include <algorithm>
 
-
 // ============================================================
 // Static energy-bin storage
 // ============================================================
 
 std::vector<G4double>
 TETPSPhotonFluence::energyEdges;
-
 
 // ============================================================
 // Constructor
@@ -35,7 +33,6 @@ TETPSPhotonFluence::TETPSPhotonFluence(
     InitializeEnergyBins();
 }
 
-
 // ============================================================
 // Destructor
 // ============================================================
@@ -43,7 +40,6 @@ TETPSPhotonFluence::TETPSPhotonFluence(
 TETPSPhotonFluence::~TETPSPhotonFluence()
 {
 }
-
 
 // ============================================================
 // Create logarithmic energy bins
@@ -71,7 +67,6 @@ void TETPSPhotonFluence::InitializeEnergyBins()
     }
 }
 
-
 // ============================================================
 // Lower edge of energy bin
 // ============================================================
@@ -92,7 +87,6 @@ G4double TETPSPhotonFluence::GetEnergyLow(
     return energyEdges[bin];
 }
 
-
 // ============================================================
 // Upper edge of energy bin
 // ============================================================
@@ -112,7 +106,6 @@ G4double TETPSPhotonFluence::GetEnergyHigh(
 
     return energyEdges[bin + 1];
 }
-
 
 // ============================================================
 // Geometric center of energy bin
@@ -139,7 +132,6 @@ G4double TETPSPhotonFluence::GetEnergyCenter(
         energyEdges[bin + 1]
     );
 }
-
 
 // ============================================================
 // Initialize scorer
@@ -173,7 +165,6 @@ void TETPSPhotonFluence::Initialize(
         evtMap
     );
 }
-
 
 // ============================================================
 // Process photon steps

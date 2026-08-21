@@ -63,18 +63,12 @@ def phits_calculate_dose_and_safs(params):
     if phantom_selection.startswith("MRCP"):
 
         phantom_family = "MRCP"
-
-        output_file = (
-            output_root / phits_mrcp_file
-        )
+        output_file = output_root / phits_mrcp_file
 
     elif phantom_selection.startswith("MFCP"):
 
         phantom_family = "MFCP"
-
-        output_file = (
-            output_root / phits_mfcp_file
-        )
+        output_file = output_root / phits_mfcp_file
 
     else:
 

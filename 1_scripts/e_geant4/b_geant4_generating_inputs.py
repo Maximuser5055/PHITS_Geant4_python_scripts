@@ -20,15 +20,38 @@ def geant4_generate_inputs(params):
     base_output_dir = config.GEANT4_GENERATED_INPUTS_DIR
     base_output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Adult male or female phantom or both
-    if params["phantom"] == "AM":
-        phantoms = ["AM"]
-    elif params["phantom"] == "AF":
-        phantoms = ["AF"]
+    # ============================================================
+    # PHANTOM SELECTION
+    # ============================================================
+
+    phantom_selection = params["phantom"]
+
+    if phantom_selection == "MRCP_AM":
+        phantoms = ["MRCP_AM"]
+
+    elif phantom_selection == "MRCP_AF":
+        phantoms = ["MRCP_AF"]
+
+    elif phantom_selection == "MRCP_AF_AM":
+        phantoms = ["MRCP_AM", "MRCP_AF"]
+
+    elif phantom_selection == "MFCP_AM":
+        phantoms = ["MFCP_AM"]
+
+    elif phantom_selection == "MFCP_AF":
+        phantoms = ["MFCP_AF"]
+
+    elif phantom_selection == "MFCP_AF_AM":
+        phantoms = ["MFCP_AM", "MFCP_AF"]
+
     else:
-        phantoms = ["AM", "AF"]
+        raise ValueError(
+            f"Unknown phantom selection: {phantom_selection}"
+        )
 
     for phantom in phantoms:
+
+        phantom_prefix, AM_or_AF = phantom.split("_")
 
         threads = params["threads"]
         nps = params["nps"]      
@@ -38,18 +61,13 @@ def geant4_generate_inputs(params):
 
             for region, organ_name in SOURCE_ORGANS[phantom].items():
 
-                safe_name = (
-                    organ_name
-                    .replace(",", "")
-                    .replace(" ", "_")
-                )
+                safe_name = (organ_name.replace(",", "").replace(" ", "_"))
 
-                basename = (
-                    f"geant4_MRCP_"
-                    f"{phantom}_"
-                    f"source_{safe_name}_"
-                    f"{source_type}_"
-                    f"energy_{energy}"
+                basename = (f"geant4_{phantom_prefix}_"
+                            f"{AM_or_AF}_"
+                            f"source_{safe_name}_"
+                            f"{source_type}_"
+                            f"energy_{energy}"
                 )
 
                 #############################

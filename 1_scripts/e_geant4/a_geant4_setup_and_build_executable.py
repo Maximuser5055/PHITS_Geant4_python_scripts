@@ -16,6 +16,7 @@ energy_bins = config.ENERGY_BINS
 energy_min = config.ENERGY_MIN
 energy_max = config.ENERGY_MAX
 internal_dir = config.INTERNAL_DIR
+tet_model_import_file = config.SRC_DIR / "TETModelImport.cc"
 
 def find_geant4make():
     """Search for geant4make.sh"""
@@ -71,6 +72,59 @@ def geant4_change_fluence_settings(params):
 
     return photon_fluence_file
 
+def geant4_change_phantom_family(params):
+
+    phantom_selection = params["phantom"]
+
+    if phantom_selection.startswith("MRCP"):
+
+        male_phantom = "MRCP_AM"
+        female_phantom = "MRCP_AF"
+
+    elif phantom_selection.startswith("MFCP"):
+
+        male_phantom = "MFCP_AM"
+        female_phantom = "MFCP_AF"
+
+    else:
+
+        raise ValueError(
+            f"Unknown phantom selection: "
+            f"{phantom_selection}"
+        )
+
+    text = tet_model_import_file.read_text()
+
+    old_pattern = (
+        r'// set phantom name\s*'
+        r'if\(!isAF\)\s*phantomName\s*=\s*"[^"]+"\s*;\s*'
+        r'else\s*phantomName\s*=\s*"[^"]+"\s*;'
+    )
+
+    new_code = (
+        f'// set phantom name\n'
+        f'if(!isAF) phantomName = "{male_phantom}";\n'
+        f'else      phantomName = "{female_phantom}";'
+    )
+
+    new_text, count = re.subn(
+        old_pattern,
+        new_code,
+        text
+    )
+
+    if count != 1:
+
+        raise RuntimeError(
+            "Could not uniquely update the phantom "
+            "selection in TETModelImport.cc."
+        )
+
+    if new_text != text:
+        tet_model_import_file.write_text(new_text)
+
+    return tet_model_import_file
+
 def source_snapshot(project_dir):
     snapshot = {}
 
@@ -87,6 +141,8 @@ def source_snapshot(project_dir):
 def build_geant4(params):
 
     geant4_change_fluence_settings(params)
+    geant4_change_phantom_family(params)
+    
     geant4make_path = find_geant4make()
     project_dir = internal_dir.resolve()
     executable = project_dir / "build" / "Internal"
