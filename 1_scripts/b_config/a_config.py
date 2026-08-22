@@ -121,7 +121,7 @@ GENERATED_INPUTS_DIR = ROOT / "2_phits/generated_inputs"
 
 RESULTS_PHITS_DIR = RESULTS_DIR / "a_phits"
 
-PHITS_RERUN_CSV_FILE = RESULTS_PHITS_DIR / "h_phits_rerun_required.csv"
+PHITS_RERUN_CSV_FILE = RESULTS_PHITS_DIR / "i_phits_rerun_required.csv"
 
 ############################
 # Geant4 Directories and Files
@@ -143,7 +143,7 @@ GEANT4_GENERATED_INPUTS_DIR = GEANT4_BUILD_DIR / "generated_inputs"
 
 RESULTS_GEANT4_DIR = RESULTS_DIR / "b_geant4"
 
-GEANT4_RERUN_CSV_FILE = RESULTS_GEANT4_DIR / "h_geant4_rerun_required.csv"
+GEANT4_RERUN_CSV_FILE = RESULTS_GEANT4_DIR / "i_geant4_rerun_required.csv"
 
 ############################
 # PHITS or Geant4
@@ -160,20 +160,6 @@ PARALLELIZATION = "OMP"
 MAXCAS = 1000
 
 MAXBCH = 10
-
-PHANTOMS = [
-    "MRCP_AF",
-    "MRCP_AM",
-    "MFCP_AF",
-    "MFCP_AM",
-]
-
-SEXINFO = {
-    "MRCP_AF": "FEMALE",
-    "MRCP_AM": "MALE",
-    "MFCP_AF": "FEMALE",
-    "MFCP_AM": "MALE",
-}
 
 PHITS_SOURCE_TYPES = [
     "photon",
@@ -221,14 +207,7 @@ GEANT4_SOURCE_TYPES = [
 
 PHANTOM_INPUT_GENERATION = "MRCP_AF_AM"
 
-PHANTOM_NAMES = {
-    "MRCP_AM": "ICRP 145 Adult Male",
-    "MRCP_AF": "ICRP 145 Adult Female",
-    "MFCP_AM": "Filipino Adult Male",
-    "MFCP_AF": "Filipino Adult Female"
-}
-
-NPS = 1000
+NPS = 10000
 
 GEANT4_SOURCE_TYPE_MAP = {
     "gamma": "photon",
@@ -239,24 +218,22 @@ GEANT4_SOURCE_TYPE_MAP = {
 # General Settings
 ############################
 
-PHANTOM_DISPLAY_NAMES = {
-    "MRCP_AF": "MRCP AF (Adult Female)",
-    "MRCP_AM": "MRCP AM (Adult Male)",
-    "MRCP_AF_AM": "Both MRCP phantoms (AF + AM)",
-    "MFCP_AF": "MFCP AF",
-    "MFCP_AM": "MFCP AM",
-    "MFCP_AF_AM": "Both MFCP phantoms (AF + AM)",
+# For check_uncertainty.py
+SAF_DATABASE_PHANTOM_GROUPS = {
+    "MRCP_AF": ["MRCP_AF", "MRCP_AM"],
+    "MRCP_AM": ["MRCP_AF", "MRCP_AM"],
+    "MRCP_AF_AM": ["MRCP_AF", "MRCP_AM"],
+
+    "MFCP_AF": ["MFCP_AF", "MFCP_AM"],
+    "MFCP_AM": ["MFCP_AF", "MFCP_AM"],
+    "MFCP_AF_AM": ["MFCP_AF", "MFCP_AM"],
 }
 
-# SAF database display names
-SAF_DATABASE_PHANTOM_NAMES = {
-    "MRCP_AF": "MRCP AF + AM",
-    "MRCP_AM": "MRCP AF + AM",
-    "MRCP_AF_AM": "MRCP AF + AM",
-
-    "MFCP_AF": "MFCP AF + AM",
-    "MFCP_AM": "MFCP AF + AM",
-    "MFCP_AF_AM": "MFCP AF + AM",
+PHANTOM_NAMES = {
+    "MRCP_AM": "ICRP 145 Adult Male",
+    "MRCP_AF": "ICRP 145 Adult Female",
+    "MFCP_AM": "Filipino Adult Male",
+    "MFCP_AF": "Filipino Adult Female"
 }
 
 MEV_TO_J = 1.6021766339999e-13

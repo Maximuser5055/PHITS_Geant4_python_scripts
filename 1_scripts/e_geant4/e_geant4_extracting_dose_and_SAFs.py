@@ -11,11 +11,10 @@ from c_database.b_organ_database import ORGANS
 def geant4_calculate_dose_and_SAFs(params):
 
     # -------------------------------------------------------------
-    # Constants and configs
+    # Constants
     # -------------------------------------------------------------
 
     MeV_to_J = config.MEV_TO_J
-    phantom_names = config.PHANTOM_NAMES
 
     # -------------------------------------------------------------
     # Directories and Configs

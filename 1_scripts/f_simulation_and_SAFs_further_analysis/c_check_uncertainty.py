@@ -13,13 +13,6 @@ import b_config.a_config as config
 # EXISTING PUBLISHABLE SAF DATABASE CHECK
 # ============================================================
 
-PHANTOM_FILE_NAMES = {
-    "MRCP_AF": "mrcp_af",
-    "MRCP_AM": "mrcp_am",
-    "MFCP_AF": "mfcp_af",
-    "MFCP_AM": "mfcp_am",
-}
-
 def get_required_saf_database_files(phantom, simulation_code):
     """
     Return all required publishable SAF and STD files for
@@ -30,61 +23,32 @@ def get_required_saf_database_files(phantom, simulation_code):
 
     simulation_code = simulation_code.upper()
 
-    if simulation_code == "PHITS":
-
-        publishable_dir = config.RESULTS_PHITS_PUBLISHABLE_SAF_DATABASE_DIR
-
-    elif simulation_code == "GEANT4":
-
-        publishable_dir = config.RESULTS_GEANT4_PUBLISHABLE_SAF_DATABASE_DIR
-
-    else:
-
-        raise ValueError(f"Unsupported simulation code: {simulation_code}")
-    
-    phantom_map = {
-        "MRCP_AF": ["MRCP_AF"],
-        "MRCP_AM": ["MRCP_AM"],
-        "MFCP_AF": ["MFCP_AF"],
-        "MFCP_AM": ["MFCP_AM"],
-        "MRCP_AF_AM": ["MRCP_AF", "MRCP_AM"],
-        "MFCP_AF_AM": ["MFCP_AF", "MFCP_AM"],
+    publishable_dirs = {
+        "PHITS": config.RESULTS_PHITS_PUBLISHABLE_SAF_DATABASE_DIR,
+        "GEANT4": config.RESULTS_GEANT4_PUBLISHABLE_SAF_DATABASE_DIR,
     }
 
-    if phantom not in phantom_map:
+    if simulation_code not in publishable_dirs:
+        raise ValueError(
+            f"Unsupported simulation code: {simulation_code}"
+        )
+
+    if phantom not in config.SAF_DATABASE_PHANTOM_GROUPS:
         raise ValueError(
             f"Unsupported phantom selection: {phantom}"
         )
 
+    publishable_dir = publishable_dirs[simulation_code]
     required_files = []
 
-    for phantom_code in phantom_map[phantom]:
+    for phantom_code in config.SAF_DATABASE_PHANTOM_GROUPS[phantom]:
+        phantom_name = phantom_code.lower()
 
-        phantom_name = PHANTOM_FILE_NAMES[phantom_code]
-
-        # ----------------------------------------------------
-        # Photon SAF database
-        # ----------------------------------------------------
-
-        required_files.extend([
-            publishable_dir
-            / f"{phantom_name}_photons_saf.csv",
-
-            publishable_dir
-            / f"{phantom_name}_photons_std.csv",
-        ])
-
-        # ----------------------------------------------------
-        # Electron SAF database
-        # ----------------------------------------------------
-
-        required_files.extend([
-            publishable_dir
-            / f"{phantom_name}_electrons_saf.csv",
-
-            publishable_dir
-            / f"{phantom_name}_electrons_std.csv",
-        ])
+        for source_name in ("photons", "electrons"):
+            required_files.extend([
+                publishable_dir / f"{phantom_name}_{source_name}_saf.csv",
+                publishable_dir / f"{phantom_name}_{source_name}_std.csv",
+            ])
 
     return required_files
 
@@ -168,7 +132,12 @@ def check_existing_saf_database(phantom, simulation_code, uncertainty_limit,):
 
         file_max = float(numeric_values.max())
 
-        uncertainty_by_file[std_file.name] = file_max
+        saf_file_name = std_file.name.replace(
+            "_std.csv",
+            "_saf.csv",
+        )
+
+        uncertainty_by_file[saf_file_name] = file_max
 
         if (
             overall_max_uncertainty is None
@@ -198,81 +167,89 @@ def check_uncertainty(params):
 
     uncertainty_limit = params["uncertainty_limit"]
     simulation_code = params["simulation_code"].upper()
+    phantom_selection = params["phantom"]
 
     # -------------------------------------------------------------------------
-    # Directories and configs
+    # Determine selected phantom family
     # -------------------------------------------------------------------------
 
-    results_phits_dir = config.RESULTS_PHITS_DIR
-    results_geant4_dir = config.RESULTS_GEANT4_DIR
-    
-    if simulation_code == "PHITS":
+    if phantom_selection.startswith("MRCP"):
 
-        input_dir = config.GENERATED_INPUTS_DIR
+        phantom_family = "MRCP"
 
-        csv_files = [
-            results_phits_dir / "f_phits_target_regions_dose_SAFs_AM.csv",
-            results_phits_dir / "g_phits_target_regions_dose_SAFs_AF.csv",
-        ]
+    elif phantom_selection.startswith("MFCP"):
 
-        rerun_file = config.PHITS_RERUN_CSV_FILE
-
-        input_extension = ".inp"
-
-    elif simulation_code == "GEANT4":
-
-        input_dir = config.GEANT4_GENERATED_INPUTS_DIR
-
-        csv_files = [
-            results_geant4_dir / "f_geant4_target_regions_dose_SAFs_AM.csv",
-            results_geant4_dir / "g_geant4_target_regions_dose_SAFs_AF.csv",
-        ]
-
-        rerun_file = config.GEANT4_RERUN_CSV_FILE
-
-        input_extension = ".in"
+        phantom_family = "MFCP"
 
     else:
-        raise ValueError(f"Unsupported simulation code: {simulation_code}")
 
+        raise ValueError(f"Unknown phantom selection: {phantom_selection}")
+
+     # -------------------------------------------------------------------------
+    # Directories and simulation-specific configuration
     # -------------------------------------------------------------------------
-    # Read CSV files
-    # -------------------------------------------------------------------------
 
-    dfs = []
+    simulation_config = {
+        "PHITS": {
+            "results_dir": config.RESULTS_PHITS_DIR,
+            "input_dir": config.GENERATED_INPUTS_DIR,
+            "rerun_file": config.PHITS_RERUN_CSV_FILE,
+            "input_extension": ".inp",
+            "result_files": {
+                "MRCP": "g_phits_MRCP_target_regions_dose_SAFs.csv",
+                "MFCP": "h_phits_MFCP_target_regions_dose_SAFs.csv",
+            },
+        },
 
-    for csv_file in csv_files:
+        "GEANT4": {
+            "results_dir": config.RESULTS_GEANT4_DIR,
+            "input_dir": config.GEANT4_GENERATED_INPUTS_DIR,
+            "rerun_file": config.GEANT4_RERUN_CSV_FILE,
+            "input_extension": ".in",
+            "result_files": {
+                "MRCP": "g_geant4_MRCP_target_regions_dose_SAFs.csv",
+                "MFCP": "h_geant4_MFCP_target_regions_dose_SAFs.csv",
+            },
+        },
+    }
 
-        if not csv_file.exists():
-
-            print(
-                f"\n[SKIP] Phantom result file not found:"
-            )
-
-            print(
-                f"       {csv_file}"
-            )
-
-            continue
-
-        print(
-            f"\nReading: {csv_file.name}"
+    if simulation_code not in simulation_config:
+        raise ValueError(
+            f"Unsupported simulation code: {simulation_code}"
         )
 
-        dfs.append(
-            pd.read_csv(csv_file)
-        )
+    sim = simulation_config[simulation_code]
 
-    if not dfs:
+    results_dir = sim["results_dir"]
+    input_dir = sim["input_dir"]
+    rerun_file = sim["rerun_file"]
+    input_extension = sim["input_extension"]
+
+    csv_file = (
+        results_dir
+        / sim["result_files"][phantom_family]
+    )
+
+    # -------------------------------------------------------------------------
+    # Read selected phantom-family CSV
+    # -------------------------------------------------------------------------
+
+    if not csv_file.exists():
 
         raise FileNotFoundError(
-            "No phantom tally CSV files found."
+            f"No {phantom_family} phantom result file found for "
+            f"{simulation_code}:\n{csv_file}"
         )
 
-    df = pd.concat(
-        dfs,
-        ignore_index=True
+    print(
+        f"\nSelected phantom family : {phantom_family}"
     )
+
+    print(
+        f"Reading: {csv_file.name}"
+    )
+
+    df = pd.read_csv(csv_file)
 
     # -------------------------------------------------------------------------
     # Ignore rows with zero dose
@@ -322,7 +299,22 @@ def check_uncertainty(params):
 
     for index, row in rerun.iterrows():
 
-        phantom = "AM" if row["Phantom"] == "Adult Male" else "AF"
+        phantom_code = next(
+            (
+                code
+                for code, name in config.PHANTOM_NAMES.items()
+                if name == row["Phantom"]
+            ),
+            None,
+        )
+
+        if phantom_code is None:
+            raise ValueError(
+                f"Could not map phantom name to config.PHANTOM_NAMES: "
+                f"{row['Phantom']}"
+            )
+
+        phantom = phantom_code.split("_")[-1]
 
         source = row["Source Organ Name"]
 
@@ -336,7 +328,7 @@ def check_uncertainty(params):
 
         energy = row["Source Energy (MeV)"]
 
-        input_pattern = (f"*MRCP_{phantom}_source_{source}_{particle}_energy_*{input_extension}")
+        input_pattern = (f"*{phantom_family}_{phantom}_source_{source}_{particle}_energy_*{input_extension}")
 
         for file in input_dir.rglob(input_pattern):
 
@@ -369,9 +361,13 @@ def check_uncertainty(params):
     # Report
     # -------------------------------------------------------------------------
 
-    print("\n========================================")
+    print()
+    print("=" * 90)
     print("Uncertainty Check")
-    print("========================================")
+    print("=" * 90)
+    print(f"Simulation code   : {simulation_code}")
+    print(f"Phantom family    : {phantom_family}")
+    print(f"Result file       : {csv_file.name}")
 
     if rerun.empty:
 

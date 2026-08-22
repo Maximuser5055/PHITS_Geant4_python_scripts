@@ -47,7 +47,8 @@ def display_existing_saf_database_status(status, uncertainty_limit, publishable_
     for file in status["existing_files"]:
         print(f"    {file.name}")
 
-    print("\nMaximum statistical uncertainty:")
+    print("\nMaximum statistical uncertainty:"    
+          "\n(from corresponding *_std.csv files):")
 
     for file_name, maximum in status["uncertainty_by_file"].items():
 
@@ -75,6 +76,23 @@ def display_existing_saf_database_status(status, uncertainty_limit, publishable_
         f"{status['max_uncertainty']:.2f} %"
     )
     print(f"Overall status    : {overall_status}")
+
+def get_saf_database_display_name(phantom_code):
+    """Return the phantom family represented by the SAF database."""
+
+    group = config.SAF_DATABASE_PHANTOM_GROUPS.get(
+        phantom_code,
+        [phantom_code],
+    )
+
+    family = group[0].split("_")[0]
+
+    sexes = " + ".join(
+        phantom.split("_")[-1]
+        for phantom in group
+    )
+
+    return f"{family} {sexes}"
 
 def get_user_parameters():
 
@@ -145,10 +163,8 @@ def get_user_parameters():
             print("[5] Both MRCP phantoms (AF + AM)")
             print("[6] Both MFCP phantoms (AF + AM)")
     
-            current_phantom_display = config.PHANTOM_DISPLAY_NAMES.get(
-                config.PHANTOM_INPUT_GENERATION,
-                config.PHANTOM_INPUT_GENERATION)
-            
+            current_phantom_display = get_saf_database_display_name(config.PHANTOM_INPUT_GENERATION)
+
             choice = input(
                 f"Select phantom input generation "
                 f"[Current = {current_phantom_display}]: "
@@ -292,10 +308,7 @@ def get_user_parameters():
 
     else:
 
-        database_phantom_display = config.SAF_DATABASE_PHANTOM_NAMES.get(
-            phantom_input_generation,
-            phantom_input_generation,
-        )
+        database_phantom_display = get_saf_database_display_name(phantom_input_generation)
         
         print()
         print("=" * 90)

@@ -928,7 +928,7 @@ def update_master_saf_database(params):
           f"{combined_database['Source Energy (MeV)'].nunique()}"
     )
 
-    print(f"  Particle counts    : "
+    print(f"  Particle history counts    : "
       f"{combined_database['Number of Particles'].nunique()}"
     )
     

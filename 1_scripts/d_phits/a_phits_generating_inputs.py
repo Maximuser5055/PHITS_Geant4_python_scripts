@@ -19,7 +19,7 @@ def phits_generate_inputs(params):
     base_output_dir = config.GENERATED_INPUTS_DIR
 
     # Configs
-    sex_info = config.SEXINFO
+    sex_info = config.PHANTOM_NAMES
     phits_source_types = config.PHITS_SOURCE_TYPES
     
     # T-track configuration
@@ -74,7 +74,7 @@ def phits_generate_inputs(params):
         source_type = params["source_type"]
         source_energies = params["source_energies"]
         target_regions = "all"
-        sexinfo = sex_info.get(phantom)
+        namesexinfo = sex_info.get(phantom)
 
         # Loop through source energies and regions to generate input files
         for energy in source_energies:
@@ -97,7 +97,7 @@ def phits_generate_inputs(params):
 
                 text = template
 
-                text = text.replace("{{SEXINFO}}", sexinfo)
+                text = text.replace("{{NAMESEXINFO}}", namesexinfo)
                 text = text.replace("{{PARALLELIZATION}}", parallelization)
                 text = text.replace("{{THREADS}}", str(threads))
                 text = text.replace("{{MAXCAS}}", f"{maxcas}")

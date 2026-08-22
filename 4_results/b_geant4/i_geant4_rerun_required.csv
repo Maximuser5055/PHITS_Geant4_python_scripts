@@ -1,0 +1,9 @@
+Phantom,Source Organ ID,Source Organ Name,Source Type,Source Energy (MeV),Maximum Statistical Uncertainty (%),Input File,Job Directory
+ICRP 145 Adult Female,6100,Brain,electron,1.0,99.99499987,MRCP_AF/geant4_MRCP_AF_source_Brain_e-_energy_1.0/geant4_MRCP_AF_source_Brain_e-_energy_1.0.in,MRCP_AF/geant4_MRCP_AF_source_Brain_e-_energy_1.0
+ICRP 145 Adult Female,6100,Brain,electron,10.0,99.99499987,MRCP_AF/geant4_MRCP_AF_source_Brain_e-_energy_10.0/geant4_MRCP_AF_source_Brain_e-_energy_10.0.in,MRCP_AF/geant4_MRCP_AF_source_Brain_e-_energy_10.0
+ICRP 145 Adult Female,9500,Liver,electron,1.0,99.99499987000002,MRCP_AF/geant4_MRCP_AF_source_Liver_e-_energy_1.0/geant4_MRCP_AF_source_Liver_e-_energy_1.0.in,MRCP_AF/geant4_MRCP_AF_source_Liver_e-_energy_1.0
+ICRP 145 Adult Female,9500,Liver,electron,10.0,99.99499987000002,MRCP_AF/geant4_MRCP_AF_source_Liver_e-_energy_10.0/geant4_MRCP_AF_source_Liver_e-_energy_10.0.in,MRCP_AF/geant4_MRCP_AF_source_Liver_e-_energy_10.0
+ICRP 145 Adult Male,6100,Brain,electron,1.0,99.99499987000004,MRCP_AM/geant4_MRCP_AM_source_Brain_e-_energy_1.0/geant4_MRCP_AM_source_Brain_e-_energy_1.0.in,MRCP_AM/geant4_MRCP_AM_source_Brain_e-_energy_1.0
+ICRP 145 Adult Male,6100,Brain,electron,10.0,99.99499987000002,MRCP_AM/geant4_MRCP_AM_source_Brain_e-_energy_10.0/geant4_MRCP_AM_source_Brain_e-_energy_10.0.in,MRCP_AM/geant4_MRCP_AM_source_Brain_e-_energy_10.0
+ICRP 145 Adult Male,9500,Liver,electron,1.0,99.99499987000002,MRCP_AM/geant4_MRCP_AM_source_Liver_e-_energy_1.0/geant4_MRCP_AM_source_Liver_e-_energy_1.0.in,MRCP_AM/geant4_MRCP_AM_source_Liver_e-_energy_1.0
+ICRP 145 Adult Male,9500,Liver,electron,10.0,99.99499987000002,MRCP_AM/geant4_MRCP_AM_source_Liver_e-_energy_10.0/geant4_MRCP_AM_source_Liver_e-_energy_10.0.in,MRCP_AM/geant4_MRCP_AM_source_Liver_e-_energy_10.0

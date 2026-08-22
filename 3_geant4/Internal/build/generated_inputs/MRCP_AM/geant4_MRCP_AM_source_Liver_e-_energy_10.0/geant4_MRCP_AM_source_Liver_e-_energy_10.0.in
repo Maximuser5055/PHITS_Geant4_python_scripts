@@ -13,4 +13,4 @@
 /control/execute geant4_MRCP_AM_source_Liver_e-_energy_10.0.mac
 
 # Set the nps
-/run/beamOn 1000
+/run/beamOn 10000
