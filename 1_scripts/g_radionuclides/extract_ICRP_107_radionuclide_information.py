@@ -477,7 +477,7 @@ def print_radionuclide(
                 f"{r['icode']:>6} "
                 f"{r['radiation_type']:<25} "
                 f"{r['jcode']:<5} "
-                f"{r['yield']:>15.6E} "
+                f"{r['yield (/nt for RAD file, beta/MeV/nt for BET file)']:>15.6E} "
                 f"{r['energy_mev']:>15.6E}"
             )
     else:
@@ -499,7 +499,7 @@ def print_radionuclide(
         for r in bet:
             print(
                 f"{r['energy_mev']:>15.6E} "
-                f"{r['yield']:>35.6E}"
+                f"{r['yield (/nt for RAD file, beta/MeV/nt for BET file)']:>35.6E}"
             )
     else:
         print("\nNo BET records for this radionuclide.")
@@ -532,7 +532,7 @@ def plot_radionuclide(
     # Only positive x/y values can appear on a log-log plot.
     positive = [
         r for r in selected
-        if r["energy_mev"] > 0 and r["yield"] > 0
+        if r["energy_mev"] > 0 and r["yield (/nt for RAD file, beta/MeV/nt for BET file)"] > 0
     ]
 
     if not positive:
@@ -553,7 +553,7 @@ def plot_radionuclide(
         rows = sorted(rows, key=lambda x: x["energy_mev"])
         ax.scatter(
             [r["energy_mev"] for r in rows],
-            [r["yield"] for r in rows],
+            [r["yield (/nt for RAD file, beta/MeV/nt for BET file)"] for r in rows],
             label=radiation_type,
             s=28,
             alpha=0.75,
@@ -564,7 +564,7 @@ def plot_radionuclide(
         bet_rows = sorted(bet, key=lambda x: x["energy_mev"])
         ax.plot(
             [r["energy_mev"] for r in bet_rows],
-            [r["yield"] for r in bet_rows],
+            [r["yield (/nt for RAD file, beta/MeV/nt for BET file)"] for r in bet_rows],
             label="Beta- particles",
             linewidth=1.5,
         )
