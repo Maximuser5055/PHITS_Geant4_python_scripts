@@ -257,3 +257,7 @@ ENERGY_MIN = 0.01
 ENERGY_MAX = 10
 
 UNCERTAINTY_LIMIT = 5.0
+
+############################
+# S-Values
+############################
