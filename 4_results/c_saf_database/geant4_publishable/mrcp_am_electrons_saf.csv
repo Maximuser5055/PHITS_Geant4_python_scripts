@@ -1,0 +1,89 @@
+# Header
+# Document: Specific Absorbed Fractions (kg^-1)
+# Phantom type: ICRP 145 Adult Male
+# Source type: electrons
+# Number of source energies: 3
+# Number of source organs: 2
+# Number of target organs: 42
+# End Header
+Source Organ,Target Organ,0.01 MeV,1 MeV,10 MeV
+Brain,Red (active) marrow,0.0,0.0006363189908266,0.012522478644069
+Brain,Colon wall,0.0,0.0,0.0
+Brain,RLung + LLung,0.0,0.0,1.7410831498283507e-06
+Brain,Stomach wall,0.0,0.0,0.0
+Brain,Breast-a + Breast-g,0.0,0.0,0.0
+Brain,Testes,0.0,0.0,0.0
+Brain,Urinary bladder wall,0.0,0.0,0.0
+Brain,Oesophagus wall,0.0,0.0,0.0
+Brain,Liver,0.0,0.0,2.598560496794924e-06
+Brain,Thyroid,0.0,0.0,0.0
+Brain,50-um endosteal region,0.0,0.0012831610013407,0.0245433026776275
+Brain,Brain,0.6590264940788456,0.6408879446934089,0.4770868143868134
+Brain,Salivary glands,0.0,0.0003883980535023,0.0023822565322027
+Brain,Skin,0.0,8.431084069425307e-05,0.0022357483179632
+Brain,RAdrenal + LAdrenal,0.0,0.0,0.0
+Brain,ET region,0.0,0.0,0.031452917477296
+Brain,Gallbladder wall,0.0,0.0,0.0
+Brain,Heart wall,0.0,0.0,4.560886301753703e-06
+Brain,RKidney + LKidney,0.0,0.0,0.0
+Brain,Systemic lymph nodes,0.0,0.0,0.0
+Brain,Muscle,0.0,3.276918415021654e-06,0.0006076821994185
+Brain,Oral mucosa,0.0,0.0,0.0
+Brain,Pancreas,0.0,0.0,0.0
+Brain,Prostate,0.0,0.0,0.0
+Brain,Small intestine wall,0.0,0.0,0.0
+Brain,Spleen,0.0,0.0,0.0
+Brain,Thymus,0.0,0.0,0.0
+Brain,Tongue,0.0,0.0,0.0004848129774541
+Brain,Tonsils,0.0,0.0,0.0020202402377565
+Brain,Right colon wall (ascending + right transverse),0.0,0.0,0.0
+Brain,Left colon wall (left transverse + descending),0.0,0.0,0.0
+Brain,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0,0.0
+Brain,Extrathoracic lymph nodes,0.0,0.0,0.0341739558785772
+Brain,Alveolar-interstitium,0.0,0.0,1.7410831498283507e-06
+Brain,Thoracic lymph nodes,0.0,0.0,0.0
+Brain,Entire lens of eye,0.0,0.0,0.0
+Brain,Pituitary gland,0.0,0.0,0.2620532205939199
+Brain,Spinal cord,0.0,0.0,0.0220156202889688
+Brain,Ureters,0.0,0.0,0.0
+Brain,Adipose/residual tissue,0.0,0.0001027466984213,0.0021041244724871
+Liver,Red (active) marrow,0.0,0.0,0.0059485389971756
+Liver,Colon wall,0.0,0.0002598042441756,0.0084874908568017
+Liver,RLung + LLung,0.0,0.0053055308735856,0.0220772461754801
+Liver,Stomach wall,0.0,3.18583331900674e-06,0.0414955025203798
+Liver,Breast-a + Breast-g,0.0,0.0,0.0011507179628609
+Liver,Testes,0.0,0.0,0.0
+Liver,Urinary bladder wall,0.0,0.0,6.648415680957067e-05
+Liver,Oesophagus wall,0.0,0.0,0.0331180361910662
+Liver,Liver,0.4237288126622637,0.4130040581405966,0.3025737176616634
+Liver,Thyroid,0.0,0.0,0.0
+Liver,50-um endosteal region,0.0,0.0,0.0020325005489251
+Liver,Brain,0.0,0.0,0.0
+Liver,Salivary glands,0.0,0.0,0.0
+Liver,Skin,0.0,0.0,0.0010337510891923
+Liver,RAdrenal + LAdrenal,0.0,0.0296822533711458,0.0761855000462399
+Liver,ET region,0.0,0.0,0.0
+Liver,Gallbladder wall,0.0,0.0361310753705596,0.1542745285099541
+Liver,Heart wall,0.0,0.0023246884500502,0.0194863213939505
+Liver,RKidney + LKidney,0.0,0.0023152112055801,0.0192165912205196
+Liver,Systemic lymph nodes,0.0,0.0,0.0017939468665503
+Liver,Muscle,0.0,5.126698744842301e-06,0.0013252417099864
+Liver,Oral mucosa,0.0,0.0,0.0
+Liver,Pancreas,0.0,0.0005794454301098,0.0273315545244699
+Liver,Prostate,0.0,0.0,0.0
+Liver,Small intestine wall,0.0,0.0,0.0008696574089774
+Liver,Spleen,0.0,0.0,0.0001679325677895
+Liver,Thymus,0.0,0.0,0.0
+Liver,Tongue,0.0,0.0,0.0
+Liver,Tonsils,0.0,0.0,0.0
+Liver,Right colon wall (ascending + right transverse),0.0,0.0006408339066751,0.0193457911909553
+Liver,Left colon wall (left transverse + descending),0.0,0.0,0.0015894784453096
+Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0,0.0
+Liver,Extrathoracic lymph nodes,0.0,0.0,0.0
+Liver,Alveolar-interstitium,0.0,0.0053055308735856,0.0220772461754801
+Liver,Thoracic lymph nodes,0.0,0.0,0.002094997325994
+Liver,Entire lens of eye,0.0,0.0,0.0
+Liver,Pituitary gland,0.0,0.0,0.0
+Liver,Spinal cord,0.0,0.0,0.0001988385216333
+Liver,Ureters,0.0,0.0,9.855280616038888e-05
+Liver,Adipose/residual tissue,0.0,0.0007844742034487,0.0041078754283551

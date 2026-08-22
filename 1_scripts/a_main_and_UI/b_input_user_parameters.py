@@ -59,7 +59,7 @@ def display_existing_saf_database_status(status, uncertainty_limit, publishable_
 
         print(
             f"    {file_name:<35}"
-            f"{maximum:8.2f}%   [{file_status}]"
+            f"{maximum:8.2f} %   [{file_status}]"
         )
 
     overall_status = (
@@ -69,10 +69,10 @@ def display_existing_saf_database_status(status, uncertainty_limit, publishable_
     )
 
     print()
-    print(f"Uncertainty limit : {uncertainty_limit:.2f}%")
+    print(f"Uncertainty limit : {uncertainty_limit:.2f} %")
     print(
         f"Overall maximum   : "
-        f"{status['max_uncertainty']:.2f}%"
+        f"{status['max_uncertainty']:.2f} %"
     )
     print(f"Overall status    : {overall_status}")
 
@@ -230,7 +230,7 @@ def get_user_parameters():
         else:
             print(
                 "\nWARNING: The existing SAF database does NOT "
-                "satisfy the selected uncertainty limit."
+                f"satisfy the selected uncertainty limit of {config.UNCERTAINTY_LIMIT} %."
             )
 
         print("\nWhat would you like to do?")
@@ -292,9 +292,14 @@ def get_user_parameters():
 
     else:
 
+        database_phantom_display = config.SAF_DATABASE_PHANTOM_NAMES.get(
+            phantom_input_generation,
+            phantom_input_generation,
+        )
+        
         print()
         print("=" * 90)
-        print("NO COMPLETE SAF DATABASE AVAILABLE")
+        print(f"NO COMPLETE SAF DATABASE AVAILABLE FOR {simulation_code} {database_phantom_display}")
         print("=" * 90)
 
         print("\nS-value calculation cannot proceed yet.")
@@ -479,7 +484,7 @@ def get_user_parameters():
 
         print(f"\nError: '{source_csv}' was not found. Please try again.\n")
 
-    print(f"\nMaximum allowed statistical uncertainty: {config.UNCERTAINTY_LIMIT}%")
+    print(f"\nMaximum allowed statistical uncertainty: {config.UNCERTAINTY_LIMIT} %")
 
     config.update_config("SIMULATION_CODE", simulation_code)
     config.update_config("THREADS", threads)

@@ -1,7 +1,7 @@
 # Example macro file to run in the batch mode
 
 # Set the verbose
-/run/verbose 1
+/run/verbose 2
 
 # Set the number of threads for multi-threading mode
 /run/numberOfThreads 32

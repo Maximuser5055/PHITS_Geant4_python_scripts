@@ -450,7 +450,12 @@ def run_geant4(params):
             ) + ".txt"
         )
         
-        return outfile.exists() and timing_file.exists()
+        required_outputs = [outfile, timing_file,]
+
+        # A simulation is considered completed only when every
+        # required output exists AND is non-zero in size.
+        return all(output.is_file() and output.stat().st_size > 0
+                  for output in required_outputs)
 
     # ==========================================================
     # Filter completed jobs

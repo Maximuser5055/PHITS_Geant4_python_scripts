@@ -489,8 +489,8 @@ def run_phits(params):
             job_dir / f"phits_fluence_{stem}.out",
         ]
 
-        return (batch_exists and 
-                all(output.exists()for output in required_outputs))
+        return all(output.is_file() and output.stat().st_size > 0
+                   for output in required_outputs)
 
     # ==========================================================
     # Filter completed jobs

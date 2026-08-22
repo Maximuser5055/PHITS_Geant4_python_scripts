@@ -136,6 +136,10 @@ def check_existing_saf_database(phantom, simulation_code, uncertainty_limit,):
 
     for std_file in existing_files:
 
+        # Only STD files contain the statistical uncertainty.
+        if not std_file.name.endswith("_std.csv"):
+            continue
+
         dataframe = pd.read_csv(
             std_file,
             comment="#",
@@ -371,7 +375,7 @@ def check_uncertainty(params):
 
     if rerun.empty:
 
-        print(f"\nAll simulations satisfy the {uncertainty_limit:.1f}% criterion.")
+        print(f"\nAll simulations satisfy the {uncertainty_limit:.1f} % criterion.")
 
         return
 
@@ -385,7 +389,7 @@ def check_uncertainty(params):
         lambda x: "PASS" if x < uncertainty_limit else "FAIL"
     )
 
-    print(f"\nThreshold         : {uncertainty_limit:.1f}%")
+    print(f"\nThreshold         : {uncertainty_limit:.1f} %")
     print(f"Total simulations : {len(summary)}")
     print(f"PASS              : {(summary['Status'] == 'PASS').sum()}")
     print(f"FAIL              : {(summary['Status'] == 'FAIL').sum()}\n")

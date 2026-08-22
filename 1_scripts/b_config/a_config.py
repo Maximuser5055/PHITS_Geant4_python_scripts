@@ -248,6 +248,17 @@ PHANTOM_DISPLAY_NAMES = {
     "MFCP_AF_AM": "Both MFCP phantoms (AF + AM)",
 }
 
+# SAF database display names
+SAF_DATABASE_PHANTOM_NAMES = {
+    "MRCP_AF": "MRCP AF + AM",
+    "MRCP_AM": "MRCP AF + AM",
+    "MRCP_AF_AM": "MRCP AF + AM",
+
+    "MFCP_AF": "MFCP AF + AM",
+    "MFCP_AM": "MFCP AF + AM",
+    "MFCP_AF_AM": "MFCP AF + AM",
+}
+
 MEV_TO_J = 1.6021766339999e-13
 
 THREADS = 32

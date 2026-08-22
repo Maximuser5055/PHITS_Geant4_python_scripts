@@ -1,0 +1,89 @@
+# Header
+# Document: Specific Absorbed Fractions (kg^-1)
+# Phantom type: ICRP 145 Adult Female
+# Source type: electrons
+# Number of source energies: 3
+# Number of source organs: 2
+# Number of target organs: 42
+# End Header
+Source Organ,Target Organ,0.01 MeV,1 MeV,10 MeV
+Brain,Red (active) marrow,0.0,0.0018985497935291,0.0134057866748696
+Brain,Colon wall,0.0,0.0,0.0
+Brain,RLung + LLung,0.0,0.0,6.519807955849587e-06
+Brain,Stomach wall,0.0,0.0,0.0
+Brain,Breast-a + Breast-g,0.0,0.0,0.0001323018263204
+Brain,ROvary + LOvary,0.0,0.0,0.0
+Brain,Urinary bladder wall,0.0,0.0,0.0
+Brain,Oesophagus wall,0.0,0.0,0.0
+Brain,Liver,0.0,0.0,4.1268319439243634e-08
+Brain,Thyroid,0.0,0.0,0.0
+Brain,50-um endosteal region,0.0,0.0039316119413222,0.0267798948270026
+Brain,Brain,0.7409777915910325,0.7150383738526495,0.5408455929335778
+Brain,Salivary glands,0.0,0.0,0.01233453976179
+Brain,Skin,0.0,6.968014883232938e-06,0.0028231954810812
+Brain,RAdrenal + LAdrenal,0.0,0.0,0.0
+Brain,ET region,0.0,0.0,0.0515855985453979
+Brain,Gallbladder wall,0.0,0.0,0.0
+Brain,Heart wall,0.0,0.0,0.0
+Brain,RKidney + LKidney,0.0,0.0,0.0
+Brain,Systemic lymph nodes,0.0,0.0,0.0
+Brain,Muscle,0.0,1.867230298082155e-05,0.0007962974790605
+Brain,Oral mucosa,0.0,0.0,0.0
+Brain,Pancreas,0.0,0.0,0.0
+Brain,Small intestine wall,0.0,0.0,6.603516168690738e-06
+Brain,Spleen,0.0,0.0,0.0
+Brain,Thymus,0.0,0.0,0.0
+Brain,Uterus/cervix,0.0,0.0,0.0
+Brain,Tongue,0.0,0.0,0.000257641368985
+Brain,Tonsils,0.0,0.0,0.0
+Brain,Right colon wall (ascending + right transverse),0.0,0.0,0.0
+Brain,Left colon wall (left transverse + descending),0.0,0.0,0.0
+Brain,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0,0.0
+Brain,Extrathoracic lymph nodes,0.0,0.0292626492329702,0.073299198045855
+Brain,Alveolar-interstitium,0.0,0.0,6.519807955849587e-06
+Brain,Thoracic lymph nodes,0.0,0.0,0.0
+Brain,Entire lens of eye,0.0,0.0,0.0
+Brain,Pituitary gland,0.0,1.249141379002363,0.2204917031638735
+Brain,Spinal cord,0.0,0.0,0.0054594915874928
+Brain,Ureters,0.0,0.0,0.0001013857251661
+Brain,Adipose/residual tissue,0.0,6.058954902817697e-05,0.0018160300408181
+Liver,Red (active) marrow,0.0,0.0002842925194213,0.0081760234533489
+Liver,Colon wall,0.0,0.0,0.0004451125055154
+Liver,RLung + LLung,0.0,0.0019531360085496,0.0222946172164684
+Liver,Stomach wall,0.0,0.0112689989248289,0.0351688289368613
+Liver,Breast-a + Breast-g,0.0,0.0,0.0007129972967029
+Liver,ROvary + LOvary,0.0,0.0,0.0
+Liver,Urinary bladder wall,0.0,0.0,0.0
+Liver,Oesophagus wall,0.0,0.0004997947375302,0.0240653355786855
+Liver,Liver,0.5524861872377393,0.5384127918195902,0.3919864854301945
+Liver,Thyroid,0.0,0.0,0.0
+Liver,50-um endosteal region,0.0,9.912934950731684e-05,0.0027616539510836
+Liver,Brain,0.0,0.0,8.359830586569916e-05
+Liver,Salivary glands,0.0,0.0,0.0
+Liver,Skin,0.0,7.638303514710532e-06,0.0019636996204685
+Liver,RAdrenal + LAdrenal,0.0,0.0,0.0926270286802931
+Liver,ET region,0.0,0.0,0.0
+Liver,Gallbladder wall,0.0,0.0959350618641025,0.2122547799558168
+Liver,Heart wall,0.0,0.004757975406225,0.0198891229679498
+Liver,RKidney + LKidney,0.0,0.0023730599400436,0.0357311132793437
+Liver,Systemic lymph nodes,0.0,0.0,4.306969518284697e-07
+Liver,Muscle,0.0,8.056616270621452e-06,0.0017054078016023
+Liver,Oral mucosa,0.0,0.0,0.0
+Liver,Pancreas,0.0,0.0003754870244849,0.0618296720397722
+Liver,Small intestine wall,0.0,0.0,0.0006542969888848
+Liver,Spleen,0.0,7.766067739320667e-05,0.0011281717768454
+Liver,Thymus,0.0,0.0,0.0
+Liver,Uterus/cervix,0.0,0.0,0.0
+Liver,Tongue,0.0,0.0,0.0
+Liver,Tonsils,0.0,0.0,0.0
+Liver,Right colon wall (ascending + right transverse),0.0,0.0,0.0005706481451038
+Liver,Left colon wall (left transverse + descending),0.0,0.0,0.0001528693726462
+Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0,0.0007903838947383
+Liver,Extrathoracic lymph nodes,0.0,0.0,0.0
+Liver,Alveolar-interstitium,0.0,0.0019531360085496,0.0222946172164684
+Liver,Thoracic lymph nodes,0.0,0.0,0.0557902138834995
+Liver,Entire lens of eye,0.0,0.0,0.0
+Liver,Pituitary gland,0.0,0.0,0.0
+Liver,Spinal cord,0.0,0.0,3.724831081265397e-06
+Liver,Ureters,0.0,0.0,0.0002343549192592
+Liver,Adipose/residual tissue,0.0,0.0006138704663758,0.0040460099707261
