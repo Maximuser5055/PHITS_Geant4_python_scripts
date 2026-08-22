@@ -9,6 +9,183 @@ import pandas as pd
 import re
 import b_config.a_config as config
 
+# ============================================================
+# EXISTING PUBLISHABLE SAF DATABASE CHECK
+# ============================================================
+
+PHANTOM_FILE_NAMES = {
+    "MRCP_AF": "mrcp_af",
+    "MRCP_AM": "mrcp_am",
+    "MFCP_AF": "mfcp_af",
+    "MFCP_AM": "mfcp_am",
+}
+
+def get_required_saf_database_files(phantom, simulation_code):
+    """
+    Return all required publishable SAF and STD files for
+    the selected phantom.
+
+    Both photon and electron databases are always required.
+    """
+
+    simulation_code = simulation_code.upper()
+
+    if simulation_code == "PHITS":
+
+        publishable_dir = config.RESULTS_PHITS_PUBLISHABLE_SAF_DATABASE_DIR
+
+    elif simulation_code == "GEANT4":
+
+        publishable_dir = config.RESULTS_GEANT4_PUBLISHABLE_SAF_DATABASE_DIR
+
+    else:
+
+        raise ValueError(f"Unsupported simulation code: {simulation_code}")
+    
+    phantom_map = {
+        "MRCP_AF": ["MRCP_AF"],
+        "MRCP_AM": ["MRCP_AM"],
+        "MFCP_AF": ["MFCP_AF"],
+        "MFCP_AM": ["MFCP_AM"],
+        "MRCP_AF_AM": ["MRCP_AF", "MRCP_AM"],
+        "MFCP_AF_AM": ["MFCP_AF", "MFCP_AM"],
+    }
+
+    if phantom not in phantom_map:
+        raise ValueError(
+            f"Unsupported phantom selection: {phantom}"
+        )
+
+    required_files = []
+
+    for phantom_code in phantom_map[phantom]:
+
+        phantom_name = PHANTOM_FILE_NAMES[phantom_code]
+
+        # ----------------------------------------------------
+        # Photon SAF database
+        # ----------------------------------------------------
+
+        required_files.extend([
+            publishable_dir
+            / f"{phantom_name}_photons_saf.csv",
+
+            publishable_dir
+            / f"{phantom_name}_photons_std.csv",
+        ])
+
+        # ----------------------------------------------------
+        # Electron SAF database
+        # ----------------------------------------------------
+
+        required_files.extend([
+            publishable_dir
+            / f"{phantom_name}_electrons_saf.csv",
+
+            publishable_dir
+            / f"{phantom_name}_electrons_std.csv",
+        ])
+
+    return required_files
+
+def check_existing_saf_database(phantom, simulation_code, uncertainty_limit,):
+    """
+    Check whether the complete publishable SAF database required
+    by the selected phantom and simulation code exists.
+
+    Both photon and electron SAF databases are required.
+
+    The uncertainty is read directly from the corresponding
+    publishable *_std.csv files.
+
+    This function is report-only. It does not modify input files
+    and does not request a rerun. The user interface in
+    b_input_user_parameters.py decides whether to reuse the
+    existing database or redo the SAF calculations.
+    """
+
+    required_files = get_required_saf_database_files(phantom, simulation_code)
+
+    existing_files = [
+        file
+        for file in required_files
+        if file.is_file()
+    ]
+
+    missing_files = [
+        file
+        for file in required_files
+        if not file.is_file()
+    ]
+
+    if missing_files:
+
+        return {
+            "exists": bool(existing_files),
+            "complete": False,
+            "required_files": required_files,
+            "existing_files": existing_files,
+            "missing_files": missing_files,
+            "max_uncertainty": None,
+            "uncertainty_by_file": {},
+            "uncertainty_pass": False,
+        }
+
+    uncertainty_by_file = {}
+    overall_max_uncertainty = None
+
+    for std_file in existing_files:
+
+        dataframe = pd.read_csv(
+            std_file,
+            comment="#",
+        )
+
+        if dataframe.shape[1] < 3:
+            raise ValueError(
+                f"Uncertainty database {std_file.name} "
+                "does not contain source-energy columns."
+            )
+
+        energy_columns = list(dataframe.columns[2:])
+
+        numeric_values = (
+            dataframe[energy_columns]
+            .apply(pd.to_numeric, errors="coerce")
+            .stack()
+            .dropna()
+        )
+
+        if numeric_values.empty:
+            raise ValueError(
+                f"No numerical uncertainty values were found "
+                f"in {std_file.name}."
+            )
+
+        file_max = float(numeric_values.max())
+
+        uncertainty_by_file[std_file.name] = file_max
+
+        if (
+            overall_max_uncertainty is None
+            or file_max > overall_max_uncertainty
+        ):
+            overall_max_uncertainty = file_max
+
+    return {
+        "exists": True,
+        "complete": True,
+        "required_files": required_files,
+        "existing_files": existing_files,
+        "missing_files": [],
+        "max_uncertainty": overall_max_uncertainty,
+        "uncertainty_by_file": uncertainty_by_file,
+        "uncertainty_pass": (
+            overall_max_uncertainty < uncertainty_limit
+        ),
+    }
+
+
 def check_uncertainty(params):
 
     # -------------------------------------------------------------------------
@@ -271,7 +448,7 @@ def check_uncertainty(params):
 
         print("\nEnter new PHITS parameter/s:")
 
-        new_maxcas = input(f"New maxbch (no. of batches) [Current = {params["maxcas"]}]: ").strip()
+        new_maxcas = input(f"New maxcas (no. of histories per batch) [Current = {params["maxcas"]}]: ").strip()
         new_maxcas = int(new_maxcas) if new_maxcas else params["maxcas"]
         config.update_config("MAXCAS", new_maxcas)
         config.MAXCAS = new_maxcas

@@ -76,7 +76,8 @@ PUBLISHABLE_SKELETAL_METHODS = {
 # Output directory
 # ------------------------------------------------------------
 
-publishable_dir = config.RESULTS_PUBLISHABLE_SAF_DATABASE_DIR
+geant4_publishable_dir = config.RESULTS_GEANT4_PUBLISHABLE_SAF_DATABASE_DIR
+phits_publishable_dir = config.RESULTS_PHITS_PUBLISHABLE_SAF_DATABASE_DIR
 
 # ------------------------------------------------------------
 # Master SAF databases and other configs
@@ -662,16 +663,21 @@ def create_publishable_saf_database(params):
 
     if simulation_code not in MASTER_DATABASES:
 
-        raise ValueError(
-            f"Unsupported simulation code: "
-            f"{simulation_code}"
-        )
+        raise ValueError(f"Unsupported simulation code: {simulation_code}")
 
-    master_database_file = (
-        MASTER_DATABASES[
-            simulation_code
-        ]
-    )
+    if simulation_code == "PHITS":
+
+        publishable_dir = config.RESULTS_PHITS_PUBLISHABLE_SAF_DATABASE_DIR
+
+    elif simulation_code == "GEANT4":
+
+        publishable_dir = config.RESULTS_GEANT4_PUBLISHABLE_SAF_DATABASE_DIR
+
+    else:
+
+        raise ValueError(f"Unsupported simulation code: {simulation_code}")
+
+    master_database_file = (MASTER_DATABASES[simulation_code])
 
     # --------------------------------------------------------
     # Check master database

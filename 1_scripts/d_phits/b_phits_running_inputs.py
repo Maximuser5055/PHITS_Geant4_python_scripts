@@ -45,7 +45,7 @@ def run_phits(params):
 
     print("\n")
     print("=" * 50)
-    print("PHITS Specific Absorbed Fraction (SAF) Simulation Launcher")
+    print("PHITS SAF Simulation Launcher")
     print("=" * 50)
 
     # ----------------------------------------------------------

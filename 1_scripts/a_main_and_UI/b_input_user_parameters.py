@@ -1,13 +1,86 @@
 # This script asks the user for various input files and PHITS parameters
 
 # Import necessary libraries
-import b_config.a_config as config
 from pathlib import Path
 import shutil
 
+import b_config.a_config as config
+from f_simulation_and_SAFs_further_analysis.c_check_uncertainty import check_existing_saf_database
+
+def display_existing_saf_database_status(status, uncertainty_limit, publishable_dir,):
+    """Display existing SAF database status and uncertainty."""
+
+    print()
+    print("=" * 90)
+    print("EXISTING SAF DATABASE CHECK")
+    print("=" * 90)
+
+    print(
+        f"\nSAF database directory:\n"
+        f"    {publishable_dir}"
+    )
+
+    if not status["exists"]:
+        print(
+            "\nNo existing SAF database was found for "
+            "the selected phantom."
+        )
+
+        return
+
+    if not status["complete"]:
+        print("\nAn incomplete SAF database was found.")
+
+        print("\nExisting files:")
+        for file in status["existing_files"]:
+            print(f"    {file.name}")
+
+        print("\nMissing files:")
+        for file in status["missing_files"]:
+            print(f"    {file.name}")
+
+        return
+
+    print("\nComplete SAF database found.")
+
+    print("\nFiles:")
+    for file in status["existing_files"]:
+        print(f"    {file.name}")
+
+    print("\nMaximum statistical uncertainty:")
+
+    for file_name, maximum in status["uncertainty_by_file"].items():
+
+        file_status = (
+            "PASS"
+            if maximum < uncertainty_limit
+            else "FAIL"
+        )
+
+        print(
+            f"    {file_name:<35}"
+            f"{maximum:8.2f}%   [{file_status}]"
+        )
+
+    overall_status = (
+        "PASS"
+        if status["uncertainty_pass"]
+        else "FAIL"
+    )
+
+    print()
+    print(f"Uncertainty limit : {uncertainty_limit:.2f}%")
+    print(
+        f"Overall maximum   : "
+        f"{status['max_uncertainty']:.2f}%"
+    )
+    print(f"Overall status    : {overall_status}")
+
 def get_user_parameters():
 
-    # User Interface
+    # ============================================================
+    # Start of Internal Dosimetry UI
+    # ============================================================
     print("\n")
     print("=" * 50)
     print("Internal Dosimetry Pipeline Configuration")
@@ -58,6 +131,188 @@ def get_user_parameters():
 
     else:
         raise RuntimeError("Unsupported operating system.")
+    
+    while True:
+            print("\nWhich phantom will you do internal dosimetry on?:")
+            print("ICRP 145 Mesh-type Reference Computational Phantoms")
+            print("[1] MRCP AF (Adult Female)")
+            print("[2] MRCP AM (Adult Male)")
+            print("\nFilipino-based Mesh-type Computational Phantoms")
+            print("[3] MFCP AF")
+            print("[4] MFCP AM")
+    
+            print("\nPhantom sets")
+            print("[5] Both MRCP phantoms (AF + AM)")
+            print("[6] Both MFCP phantoms (AF + AM)")
+    
+            current_phantom_display = config.PHANTOM_DISPLAY_NAMES.get(
+                config.PHANTOM_INPUT_GENERATION,
+                config.PHANTOM_INPUT_GENERATION)
+            
+            choice = input(
+                f"Select phantom input generation "
+                f"[Current = {current_phantom_display}]: "
+            ).strip()
+    
+    
+            if choice == "":
+                phantom_input_generation = (config.PHANTOM_INPUT_GENERATION)
+                break
+    
+            if choice == "1":
+                phantom_input_generation = "MRCP_AF"
+                break
+    
+            elif choice == "2":
+                phantom_input_generation = "MRCP_AM"
+                break
+    
+            elif choice == "3":
+                phantom_input_generation = "MFCP_AF"
+                break
+    
+            elif choice == "4":
+                phantom_input_generation = "MFCP_AM"
+                break
+    
+            elif choice == "5":
+                phantom_input_generation = "MRCP_AF_AM"
+                break
+    
+            elif choice == "6":
+                phantom_input_generation = "MFCP_AF_AM"
+                break
+    
+            print("\nError: Please enter 1, 2, 3, 4, 5, or 6.\n")
+
+    # ============================================================
+    # EXISTING SAF DATABASE
+    # ============================================================
+
+    if simulation_code == "PHITS":
+
+        publishable_dir = config.RESULTS_PHITS_PUBLISHABLE_SAF_DATABASE_DIR
+
+    elif simulation_code == "GEANT4":
+
+        publishable_dir = config.RESULTS_GEANT4_PUBLISHABLE_SAF_DATABASE_DIR
+
+    else:
+
+        raise ValueError(f"Unsupported simulation code: {simulation_code}")
+
+    saf_database_status = check_existing_saf_database(
+        phantom_input_generation,
+        simulation_code,
+        config.UNCERTAINTY_LIMIT
+    )
+
+    display_existing_saf_database_status(
+        saf_database_status,
+        config.UNCERTAINTY_LIMIT,
+        publishable_dir,)
+
+    use_existing_saf_database = False
+    redo_saf_calculations = True
+
+    if saf_database_status["complete"]:
+
+        print()
+        print("=" * 90)
+        print("EXISTING SAF DATABASE AVAILABLE")
+        print("=" * 90)
+
+        if saf_database_status["uncertainty_pass"]:
+            print(
+                "\nThe existing SAF database satisfies "
+                "the selected uncertainty limit."
+            )
+        else:
+            print(
+                "\nWARNING: The existing SAF database does NOT "
+                "satisfy the selected uncertainty limit."
+            )
+
+        print("\nWhat would you like to do?")
+        print(
+            "[1] Use the existing SAF database and "
+            "proceed to S-value calculation"
+        )
+        print("[2] Redo the SAF calculations")
+
+        while True:
+
+            choice = input("\nSelect option (1-2): ").strip()
+
+            if choice == "1":
+                use_existing_saf_database = True
+                redo_saf_calculations = False
+                print("\nUsing the existing SAF database.")
+                
+                if use_existing_saf_database:
+
+                    print()
+                    print("=" * 90)
+                    print("SKIPPING SAF CALCULATION")
+                    print("=" * 90)
+
+                    print(
+                        "\nThe existing publishable SAF database will be used."
+                    )
+
+                    print(
+                        f"Simulation code : {simulation_code}"
+                    )
+
+                    print(
+                        f"SAF database    : {publishable_dir}"
+                    )
+
+                    print(
+                        "\nProceeding directly to S-value calculation..."
+                    )
+
+                    return {
+                        "use_existing_saf_database": True,
+                        "redo_saf_calculations": False,
+                        "saf_database_status": saf_database_status,
+                        "simulation_code": simulation_code,
+                        "uncertainty_limit": config.UNCERTAINTY_LIMIT,
+                        "phantom": phantom_input_generation,
+                        "saf_database_dir": publishable_dir,
+                    }
+
+            elif choice == "2":
+                use_existing_saf_database = False
+                redo_saf_calculations = True
+                print("\nThe SAF calculations will be redone.")
+                break
+
+            print("Invalid choice. Please enter 1 or 2.")
+
+    else:
+
+        print()
+        print("=" * 90)
+        print("NO COMPLETE SAF DATABASE AVAILABLE")
+        print("=" * 90)
+
+        print("\nS-value calculation cannot proceed yet.")
+        print("The SAF calculations must be performed first.")
+
+        use_existing_saf_database = False
+        redo_saf_calculations = True
+
+    # ============================================================
+    # Start of SAF calculation pipeline
+    # ============================================================
+
+    print("\n")
+    print("=" * 50)
+    print("Specific Absorbed Fraction (SAFs) Pipeline Configuration")
+    print("=" * 50)
+
+    print(f"\n{simulation_code} is currently selected as the Monte Carlo particle transport code option.")
 
     if simulation_code == "PHITS":
 
@@ -224,72 +479,9 @@ def get_user_parameters():
 
         print(f"\nError: '{source_csv}' was not found. Please try again.\n")
 
-    while True:
-        print("\nPhantom Input Generation and Simulation:")
-        print("ICRP 145 Mesh-type Reference Computational Phantoms")
-        print("[1] MRCP AF (Adult Female)")
-        print("[2] MRCP AM (Adult Male)")
-        print("\nFilipino-based Mesh-type Computational Phantoms")
-        print("[3] MFCP AF")
-        print("[4] MFCP AM")
-
-        print("\nPhantom sets")
-        print("[5] Both MRCP phantoms (AF + AM)")
-        print("[6] Both MFCP phantoms (AF + AM)")
-
-        current_phantom_display = config.PHANTOM_DISPLAY_NAMES.get(
-            config.PHANTOM_INPUT_GENERATION,
-            config.PHANTOM_INPUT_GENERATION)
-        
-        choice = input(
-            f"Select phantom input generation "
-            f"[Current = {current_phantom_display}]: "
-        ).strip()
-
-
-        if choice == "":
-            phantom_input_generation = (config.PHANTOM_INPUT_GENERATION)
-            break
-
-        if choice == "1":
-            phantom_input_generation = "MRCP_AF"
-            break
-
-        elif choice == "2":
-            phantom_input_generation = "MRCP_AM"
-            break
-
-        elif choice == "3":
-            phantom_input_generation = "MFCP_AF"
-            break
-
-        elif choice == "4":
-            phantom_input_generation = "MFCP_AM"
-            break
-
-        elif choice == "5":
-            phantom_input_generation = "MRCP_AF_AM"
-            break
-
-        elif choice == "6":
-            phantom_input_generation = "MFCP_AF_AM"
-            break
-
-        print("\nError: Please enter 1, 2, 3, 4, 5, or 6.\n")
-
-    uncertainty_limit = input(
-        f"\nMaximum allowed statistical uncertainty (%) "
-        f"[Current = {config.UNCERTAINTY_LIMIT}]: "
-    ).strip()
-
-    uncertainty_limit = (
-        float(uncertainty_limit)
-        if uncertainty_limit
-        else config.UNCERTAINTY_LIMIT
-    )
+    print(f"\nMaximum allowed statistical uncertainty: {config.UNCERTAINTY_LIMIT}%")
 
     config.update_config("SIMULATION_CODE", simulation_code)
-    config.update_config("UNCERTAINTY_LIMIT", uncertainty_limit)
     config.update_config("THREADS", threads)
     config.update_config("SOURCE_CSV", source_csv)
     config.update_config("PHANTOM_INPUT_GENERATION", phantom_input_generation)
@@ -315,7 +507,7 @@ def get_user_parameters():
     elif simulation_code == "GEANT4":
         generated_inputs_dir = config.GEANT4_GENERATED_INPUTS_DIR
 
-    if generated_inputs_dir.exists():
+    if redo_saf_calculations and generated_inputs_dir.exists():
 
         while True:
 
@@ -353,7 +545,8 @@ def get_user_parameters():
         config.RESULTS_PHITS_DIR,
         config.RESULTS_GEANT4_DIR,
         config.RESULTS_SAF_DATABASE_DIR,
-        config.RESULTS_PUBLISHABLE_SAF_DATABASE_DIR,
+        config.RESULTS_GEANT4_PUBLISHABLE_SAF_DATABASE_DIR,
+        config.RESULTS_PHITS_PUBLISHABLE_SAF_DATABASE_DIR,
         config.RESULTS_S_VALUES_DIR,
     ]
 
@@ -361,8 +554,14 @@ def get_user_parameters():
         directory.mkdir(parents=True, exist_ok=True)
 
     params = {
+    # Check SAF database workflow
+    "use_existing_saf_database": use_existing_saf_database,
+    "redo_saf_calculations": redo_saf_calculations,
+    "saf_database_status": saf_database_status,
+
+    # SAF pipeline configuration
     "simulation_code": simulation_code,
-    "uncertainty_limit": uncertainty_limit,
+    "uncertainty_limit": config.UNCERTAINTY_LIMIT,
     "threads": threads,
     "source_csv": source_csv,
     "phantom": phantom_input_generation,

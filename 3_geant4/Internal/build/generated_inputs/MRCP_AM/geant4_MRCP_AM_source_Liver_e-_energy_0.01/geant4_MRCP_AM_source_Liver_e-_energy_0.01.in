@@ -1,0 +1,16 @@
+# Example macro file to run in the batch mode
+
+# Set the verbose
+/run/verbose 1
+
+# Set the number of threads for multi-threading mode
+/run/numberOfThreads 32
+
+# Initialize
+/run/initialize
+
+# source setting
+/control/execute geant4_MRCP_AM_source_Liver_e-_energy_0.01.mac
+
+# Set the nps
+/run/beamOn 1000
