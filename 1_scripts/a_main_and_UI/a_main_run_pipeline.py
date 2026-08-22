@@ -72,7 +72,9 @@ def main():
 
     # else:
         # Not implemented yet
-        # from g_S_values_and_whole_body_doses.calculate_S_values import calculate_S_values
+        # from g_radionuclides.extract_ICRP_107_radionuclide_information import extract_radionuclide_info
+        # extract_radionuclide_info(params)
+        # from h_S_values_and_whole_body_doses.calculate_S_values import calculate_S_values
         # calculate_S_values(params)
 
 if __name__ == "__main__":
