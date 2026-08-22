@@ -1,0 +1,63 @@
+==============================================================================
+ICRP-107 RAD/BET EXTRACTION SUMMARY
+==============================================================================
+
+INPUT FILES
+------------------------------------------------------------------------------
+RAD file radionuclides:       1,252
+BET file radionuclides:       955
+Combined unique radionuclides: 1,252
+Radionuclides in both files:  955
+RAD-only radionuclides:       297
+BET-only radionuclides:       0
+
+DATA RECORDS
+------------------------------------------------------------------------------
+RAD declared data records:    454,373
+BET declared data records:    110,370
+Combined CSV rows:             564,743
+RAD rows in CSV:               454,373
+BET rows in CSV:               110,370
+
+RAD RADIATION TYPES
+------------------------------------------------------------------------------
+IC electrons                        292,348
+X rays                               69,007
+Gamma rays                           62,317
+Auger electrons                      17,601
+Beta- particles                       5,191
+Beta+ particles                       4,826
+Alpha particles                       1,288
+Alpha recoil nuclei                   1,288
+Annihilation photons                    451
+Fission fragments                        28
+Neutrons                                 28
+
+RAD HALF-LIFE UNITS
+------------------------------------------------------------------------------
+d                                       206
+h                                       295
+m                                       508
+ms                                        1
+s                                       106
+us                                        1
+y                                       135
+
+ICODE / JCODE DEFINITIONS
+------------------------------------------------------------------------------------------
+1  G   Gamma rays
+1  PG  Prompt gamma rays
+1  DG  Delayed gamma rays
+2  X   X rays
+3  AQ  Annihilation photons
+4  B+  Beta+ particles
+5  B-  Beta- particles
+5  BD  Delayed beta particles
+6  IE  IC electrons
+7  AE  Auger electrons
+8  A   Alpha particles
+9  AR  Alpha recoil nuclei
+10 FF  Fission fragments
+11 N   Neutrons
+
+==========================================================================================
