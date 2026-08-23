@@ -31,15 +31,18 @@ Important:
 
 from __future__ import annotations
 
+import platform
+import shutil
+import subprocess
+import webbrowser
 import csv
-import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
 try:
-    import matplotlib.pyplot as plt
+    import plotly.graph_objects as go
 except ImportError:
-    plt = None
+    go = None
 
 
 # ---------------------------------------------------------------------------
@@ -98,12 +101,6 @@ def clean_float(value: str) -> float:
     """Convert an ICRP scientific-notation field to float."""
     value = value.strip().replace("D", "E").replace("d", "e")
     return float(value)
-
-
-def safe_filename(name: str) -> str:
-    """Make a radionuclide name safe for use as a filename."""
-    return re.sub(r"[^A-Za-z0-9_.+-]+", "_", name)
-
 
 def prompt_path(prompt: str, default: Path) -> Path:
     text = input(f"{prompt} [{default}]: ").strip()
@@ -309,7 +306,7 @@ def parse_bet(bet_path: Path) -> tuple[list[dict], dict]:
                         "physical_half_life": "",
                         "half_life_units": "",
                         "number_of_data_records": number_of_records,
-                        "icode": "5",
+                        "icode": "",
                         "radiation_type": "Beta- particles",
                         "jcode": "",
                         "energy_mev": energy_mev,
@@ -511,17 +508,16 @@ def print_radionuclide(
 # Plotting
 # ---------------------------------------------------------------------------
 
-def plot_radionuclide(
-    records: list[dict],
-    nuclide: str,
-    output_directory: Path,
-) -> Path | None:
-    if plt is None:
-        print(
-            "\nMatplotlib is not installed. "
-            "Install it with: pip install matplotlib"
+def plot_radionuclide(records: list[dict], 
+                      nuclide: str,
+                      output_directory: Path) -> None:
+
+    if go is None:
+        print("\nPlotly is not installed."
+              "\nInstall it with:"
+              "\n  pip install plotly"
         )
-        return None
+        return
 
     selected = get_records_for_nuclide(records, nuclide)
 
@@ -529,10 +525,12 @@ def plot_radionuclide(
         print(f"No records found for {nuclide}.")
         return None
 
+    yield_key = "yield (/nt for RAD file, beta/MeV/nt for BET file)"
+
     # Only positive x/y values can appear on a log-log plot.
     positive = [
         r for r in selected
-        if r["energy_mev"] > 0 and r["yield (/nt for RAD file, beta/MeV/nt for BET file)"] > 0
+        if r["energy_mev"] > 0 and r[yield_key] > 0
     ]
 
     if not positive:
@@ -542,70 +540,150 @@ def plot_radionuclide(
     rad = [r for r in positive if r["source_file (1=RAD, 2=BET)"] == 1]
     bet = [r for r in positive if r["source_file (1=RAD, 2=BET)"] == 2]
 
-    fig, ax = plt.subplots(figsize=(10, 7))
+    fig = go.Figure()
 
+    # -----------------------------------------------------------------------
     # RAD: discrete emission lines
+    # -----------------------------------------------------------------------
+
     rad_by_type = defaultdict(list)
     for r in rad:
         rad_by_type[r["radiation_type"]].append(r)
 
     for radiation_type, rows in sorted(rad_by_type.items()):
         rows = sorted(rows, key=lambda x: x["energy_mev"])
-        ax.scatter(
-            [r["energy_mev"] for r in rows],
-            [r["yield (/nt for RAD file, beta/MeV/nt for BET file)"] for r in rows],
-            label=radiation_type,
-            s=28,
-            alpha=0.75,
+
+        fig.add_trace(
+            go.Scatter(
+                x=[r["energy_mev"] for r in rows],
+                y=[r[yield_key] for r in rows],
+                mode="markers",
+                name=radiation_type,
+                marker={"size": 9},
+                customdata=[
+                    [
+                        r["icode"],
+                        r["jcode"],
+                        r["energy_mev"],
+                        r[yield_key],
+                    ]
+                    for r in rows
+                ],
+                hovertemplate=(
+                    "<b>%{fullData.name}</b><br>"
+                    "Energy: %{customdata[2]:.6g} MeV<br>"
+                    "Yield: %{customdata[3]:.6e}<br>"
+                    "ICODE: %{customdata[0]}<br>"
+                    "JCODE: %{customdata[1]}"
+                    "<extra></extra>"
+                ),
+            )
         )
 
+    # -----------------------------------------------------------------------
     # BET: continuous beta spectrum
+    # -----------------------------------------------------------------------
+
     if bet:
         bet_rows = sorted(bet, key=lambda x: x["energy_mev"])
-        ax.plot(
-            [r["energy_mev"] for r in bet_rows],
-            [r["yield (/nt for RAD file, beta/MeV/nt for BET file)"] for r in bet_rows],
-            label="Beta- particles",
-            linewidth=1.5,
+
+        fig.add_trace(
+            go.Scatter(
+                x=[r["energy_mev"] for r in bet_rows],
+                y=[r[yield_key] for r in bet_rows],
+                mode="lines",
+                name="Beta- particles",
+                line={"width": 2},
+                hovertemplate=(
+                    "<b>Beta- particles</b><br>"
+                    "Energy: %{x:.6g} MeV<br>"
+                    "Yield: %{y:.6e}"
+                    "<extra></extra>"
+                ),
+            )
         )
 
-    ax.set_xscale("log")
-    ax.set_yscale("log")
+    # -----------------------------------------------------------------------
+    # Log-log axes
+    # -----------------------------------------------------------------------
 
-    ax.set_xlabel("Energy (MeV)")
-    ax.set_ylabel("Emission yield")
-
-    ax.set_title(f"ICRP-107 Emission Spectrum: {nuclide}")
-    ax.grid(True, which="both", alpha=0.25)
-    ax.legend()
-    fig.tight_layout()
-
-    output_directory.mkdir(parents=True, exist_ok=True)
-    graph_path = output_directory / (
-        f"{safe_filename(nuclide)}_emission_loglog.png"
+    fig.update_xaxes(
+        type="log",
+        range=[-5, 1],
+        title="Energy (MeV)",
+        showgrid=True,
+        minor={"showgrid": True,}
     )
 
-    fig.savefig(graph_path, dpi=300, bbox_inches="tight")
-    print(f"\nGraph saved to:\n  {graph_path}")
+    fig.update_yaxes(
+        type="log",
+        title="Emission yield",
+        showgrid=True,
+        minor={"showgrid": True,}
+    )
 
-    try:
-        plt.show()
-    except Exception as exc:
-        print(f"Could not display the graph interactively: {exc}")
-        print("The PNG file was still saved successfully.")
+    # -----------------------------------------------------------------------
+    # Layout
+    # -----------------------------------------------------------------------
 
-    plt.close(fig)
-    return graph_path
+    fig.update_layout(
+        title=f"ICRP-107 Emission Spectrum: {nuclide}",
+        hovermode="closest",
+        legend={
+            "title": "Radiation type",
+        },
+        width=1000,
+        height=700,
+    )
 
+    def open_html_in_browser(html_path: Path) -> bool:
+        """Open an HTML file in the user's web browser."""
+
+        html_path = html_path.resolve()
+
+        # Linux / WSL
+        if platform.system() == "Linux":
+            firefox = shutil.which("firefox")
+
+            if firefox:
+                try:
+                    subprocess.Popen(
+                        [firefox, str(html_path)]
+                    )
+                    return True
+                except Exception:
+                    pass
+
+        # Windows / macOS / fallback
+        try:
+            return webbrowser.open_new_tab(
+                html_path.as_uri()
+            )
+        except Exception:
+            return False
+    
+    html_path = output_directory / f"{nuclide}_emission_interactive.html"
+
+    fig.write_html(html_path, include_plotlyjs=True, auto_open=False)
+
+    print(f"\nInteractive emission spectrum saved to:\n  {html_path}")
+
+    if open_html_in_browser(html_path):
+        print("Opening interactive emission spectrum in your web browser...")
+    else:
+        print("\nCould not open the browser automatically."
+              f"\nOpen the interactive graph manually at:"
+              f"\n  {html_path}")
+
+    return
 
 # ---------------------------------------------------------------------------
 # Interactive selection
 # ---------------------------------------------------------------------------
 
-def interactive_viewer(
-    records: list[dict],
-    output_directory: Path,
-) -> None:
+def interactive_viewer(records: list[dict],
+                       output_directory: Path) -> None:
+
     answer = input(
         "\nDo you want to view individual radionuclides? [y/N]: "
     ).strip().lower()
@@ -673,7 +751,7 @@ def interactive_viewer(
             print_radionuclide(records, name)
 
             graph_answer = input(
-                f"\nDo you want a log-log emission graph for {name}? [y/N]: "
+                f"\nDo you want an interactive log-log emission graph for {name}? [y/N]: "
             ).strip().lower()
 
             if graph_answer in {"y", "yes"}:
@@ -696,10 +774,10 @@ def main() -> None:
     print("ICRP-107 RAD/BET EXTRACTOR")
     print("=" * 90)
 
-    IRCP_107_dir = Path("/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/ICRP_107")
+    ICRP_107_dir = Path("/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/ICRP_107")
 
-    default_rad = IRCP_107_dir / "ICRP-107.RAD"
-    default_bet = IRCP_107_dir / "ICRP-107.BET"
+    default_rad = ICRP_107_dir / "ICRP-107.RAD"
+    default_bet = ICRP_107_dir / "ICRP-107.BET"
 
     rad_path = prompt_path("Path to .RAD file", default_rad)
     bet_path = prompt_path("Path to .BET file", default_bet)
@@ -715,7 +793,6 @@ def main() -> None:
 
     csv_path = output_directory / "ICRP-107_combined.csv"
     summary_path = output_directory / "ICRP-107_summary.txt"
-    graph_directory = output_directory / "graphs"
 
     print("\nReading RAD file...")
     rad_records, rad_summary = parse_rad(rad_path)
@@ -750,12 +827,8 @@ def main() -> None:
     print("-" * 78)
     print(f"Combined CSV: {csv_path.resolve()}")
     print(f"Summary TXT:  {summary_path.resolve()}")
-    print(f"Graph folder: {graph_directory.resolve()}")
 
-    interactive_viewer(
-        combined_records,
-        graph_directory,
-    )
+    interactive_viewer(combined_records, output_directory)
 
     print("\nDone.")
 
