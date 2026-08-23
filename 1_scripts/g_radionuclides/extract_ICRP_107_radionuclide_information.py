@@ -571,8 +571,8 @@ def plot_radionuclide(records: list[dict],
                 ],
                 hovertemplate=(
                     "<b>%{fullData.name}</b><br>"
-                    "Energy: %{customdata[2]:.6g} MeV<br>"
-                    "Yield: %{customdata[3]:.6e}<br>"
+                    "Energy: %{customdata[2]:.3g} MeV<br>"
+                    "Yield: %{customdata[3]:.3e}<br>"
                     "ICODE: %{customdata[0]}<br>"
                     "JCODE: %{customdata[1]}"
                     "<extra></extra>"
@@ -596,8 +596,8 @@ def plot_radionuclide(records: list[dict],
                 line={"width": 2},
                 hovertemplate=(
                     "<b>Beta- particles</b><br>"
-                    "Energy: %{x:.6g} MeV<br>"
-                    "Yield: %{y:.6e}"
+                    "Energy: %{x:.3g} MeV<br>"
+                    "Yield: %{y:.3e}"
                     "<extra></extra>"
                 ),
             )
@@ -617,7 +617,7 @@ def plot_radionuclide(records: list[dict],
 
     fig.update_yaxes(
         type="log",
-        title="Emission yield",
+        title="Emission yield (particles / nuclear transformation)",
         showgrid=True,
         minor={"showgrid": True,}
     )
