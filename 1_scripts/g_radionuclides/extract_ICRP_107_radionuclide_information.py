@@ -791,6 +791,9 @@ def main() -> None:
     output_directory = Path("/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/ICRP_107")
     output_directory.mkdir(parents=True, exist_ok=True)
 
+    interactive_plots_directory = output_directory / "interactive_plots_html"
+    interactive_plots_directory.mkdir(parents=True, exist_ok=True)
+
     csv_path = output_directory / "ICRP-107_combined.csv"
     summary_path = output_directory / "ICRP-107_summary.txt"
 
@@ -828,7 +831,7 @@ def main() -> None:
     print(f"Combined CSV: {csv_path.resolve()}")
     print(f"Summary TXT:  {summary_path.resolve()}")
 
-    interactive_viewer(combined_records, output_directory)
+    interactive_viewer(combined_records, interactive_plots_directory)
 
     print("\nDone.")
 
