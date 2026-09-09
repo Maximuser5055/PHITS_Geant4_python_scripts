@@ -22,7 +22,7 @@ ${{PARALLELIZATION}}={{THREADS}}
   totfact =    1.00         # (D=1.0) global factor
    s-type =    24            # rectangular-solid source
      proj = {{SOURCETYPE}}        # kind of incident particle 
-   tetreg = {{SOURCEREGION}}          # Liver as source
+   tetreg = {{SOURCEREGION}}          # source
        e0 = {{SOURCEENERGY}}         # energy of beam [MeV/u]
       dir =   all           # z-direction of beam [isotropic]
 
