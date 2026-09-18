@@ -5,6 +5,7 @@ from pathlib import Path
 import shutil
 
 import b_config.a_config as config
+from b_config.b_phantom_registry import (PHANTOMS, PHANTOM_GROUPS)
 from f_simulation_and_SAFs_further_analysis.c_check_uncertainty import check_existing_saf_database
 
 def display_existing_saf_database_status(status, uncertainty_limit, publishable_dir,):
@@ -78,21 +79,16 @@ def display_existing_saf_database_status(status, uncertainty_limit, publishable_
     print(f"Overall status    : {overall_status}")
 
 def get_saf_database_display_name(phantom_code):
-    """Return the phantom family represented by the SAF database."""
 
-    group = config.SAF_DATABASE_PHANTOM_GROUPS.get(
-        phantom_code,
-        [phantom_code],
-    )
+    if phantom_code in PHANTOM_GROUPS:
 
-    family = group[0].split("_")[0]
+        return PHANTOM_GROUPS[phantom_code].display_name
 
-    sexes = " + ".join(
-        phantom.split("_")[-1]
-        for phantom in group
-    )
+    if phantom_code in PHANTOMS:
 
-    return f"{family} {sexes}"
+        return PHANTOMS[phantom_code].display_name
+
+    raise ValueError(f"Unknown phantom or phantom group: {phantom_code}")
 
 def get_user_parameters():
 
@@ -150,56 +146,92 @@ def get_user_parameters():
     else:
         raise RuntimeError("Unsupported operating system.")
     
-    while True:
-            print("\nWhich phantom will you do internal dosimetry on?:")
-            print("ICRP 145 Mesh-type Reference Computational Phantoms")
-            print("[1] MRCP AF (Adult Female)")
-            print("[2] MRCP AM (Adult Male)")
-            print("\nFilipino-based Mesh-type Computational Phantoms")
-            print("[3] MFCP AF")
-            print("[4] MFCP AM")
-    
-            print("\nPhantom sets")
-            print("[5] Both MRCP phantoms (AF + AM)")
-            print("[6] Both MFCP phantoms (AF + AM)")
-    
-            current_phantom_display = get_saf_database_display_name(config.PHANTOM_INPUT_GENERATION)
+    # ============================================================
+    # PHANTOM SELECTION
+    # ============================================================
 
-            choice = input(
-                f"Select phantom input generation "
-                f"[Current = {current_phantom_display}]: "
-            ).strip()
-    
-    
-            if choice == "":
-                phantom_input_generation = (config.PHANTOM_INPUT_GENERATION)
+    phantom_options = list(PHANTOMS.keys())
+    phantom_group_options = list(PHANTOM_GROUPS.keys())
+
+    phantom_menu = []
+
+    # Add individual phantoms
+    for phantom_code in phantom_options:
+
+        phantom_menu.append({
+            "code": phantom_code,
+            "type": "phantom",
+        })
+
+    # Add phantom groups
+    for group_code in phantom_group_options:
+
+        phantom_menu.append({
+            "code": group_code,
+            "type": "group",
+        })
+
+
+    print("\nWhich phantom will you do internal dosimetry on?")
+
+    print("\nAvailable phantoms:")
+
+    for index, item in enumerate(phantom_menu, start=1):
+
+        code = item["code"]
+
+        if item["type"] == "phantom":
+
+            display_name = PHANTOMS[code].display_name
+
+        else:
+
+            display_name = get_saf_database_display_name(code)
+
+        print(f"[{index}] {display_name}")
+
+
+    current_phantom_display = get_saf_database_display_name(
+        config.PHANTOM_INPUT_GENERATION
+    )
+
+
+    while True:
+
+        choice = input(
+            f"\nSelect phantom input generation "
+            f"[Current = {current_phantom_display}]: "
+        ).strip()
+
+        # Press Enter to keep current selection
+        if choice == "":
+
+            phantom_input_generation = (
+                config.PHANTOM_INPUT_GENERATION
+            )
+
+            break
+
+        try:
+
+            index = int(choice) - 1
+
+            if 0 <= index < len(phantom_menu):
+
+                phantom_input_generation = (
+                    phantom_menu[index]["code"]
+                )
+
                 break
-    
-            if choice == "1":
-                phantom_input_generation = "MRCP_AF"
-                break
-    
-            elif choice == "2":
-                phantom_input_generation = "MRCP_AM"
-                break
-    
-            elif choice == "3":
-                phantom_input_generation = "MFCP_AF"
-                break
-    
-            elif choice == "4":
-                phantom_input_generation = "MFCP_AM"
-                break
-    
-            elif choice == "5":
-                phantom_input_generation = "MRCP_AF_AM"
-                break
-    
-            elif choice == "6":
-                phantom_input_generation = "MFCP_AF_AM"
-                break
-    
-            print("\nError: Please enter 1, 2, 3, 4, 5, or 6.\n")
+
+        except ValueError:
+
+            pass
+
+        print(
+            f"\nError: Please enter a number from "
+            f"1 to {len(phantom_menu)}.\n"
+        )
 
     # ============================================================
     # EXISTING SAF DATABASE

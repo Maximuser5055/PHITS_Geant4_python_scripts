@@ -103,16 +103,6 @@ else:
         f"Unsupported operating system: {SYSTEM}"
     )
 
-CELL_FILES = {
-    # IRCP 145: Caucasian-based computational phantoms
-    "MRCP_AM": ROOT / "2_phits/phantoms/MRCP-AM.cell",
-    "MRCP_AF": ROOT / "2_phits/phantoms/MRCP-AF.cell",
-
-    # Filipino-based computational phantoms
-    "MFCP_AM": ROOT / "2_phits/phantoms/MFCP-AM.cell",
-    "MFCP_AF": ROOT / "2_phits/phantoms/MFCP-AF.cell",
-}
-
 INPUT_TEMPLATE_FILE = ROOT / "2_phits/template_input_files/1_template_MRCP_internal_input.inp"
 
 INCLUDE_FILES_DIR = ROOT / "2_phits/phantoms"
@@ -217,24 +207,6 @@ GEANT4_SOURCE_TYPE_MAP = {
 ############################
 # General Settings
 ############################
-
-# For check_uncertainty.py
-SAF_DATABASE_PHANTOM_GROUPS = {
-    "MRCP_AF": ["MRCP_AF", "MRCP_AM"],
-    "MRCP_AM": ["MRCP_AF", "MRCP_AM"],
-    "MRCP_AF_AM": ["MRCP_AF", "MRCP_AM"],
-
-    "MFCP_AF": ["MFCP_AF", "MFCP_AM"],
-    "MFCP_AM": ["MFCP_AF", "MFCP_AM"],
-    "MFCP_AF_AM": ["MFCP_AF", "MFCP_AM"],
-}
-
-PHANTOM_NAMES = {
-    "MRCP_AM": "ICRP 145 Adult Male",
-    "MRCP_AF": "ICRP 145 Adult Female",
-    "MFCP_AM": "Filipino Adult Male",
-    "MFCP_AF": "Filipino Adult Female"
-}
 
 MEV_TO_J = 1.6021766339999e-13
 
