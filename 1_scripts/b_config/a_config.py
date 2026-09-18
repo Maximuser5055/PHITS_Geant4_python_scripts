@@ -139,7 +139,7 @@ GEANT4_RERUN_CSV_FILE = RESULTS_GEANT4_DIR / "i_geant4_rerun_required.csv"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "GEANT4"
+SIMULATION_CODE = "PHITS"
 
 ############################
 # PHITS Settings
@@ -147,7 +147,7 @@ SIMULATION_CODE = "GEANT4"
 
 PARALLELIZATION = "OMP"
     
-MAXCAS = 1000
+MAXCAS = 100
 
 MAXBCH = 10
 
@@ -195,7 +195,7 @@ GEANT4_SOURCE_TYPES = [
     "e-",
 ]
 
-PHANTOM_INPUT_GENERATION = "MRCP_AF_AM"
+PHANTOM_INPUT_GENERATION = "MRCP_AF_AM_Filipino_Resized"
 
 NPS = 10000
 
@@ -214,7 +214,7 @@ THREADS = 32
 
 SOURCE_ENERGIES = [0.01, 1.0, 10.0]
 
-SELECTED_SOURCE_TYPE = "e-"
+SELECTED_SOURCE_TYPE = "photon"
 
 FLUENCE_SOURCE_TYPES = [
     "photon",
@@ -227,8 +227,6 @@ ENERGY_BINS = 100
 ENERGY_MIN = 0.01
 
 ENERGY_MAX = 10
-
-UNCERTAINTY_LIMIT = 5.0
 
 ############################
 # S-Values

@@ -6,10 +6,10 @@ import shutil
 
 import b_config.a_config as config
 from b_config.b_phantom_registry import (PHANTOMS, PHANTOM_GROUPS)
-from f_simulation_and_SAFs_further_analysis.c_check_uncertainty import check_existing_saf_database
+from f_simulation_and_SAFs_further_analysis.c_check_existing_saf_database import check_existing_saf_database
 
-def display_existing_saf_database_status(status, uncertainty_limit, publishable_dir,):
-    """Display existing SAF database status and uncertainty."""
+def display_existing_saf_database_status(status, publishable_dir):
+    """Display existing SAF database status."""
 
     print()
     print("=" * 90)
@@ -47,36 +47,6 @@ def display_existing_saf_database_status(status, uncertainty_limit, publishable_
     print("\nFiles:")
     for file in status["existing_files"]:
         print(f"    {file.name}")
-
-    print("\nMaximum statistical uncertainty:"    
-          "\n(from corresponding *_std.csv files):")
-
-    for file_name, maximum in status["uncertainty_by_file"].items():
-
-        file_status = (
-            "PASS"
-            if maximum < uncertainty_limit
-            else "FAIL"
-        )
-
-        print(
-            f"    {file_name:<35}"
-            f"{maximum:8.2f} %   [{file_status}]"
-        )
-
-    overall_status = (
-        "PASS"
-        if status["uncertainty_pass"]
-        else "FAIL"
-    )
-
-    print()
-    print(f"Uncertainty limit : {uncertainty_limit:.2f} %")
-    print(
-        f"Overall maximum   : "
-        f"{status['max_uncertainty']:.2f} %"
-    )
-    print(f"Overall status    : {overall_status}")
 
 def get_saf_database_display_name(phantom_code):
 
@@ -251,14 +221,12 @@ def get_user_parameters():
 
     saf_database_status = check_existing_saf_database(
         phantom_input_generation,
-        simulation_code,
-        config.UNCERTAINTY_LIMIT
+        simulation_code
     )
 
     display_existing_saf_database_status(
         saf_database_status,
-        config.UNCERTAINTY_LIMIT,
-        publishable_dir,)
+        publishable_dir)
 
     use_existing_saf_database = False
     redo_saf_calculations = True
@@ -269,17 +237,6 @@ def get_user_parameters():
         print("=" * 90)
         print("EXISTING SAF DATABASE AVAILABLE")
         print("=" * 90)
-
-        if saf_database_status["uncertainty_pass"]:
-            print(
-                "\nThe existing SAF database satisfies "
-                "the selected uncertainty limit."
-            )
-        else:
-            print(
-                "\nWARNING: The existing SAF database does NOT "
-                f"satisfy the selected uncertainty limit of {config.UNCERTAINTY_LIMIT} %."
-            )
 
         print("\nWhat would you like to do?")
         print(
@@ -325,7 +282,6 @@ def get_user_parameters():
                         "redo_saf_calculations": False,
                         "saf_database_status": saf_database_status,
                         "simulation_code": simulation_code,
-                        "uncertainty_limit": config.UNCERTAINTY_LIMIT,
                         "phantom": phantom_input_generation,
                         "saf_database_dir": publishable_dir,
                     }
@@ -529,8 +485,6 @@ def get_user_parameters():
 
         print(f"\nError: '{source_csv}' was not found. Please try again.\n")
 
-    print(f"\nMaximum allowed statistical uncertainty: {config.UNCERTAINTY_LIMIT} %")
-
     config.update_config("SIMULATION_CODE", simulation_code)
     config.update_config("THREADS", threads)
     config.update_config("SOURCE_CSV", source_csv)
@@ -611,7 +565,6 @@ def get_user_parameters():
 
     # SAF pipeline configuration
     "simulation_code": simulation_code,
-    "uncertainty_limit": config.UNCERTAINTY_LIMIT,
     "threads": threads,
     "source_csv": source_csv,
     "phantom": phantom_input_generation,

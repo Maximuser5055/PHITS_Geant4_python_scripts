@@ -1,10 +1,12 @@
-# This script parses the .cell files to extract organ information and 
-# generates a Python database file containing organ IDs, names, densities, volumes, and masses for both male and female phantoms.
+# This script parses the .cell files to extract organ information and
+# generates a Python database file containing organ IDs, names, densities,
+# volumes, and masses for the selected phantoms.
 
 # import necessary libraries
 import re
 import pandas as pd
 import b_config.a_config as config
+from b_config.b_phantom_registry import (PHANTOMS, get_phantom_group,)
 
 # Define path parameters
 csv_file_path = config.ORGAN_ID_CSV
@@ -27,20 +29,7 @@ def parse_cell_csv_inputs(params):
 
     phantom_selection = params["phantom"]
 
-    if phantom_selection.startswith("MRCP"):
-        male_cell_file_path = config.CELL_FILES["MRCP_AM"]
-        female_cell_file_path = config.CELL_FILES["MRCP_AF"]
-        phantom_prefix = "MRCP"
-
-    elif phantom_selection.startswith("MFCP"):
-        male_cell_file_path = config.CELL_FILES["MFCP_AM"]
-        female_cell_file_path = config.CELL_FILES["MFCP_AF"]
-        phantom_prefix = "MFCP"
-
-    else:
-        raise ValueError(
-            f"Unknown phantom selection: {phantom_selection}"
-        )
+    phantom_codes = get_phantom_group(phantom_selection)
     
     def parse_cell(cell_file_path):
         # Initialize an empty dictionary to store organ data
@@ -68,24 +57,24 @@ def parse_cell_csv_inputs(params):
                     }
         return organs
 
-    # Use parse function to extract organ data from male and female cell files, and then map organ IDs to names using the CSV file.
-    male_organs = parse_cell(male_cell_file_path)
-    female_organs = parse_cell(female_cell_file_path)
-
-    phantoms = [(f"{phantom_prefix}_AM", male_organs), 
-                (f"{phantom_prefix}_AF", female_organs)]
-    
     names = pd.read_csv(csv_file_path)
 
     name_dict = dict(zip(names.organ_id, names.name))
 
-    for organs in (male_organs, female_organs):
+    phantoms = []
+
+    for phantom_code in phantom_codes:
+
+        phantom = PHANTOMS[phantom_code]
+        organs = parse_cell(phantom.cell_file)
 
         for organ_id, organ in organs.items():
             organ["name"] = (
                 name_dict.get(organ_id, "Unknown")
                 .replace(", ", "_")
             )
+
+        phantoms.append((phantom_code, organs))
 
     # Reading the source organs
     organ_groups = pd.read_csv(source_organs_csv_file_path)
@@ -110,9 +99,9 @@ def parse_cell_csv_inputs(params):
 
         f.write("ORGANS = {\n")
 
-        for phantom_name, organs in phantoms:
+        for phantom_code, organs in phantoms:
 
-            f.write(f'    "{phantom_name}": {{\n')
+            f.write(f'    "{phantom_code}": {{\n')
 
             for organ_id, organ in organs.items():
 
@@ -134,9 +123,9 @@ def parse_cell_csv_inputs(params):
 
         f.write("SOURCE_ORGANS = {\n")
 
-        for phantom_name, organs in phantoms:
+        for phantom_code, organs in phantoms:
 
-            f.write(f'    "{phantom_name}": {{\n')
+            f.write(f'    "{phantom_code}": {{\n')
 
             for organ_id in main_source_organs:
 
@@ -152,7 +141,7 @@ def parse_cell_csv_inputs(params):
                     print(
                         f"Warning: Source organ ID {organ_id} "
                         f"({organ_name}) does not exist in "
-                        f"phantom {phantom_name}. Skipping."
+                        f"phantom {phantom_code}. Skipping."
                     )
 
                     continue

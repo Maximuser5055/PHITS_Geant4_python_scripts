@@ -31,7 +31,6 @@ def main():
 
         from f_simulation_and_SAFs_further_analysis.a_calculating_extra_metadata import calculate_extra_metadata
         from f_simulation_and_SAFs_further_analysis.b_configure_target_organs_and_calculate_true_dose_and_SAFs import combine_target_organs_and_calculate_true_dose_and_SAFs
-        from f_simulation_and_SAFs_further_analysis.c_check_uncertainty import check_uncertainty
         from f_simulation_and_SAFs_further_analysis.d_create_and_update_master_saf_database import update_master_saf_database
         from f_simulation_and_SAFs_further_analysis.e_create_and_update_publishable_saf_database import create_publishable_saf_database
         # Not implemented yet
@@ -64,7 +63,6 @@ def main():
             raise ValueError(f"Unsupported simulation code: {params['simulation_code']}")
         
         combine_target_organs_and_calculate_true_dose_and_SAFs(params)
-        check_uncertainty(params)
         update_master_saf_database(params)
         create_publishable_saf_database(params)\
         # Not implemented yet
