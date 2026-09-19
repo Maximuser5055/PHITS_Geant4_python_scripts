@@ -7,6 +7,7 @@ from pathlib import Path
 import json
 import re
 import b_config.a_config as config
+from b_config.b_phantom_registry import get_phantom_by_sex
 
 # Configurations
 executable = config.GEANT4_EXECUTABLE_FILE
@@ -76,22 +77,8 @@ def geant4_change_phantom_family(params):
 
     phantom_selection = params["phantom"]
 
-    if phantom_selection.startswith("MRCP"):
-
-        male_phantom = "MRCP_AM"
-        female_phantom = "MRCP_AF"
-
-    elif phantom_selection.startswith("MFCP"):
-
-        male_phantom = "MFCP_AM"
-        female_phantom = "MFCP_AF"
-
-    else:
-
-        raise ValueError(
-            f"Unknown phantom selection: "
-            f"{phantom_selection}"
-        )
+    male_phantom = get_phantom_by_sex(phantom_selection,"AM")
+    female_phantom = get_phantom_by_sex(phantom_selection,"AF")
 
     text = tet_model_import_file.read_text()
 
@@ -124,6 +111,7 @@ def geant4_change_phantom_family(params):
         tet_model_import_file.write_text(new_text)
 
     return tet_model_import_file
+
 
 def source_snapshot(project_dir):
     snapshot = {}

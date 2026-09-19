@@ -9,9 +9,7 @@ def get_phantom(code: str) -> PhantomSpec:
     try:
         return PHANTOMS[code]
     except KeyError:
-        raise ValueError(
-            f"Unknown phantom: {code}"
-        )
+        raise ValueError(f"Unknown phantom: {code}")
 
 def get_phantom_group(code: str) -> tuple[str, ...]:
 
@@ -21,9 +19,15 @@ def get_phantom_group(code: str) -> tuple[str, ...]:
     if code in PHANTOMS:
         return (code,)
 
-    raise ValueError(
-        f"Unknown phantom or phantom group: {code}"
-    )
+    raise ValueError(f"Unknown phantom or phantom group: {code}")
+
+def get_phantom_by_sex(phantom_group: str, sex: str) -> str:
+
+    for phantom in get_phantom_group(phantom_group):
+        if get_phantom(phantom).sex == sex:
+            return phantom
+
+    raise ValueError(f"No {sex} phantom found in '{phantom_group}'.")
 
 @dataclass(frozen=True)
 class PhantomSpec:

@@ -5,6 +5,7 @@
 #import shutil
 
 import b_config.a_config as config
+from b_config.b_phantom_registry import get_phantom_group
 from c_database.b_organ_database import SOURCE_ORGANS
 
 def geant4_generate_inputs(params):
@@ -26,32 +27,9 @@ def geant4_generate_inputs(params):
 
     phantom_selection = params["phantom"]
 
-    if phantom_selection == "MRCP_AM":
-        phantoms = ["MRCP_AM"]
-
-    elif phantom_selection == "MRCP_AF":
-        phantoms = ["MRCP_AF"]
-
-    elif phantom_selection == "MRCP_AF_AM":
-        phantoms = ["MRCP_AM", "MRCP_AF"]
-
-    elif phantom_selection == "MFCP_AM":
-        phantoms = ["MFCP_AM"]
-
-    elif phantom_selection == "MFCP_AF":
-        phantoms = ["MFCP_AF"]
-
-    elif phantom_selection == "MFCP_AF_AM":
-        phantoms = ["MFCP_AM", "MFCP_AF"]
-
-    else:
-        raise ValueError(
-            f"Unknown phantom selection: {phantom_selection}"
-        )
+    phantoms = get_phantom_group(phantom_selection)
 
     for phantom in phantoms:
-
-        phantom_prefix, AM_or_AF = phantom.split("_")
 
         threads = params["threads"]
         nps = params["nps"]      
@@ -63,11 +41,11 @@ def geant4_generate_inputs(params):
 
                 safe_name = (organ_name.replace(",", "").replace(" ", "_"))
 
-                basename = (f"geant4_{phantom_prefix}_"
-                            f"{AM_or_AF}_"
-                            f"source_{safe_name}_"
-                            f"{source_type}_"
-                            f"energy_{energy}"
+                basename = (
+                    f"geant4_{phantom}_"
+                    f"source_{safe_name}_"
+                    f"{source_type}_"
+                    f"energy_{energy}"
                 )
 
                 #############################
