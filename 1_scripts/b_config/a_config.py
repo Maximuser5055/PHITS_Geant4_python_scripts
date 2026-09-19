@@ -111,8 +111,6 @@ GENERATED_INPUTS_DIR = ROOT / "2_phits/generated_inputs"
 
 RESULTS_PHITS_DIR = RESULTS_DIR / "a_phits"
 
-PHITS_RERUN_CSV_FILE = RESULTS_PHITS_DIR / "i_phits_rerun_required.csv"
-
 ############################
 # Geant4 Directories and Files
 ############################
@@ -132,8 +130,6 @@ GEANT4_EXECUTABLE_FILE = GEANT4_BUILD_DIR / "Internal"
 GEANT4_GENERATED_INPUTS_DIR = GEANT4_BUILD_DIR / "generated_inputs"
 
 RESULTS_GEANT4_DIR = RESULTS_DIR / "b_geant4"
-
-GEANT4_RERUN_CSV_FILE = RESULTS_GEANT4_DIR / "i_geant4_rerun_required.csv"
 
 ############################
 # PHITS or Geant4

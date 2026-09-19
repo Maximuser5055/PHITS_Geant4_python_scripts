@@ -5,7 +5,7 @@ from pathlib import Path
 import shutil
 
 import b_config.a_config as config
-from b_config.b_phantom_registry import (PHANTOMS, PHANTOM_GROUPS)
+from b_config.b_phantom_registry import PHANTOMS, PHANTOM_GROUPS
 from f_simulation_and_SAFs_further_analysis.c_check_existing_saf_database import check_existing_saf_database
 
 def display_existing_saf_database_status(status, publishable_dir):

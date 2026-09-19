@@ -5,7 +5,12 @@
 
 # Import necessary libraries
 import shutil
+
 import b_config.a_config as config
+from b_config.b_phantom_registry import (
+    PHANTOMS,
+    get_phantom_group,
+)
 from c_database.b_organ_database import SOURCE_ORGANS
 
 def phits_generate_inputs(params):
@@ -19,7 +24,6 @@ def phits_generate_inputs(params):
     base_output_dir = config.GENERATED_INPUTS_DIR
 
     # Configs
-    sex_info = config.PHANTOM_NAMES
     phits_source_types = config.PHITS_SOURCE_TYPES
     
     # T-track configuration
@@ -39,32 +43,11 @@ def phits_generate_inputs(params):
 
     phantom_selection = params["phantom"]
 
-    if phantom_selection == "MRCP_AM":
-        phantoms = ["MRCP_AM"]
-
-    elif phantom_selection == "MRCP_AF":
-        phantoms = ["MRCP_AF"]
-
-    elif phantom_selection == "MRCP_AF_AM":
-        phantoms = ["MRCP_AM", "MRCP_AF"]
-
-    elif phantom_selection == "MFCP_AM":
-        phantoms = ["MFCP_AM"]
-
-    elif phantom_selection == "MFCP_AF":
-        phantoms = ["MFCP_AF"]
-
-    elif phantom_selection == "MFCP_AF_AM":
-        phantoms = ["MFCP_AM", "MFCP_AF"]
-
-    else:
-        raise ValueError(
-            f"Unknown phantom selection: {phantom_selection}"
-        )
+    phantoms = get_phantom_group(phantom_selection)
 
     for phantom in phantoms:
 
-        phantom_prefix, AM_or_AF = phantom.split("_")
+        phantom_spec = PHANTOMS[phantom]
         
         # Replace placeholders with actual values
         parallelization =  params["parallelization"]
@@ -74,7 +57,7 @@ def phits_generate_inputs(params):
         source_type = params["source_type"]
         source_energies = params["source_energies"]
         target_regions = "all"
-        namesexinfo = sex_info.get(phantom)
+        namesexinfo = phantom_spec.display_name
 
         # Loop through source energies and regions to generate input files
         for energy in source_energies:
@@ -82,18 +65,9 @@ def phits_generate_inputs(params):
             for region, organ_name in SOURCE_ORGANS[phantom].items():
 
                 safe_name = organ_name.replace(",", "").replace(" ", "_")
-
-                phits_output_file = (
-                    f"phits_{phantom_prefix}_{AM_or_AF}_source_{safe_name}_{source_type}_energy_{energy}.out"
-                )
-
-                deposit_output_file = (
-                    f"phits_deposit_{phantom_prefix}_{AM_or_AF}_source_{safe_name}_{source_type}_energy_{energy}.out"
-                )
-
-                fluence_output_file = (
-                    f"phits_fluence_{phantom_prefix}_{AM_or_AF}_source_{safe_name}_{source_type}_energy_{energy}.out"
-                )
+                phits_output_file = (f"phits_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out")
+                deposit_output_file = (f"phits_deposit_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out")
+                fluence_output_file = (f"phits_fluence_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.out")
 
                 text = template
 
@@ -106,7 +80,7 @@ def phits_generate_inputs(params):
                 text = text.replace("{{SOURCETYPE}}", source_type)
                 text = text.replace("{{SOURCEREGION}}", str(region))
                 text = text.replace("{{SOURCEENERGY}}", f"{energy}")
-                text = text.replace("{{SEX}}", str(phantom_prefix) + "-" + str(AM_or_AF))
+                text = text.replace("{{SEX}}", f"{phantom_spec.family}-{phantom_spec.sex}")
                 text = text.replace("{{TARGETREGIONS}}", target_regions)
                 text = text.replace("{{PHITSOUTPUTFILE}}", phits_output_file)
                 text = text.replace("{{DEPOSITOUTPUTFILE}}", deposit_output_file)
@@ -118,7 +92,7 @@ def phits_generate_inputs(params):
                 text = text.replace("{{ENERGYMIN}}", str(energy_min))
                 text = text.replace("{{ENERGYMAX}}", str(energy_max))
 
-                filename = f"phits_{phantom_prefix}_{AM_or_AF}_source_{safe_name}_{source_type}_energy_{energy}.inp"
+                filename = (f"phits_{phantom}_source_{safe_name}_{source_type}_energy_{energy}.inp")
                 job_name = filename.removesuffix(".inp")
 
                 # Job directory
@@ -129,11 +103,13 @@ def phits_generate_inputs(params):
                 phantom_dir = base_output_dir / phantom / "phantoms"
                 phantom_dir.mkdir(exist_ok=True)
 
-                for ext in ("cell", "material", "node", "ele"):
-                    shutil.copy2(
-                        infl_file_directory / f"{phantom_prefix}-{AM_or_AF}.{ext}",
-                        phantom_dir / f"{phantom_prefix}-{AM_or_AF}.{ext}"
-                    )
+                for phantom_file in (
+                    phantom_spec.cell_file,
+                    phantom_spec.material_file,
+                    phantom_spec.node_file,
+                    phantom_spec.element_file,
+                ):
+                    shutil.copy2(phantom_file, phantom_dir / phantom_file.name)
 
                 # Write the input file
                 (job_dir / filename).write_text(text)

@@ -46,6 +46,7 @@ import numpy as np
 import pandas as pd
 
 import b_config.a_config as config
+from b_config.b_phantom_registry import get_phantom, get_phantom_group
 
 
 # ============================================================
@@ -65,18 +66,15 @@ CM2_TO_M2 = 1.0e4
 mass_file = config.SKELETAL_MASSES_CSV
 phits_generated_inputs_dir = config.GENERATED_INPUTS_DIR
 fluence_to_dose_response_functions = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
-phantom_names = config.PHANTOM_NAMES
 phits_results_dir = config.RESULTS_PHITS_DIR
-phits_mrcp_output_file = "e_phits_MRCP_rbm_endosteum_icrp116.csv"
-phits_mfcp_output_file = "f_phits_MFCP_rbm_endosteum_icrp116.csv"
+phits_output_file = "e_phits_rbm_endosteum_icrp116.csv"
 
 # ============================================================
 # PHITS FLUENCE FILENAME PATTERN
 # ============================================================
 
 fluence_filename_pattern = re.compile(
-    r"phits_fluence_(MRCP|MFCP)_"
-    r"(AM|AF)_source_"
+    r"phits_fluence_(.+?)_source_"
     r"(.+?)_"
     r"(photon|electron)_energy_"
     r"([0-9Ee.+-]+)"
@@ -237,23 +235,12 @@ def load_icrp_response_functions():
         current_row = data_start
 
         while current_row < icrp_raw.shape[0]:
-
-            energy_value = icrp_raw.iat[
-                current_row,
-                0
-            ]
+            energy_value = icrp_raw.iat[current_row, 0]
 
             try:
+                energy = float(energy_value)
 
-                energy = float(
-                    energy_value
-                )
-
-            except (
-                ValueError,
-                TypeError
-            ):
-
+            except (ValueError, TypeError):
                 break
 
             # ------------------------------------------------
@@ -683,21 +670,13 @@ def calculate_from_fluence(
     # SELECT MASS COLUMNS
     # ========================================================
 
-    sex = phantom_code.split("_")[-1]
+    phantom_spec = get_phantom(phantom_code)
 
-    if sex == "AM":
+    if phantom_spec.skeletal_mass_columns is None:
+        raise ValueError(f"No skeletal mass columns defined for phantom "
+                         f"'{phantom_code}'.")
 
-        marrow_column = ("Ref_AM_Marrow_Mass(g)")
-        endosteum_column = ("Ref_AM_Endosteum_Mass(g)")
-
-    elif sex == "AF":
-
-        marrow_column = ("Ref_AF_Marrow_Mass(g)")
-        endosteum_column = ("Ref_AF_Endosteum_Mass(g)")
-
-    else:
-
-        raise ValueError(f"Unsupported phantom key: {phantom_code}")
+    marrow_column, endosteum_column = (phantom_spec.skeletal_mass_columns)
 
     # ========================================================
     # SKELETAL IDS
@@ -1271,7 +1250,7 @@ def calculate_from_fluence(
     # ========================================================
     number_of_particles = params["maxcas"] * params["maxbch"]
     
-    results.insert(0, "Phantom", phantom_names[phantom_code])
+    results.insert(0, "Phantom", phantom_spec.display_name)
     results.insert(1, "Source Organ", source_organ)
     results.insert(2, "Source Type", source_type)
     results.insert(3, "Source Energy (MeV)", source_energy)
@@ -1494,27 +1473,19 @@ def phits_calculate_marrow_endosteum_SAFs(
 
     phantom_selection = params["phantom"]
 
-    if phantom_selection.startswith("MRCP"):
-        selected_family = "MRCP"
-
-    elif phantom_selection.startswith("MFCP"):
-        selected_family = "MFCP"
-
-    else:
-        raise ValueError(
-            f"Unknown phantom selection: "
-            f"{phantom_selection}"
-        )
+    selected_phantoms = get_phantom_group(phantom_selection)
 
     fluence_files = [
         f
         for f in find_fluence_files()
-        if f.name.upper().startswith(
-            f"PHITS_FLUENCE_{selected_family}_"
+        if any(
+            f.name.upper().startswith(
+                f"PHITS_FLUENCE_{phantom_code}_"
+            )
+            for phantom_code in selected_phantoms
         )
         and any(
-            f"energy_{energy}.out"
-            in f.name
+            f"energy_{energy}.out" in f.name
             for energy in params["source_energies"]
         )
     ]
@@ -1556,27 +1527,12 @@ def phits_calculate_marrow_endosteum_SAFs(
 
             continue
 
-        phantom_prefix = match.group(1).upper()
-        sex = match.group(2).upper()
+        phantom_code = match.group(1).upper()
+        phantom_spec = get_phantom(phantom_code)
 
-        phantom_code = (f"{phantom_prefix}_{sex}")
-
-        source_organ = match.group(3)
-
-        source_type = match.group(4).lower()
-
-        source_energy = float(match.group(5))
-
-        # Check that the phantom exists in the configuration
-        if phantom_code not in phantom_names:
-
-            print(
-                f"\n[WARNING] Unknown phantom key "
-                f"'{phantom_code}' in file:"
-            )
-            print(f"  {fluence_file.name}")
-
-            continue
+        source_organ = match.group(2)
+        source_type = match.group(3).lower()
+        source_energy = float(match.group(4))
 
         try:
 
@@ -1665,44 +1621,61 @@ def phits_calculate_marrow_endosteum_SAFs(
         ] = np.nan
 
     # ========================================================
-    # SELECT PHANTOM FAMILY
+    # SELECT PHANTOMS
     # ========================================================
 
-    if phantom_selection.startswith("MRCP"):
+    selected_phantoms = get_phantom_group(phantom_selection)
 
-        phantom_family = "MRCP"
+    selected_display_names = [
+        get_phantom(code).display_name
+        for code in selected_phantoms
+    ]
 
-        selected_phantoms = [
-            config.PHANTOM_NAMES["MRCP_AM"],
-            config.PHANTOM_NAMES["MRCP_AF"],
-        ]
+    # ========================================================
+    # KEEP ONLY SELECTED PHANTOMS
+    # ========================================================
 
-        output_file = (
-            phits_results_dir
-            / phits_mrcp_output_file
+    family_results = combined_results[
+        combined_results["Phantom"].isin(
+            selected_display_names
         )
+    ].copy()
 
-    elif phantom_selection.startswith("MFCP"):
+    # ========================================================
+    # SORT RESULTS
+    # ========================================================
 
-        phantom_family = "MFCP"
+    sort_columns = [
+        "Phantom",
+        "Source Organ",
+        "Source Type",
+        "Source Energy (MeV)",
+        "Organ ID",
+    ]
 
-        selected_phantoms = [
-            config.PHANTOM_NAMES["MFCP_AM"],
-            config.PHANTOM_NAMES["MFCP_AF"],
-        ]
+    family_results.sort_values(
+        by=sort_columns,
+        inplace=True,
+    )
 
-        output_file = (
-            phits_results_dir
-            / phits_mfcp_output_file
-        )
+    family_results.reset_index(
+        drop=True,
+        inplace=True,
+    )
 
-    else:
+    # ========================================================
+    # SAVE
+    # ========================================================
 
-        raise ValueError(
-            f"Unknown phantom selection: "
-            f"{phantom_selection}"
-        )
+    output_file = (
+        phits_results_dir
+        / phits_output_file
+    )
 
+    family_results.to_csv(
+        output_file,
+        index=False
+    )
 
     # ========================================================
     # KEEP ONLY SELECTED PHANTOM FAMILY
@@ -1713,7 +1686,6 @@ def phits_calculate_marrow_endosteum_SAFs(
             selected_phantoms
         )
     ].copy()
-
 
     # ========================================================
     # SORT RESULTS
@@ -1761,16 +1733,8 @@ def phits_calculate_marrow_endosteum_SAFs(
 
     print("=" * 90)
 
-    print(
-        f"{phantom_family} result rows : "
-        f"{len(family_results)}"
-    )
-
+    print(f"Selected phantom result rows : {len(family_results)}")
     print()
-
-    print(
-        f"{phantom_family} results saved to:\n"
-        f"{output_file}"
-    )
+    print(f"Results saved to:\n {output_file}")
 
     return family_results

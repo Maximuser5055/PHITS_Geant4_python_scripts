@@ -6,16 +6,16 @@
 import re
 import pandas as pd
 import b_config.a_config as config
+from b_config.b_phantom_registry import get_phantom
 from c_database.b_organ_database import ORGANS
 
 def phits_calculate_dose_and_safs(params):
 
     # -------------------------------------------------------------------------
-    # Constants and configs
+    # Constants
     # -------------------------------------------------------------------------
 
     MeV_to_J = config.MEV_TO_J
-    phantom_names = config.PHANTOM_NAMES
 
     # -------------------------------------------------------------------------
     # Root directories
@@ -28,8 +28,7 @@ def phits_calculate_dose_and_safs(params):
     # File names
     # -------------------------------------------------------------------------
 
-    phits_mrcp_file = "c_phits_MRCP_dose_and_SAFs.csv"
-    phits_mfcp_file = "d_phits_MFCP_dose_and_SAFs.csv"
+    phits_saf_file = "phits_dose_and_SAFs.csv"
     
     # -------------------------------------------------------------------------
     # Regex patterns
@@ -38,10 +37,8 @@ def phits_calculate_dose_and_safs(params):
     patterns = {
 
         "file_name":
-            re.compile(
-                    r"phits_deposit_(MRCP|MFCP)_(AM|AF)_source_(.+?)_([A-Za-z0-9+-]+)_energy_([0-9Ee.+-]+)\.out",
-                re.IGNORECASE
-            ),
+            re.compile(r"phits_deposit_(.+?)_source_(.+?)_([A-Za-z0-9+-]+)_energy_([0-9Ee.+-]+)\.out",
+                re.IGNORECASE),
 
         "tally_row":
             re.compile(
@@ -59,29 +56,13 @@ def phits_calculate_dose_and_safs(params):
     # -------------------------------------------------------------------------
 
     phantom_selection = params["phantom"]
-
-    if phantom_selection.startswith("MRCP"):
-
-        phantom_family = "MRCP"
-        output_file = output_root / phits_mrcp_file
-
-    elif phantom_selection.startswith("MFCP"):
-
-        phantom_family = "MFCP"
-        output_file = output_root / phits_mfcp_file
-
-    else:
-
-        raise ValueError(
-            f"Unknown phantom selection: "
-            f"{phantom_selection}"
-        )
+    output_file = output_root / phits_saf_file
 
     # -------------------------------------------------------------------------
     # Find all deposit tally files
     # -------------------------------------------------------------------------
 
-    deposit_files = sorted(input_root.rglob(f"phits_deposit_{phantom_family}_*.out"))
+    deposit_files = sorted(input_root.rglob("phits_deposit_*_source_*.out"))
 
     print(f"Found {len(deposit_files)} deposit tally file(s).\n")
 
@@ -105,13 +86,13 @@ def phits_calculate_dose_and_safs(params):
         if not filename_match:
             raise ValueError(f"Could not parse filename:\n{deposit_file.name}")
 
-        phantom_prefix = filename_match.group(1).upper()
-        sex = filename_match.group(2).upper()
-        phantom = f"{phantom_prefix}_{sex}"
+        phantom = filename_match.group(1).upper()
+        phantom_spec = get_phantom(phantom)
 
         source_organ = filename_match.group(3)
         source_type = filename_match.group(4)
         source_energy = float(filename_match.group(5))
+
         number_of_particles = params["maxcas"] * params["maxbch"]
 
         if phantom not in ORGANS:
@@ -149,15 +130,11 @@ def phits_calculate_dose_and_safs(params):
             source_energy_joule = source_energy * MeV_to_J
 
             saf = dose / source_energy_joule
-
-            # Skip regions not in organ database
-            if target_organ is None:
-                continue
-
+            
             results.append({
 
                 "Phantom":
-                    phantom_names[phantom],
+                    phantom_spec.display_name,
 
                 "Source Organ ID":
                     source_organ_id,

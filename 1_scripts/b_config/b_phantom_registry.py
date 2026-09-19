@@ -104,30 +104,30 @@ PHANTOMS = {
         ),
     ),
 
-    "MFCP_AF": PhantomSpec(
-        code="MFCP_AF",
+    "MRCP_AF_Filipino": PhantomSpec(
+        code="MRCP_AF_Filipino",
         display_name="Adult Filipino Female",
-        family="MFCP",
+        family="MRCP_Filipino",
         sex="AF",
-        cell_file=config.INCLUDE_FILES_DIR / "MFCP-AF.cell",
-        material_file=config.INCLUDE_FILES_DIR / "MFCP-AF.material",
-        node_file=config.INCLUDE_FILES_DIR / "MFCP-AF.node",
-        element_file=config.INCLUDE_FILES_DIR / "MFCP-AF.ele",
+        cell_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AF.cell",
+        material_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AF.material",
+        node_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AF.node",
+        element_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AF.ele",
         skeletal_mass_columns=(
             "Ref_AF_Marrow_Mass(g)",
             "Ref_AF_Endosteum_Mass(g)",
         ),
     ),
 
-    "MFCP_AM": PhantomSpec(
-        code="MFCP_AM",
+    "MRCP_AM_Filipino": PhantomSpec(
+        code="MRCP_AM_Filipino",
         display_name="Adult Filipino Male",
-        family="MFCP",
+        family="MRCP_Filipino",
         sex="AM",
-        cell_file=config.INCLUDE_FILES_DIR / "MFCP-AM.cell",
-        material_file=config.INCLUDE_FILES_DIR / "MFCP-AM.material",
-        node_file=config.INCLUDE_FILES_DIR / "MFCP-AM.node",
-        element_file=config.INCLUDE_FILES_DIR / "MFCP-AM.ele",
+        cell_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AM.cell",
+        material_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AM.material",
+        node_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AM.node",
+        element_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AM.ele",
         skeletal_mass_columns=(
             "Ref_AM_Marrow_Mass(g)",
             "Ref_AM_Endosteum_Mass(g)",
@@ -139,7 +139,7 @@ PHANTOM_GROUPS = {
 
     "MRCP_AF_AM": PhantomGroupSpec(
         code="MRCP_AF_AM",
-        display_name="Both MRCP Phantoms",
+        display_name="Both ICRP 145 Phantoms",
         phantoms=(
             "MRCP_AF",
             "MRCP_AM",
@@ -148,19 +148,19 @@ PHANTOM_GROUPS = {
 
     "MRCP_AF_AM_Filipino_Resized": PhantomGroupSpec(
         code="MRCP_AF_AM_Filipino_Resized",
-        display_name="Both MRCP Phantoms Resized to Filipino",
+        display_name="Both ICRP 145 Phantoms Resized to Filipino",
         phantoms=(
-            "MRCP_AF_H150W55",
-            "MRCP_AM_H165W65",
+            "MRCP_6AF_H150W55",
+            "MRCP_AM_H15W65",
         ),
     ),
 
-    "MFCP_AF_AM": PhantomGroupSpec(
-        code="MFCP_AF_AM",
-        display_name="Both MFCP Phantoms",
+    "MRCP_AF_AM_Filipino": PhantomGroupSpec(
+        code="MRCP_AF_AM_Filipino",
+        display_name="Both Filipino MRCP Phantoms",
         phantoms=(
-            "MFCP_AF",
-            "MFCP_AM",
+            "MRCP_AF_Filipino",
+            "MRCP_AM_Filipino",
         ),
     ),
 }

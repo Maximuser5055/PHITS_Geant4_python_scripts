@@ -6,7 +6,7 @@
 import re
 import pandas as pd
 import b_config.a_config as config
-from b_config.b_phantom_registry import (PHANTOMS, get_phantom_group,)
+from b_config.b_phantom_registry import PHANTOMS, get_phantom_group
 
 # Define path parameters
 csv_file_path = config.ORGAN_ID_CSV
