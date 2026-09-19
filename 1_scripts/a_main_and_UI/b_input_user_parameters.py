@@ -320,6 +320,15 @@ def get_user_parameters():
 
     print(f"\n{simulation_code} is currently selected as the Monte Carlo particle transport code option.")
 
+    # Initialize variables
+    threads = config.THREADS
+    phits_root = config.PHITS_INSTALLATION_DIR
+    parallelization = config.PARALLELIZATION
+    maxcas = config.MAXCAS
+    maxbch = config.MAXBCH
+    nps = config.NPS
+    source_type = config.SELECTED_SOURCE_TYPE
+    
     if simulation_code == "PHITS":
 
         phits_root = input(f"\nPHITS installation directory [Current = {config.PHITS_INSTALLATION_DIR}]: ").strip()
@@ -510,6 +519,9 @@ def get_user_parameters():
 
     elif simulation_code == "GEANT4":
         generated_inputs_dir = config.GEANT4_GENERATED_INPUTS_DIR
+
+    else:
+        raise ValueError(f"Unsupported simulation code: {simulation_code}")
 
     if redo_saf_calculations and generated_inputs_dir.exists():
 
