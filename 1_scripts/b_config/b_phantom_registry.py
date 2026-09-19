@@ -150,8 +150,8 @@ PHANTOM_GROUPS = {
         code="MRCP_AF_AM_Filipino_Resized",
         display_name="Both ICRP 145 Phantoms Resized to Filipino",
         phantoms=(
-            "MRCP_6AF_H150W55",
-            "MRCP_AM_H15W65",
+            "MRCP_AF_H150W55",
+            "MRCP_AM_H165W65",
         ),
     ),
 

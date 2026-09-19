@@ -66,9 +66,9 @@ def get_user_parameters():
     # Start of Internal Dosimetry UI
     # ============================================================
     print("\n")
-    print("=" * 50)
+    print("=" * 90)
     print("Internal Dosimetry Pipeline Configuration")
-    print("=" * 50)
+    print("=" * 90)
 
     print(f"\nOperating System : {config.SYSTEM}")
 
@@ -314,9 +314,9 @@ def get_user_parameters():
     # ============================================================
 
     print("\n")
-    print("=" * 50)
+    print("=" * 90)
     print("Specific Absorbed Fraction (SAFs) Pipeline Configuration")
-    print("=" * 50)
+    print("=" * 90)
 
     print(f"\n{simulation_code} is currently selected as the Monte Carlo particle transport code option.")
 
