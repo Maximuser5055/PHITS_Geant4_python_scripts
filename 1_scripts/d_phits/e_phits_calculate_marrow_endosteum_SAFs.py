@@ -238,7 +238,7 @@ def load_icrp_response_functions():
             energy_value = icrp_raw.iat[current_row, 0]
 
             try:
-                energy = float(energy_value)
+                energy = float(str(energy_value).strip().replace("E", "e"))
 
             except (ValueError, TypeError):
                 break

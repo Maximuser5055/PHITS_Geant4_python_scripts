@@ -11,10 +11,10 @@ The remaining cells are generated from the IDs/volumes in the .vol file
 and densities in the .material file.
 
 Usage:
-    python 1_scripts/i_miscellaneous/d_create_phantom_cell_files_for_PHITS.py F_H150W55.vol F_H150W55.material
+    python 1_scripts/i_miscellaneous/d_create_phantom_cell_files_for_PHITS.py M_H165W65.vol M_H165W65.material
 
 Optional:
-    python 1_scripts/i_miscellaneous/d_create_phantom_cell_files_for_PHITS.py F_H150W55.vol F_H150W55.material -o output.cell
+    python 1_scripts/i_miscellaneous/d_create_phantom_cell_files_for_PHITS.py M_H165W65.vol M_H165W65.material -o output.cell
 """
 
 import argparse
