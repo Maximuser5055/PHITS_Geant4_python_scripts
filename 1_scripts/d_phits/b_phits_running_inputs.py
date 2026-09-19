@@ -42,9 +42,9 @@ def run_phits(params):
     # ==========================================================
 
     print("\n")
-    print("=" * 50)
+    print("=" * 90)
     print("PHITS SAF Simulation Launcher")
-    print("=" * 50)
+    print("=" * 90)
 
     phantom_selection = params["phantom"]
 
@@ -64,9 +64,9 @@ def run_phits(params):
     source_df = pd.read_csv(source_csv)
 
     print("\n")
-    print("=" * 50)
+    print("=" * 90)
     print("Source Organ Selection")
-    print("=" * 50)
+    print("=" * 90)
 
     print(
         f"Source organ file:\n"
@@ -209,9 +209,9 @@ def run_phits(params):
             f"  - {organ_id} ({organ_name})"
         )
 
-    # ======================================================
-    # Normal simulation mode
-    # ======================================================
+    # ==========================================================
+    # Find input files
+    # ==========================================================
 
     input_files = []
 
@@ -311,9 +311,9 @@ def run_phits(params):
     # Existing simulation check
     # ======================================================
 
-    print("=" * 50)
+    print("=" * 90)
     print("Existing Simulation Check")
-    print("=" * 50)
+    print("=" * 90)
 
     print(
         "[1] Skip jobs that have already been simulated"

@@ -9,6 +9,7 @@ import pandas as pd
 
 import b_config.a_config as config
 from c_database.b_organ_database import SOURCE_ORGANS
+from b_config.b_phantom_registry import get_phantom, get_phantom_group
 from e_geant4.a_geant4_setup_and_build_executable import find_geant4make
 
 def run_geant4(params):
@@ -19,7 +20,6 @@ def run_geant4(params):
     executable = config.GEANT4_EXECUTABLE_FILE
     input_root = config.GEANT4_GENERATED_INPUTS_DIR
     current_working_dir = config.GEANT4_BUILD_DIR
-    rerun_csv = config.GEANT4_RERUN_CSV_FILE
     source_csv = config.SOURCE_CSV
 
     #########################################
@@ -27,408 +27,286 @@ def run_geant4(params):
     #########################################
 
     print("\n")
-    print("=" * 50)
+    print("=" * 90)
     print("Geant4 SAF Simulation Launcher")
-    print("=" * 50)
-
-    # ----------------------------------------------------------
-    # Select operation
-    # ----------------------------------------------------------
-
-    print("[1] Run new simulations")
-    print("[2] Re-run failed simulations")
-
-    while True:
-
-        choice = input("Enter your choice (1-2): ").strip()
-
-        if choice in {"1", "2"}:
-            break
-
-        print("Invalid choice. Please enter 1 or 2.")
+    print("=" * 90)
 
     phantom_selection = params["phantom"]
 
-    if phantom_selection == "MRCP_AM":
-        selected_phantoms = ["MRCP_AM"]
-
-    elif phantom_selection == "MRCP_AF":
-        selected_phantoms = ["MRCP_AF"]
-
-    elif phantom_selection == "MRCP_AF_AM":
-        selected_phantoms = ["MRCP_AM", "MRCP_AF"]
-
-    elif phantom_selection == "MFCP_AM":
-        selected_phantoms = ["MFCP_AM"]
-
-    elif phantom_selection == "MFCP_AF":
-        selected_phantoms = ["MFCP_AF"]
-
-    elif phantom_selection == "MFCP_AF_AM":
-        selected_phantoms = ["MFCP_AM", "MFCP_AF"]
-
-    else:
-        raise ValueError(f"Unknown phantom selection: {phantom_selection}")
-
+    selected_phantoms = get_phantom_group(phantom_selection)
 
     #########################################
     # Source Organ Selection
     #########################################
 
-    if choice == "1":
+    if not source_csv.is_file():
 
-        if not source_csv.is_file():
-
-            raise FileNotFoundError(
-                f"Source organ file not found:\n"
-                f"{source_csv}"
-            )
-
-        source_df = pd.read_csv(source_csv)
-
-        print("\n")
-        print("=" * 50)
-        print("Source Organ Selection")
-        print("=" * 50)
-
-        print(
-            f"Source organ file:\n"
+        raise FileNotFoundError(
+            f"Source organ file not found:\n"
             f"{source_csv}"
         )
 
-        # ------------------------------------------------------
-        # Source organ column
-        # ------------------------------------------------------
+    source_df = pd.read_csv(source_csv)
 
-        source_organ_column = "source_organ_ID"
+    print("\n")
+    print("=" * 90)
+    print("Source Organ Selection")
+    print("=" * 90)
 
-        if source_organ_column not in source_df.columns:
+    print(
+        f"Source organ file:\n"
+        f"{source_csv}"
+    )
 
-            raise ValueError(
-                f"Column '{source_organ_column}' was not found "
-                f"in {source_csv}"
-            )
+    # ------------------------------------------------------
+    # Source organ column
+    # ------------------------------------------------------
 
-        # ------------------------------------------------------
-        # Get source-organ IDs from SOURCE_CSV
-        # ------------------------------------------------------
+    source_organ_column = "source_organ_ID"
 
-        available_source_organs = (
-            source_df[source_organ_column]
-            .dropna()
-            .astype(str)
-            .str.strip()
-            .unique()
-            .tolist()
+    if source_organ_column not in source_df.columns:
+
+        raise ValueError(
+            f"Column '{source_organ_column}' was not found "
+            f"in {source_csv}"
         )
 
-        if not available_source_organs:
+    # ------------------------------------------------------
+    # Get source-organ IDs from SOURCE_CSV
+    # ------------------------------------------------------
 
-            raise ValueError(
-                "No source organs were found in "
-                f"{source_csv}"
+    available_source_organs = (
+        source_df[source_organ_column]
+        .dropna()
+        .astype(str)
+        .str.strip()
+        .unique()
+        .tolist()
+    )
+
+    if not available_source_organs:
+
+        raise ValueError(
+            "No source organs were found in "
+            f"{source_csv}"
+        )
+
+    # ------------------------------------------------------
+    # Build source-organ name lookup
+    # ------------------------------------------------------
+
+    source_organ_names = {}
+
+    for phantom in selected_phantoms:
+
+        phantom_sources = SOURCE_ORGANS.get(
+            phantom,
+            {}
+        )
+
+        for organ_id, organ_name in phantom_sources.items():
+
+            source_organ_names[str(organ_id)] = organ_name
+
+    # ------------------------------------------------------
+    # Display source organs
+    # ------------------------------------------------------
+
+    for i, organ_id in enumerate(
+        available_source_organs,
+        start=1
+    ):
+
+        organ_name = source_organ_names.get(
+            organ_id,
+            "Unknown"
+        )
+
+        print(
+            f"[{i}] {organ_id} ({organ_name})"
+        )
+
+    print("[A] All source organs")
+
+    # ------------------------------------------------------
+    # User selects source organs
+    # ------------------------------------------------------
+
+    while True:
+
+        source_choice = input(
+            "\nSelect source organ(s): "
+        ).strip().upper()
+
+        if source_choice == "A":
+
+            selected_source_organs = (
+                available_source_organs.copy()
             )
 
-        # ------------------------------------------------------
-        # Build source-organ name lookup
-        # ------------------------------------------------------
+            break
 
-        source_organ_names = {}
+        try:
 
-        for phantom in selected_phantoms:
+            indices = [
+                int(x.strip()) - 1
+                for x in source_choice.split(",")
+            ]
 
-            phantom_sources = SOURCE_ORGANS.get(
-                phantom,
-                {}
-            )
+            if not indices:
+                raise ValueError
 
-            for organ_id, organ_name in phantom_sources.items():
+            if any(
+                index < 0
+                or index >= len(available_source_organs)
+                for index in indices
+            ):
+                raise ValueError
 
-                source_organ_names[str(organ_id)] = organ_name
-
-        # ------------------------------------------------------
-        # Display source organs
-        # ------------------------------------------------------
-
-        for i, organ_id in enumerate(
-            available_source_organs,
-            start=1
-        ):
-
-            organ_name = source_organ_names.get(
-                organ_id,
-                "Unknown"
-            )
-
-            print(
-                f"[{i}] {organ_id} ({organ_name})"
-            )
-
-        print("[A] All source organs")
-
-        # ------------------------------------------------------
-        # User selects source organs
-        # ------------------------------------------------------
-
-        while True:
-
-            source_choice = input(
-                "\nSelect source organ(s): "
-            ).strip().upper()
-
-            if source_choice == "A":
-
-                selected_source_organs = (
-                    available_source_organs.copy()
-                )
-
-                break
-
-            try:
-
-                indices = [
-                    int(x.strip()) - 1
-                    for x in source_choice.split(",")
-                ]
-
-                if not indices:
-                    raise ValueError
-
-                if any(
-                    index < 0
-                    or index >= len(available_source_organs)
+            selected_source_organs = list(
+                dict.fromkeys(
+                    available_source_organs[index]
                     for index in indices
-                ):
-                    raise ValueError
-
-                selected_source_organs = list(
-                    dict.fromkeys(
-                        available_source_organs[index]
-                        for index in indices
-                    )
                 )
-
-                break
-
-            except ValueError:
-
-                print(
-                    "\nInvalid selection. "
-                    "Please enter valid numbers "
-                    "separated by commas, or A."
-                )
-
-        # ------------------------------------------------------
-        # Display selected source organs
-        # ------------------------------------------------------
-
-        print("\nSelected source organ(s):")
-
-        for organ_id in selected_source_organs:
-
-            organ_name = source_organ_names.get(
-                organ_id,
-                "Unknown"
             )
+
+            break
+
+        except ValueError:
 
             print(
-                f"  - {organ_id} ({organ_name})"
+                "\nInvalid selection. "
+                "Please enter valid numbers "
+                "separated by commas, or A."
             )
+
+    # ------------------------------------------------------
+    # Display selected source organs
+    # ------------------------------------------------------
+
+    print("\nSelected source organ(s):")
+
+    for organ_id in selected_source_organs:
+
+        organ_name = source_organ_names.get(
+            organ_id,
+            "Unknown"
+        )
+
+        print(
+            f"  - {organ_id} ({organ_name})"
+        )
 
     # ==========================================================
     # Find input files
     # ==========================================================
 
-    if choice == "2":
+    input_files = []
 
-        # ======================================================
-        # Re-run failed simulations
-        # ======================================================
+    for phantom in selected_phantoms:
 
-        if not rerun_csv.exists():
+        phantom_dir = input_root / phantom
 
-            raise FileNotFoundError(
-                f"\nRerun file not found:\n"
-                f"{rerun_csv}\n\n"
-                "Run the uncertainty-checking script first."
-            )
+        # ------------------------------------------------------
+        # Skip phantom if its generated-input directory
+        # does not exist
+        # ------------------------------------------------------
 
-        rerun = pd.read_csv(rerun_csv)
-
-        if rerun.empty:
+        if not phantom_dir.exists():
 
             print(
-                "\nThere are no failed simulations "
-                "to rerun."
+                f"\nSkipping {phantom}: "
+                f"input directory does not exist."
             )
 
-            return
+            continue
 
-        if "Input File" not in rerun.columns:
-
-            raise ValueError(
-                "The rerun file does not contain "
-                "an 'Input File' column.\n"
-                "Run the latest uncertainty-checking "
-                "script."
-            )
-
-        input_files = []
-
-        for relative_path in rerun["Input File"]:
-
-            input_file = (
-                input_root /
-                relative_path
-            )
-
-            if input_file.exists():
-
-                input_files.append(
-                    input_file
-                )
-
-            else:
-
-                print(
-                    f"Missing input file: "
-                    f"{relative_path}"
-                )
-
-        input_files = sorted(
-            set(input_files)
+        phantom_input_files = sorted(
+            phantom_dir.rglob("*.in")
         )
 
-        if not input_files:
+        for infile in phantom_input_files:
 
-            print(
-                "\nNo valid failed simulations "
-                "were found to rerun."
+            # --------------------------------------------------
+            # Read source ID from source_id.txt
+            # --------------------------------------------------
+
+            source_id_file = (
+                infile.parent / "source_id.txt"
             )
 
-            return
-
-        print(
-            f"\nRunning {len(input_files)} failed "
-            f"simulation(s) listed in "
-            f"{rerun_csv.name}."
-        )
-
-        # Rerun jobs regardless of existing output
-        skip_completed = False
-
-    else:
-
-        # ======================================================
-        # Normal simulation mode
-        # ======================================================
-
-        input_files = []
-
-        for phantom in selected_phantoms:
-
-            phantom_dir = input_root / phantom
-
-            # ------------------------------------------------------
-            # Skip phantom if its generated-input directory
-            # does not exist
-            # ------------------------------------------------------
-
-            if not phantom_dir.exists():
+            if not source_id_file.exists():
 
                 print(
-                    f"\nSkipping {phantom}: "
-                    f"input directory does not exist."
+                    f"[WARNING] Missing source_id.txt for "
+                    f"{infile.name}"
                 )
 
                 continue
 
-            phantom_input_files = sorted(
-                phantom_dir.rglob("*.in")
+            source_id = (
+                source_id_file
+                .read_text()
+                .strip()
             )
 
-            for infile in phantom_input_files:
+            # --------------------------------------------------
+            # Match against selected source-organ IDs
+            # --------------------------------------------------
 
-                # --------------------------------------------------
-                # Read source ID from source_id.txt
-                # --------------------------------------------------
+            if source_id in selected_source_organs:
 
-                source_id_file = (
-                    infile.parent / "source_id.txt"
-                )
+                input_files.append(infile)
 
-                if not source_id_file.exists():
+    # Remove duplicates and sort
+    input_files = sorted(set(input_files))
 
-                    print(
-                        f"[WARNING] Missing source_id.txt for "
-                        f"{infile.name}"
-                    )
+    # ----------------------------------------------------------
+    # Check whether anything was found
+    # ----------------------------------------------------------
 
-                    continue
-
-                source_id = (
-                    source_id_file
-                    .read_text()
-                    .strip()
-                )
-
-                # --------------------------------------------------
-                # Match against selected source-organ IDs
-                # --------------------------------------------------
-
-                if source_id in selected_source_organs:
-
-                    input_files.append(infile)
-
-        # Remove duplicates and sort
-        input_files = sorted(set(input_files))
-
-        # ----------------------------------------------------------
-        # Check whether anything was found
-        # ----------------------------------------------------------
-
-        if not input_files:
-
-            print(
-                "\nNo Geant4 input files were found "
-                "for the selected phantom/source organs."
-            )
-
-            return
-
-        # ======================================================
-        # Existing simulation check
-        # ======================================================
-
-        print("=" * 50)
-        print("Existing Simulation Check")
-        print("=" * 50)
+    if not input_files:
 
         print(
-            "[1] Skip jobs that have already been simulated"
+            "\nNo Geant4 input files were found "
+            "for the selected phantom/source organs."
         )
+
+        return
+
+    # ======================================================
+    # Existing simulation check
+    # ======================================================
+
+    print("=" * 90)
+    print("Existing Simulation Check")
+    print("=" * 90)
+
+    print(
+        "[1] Skip jobs that have already been simulated"
+    )
+
+    print(
+        "[2] Re-run completed jobs (overwrite outputs)"
+    )
+
+    while True:
+
+        overwrite_choice = input(
+            "Enter your choice (1-2): "
+        ).strip()
+
+        if overwrite_choice in {"1", "2"}:
+            break
 
         print(
-            "[2] Re-run completed jobs (overwrite outputs)"
+            "Invalid choice. "
+            "Please enter 1 or 2."
         )
 
-        while True:
-
-            overwrite_choice = input(
-                "Enter your choice (1-2): "
-            ).strip()
-
-            if overwrite_choice in {"1", "2"}:
-                break
-
-            print(
-                "Invalid choice. "
-                "Please enter 1 or 2."
-            )
-
-        skip_completed = (
-            overwrite_choice == "1"
-        )
+    skip_completed = (
+        overwrite_choice == "1"
+    )
 
     # ==========================================================
     # Check completion
@@ -588,13 +466,12 @@ def run_geant4(params):
         # AF phantom flag
         # ------------------------------------------------------
 
-        if phantom.endswith("_AF"):
+        phantom_spec = get_phantom(phantom)
 
+        if phantom_spec.sex == "AF":
             cmd += " -f"
 
-        print(
-            f"Starting {infile.name}"
-        )
+        print(f"Starting {infile.name}")
 
         process = subprocess.Popen(
             ["bash", "-c", cmd],
