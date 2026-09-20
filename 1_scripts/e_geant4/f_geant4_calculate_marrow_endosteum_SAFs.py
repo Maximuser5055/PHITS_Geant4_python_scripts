@@ -44,7 +44,7 @@ import numpy as np
 import pandas as pd
 
 import b_config.a_config as config
-from b_config.b_phantom_registry import get_phantom, get_phantom_group
+from b_config.b_phantom_registry import get_phantom, get_phantom_group, get_skeletal_ids
 
 # ============================================================
 # CONSTANTS
@@ -1066,32 +1066,56 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
     skeletal_masses = (load_skeletal_masses())
 
     # ========================================================
-    # VALID ICRP RESPONSE-FUNCTION IDs
-    # ========================================================
-
-    rbm_ids = {
-        organ_id
-        for organ_id, response_df
-        in response_functions.items()
-        if response_df["AM_Gy_m2"].notna().any()
-    }
-
-    endosteum_ids = {
-        organ_id
-        for organ_id, response_df
-        in response_functions.items()
-        if response_df["TM50_Gy_m2"].notna().any()
-    }
-
-    # ========================================================
     # SELECT PHANTOMS
     # ========================================================
 
     phantom_selection = params["phantom"]
 
-    selected_phantoms = get_phantom_group(phantom_selection)
+    selected_phantoms = get_phantom_group(
+        phantom_selection
+    )
 
-    output_file = geant4_results_dir / geant4_output_file
+    configured_skeletal_ids = set(
+        get_skeletal_ids(phantom_selection)
+    )
+
+    # ========================================================
+    # VALID ICRP RESPONSE-FUNCTION IDs
+    # ========================================================
+
+    rbm_ids = {
+        organ_id
+        for organ_id in configured_skeletal_ids
+        if (
+            organ_id in response_functions
+            and response_functions[organ_id][
+                "AM_Gy_m2"
+            ].notna().any()
+        )
+    }
+
+    endosteum_ids = {
+        organ_id
+        for organ_id in configured_skeletal_ids
+        if (
+            organ_id in response_functions
+            and response_functions[organ_id][
+                "TM50_Gy_m2"
+            ].notna().any()
+        )
+    }
+
+    if not rbm_ids:
+        raise RuntimeError(
+            f"No valid RBM skeletal IDs configured for "
+            f"phantom/group '{phantom_selection}'."
+        )
+
+    if not endosteum_ids:
+        raise RuntimeError(
+            f"No valid endosteum skeletal IDs configured for "
+            f"phantom/group '{phantom_selection}'."
+        )
 
     # ========================================================
     # FIND FLUENCE FILES

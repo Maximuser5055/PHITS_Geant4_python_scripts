@@ -7,7 +7,7 @@ from pathlib import Path
 import json
 import re
 import b_config.a_config as config
-from b_config.b_phantom_registry import get_phantom_by_sex
+from b_config.b_phantom_registry import get_phantom_by_sex, get_skeletal_ids
 
 # Configurations
 executable = config.GEANT4_EXECUTABLE_FILE
@@ -17,7 +17,9 @@ energy_bins = config.ENERGY_BINS
 energy_min = config.ENERGY_MIN
 energy_max = config.ENERGY_MAX
 internal_dir = config.INTERNAL_DIR
+
 tet_model_import_file = config.SRC_DIR / "TETModelImport.cc"
+tet_run_action_file = config.SRC_DIR / "TETRunAction.cc"
 
 def find_geant4make():
     """Search for geant4make.sh"""
@@ -112,6 +114,47 @@ def geant4_change_phantom_family(params):
 
     return tet_model_import_file
 
+def geant4_change_skeletal_ids(params):
+
+    phantom_selection = params["phantom"]
+    skeletal_ids = get_skeletal_ids(phantom_selection)
+
+    text = tet_run_action_file.read_text()
+
+    old_pattern = (
+        r"// SKELETAL_IDS_BEGIN.*?"
+        r"// SKELETAL_IDS_END"
+    )
+
+    new_code = (
+        "// SKELETAL_IDS_BEGIN\n"
+        "std::vector<G4int> skeletalIDs =\n"
+        "{\n"
+        + "".join(
+            f"        {skeletal_id},\n"
+            for skeletal_id in skeletal_ids
+        )
+        + "    };\n"
+        "// SKELETAL_IDS_END"
+    )
+
+    new_text, count = re.subn(
+        old_pattern,
+        new_code,
+        text,
+        flags=re.DOTALL
+    )
+
+    if count != 1:
+        raise RuntimeError(
+            "Could not uniquely update the skeletal IDs "
+            "in TETRunAction.cc."
+        )
+
+    if new_text != text:
+        tet_run_action_file.write_text(new_text)
+
+    return tet_run_action_file
 
 def source_snapshot(project_dir):
     snapshot = {}
@@ -130,6 +173,7 @@ def build_geant4(params):
 
     geant4_change_fluence_settings(params)
     geant4_change_phantom_family(params)
+    geant4_change_skeletal_ids(params)
     
     geant4make_path = find_geant4make()
     project_dir = internal_dir.resolve()

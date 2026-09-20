@@ -29,6 +29,18 @@ def get_phantom_by_sex(phantom_group: str, sex: str) -> str:
 
     raise ValueError(f"No {sex} phantom found in '{phantom_group}'.")
 
+def get_skeletal_ids(code: str) -> tuple[int, ...]:
+
+    if code in PHANTOM_GROUPS:
+        return PHANTOM_GROUPS[code].skeletal_ids
+
+    if code in PHANTOMS:
+        for group in PHANTOM_GROUPS.values():
+            if code in group.phantoms:
+                return group.skeletal_ids
+
+    raise ValueError(f"No skeletal IDs configured for phantom or group '{code}'.")
+
 @dataclass(frozen=True)
 class PhantomSpec:
     code: str
@@ -46,6 +58,7 @@ class PhantomGroupSpec:
     code: str
     display_name: str
     phantoms: tuple[str, ...]
+    skeletal_ids: tuple[int, ...]
 
 PHANTOMS = {
     "MRCP_AF": PhantomSpec(
@@ -148,6 +161,7 @@ PHANTOM_GROUPS = {
             "MRCP_AF",
             "MRCP_AM",
         ),
+        skeletal_ids=config.ICRP145_SKELETAL_IDS,
     ),
 
     "MRCP_AF_AM_Filipino_Resized": PhantomGroupSpec(
@@ -157,6 +171,7 @@ PHANTOM_GROUPS = {
             "MRCP_AF_H150W55",
             "MRCP_AM_H165W65",
         ),
+        skeletal_ids=config.RESIZED_ICRP145_SKELETAL_IDS,
     ),
 
     "MRCP_AF_AM_Filipino": PhantomGroupSpec(
@@ -166,5 +181,6 @@ PHANTOM_GROUPS = {
             "MRCP_AF_Filipino",
             "MRCP_AM_Filipino",
         ),
+        skeletal_ids=config.FILIPINO_SKELETAL_IDS,
     ),
 }

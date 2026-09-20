@@ -10,6 +10,7 @@ import b_config.a_config as config
 from b_config.b_phantom_registry import (
     PHANTOMS,
     get_phantom_group,
+    get_skeletal_ids
 )
 from c_database.b_organ_database import SOURCE_ORGANS
 
@@ -26,7 +27,7 @@ def phits_generate_inputs(params):
     phits_source_types = config.PHITS_SOURCE_TYPES
     
     # T-track configuration
-    skeletal_regions = " ".join(str(region)for region in config.SKELETAL_IDS)
+    skeletal_ids = get_skeletal_ids(params["phantom"])
     fluence_source_type = config.FLUENCE_SOURCE_TYPES
     energy_bins = config.ENERGY_BINS
     energy_min = config.ENERGY_MIN
@@ -44,6 +45,8 @@ def phits_generate_inputs(params):
 
     phantoms = get_phantom_group(phantom_selection)
 
+    skeletal_regions = " ".join(str(region) for region in skeletal_ids)
+    
     for phantom in phantoms:
 
         phantom_spec = PHANTOMS[phantom]

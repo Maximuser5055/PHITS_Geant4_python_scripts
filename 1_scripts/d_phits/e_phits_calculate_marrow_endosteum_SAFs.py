@@ -46,8 +46,7 @@ import numpy as np
 import pandas as pd
 
 import b_config.a_config as config
-from b_config.b_phantom_registry import get_phantom, get_phantom_group
-
+from b_config.b_phantom_registry import get_phantom, get_phantom_group, get_skeletal_ids
 
 # ============================================================
 # CONSTANTS
@@ -1427,6 +1426,12 @@ def phits_calculate_marrow_endosteum_SAFs(
         load_skeletal_masses()
     )
 
+    phantom_selection = params["phantom"]
+
+    selected_phantoms = get_phantom_group(phantom_selection)
+
+    configured_skeletal_ids = set(get_skeletal_ids(phantom_selection))
+
     # ========================================================
     # VALID RESPONSE-FUNCTION IDs
     # ========================================================
@@ -1435,10 +1440,11 @@ def phits_calculate_marrow_endosteum_SAFs(
 
         organ_id
 
-        for organ_id, response_df
-        in response_functions.items()
+        for organ_id in configured_skeletal_ids
 
-        if response_df[
+        if organ_id in response_functions
+
+        and response_functions[organ_id][
             "AM_Gy_m2"
         ].notna().any()
 
@@ -1448,14 +1454,32 @@ def phits_calculate_marrow_endosteum_SAFs(
 
         organ_id
 
-        for organ_id, response_df
-        in response_functions.items()
+        for organ_id in configured_skeletal_ids
 
-        if response_df[
+        if organ_id in response_functions
+
+        and response_functions[organ_id][
             "TM50_Gy_m2"
         ].notna().any()
 
     }
+
+    if not rbm_ids:
+        raise RuntimeError(
+            f"No valid RBM skeletal IDs were found for "
+            f"phantom group '{phantom_selection}'."
+        )
+
+    if not endosteum_ids:
+        raise RuntimeError(
+            f"No valid endosteum skeletal IDs were found for "
+            f"phantom group '{phantom_selection}'."
+    )
+
+    print(
+        f"\nConfigured skeletal regions : "
+        f"{len(configured_skeletal_ids)}"
+    )
 
     print(
         f"\nICRP RBM regions        : "
@@ -1470,10 +1494,6 @@ def phits_calculate_marrow_endosteum_SAFs(
     # ========================================================
     # FIND PHITS FLUENCE FILES
     # ========================================================
-
-    phantom_selection = params["phantom"]
-
-    selected_phantoms = get_phantom_group(phantom_selection)
 
     fluence_files = [
         f
@@ -1528,7 +1548,6 @@ def phits_calculate_marrow_endosteum_SAFs(
             continue
 
         phantom_code = match.group(1).upper()
-        phantom_spec = get_phantom(phantom_code)
 
         source_organ = match.group(2)
         source_type = match.group(3).lower()
@@ -1671,48 +1690,6 @@ def phits_calculate_marrow_endosteum_SAFs(
         phits_results_dir
         / phits_output_file
     )
-
-    family_results.to_csv(
-        output_file,
-        index=False
-    )
-
-    # ========================================================
-    # KEEP ONLY SELECTED PHANTOM FAMILY
-    # ========================================================
-
-    family_results = combined_results[
-        combined_results["Phantom"].isin(
-            selected_phantoms
-        )
-    ].copy()
-
-    # ========================================================
-    # SORT RESULTS
-    # ========================================================
-
-    sort_columns = [
-        "Phantom",
-        "Source Organ",
-        "Source Type",
-        "Source Energy (MeV)",
-        "Organ ID",
-    ]
-
-    family_results.sort_values(
-        by=sort_columns,
-        inplace=True,
-    )
-
-    family_results.reset_index(
-        drop=True,
-        inplace=True,
-    )
-
-
-    # ========================================================
-    # SAVE SELECTED PHANTOM FAMILY
-    # ========================================================
 
     family_results.to_csv(
         output_file,

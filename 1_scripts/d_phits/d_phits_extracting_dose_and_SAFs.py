@@ -89,9 +89,9 @@ def phits_calculate_dose_and_safs(params):
         phantom = filename_match.group(1).upper()
         phantom_spec = get_phantom(phantom)
 
-        source_organ = filename_match.group(3)
-        source_type = filename_match.group(4)
-        source_energy = float(filename_match.group(5))
+        source_organ = filename_match.group(2)
+        source_type = filename_match.group(3)
+        source_energy = float(filename_match.group(4))
 
         number_of_particles = params["maxcas"] * params["maxbch"]
 

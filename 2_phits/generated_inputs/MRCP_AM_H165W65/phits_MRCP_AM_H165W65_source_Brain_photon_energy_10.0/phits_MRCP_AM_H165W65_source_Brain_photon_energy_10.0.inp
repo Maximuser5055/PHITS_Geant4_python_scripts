@@ -55,7 +55,7 @@ infl:{../phantoms/M_H165W65.cell}
 # Count fluence in a certain region.
 file   = phits_fluence_MRCP_AM_H165W65_source_Brain_photon_energy_10.0.out
 mesh   = reg
-reg    = 1400 1500 1700 1800 2000 2100 2300 2500 2700 2900 3000 3200 3300 3500 3600 3800 4000 4200 4400 4600 4800 5000 5200 5400 5600
+reg    = 1400 1500 1700 2000 2100 2300 2500 2700 2900 3000 3200 3500 3600 3800 4000 4200 4400 4600 4800 5000 5200 5400 5600
 axis   = eng    # energy-based spectrum
 part   = photon
 unit   = 1
