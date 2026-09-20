@@ -1,4 +1,4 @@
-file = MRCP-AF_internal_input.inp
+
 # ----------------------------------------------------------------------------
 #    name               : MRCP PHANTOM                                        
 #    sex                : FEMALE                                                
@@ -7,14 +7,13 @@ file = MRCP-AF_internal_input.inp
 
 [ Parameters ]
  icntl    =           0     # (D=0) 3:ECH 5:NOR 6:SRC 7,8:GSH 11:DSH 12:DUMP
- maxcas   =     1000000     # (D=10) number of particles per one batch
+ maxcas   =     10000       # (D=10) number of particles per one batch
  maxbch   =          10     # (D=10) number of batches
  itetvol  =           0     # (D=0) =1 Volume calculation for tetrahedrons
  ntetelem =        2000     # Number of tetra element allowed in sub-block
  maxbnk   =     1000000     # (D=10000) maximum bank memory length
  itetra   =           0     # (D=0) tetra data is read(=1)/write(=2) on binary
- file(6)  = MRCP-AF_internal.out # (D=phits.out) general output file name
- file(7)  = (path to 'xsdir.jnd' file) # nuclear data input file name
+
  file(20) = (path to egs folder)       # Directory library data for EGS5
  negs     =           1     # (D=-1) 1:EGS
  ipegs    =           0     # [EGS](D=0) 0:Full

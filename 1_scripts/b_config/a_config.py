@@ -156,7 +156,7 @@ SKELETAL_IDS = [
     1400,
     1500,
     1700,
-    1800,
+    #1800,
     2000,
     2100,
     2300,
@@ -165,7 +165,7 @@ SKELETAL_IDS = [
     2900,
     3000,
     3200,
-    3300,
+    #3300,
     3500,
     3600,
     3800,
@@ -206,9 +206,9 @@ GEANT4_SOURCE_TYPE_MAP = {
 
 MEV_TO_J = 1.6021766339999e-13
 
-THREADS = 32
+THREADS = 12
 
-SOURCE_ENERGIES = [0.01, 1.0, 10.0]
+SOURCE_ENERGIES = [10.0]
 
 SELECTED_SOURCE_TYPE = "photon"
 

@@ -19,7 +19,6 @@ def phits_generate_inputs(params):
 
     # Read input template and define paths for phantom and interaction model files
     template = config.INPUT_TEMPLATE_FILE.read_text()
-    infl_file_directory = config.INCLUDE_FILES_DIR
     phits_installation_dir = config.PHITS_INSTALLATION_DIR
     base_output_dir = config.GENERATED_INPUTS_DIR
 
@@ -80,7 +79,8 @@ def phits_generate_inputs(params):
                 text = text.replace("{{SOURCETYPE}}", source_type)
                 text = text.replace("{{SOURCEREGION}}", str(region))
                 text = text.replace("{{SOURCEENERGY}}", f"{energy}")
-                text = text.replace("{{SEX}}", f"{phantom_spec.family}-{phantom_spec.sex}")
+                text = text.replace("{{MATERIAL_FILE}}", phantom_spec.material_file.name)
+                text = text.replace("{{CELL_FILE}}", phantom_spec.cell_file.name)
                 text = text.replace("{{TARGETREGIONS}}", target_regions)
                 text = text.replace("{{PHITSOUTPUTFILE}}", phits_output_file)
                 text = text.replace("{{DEPOSITOUTPUTFILE}}", deposit_output_file)

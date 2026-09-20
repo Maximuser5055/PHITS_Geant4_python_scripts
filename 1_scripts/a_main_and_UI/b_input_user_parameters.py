@@ -3,6 +3,7 @@
 # Import necessary libraries
 from pathlib import Path
 import shutil
+import os
 
 import b_config.a_config as config
 from b_config.b_phantom_registry import PHANTOMS, PHANTOM_GROUPS
@@ -59,6 +60,37 @@ def get_saf_database_display_name(phantom_code):
         return PHANTOMS[phantom_code].display_name
 
     raise ValueError(f"Unknown phantom or phantom group: {phantom_code}")
+
+def get_thread_count(current_threads):
+
+    max_threads = os.cpu_count() or 1
+
+    if current_threads > max_threads:
+        print(f"\nWarning: Configured threads ({current_threads}) exceed the available logical CPU threads ({max_threads}).")
+        print(f"Using {max_threads} threads instead.")
+        current_threads = max_threads
+
+    while True:
+
+        threads_input = input(f"\nParallelization Threads [Current = {current_threads}, Max = {max_threads}]: ").strip()
+
+        if threads_input == "":
+            return current_threads
+
+        try:
+            threads = int(threads_input)
+
+        except ValueError:
+            print(
+                f"\nError: Please enter an integer "
+                f"between 1 and {max_threads}."
+            )
+            continue
+
+        if 1 <= threads <= max_threads:
+            return threads
+
+        print(f"\nError: Number of threads must be between 1 and {max_threads}.")
 
 def get_user_parameters():
 
@@ -342,8 +374,7 @@ def get_user_parameters():
         if parallelization == "":
             parallelization = config.PARALLELIZATION
 
-        threads = input(f"Parallelization Threads [Current = {config.THREADS}]: ").strip()
-        threads = int(threads) if threads else config.THREADS
+        threads = get_thread_count(config.THREADS)
 
         maxcas = input(f"PHITS maxcas (no. of particle histories per batch) [Current = {config.MAXCAS}]: ").strip()
         maxcas = int(maxcas) if maxcas else config.MAXCAS
@@ -391,8 +422,7 @@ def get_user_parameters():
 
     elif simulation_code == "GEANT4":
 
-        threads = input(f"\nParallelization Threads [Current = {config.THREADS}]: ").strip()
-        threads = int(threads) if threads else config.THREADS
+        threads = get_thread_count(config.THREADS)
 
         nps = input(f"GEANT4 nps (no. of particle histories) [Current = {config.NPS}]: ").strip()
         nps = int(nps) if nps else config.NPS
