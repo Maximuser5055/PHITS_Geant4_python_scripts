@@ -5,8 +5,8 @@ import re
 import pandas as pd
 
 import b_config.a_config as config
+from b_config.b_phantom_registry import get_phantom, get_phantom_group
 from c_database.b_organ_database import ORGANS
-
 
 def geant4_calculate_dose_and_SAFs(params):
 
@@ -23,18 +23,15 @@ def geant4_calculate_dose_and_SAFs(params):
     input_root = config.GEANT4_GENERATED_INPUTS_DIR
     output_root = config.RESULTS_GEANT4_DIR
     source_type_map = config.GEANT4_SOURCE_TYPE_MAP
-    phantom_names = config.PHANTOM_NAMES
     
     # -------------------------------------------------------------
     # File names
     # -------------------------------------------------------------
 
-    geant4_mrcp_file = "c_geant4_MRCP_dose_and_SAFs.csv"
-    geant4_mfcp_file = "d_geant4_MFCP_dose_and_SAFs.csv"
+    geant4_output_file = "geant4_dose_and_SAFs.csv"
 
     filename_pattern = re.compile(
-        r"geant4_deposit_(MRCP|MFCP)_"
-        r"(AM|AF)_source_"
+        r"geant4_deposit_(.+?)_source_"
         r"(.+?)_"
         r"(.+?)_energy_"
         r"([0-9Ee.+-]+)\.csv",
@@ -46,32 +43,25 @@ def geant4_calculate_dose_and_SAFs(params):
     # -------------------------------------------------------------------------
 
     phantom_selection = params["phantom"]
+    selected_phantoms = get_phantom_group(phantom_selection)
 
-    if phantom_selection.startswith("MRCP"):
-
-        phantom_family = "MRCP"
-        output_file = output_root / geant4_mrcp_file
-
-    elif phantom_selection.startswith("MFCP"):
-
-        phantom_family = "MFCP"
-        output_file = output_root / geant4_mfcp_file
-
-    else:
-
-        raise ValueError(
-            f"Unknown phantom selection: "
-            f"{phantom_selection}"
-        )
+    output_file = output_root / geant4_output_file
 
     # -------------------------------------------------------------------------
     # Find all deposit tally files
     # -------------------------------------------------------------------------
-    #  
-    deposit_files = sorted(
-        file
-        for file in input_root.rglob(f"geant4_deposit_{phantom_family}_*.csv")
-        if not file.stem.lower().endswith("_photon_fluence")
+
+    deposit_files = sorted(file
+        for file in input_root.rglob("geant4_deposit_*.csv")
+        if (
+            not file.stem.lower().endswith("_photon_fluence")
+            and any(
+                file.name.lower().startswith(
+                    f"geant4_deposit_{phantom.lower()}_"
+                )
+                for phantom in selected_phantoms
+            )
+        )
     )
 
     if not deposit_files:
@@ -114,15 +104,14 @@ def geant4_calculate_dose_and_SAFs(params):
                 f"Cannot parse filename:\n{deposit_file.name}"
             )
 
-        phantom_code = (f"{match.group(1).upper()}_"
-                        f"{match.group(2).upper()}"
-        )
-        phantom = phantom_names[phantom_code]
+        phantom_code = match.group(1).upper()
+        phantom_spec = get_phantom(phantom_code)
 
-        source_organ = match.group(3)
-        source_type = source_type_map.get(match.group(4).lower(),
-                                          match.group(4).lower())  
-        source_energy = float(match.group(5))
+        phantom = phantom_spec.display_name
+
+        source_organ = match.group(2)
+        source_type = source_type_map.get(match.group(3).lower(), match.group(3).lower())
+        source_energy = float(match.group(4))
 
         number_of_particles = params["nps"]
 
@@ -155,7 +144,8 @@ def geant4_calculate_dose_and_SAFs(params):
         df["Target Organ Name"] = df[
             "Target Organ ID"
         ].map(
-            lambda x: organ_database[x]["name"]
+            lambda x: organ_database[int(x)]["name"]
+            if pd.notna(x) else pd.NA
         )
 
         # Use masses from database
@@ -163,7 +153,8 @@ def geant4_calculate_dose_and_SAFs(params):
         df["Target Organ Mass (g)"] = df[
             "Target Organ ID"
         ].map(
-            lambda x: organ_database[x]["mass"]
+            lambda x: organ_database[int(x)]["mass"]
+            if pd.notna(x) else pd.NA
         )
 
         # SAF

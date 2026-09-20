@@ -79,7 +79,7 @@ PHANTOMS = {
     ),
 
     "MRCP_AF_H150W55": PhantomSpec(
-        code="F_H150W55",
+        code="MRCP_AF_H150W55",
         display_name="Adult ICRP 145 Female Resized to Filipino",
         family="MRCP_Resized",
         sex="AF",
@@ -94,7 +94,7 @@ PHANTOMS = {
     ),
 
     "MRCP_AM_H165W65": PhantomSpec(
-        code="M_H165W65",
+        code="MRCP_AM_H165W65",
         display_name="Adult ICRP 145 Male Resized to Filipino",
         family="MRCP_Resized",
         sex="AM",

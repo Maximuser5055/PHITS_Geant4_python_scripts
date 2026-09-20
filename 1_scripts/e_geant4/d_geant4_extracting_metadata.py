@@ -6,13 +6,12 @@ from pathlib import Path
 import csv
 
 import b_config.a_config as config
-
+from b_config.b_phantom_registry import get_phantom
 
 def geant4_extract_metadata_stats():
 
     # Configs
     root = config.GEANT4_GENERATED_INPUTS_DIR
-    phantom_names = config.PHANTOM_NAMES
     timing_files = sorted(root.rglob("geant4_timing_*.txt"))
     metadata_output_file = (config.RESULTS_GEANT4_DIR / "a_geant4_all_simulations_log.csv")
 
@@ -36,7 +35,7 @@ def geant4_extract_metadata_stats():
     }
 
     filename_pattern = re.compile(
-        r"geant4_(MRCP|MFCP)_(AM|AF)_source_(.+?)_(.+?)_energy_([0-9Ee.+-]+)\.in",
+        r"geant4_(.+?)_source_(.+?)_(.+?)_energy_([0-9Ee.+-]+)\.in",
         re.IGNORECASE
     )
 
@@ -100,15 +99,14 @@ def geant4_extract_metadata_stats():
                 f"Cannot parse filename:\n{input_files.name}"
             )
 
-        phantom_code = (f"{match.group(1).upper()}_"
-                        f"{match.group(2).upper()}")
-        phantom = phantom_names[phantom_code]
-        
-        source_organ = match.group(3)
-        source_type = match.group(4)
-        source_energy = float(match.group(5))
+        phantom_code = match.group(1).upper()
+        phantom_spec = get_phantom(phantom_code)
 
-        results["phantom"] = phantom
+        source_organ = match.group(2)
+        source_type = match.group(3)
+        source_energy = float(match.group(4))
+
+        results["phantom"] = phantom_spec.display_name
         results["source_organ"] = source_organ
         results["source_type"] = source_type
         results["source_energy"] = source_energy
