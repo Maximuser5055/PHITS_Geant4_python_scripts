@@ -48,7 +48,7 @@ below is used.
 import pandas as pd
 
 import b_config.a_config as config
-
+from b_config.b_phantom_registry import get_phantom
 
 # ============================================================
 # SETTINGS
@@ -71,13 +71,6 @@ PUBLISHABLE_SKELETAL_METHODS = {
     "electron": "Direct dose calculation",
     "e-": "Direct dose calculation",
 }
-
-# ------------------------------------------------------------
-# Output directory
-# ------------------------------------------------------------
-
-geant4_publishable_dir = config.RESULTS_GEANT4_PUBLISHABLE_SAF_DATABASE_DIR
-phits_publishable_dir = config.RESULTS_PHITS_PUBLISHABLE_SAF_DATABASE_DIR
 
 # ------------------------------------------------------------
 # Master SAF databases and other configs
@@ -141,14 +134,6 @@ SOURCE_TYPE_NAMES = {
 # ============================================================
 # FILE NAME COMPONENTS
 # ============================================================
-
-PHANTOM_FILE_NAMES = {
-    "MRCP_AF": "mrcp_af",
-    "MRCP_AM": "mrcp_am",
-
-    "MFCP_AF": "mfcp_af",
-    "MFCP_AM": "mfcp_am",
-}
 
 SOURCE_TYPE_FILE_NAMES = {
 
@@ -843,38 +828,22 @@ def create_publishable_saf_database(params):
                 "Statistical Uncertainty (%)"
             )
 
-            phantom_code = next(code
-                for code, name in config.PHANTOM_NAMES.items()
-                if name == phantom)
-            
-            phantom_filename = (PHANTOM_FILE_NAMES[phantom_code])
+            phantom_code = phantom
+            get_phantom(phantom_code)
 
-            source_filename = (SOURCE_TYPE_FILE_NAMES[source_type])
+            phantom_filename = phantom_code.lower()
 
-            # ------------------------------------------------
-            # SAF filename
-            # ------------------------------------------------
-
-            saf_file = (
-                publishable_dir
-                /
-                f"{phantom_filename}_"
-                f"{source_filename}_saf.csv"
-            )
+            source_filename = SOURCE_TYPE_FILE_NAMES[source_type]
 
             # ------------------------------------------------
-            # Standard uncertainty filename
+            # SAF and standard uncertainty filenames
             # ------------------------------------------------
 
-            std_file = (
-                publishable_dir
-                /
-                f"{phantom_filename}_"
-                f"{source_filename}_std.csv"
-            )
+            saf_file = publishable_dir / f"{phantom_filename}_{source_filename}_saf.csv"
+            std_file = publishable_dir / f"{phantom_filename}_{source_filename}_std.csv"
 
             # ------------------------------------------------
-            # Write SAF file
+            # Write SAF and uncertainty files
             # ------------------------------------------------
 
             write_publishable_csv(
@@ -887,10 +856,6 @@ def create_publishable_saf_database(params):
                 target_organs,
                 "Specific Absorbed Fractions (kg^-1)",
             )
-
-            # ------------------------------------------------
-            # Write uncertainty file
-            # ------------------------------------------------
 
             write_publishable_csv(
                 std_table,
@@ -911,17 +876,9 @@ def create_publishable_saf_database(params):
             )
 
             print()
-            print(
-                f"Generated:"
-            )
-
-            print(
-                f"  {saf_file.name}"
-            )
-
-            print(
-                f"  {std_file.name}"
-            )
+            print(f"Generated:")
+            print(f"  {saf_file.name}")
+            print(f"  {std_file.name}")
 
             print(f"    Skeletal method: {publishable_method}")
             

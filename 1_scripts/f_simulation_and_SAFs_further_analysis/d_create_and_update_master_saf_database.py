@@ -58,12 +58,12 @@ def find_current_result_files(simulation_code):
     if simulation_code == "PHITS":
 
         root = config.RESULTS_PHITS_DIR
-        pattern = "*_phits_*_target_regions_dose_SAFs.csv"
+        pattern = "phits_target_regions_dose_SAFs.csv"
 
     elif simulation_code == "GEANT4":
 
         root = config.RESULTS_GEANT4_DIR
-        pattern = "*_geant4_*_target_regions_dose_SAFs.csv"
+        pattern = "geant4_target_regions_dose_SAFs.csv"
 
     else:
 
@@ -133,7 +133,7 @@ def filter_new_results(current_results, existing_database, override_duplicates=F
 
         current_source_sets = (
             current_results[
-                [
+                [   
                     "Source Organ ID",
                     "Source Type",
                     "Source Energy (MeV)",

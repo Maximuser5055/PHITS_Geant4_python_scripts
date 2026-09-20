@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from b_config import a_config as config
-
+from b_config.b_phantom_registry import get_phantom, get_phantom_group
 
 def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
@@ -21,6 +21,8 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
         number_of_particles = params["maxcas"] * params["maxbch"]
     elif simulation == "GEANT4":
         number_of_particles = params["nps"]
+    else:
+        raise ValueError(f"Unsupported simulation code: {simulation}")
 
     skeletal = pd.read_csv(config.SKELETAL_MASSES_CSV)
     results_phits_dir = config.RESULTS_PHITS_DIR
@@ -31,58 +33,32 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
     skeletal = skeletal.set_index("Organ ID")
 
-    am_marrow = skeletal["Ref_AM_Marrow_Mass(g)"]
-    af_marrow = skeletal["Ref_AF_Marrow_Mass(g)"]
-
-    am_endosteum = skeletal["Ref_AM_Endosteum_Mass(g)"]
-    af_endosteum = skeletal["Ref_AF_Endosteum_Mass(g)"]
-
-    # ========================================================
-    # SELECT PHANTOM FAMILY
-    # ========================================================
+    # ==========================================================
+    # Determine selected phantoms
+    # ==========================================================
 
     phantom_selection = params["phantom"]
+    selected_phantoms = get_phantom_group(phantom_selection)
 
-    if phantom_selection.startswith("MRCP"):
-        phantom_family = "MRCP"
-
-    elif phantom_selection.startswith("MFCP"):
-        phantom_family = "MFCP"
-
-    else:
-        raise ValueError(f"Unknown phantom selection: {phantom_selection}")
+    # ==========================================================
+    # Determine input/output files
+    # ==========================================================
 
     if simulation == "PHITS":
 
-        input_csv = (results_phits_dir / 
-            f"{'c' if phantom_family == 'MRCP' else 'd'}_"
-            f"phits_{phantom_family}_dose_and_SAFs.csv")
-
-        fluence_csv = (results_phits_dir / 
-            f"{'e' if phantom_family == 'MRCP' else 'f'}_"
-            f"phits_{phantom_family}_rbm_endosteum_icrp116.csv")
-        
-        output_csv = (results_phits_dir /
-            f"{'g' if phantom_family == 'MRCP' else 'h'}_"
-            f"phits_{phantom_family}_target_regions_dose_SAFs.csv")
+        input_csv = results_phits_dir / "phits_dose_and_SAFs.csv"
+        fluence_csv = results_phits_dir / "phits_rbm_endosteum_icrp116.csv"
+        output_csv = results_phits_dir / "phits_target_regions_dose_SAFs.csv"
 
     elif simulation == "GEANT4":
 
-        input_csv = (results_geant4_dir / 
-            f"{'c' if phantom_family == 'MRCP' else 'd'}_"
-            f"geant4_{phantom_family}_dose_and_SAFs.csv")
-
-        fluence_csv = (results_geant4_dir / 
-            f"{'e' if phantom_family == 'MRCP' else 'f'}_"
-            f"geant4_{phantom_family}_rbm_endosteum_icrp116.csv")
-        
-        output_csv = (results_geant4_dir / 
-            f"{'g' if phantom_family == 'MRCP' else 'h'}_"
-            f"geant4_{phantom_family}_target_regions_dose_SAFs.csv")
+        input_csv = results_geant4_dir / "geant4_dose_and_SAFs.csv"
+        fluence_csv = results_geant4_dir / "geant4_rbm_endosteum_icrp116.csv"
+        output_csv = results_geant4_dir / "geant4_target_regions_dose_SAFs.csv"
 
     else:
         raise ValueError(f"Unsupported simulation code: {simulation}")
-
+    
     # ==========================================================
     # Skip phantom if input file does not exist
     # ==========================================================
@@ -120,20 +96,24 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
     for group_key, source_df in grouped:
 
-        phantom_code = next(code
-            for code, name in config.PHANTOM_NAMES.items()
-            if name == group_key[0])
+        phantom_code = next(
+            code
+            for code in selected_phantoms
+            if get_phantom(code).display_name == group_key[0]
+        )
 
-        if phantom_code.endswith("_AM"):
-            marrow_lookup = am_marrow
-            endosteum_lookup = am_endosteum
+        phantom_spec = get_phantom(phantom_code)
 
-        elif phantom_code.endswith("_AF"):
-            marrow_lookup = af_marrow
-            endosteum_lookup = af_endosteum
+        if phantom_spec.skeletal_mass_columns is None:
+            raise ValueError(
+                f"No skeletal mass columns defined for "
+                f"phantom '{phantom_code}'."
+            )
 
-        else:
-            raise ValueError(f"Unknown phantom code: {phantom_code}")
+        marrow_column, endosteum_column = phantom_spec.skeletal_mass_columns
+
+        marrow_lookup = skeletal[marrow_column]
+        endosteum_lookup = skeletal[endosteum_column]
     
         # ------------------------------------------------------
         # Process every target region listed in mapping file
@@ -489,7 +469,7 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
     # ==========================================================
     if not output_rows:
 
-        print(f"\n[WARNING] No target-region data generated for {phantom_family}.")
+        print("\n[WARNING] No target-region data generated for {phantom_selection}.")
 
         return pd.DataFrame()
 
