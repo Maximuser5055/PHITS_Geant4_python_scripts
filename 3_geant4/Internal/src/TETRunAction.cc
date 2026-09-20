@@ -196,12 +196,11 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
     // Skeletal IDs
     // ========================================================
     // SKELETAL_IDS_BEGIN
-    std::vector<G4int> skeletalIDs =
-    {
+std::vector<G4int> skeletalIDs =
+{
         1400,
         1500,
         1700,
-        1800,
         2000,
         2100,
         2300,
@@ -210,7 +209,6 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
         2900,
         3000,
         3200,
-        3300,
         3500,
         3600,
         3800,
@@ -222,9 +220,9 @@ void TETRunAction::PrintPhotonFluence(std::ostream& out)
         5000,
         5200,
         5400,
-        5600
+        5600,
     };
-    // SKELETAL_IDS_END
+// SKELETAL_IDS_END
     
     // ========================================================
     // CSV header

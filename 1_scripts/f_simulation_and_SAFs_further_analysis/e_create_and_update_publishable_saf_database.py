@@ -48,7 +48,7 @@ below is used.
 import pandas as pd
 
 import b_config.a_config as config
-from b_config.b_phantom_registry import get_phantom
+from b_config.b_phantom_registry import PHANTOMS, get_phantom
 
 # ============================================================
 # SETTINGS
@@ -828,8 +828,20 @@ def create_publishable_saf_database(params):
                 "Statistical Uncertainty (%)"
             )
 
-            phantom_code = phantom
-            get_phantom(phantom_code)
+            phantom_code = next(
+                (
+                    code
+                    for code, phantom_spec in PHANTOMS.items()
+                    if phantom_spec.display_name == phantom
+                ),
+                None
+            )
+
+            if phantom_code is None:
+                raise ValueError(
+                    f"Could not find phantom registry code "
+                    f"for display name: {phantom}"
+                )
 
             phantom_filename = phantom_code.lower()
 

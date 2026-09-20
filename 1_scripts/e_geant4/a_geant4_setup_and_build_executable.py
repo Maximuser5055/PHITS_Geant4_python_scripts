@@ -7,7 +7,7 @@ from pathlib import Path
 import json
 import re
 import b_config.a_config as config
-from b_config.b_phantom_registry import get_phantom_by_sex, get_skeletal_ids
+from b_config.b_phantom_registry import PHANTOMS, PHANTOM_GROUPS, get_skeletal_ids
 
 # Configurations
 executable = config.GEANT4_EXECUTABLE_FILE
@@ -79,8 +79,37 @@ def geant4_change_phantom_family(params):
 
     phantom_selection = params["phantom"]
 
-    male_phantom = get_phantom_by_sex(phantom_selection,"AM")
-    female_phantom = get_phantom_by_sex(phantom_selection,"AF")
+    # Convert an individual phantom selection into its group
+    if phantom_selection in PHANTOM_GROUPS:
+        phantom_group = phantom_selection
+
+    else:
+        phantom_group = next(
+            (
+                group_code
+                for group_code, group_spec in PHANTOM_GROUPS.items()
+                if phantom_selection in group_spec.phantoms
+            ),
+            None
+        )
+
+        if phantom_group is None:
+            raise ValueError(
+                f"Phantom '{phantom_selection}' does not belong "
+                f"to a registered phantom group."
+            )
+
+    male_phantom = next(
+        phantom_spec.cell_file.stem
+        for phantom_code in PHANTOM_GROUPS[phantom_group].phantoms
+        if (phantom_spec := PHANTOMS[phantom_code]).sex == "AM"
+    )
+
+    female_phantom = next(
+        phantom_spec.cell_file.stem
+        for phantom_code in PHANTOM_GROUPS[phantom_group].phantoms
+        if (phantom_spec := PHANTOMS[phantom_code]).sex == "AF"
+    )
 
     text = tet_model_import_file.read_text()
 
@@ -103,11 +132,7 @@ def geant4_change_phantom_family(params):
     )
 
     if count != 1:
-
-        raise RuntimeError(
-            "Could not uniquely update the phantom "
-            "selection in TETModelImport.cc."
-        )
+        raise RuntimeError("Could not uniquely update the phantom selection in TETModelImport.cc.")
 
     if new_text != text:
         tet_model_import_file.write_text(new_text)

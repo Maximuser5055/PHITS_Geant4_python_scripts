@@ -1354,6 +1354,8 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
     # ========================================================
     # KEEP AND SAVE SELECTED PHANTOM FAMILY
     # ========================================================
+    
+    output_file = geant4_results_dir / geant4_output_file
 
     family_results = combined_results.copy()
     family_results.to_csv(output_file, index=False)
