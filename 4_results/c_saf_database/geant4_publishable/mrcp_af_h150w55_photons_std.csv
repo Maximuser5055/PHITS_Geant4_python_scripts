@@ -1,0 +1,89 @@
+# Header
+# Document: Statistical Uncertainties (%)
+# Phantom type: Adult ICRP 145 Female Resized to Filipino
+# Source type: photons
+# Number of source energies: 1
+# Number of source organs: 2
+# Number of target organs: 42
+# End Header
+Source Organ,Target Organ,10 MeV
+Brain,Red (active) marrow,1.712237464019615
+Brain,Colon wall,56.59570181011709
+Brain,RLung + LLung,26.124393914636347
+Brain,Stomach wall,68.64144807761878
+Brain,Breast-a + Breast-g,26.80539484518472
+Brain,ROvary + LOvary,0.0
+Brain,Urinary bladder wall,0.0
+Brain,Oesophagus wall,54.40146477662251
+Brain,Liver,35.385231430000005
+Brain,Thyroid,96.8393154
+Brain,50-um endosteal region,0.954169900436669
+Brain,Brain,3.507059358
+Brain,Salivary glands,17.946429952297166
+Brain,Skin,4.990165685198266
+Brain,RAdrenal + LAdrenal,62.30909492175056
+Brain,ET region,34.70853520894403
+Brain,Gallbladder wall,70.20642959999999
+Brain,Heart wall,38.90233748
+Brain,RKidney + LKidney,63.79985597291508
+Brain,Systemic lymph nodes,49.54310548685877
+Brain,Muscle,6.524858824
+Brain,Oral mucosa,39.94265571389055
+Brain,Pancreas,99.83141626999998
+Brain,Small intestine wall,62.65015749886439
+Brain,Spleen,51.04248198
+Brain,Thymus,96.34870525
+Brain,Uterus/cervix,0.0
+Brain,Tongue,32.09621609563714
+Brain,Tonsils,99.99499987
+Brain,Right colon wall (ascending + right transverse),72.40402175
+Brain,Left colon wall (left transverse + descending),88.00664217772182
+Brain,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Brain,Extrathoracic lymph nodes,28.39803809
+Brain,Alveolar-interstitium,26.124393914636347
+Brain,Thoracic lymph nodes,58.69689627
+Brain,Entire lens of eye,0.0
+Brain,Pituitary gland,59.04310373
+Brain,Spinal cord,70.50707939
+Brain,Ureters,0.0
+Brain,Adipose/residual tissue,4.5194475380000005
+Liver,Red (active) marrow,2.0892595110087253
+Liver,Colon wall,16.499669017297336
+Liver,RLung + LLung,7.660199087254744
+Liver,Stomach wall,11.0173507707609
+Liver,Breast-a + Breast-g,12.339855350324944
+Liver,ROvary + LOvary,84.67361892674825
+Liver,Urinary bladder wall,46.9133605547693
+Liver,Oesophagus wall,24.610688767090537
+Liver,Liver,3.3755188030000003
+Liver,Thyroid,78.93270498
+Liver,50-um endosteal region,2.108969395278652
+Liver,Brain,26.1024168
+Liver,Salivary glands,62.95927300062725
+Liver,Skin,5.030655090863693
+Liver,RAdrenal + LAdrenal,31.01944098780737
+Liver,ET region,70.71453103023661
+Liver,Gallbladder wall,21.78212327
+Liver,Heart wall,11.619849619999998
+Liver,RKidney + LKidney,10.925501936551376
+Liver,Systemic lymph nodes,22.533478154010474
+Liver,Muscle,4.23574034
+Liver,Oral mucosa,99.99499987000002
+Liver,Pancreas,17.904417180000003
+Liver,Small intestine wall,12.457959778527773
+Liver,Spleen,18.40933992
+Liver,Thymus,91.63827655
+Liver,Uterus/cervix,88.49242769000001
+Liver,Tongue,86.03652852682394
+Liver,Tonsils,99.99499987
+Liver,Right colon wall (ascending + right transverse),20.97781963246813
+Liver,Left colon wall (left transverse + descending),28.51329518311524
+Liver,Rectosigmoid colon wall (sigmoid + rectum),61.52196730372245
+Liver,Extrathoracic lymph nodes,99.99499987000002
+Liver,Alveolar-interstitium,7.660199087254744
+Liver,Thoracic lymph nodes,31.48029326
+Liver,Entire lens of eye,0.0
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,28.02268776
+Liver,Ureters,68.01345210092367
+Liver,Adipose/residual tissue,2.807153888

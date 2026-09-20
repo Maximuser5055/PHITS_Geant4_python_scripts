@@ -63,7 +63,7 @@ class PhantomGroupSpec:
 PHANTOMS = {
     "MRCP_AF": PhantomSpec(
         code="MRCP_AF",
-        display_name="Adult ICRP 145 Female",
+        display_name="ICRP 145 Adult Female",
         family="MRCP",
         sex="AF",
         cell_file=config.INCLUDE_FILES_DIR / "MRCP-AF.cell",
@@ -78,7 +78,7 @@ PHANTOMS = {
 
     "MRCP_AM": PhantomSpec(
         code="MRCP_AM",
-        display_name="Adult ICRP 145 Male",
+        display_name="ICRP 145 Adult Male",
         family="MRCP",
         sex="AM",
         cell_file=config.INCLUDE_FILES_DIR / "MRCP-AM.cell",
@@ -93,7 +93,7 @@ PHANTOMS = {
 
     "MRCP_AF_H150W55": PhantomSpec(
         code="MRCP_AF_H150W55",
-        display_name="Adult ICRP 145 Female Resized to Filipino",
+        display_name="ICRP 145 Adult Female Resized to Filipino",
         family="MRCP_Resized",
         sex="AF",
         cell_file=config.INCLUDE_FILES_DIR / "F_H150W55.cell",
@@ -108,7 +108,7 @@ PHANTOMS = {
 
     "MRCP_AM_H165W65": PhantomSpec(
         code="MRCP_AM_H165W65",
-        display_name="Adult ICRP 145 Male Resized to Filipino",
+        display_name="ICRP 145 Adult Male Resized to Filipino",
         family="MRCP_Resized",
         sex="AM",
         cell_file=config.INCLUDE_FILES_DIR / "M_H165W65.cell",
@@ -123,7 +123,7 @@ PHANTOMS = {
 
     "MRCP_AF_Filipino": PhantomSpec(
         code="MRCP_AF_Filipino",
-        display_name="Adult Filipino Female",
+        display_name="Filipino Adult Female",
         family="MRCP_Filipino",
         sex="AF",
         cell_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AF.cell",
@@ -138,7 +138,7 @@ PHANTOMS = {
 
     "MRCP_AM_Filipino": PhantomSpec(
         code="MRCP_AM_Filipino",
-        display_name="Adult Filipino Male",
+        display_name="Filipino Adult Male",
         family="MRCP_Filipino",
         sex="AM",
         cell_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AM.cell",

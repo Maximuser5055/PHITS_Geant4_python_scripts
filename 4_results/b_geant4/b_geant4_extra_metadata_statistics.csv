@@ -1,6 +1,6 @@
 Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),Overall Wall Time (s),Overall Wall Time (dhms)
-Type + Energy,gamma,10.0,,,2,198.6,0d 00h 03m 19s,9.09,192.17,205.03,,
-Phantom + Type + Energy,gamma,10.0,Adult ICRP 145 Female Resized to Filipino,,1,192.17,0d 00h 03m 12s,,192.17,192.17,,
-Phantom + Type + Energy,gamma,10.0,Adult ICRP 145 Male Resized to Filipino,,1,205.03,0d 00h 03m 25s,,205.03,205.03,,
-Source Organ + Type + Energy,gamma,10.0,,Liver,2,198.6,0d 00h 03m 19s,9.09,192.17,205.03,,
-All simulations,,,,,2,198.6,0d 00h 03m 19s,9.09,192.17,205.03,406.0,0d 00h 06m 46s
+Type + Energy,gamma,10.0,,,2,204.91,0d 00h 03m 25s,14.84,194.42,215.4,,
+Phantom + Type + Energy,gamma,10.0,Adult ICRP 145 Female Resized to Filipino,,1,194.42,0d 00h 03m 14s,,194.42,194.42,,
+Phantom + Type + Energy,gamma,10.0,Adult ICRP 145 Male Resized to Filipino,,1,215.4,0d 00h 03m 35s,,215.4,215.4,,
+Source Organ + Type + Energy,gamma,10.0,,Brain,2,204.91,0d 00h 03m 25s,14.84,194.42,215.4,,
+All simulations,,,,,2,204.91,0d 00h 03m 25s,14.84,194.42,215.4,438.0,0d 00h 07m 18s
