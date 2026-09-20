@@ -1,6 +1,14 @@
 # Ignore everything
 *
 
+# Python
+__pycache__/
+*.py[cod]
+
+# IDE
+.vscode/
+.idea/
+
 # Keep these folders
 !1_scripts/
 !2_phits/
