@@ -7,7 +7,7 @@
 import pandas as pd
 
 import b_config.a_config as config
-from b_config.b_phantom_registry import get_target_region_file
+from b_config.b_phantom_registry import PHANTOMS, get_target_region_file
 
 # ============================================================
 # DATABASE FILES AND CONFIGS
@@ -94,6 +94,53 @@ def validate_columns(df, filename):
                 for column in missing
             )
         )
+
+# ============================================================
+# NORMALIZE PHANTOM IDENTIFIERS
+# ============================================================
+
+def normalize_phantom_codes(dataframe):
+
+    dataframe = dataframe.copy()
+
+    # --------------------------------------------------------
+    # Create lookup from display name -> registry code
+    # --------------------------------------------------------
+
+    display_name_to_code = {
+        phantom_spec.display_name: phantom_code
+        for phantom_code, phantom_spec
+        in PHANTOMS.items()
+    }
+
+    # --------------------------------------------------------
+    # Convert every phantom identifier to its registry code
+    # --------------------------------------------------------
+
+    def normalize_phantom(value):
+
+        value = str(value).strip()
+
+        # Already a registry code
+        if value in PHANTOMS:
+            return value
+
+        # Legacy display name
+        if value in display_name_to_code:
+            return display_name_to_code[value]
+
+        raise ValueError(
+            f"Unknown phantom identifier: {value}\n"
+            "Expected a registered phantom code or "
+            "registered phantom display name."
+        )
+
+    dataframe["Phantom"] = (
+        dataframe["Phantom"]
+        .apply(normalize_phantom)
+    )
+
+    return dataframe
 
 # ============================================================
 # REMOVE RESULTS ALREADY PRESENT IN DATABASE
@@ -545,6 +592,7 @@ def update_master_saf_database(params):
         current_dataframes.append(df)
 
     current_results = pd.concat(current_dataframes, ignore_index=True)
+    current_results = normalize_phantom_codes(current_results)
 
     # --------------------------------------------------------
     # Read existing database if it exists
@@ -561,6 +609,7 @@ def update_master_saf_database(params):
 
         validate_columns(existing_database, database_file.name)
 
+        existing_database = normalize_phantom_codes(existing_database)
     else:
 
         print()
