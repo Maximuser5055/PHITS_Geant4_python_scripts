@@ -57,12 +57,12 @@ def find_current_result_files(simulation_code):
     if simulation_code == "PHITS":
 
         root = config.RESULTS_PHITS_DIR
-        pattern = "phits_target_regions_dose_SAFs.csv"
+        pattern = "e_phits_target_regions_dose_SAFs.csv"
 
     elif simulation_code == "GEANT4":
 
         root = config.RESULTS_GEANT4_DIR
-        pattern = "geant4_target_regions_dose_SAFs.csv"
+        pattern = "e_geant4_target_regions_dose_SAFs.csv"
 
     else:
 

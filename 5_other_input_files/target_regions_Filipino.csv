@@ -18,7 +18,7 @@ Thyroid,Thyroid,13200
 Brain,Brain,6100
 Salivary glands,S-glands,12000_12100
 Skin,Skin,12200_12201
-Basal cells of skin,Skin-bas,12201_12301_12401_12501
+Basal cells of skin,Skin-bas,12201
 RAdrenal + LAdrenal,Adrenals,100_200
 ET region,ET,300_301_302_303_401_402_403_404_405
 Gallbladder wall,GB-wall,7000
