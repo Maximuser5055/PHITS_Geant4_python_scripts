@@ -61,7 +61,7 @@ geant4_generated_inputs_dir = config.GEANT4_GENERATED_INPUTS_DIR
 fluence_to_dose_response_functions = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
 geant4_source_type_map = config.GEANT4_SOURCE_TYPE_MAP
 geant4_results_dir = config.RESULTS_GEANT4_DIR
-geant4_output_file = "geant4_rbm_endosteum_icrp116.csv"
+geant4_output_file = "d_geant4_rbm_endosteum_icrp116.csv"
 
 # ============================================================
 # GEANT4 PHOTON-FLUENCE FILENAME PATTERN

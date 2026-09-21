@@ -41,6 +41,20 @@ def get_skeletal_ids(code: str) -> tuple[int, ...]:
 
     raise ValueError(f"No skeletal IDs configured for phantom or group '{code}'.")
 
+def get_target_region_file(code: str) -> Path:
+
+    if code in PHANTOM_GROUPS:
+        return PHANTOM_GROUPS[code].target_region_file
+
+    if code in PHANTOMS:
+        for group in PHANTOM_GROUPS.values():
+            if code in group.phantoms:
+                return group.target_region_file
+
+    raise ValueError(
+        f"No target-region file configured for phantom or group '{code}'."
+    )
+
 @dataclass(frozen=True)
 class PhantomSpec:
     code: str
@@ -59,6 +73,7 @@ class PhantomGroupSpec:
     display_name: str
     phantoms: tuple[str, ...]
     skeletal_ids: tuple[int, ...]
+    target_region_file: Path
 
 PHANTOMS = {
     "MRCP_AF": PhantomSpec(
@@ -162,6 +177,7 @@ PHANTOM_GROUPS = {
             "MRCP_AM",
         ),
         skeletal_ids=config.ICRP145_SKELETAL_IDS,
+         target_region_file=config.OTHER_INPUT_FILES_DIR / "target_regions_ICRP145.csv"
     ),
 
     "MRCP_AF_AM_Filipino_Resized": PhantomGroupSpec(
@@ -172,6 +188,7 @@ PHANTOM_GROUPS = {
             "MRCP_AM_H165W65",
         ),
         skeletal_ids=config.RESIZED_ICRP145_SKELETAL_IDS,
+        target_region_file=config.OTHER_INPUT_FILES_DIR / "target_regions_Filipino.csv"
     ),
 
     "MRCP_AF_AM_Filipino": PhantomGroupSpec(
@@ -182,5 +199,6 @@ PHANTOM_GROUPS = {
             "MRCP_AM_Filipino",
         ),
         skeletal_ids=config.FILIPINO_SKELETAL_IDS,
+        target_region_file=config.OTHER_INPUT_FILES_DIR / "target_regions_Filipino.csv"
     ),
 }

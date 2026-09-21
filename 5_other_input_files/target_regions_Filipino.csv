@@ -14,10 +14,10 @@ Oesophagus wall,Oesophagus,11000_11001_11002
 Oesophagus basal cells,Oesophagus-bas,11001
 Liver,Liver,9500
 Thyroid,Thyroid,13200
-50-um endosteal region,Endost-BS,1400_1500_1700_1800_2000_2100_2300_2500_2700_2900_3000_3200_3300_3500_3600_3800_4000_4200_4400_4600_4800_5000_5200_5400_5600
+50-um endosteal region,Endost-BS,1400_1500_1700_2000_2100_2300_2500_2700_2900_3000_3200_3500_3600_3800_4000_4200_4400_4600_4800_5000_5200_5400_5600
 Brain,Brain,6100
 Salivary glands,S-glands,12000_12100
-Skin,Skin,12200_12201_12300_12301_12400_12401_12500_12501
+Skin,Skin,12200_12201
 Basal cells of skin,Skin-bas,12201_12301_12401_12501
 RAdrenal + LAdrenal,Adrenals,100_200
 ET region,ET,300_301_302_303_401_402_403_404_405
@@ -25,7 +25,7 @@ Gallbladder wall,GB-wall,7000
 Heart wall,Ht-wall,8700
 RKidney + LKidney,Kidneys,8900_9000_9100_9200_9300_9400
 Systemic lymph nodes,LN-Sys,10200_10300_10400_10500
-Muscle,Muscle,10600_10700_10800_10900
+Muscle,Muscle,10600
 Oral mucosa,O-mucosa,500_501_600
 Pancreas,Pancreas,11300
 Prostate,Prostate,11500
@@ -77,4 +77,4 @@ Left ovary,LOvary,11100
 Pituitary gland,P-gland,11400
 Spinal cord,Sp-cord,12600
 Ureters,Ureters,13500_13600
-Adipose/residual tissue,Adipose,11600_11700_11800_11900
+Adipose/residual tissue,Adipose,11600

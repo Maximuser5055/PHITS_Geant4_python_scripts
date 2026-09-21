@@ -1,0 +1,2 @@
+Starting Datetime,Termination Datetime,Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch,Setup Time (s),Execution Time (s),Individual Wall Time (s)
+2026-09-21T10:30:07,2026-09-21T10:38:27,ICRP 145 Adult Male Resized to Filipino,Liver,photon,10.0,OMP-12,100,10,499.91600000000005,44.934,544.85

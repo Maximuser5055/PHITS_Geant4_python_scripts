@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from b_config import a_config as config
-from b_config.b_phantom_registry import get_phantom, get_phantom_group
+from b_config.b_phantom_registry import get_phantom, get_phantom_group, get_target_region_file
 
 def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
@@ -16,7 +16,11 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
     # ==========================================================
 
     simulation = params["simulation_code"].upper()
-    mapping = pd.read_csv(config.TARGET_REGION_CSV)
+
+    phantom_selection = params["phantom"]
+
+    mapping = pd.read_csv(get_target_region_file(phantom_selection))
+
     if simulation == "PHITS":
         number_of_particles = params["maxcas"] * params["maxbch"]
     elif simulation == "GEANT4":
@@ -138,10 +142,8 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
             missing_ids = sorted(expected_ids - found_ids)
 
             if missing_ids:
-                print(
-                    f"Warning: {target_name} "
-                    f"(Source Organ ID {group_key[1]}, "
-                    f"Energy {group_key[4]} MeV) "
+                raise ValueError(
+                    f"{target_name} for phantom {phantom_code} "
                     f"is missing Target Organ IDs: {missing_ids}"
                 )
 

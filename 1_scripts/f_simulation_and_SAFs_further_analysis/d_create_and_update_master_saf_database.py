@@ -7,6 +7,7 @@
 import pandas as pd
 
 import b_config.a_config as config
+from b_config.b_phantom_registry import get_target_region_file
 
 # ============================================================
 # DATABASE FILES AND CONFIGS
@@ -18,8 +19,6 @@ GEANT4_DATABASE_FILE = config.RESULTS_SAF_DATABASE_DIR / "b_geant4_all_safs_and_
 
 phits_results_dir = config.RESULTS_PHITS_DIR
 geant4_results_dir = config.RESULTS_GEANT4_DIR
-target_region_csv = config.TARGET_REGION_CSV
-target_region_mapping = pd.read_csv(target_region_csv)
 
 # ============================================================
 # EXPECTED COLUMNS
@@ -101,18 +100,6 @@ def validate_columns(df, filename):
 # ============================================================
 
 def filter_new_results(current_results, existing_database, override_duplicates=False):
-
-    # --------------------------------------------------------
-    # Load target-region definitions
-    # --------------------------------------------------------
-
-    expected_target_regions = set(
-        target_region_mapping[
-            "Target region"
-        ]
-        .dropna()
-        .astype(str)
-    )
 
     # --------------------------------------------------------
     # Columns that uniquely identify a source simulation
@@ -489,6 +476,11 @@ def filter_new_results(current_results, existing_database, override_duplicates=F
 def update_master_saf_database(params):
 
     simulation_code = (params["simulation_code"].upper())
+
+    phantom_selection = params["phantom"]
+
+    target_region_file = get_target_region_file(phantom_selection)
+    target_region_mapping = pd.read_csv(target_region_file)
 
     # --------------------------------------------------------
     # Select current-results directory
