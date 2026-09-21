@@ -1,0 +1,157 @@
+# Header
+# Document: Statistical Uncertainties (%)
+# Phantom type: ICRP 145 Adult Male Resized to Filipino
+# Source type: photons
+# Number of source energies: 1
+# Number of source organs: 2
+# Number of target organs: 79
+# End Header
+Source Organ,Target Organ,10 MeV
+Brain,Red (active) marrow,1.594813325877019
+Brain,Colon wall,70.06879543750007
+Brain,Stem cells of colon,99.99499987000002
+Brain,RLung + LLung,22.78739705257751
+Brain,Stomach wall,48.24304060791492
+Brain,Stem cells of stomach,80.35815961
+Brain,Breast-a + Breast-g,86.06402011666643
+Brain,Testes,0.0
+Brain,Urinary bladder wall,0.0
+Brain,Urinary bladder basal cells,0.0
+Brain,Oesophagus wall,47.18506403181127
+Brain,Oesophagus basal cells,72.88899240999999
+Brain,Liver,23.09550166
+Brain,Thyroid,99.99499987000002
+Brain,50-um endosteal region,0.9537143835063672
+Brain,Brain,3.371566373
+Brain,Salivary glands,22.471977859500928
+Brain,Skin,4.976292822715806
+Brain,Basal cells of skin,8.293497426
+Brain,RAdrenal + LAdrenal,99.99499987
+Brain,ET region,22.348093016119
+Brain,Gallbladder wall,0.0
+Brain,Heart wall,42.47285703
+Brain,RKidney + LKidney,63.293090500870754
+Brain,Systemic lymph nodes,47.16441004384219
+Brain,Muscle,5.232616738
+Brain,Oral mucosa,54.40649158037859
+Brain,Pancreas,99.99499987
+Brain,Prostate,0.0
+Brain,Small intestine wall,54.258361335727216
+Brain,Stem cells of small intestine,72.25585348
+Brain,Spleen,57.66691135000001
+Brain,Thymus,0.0
+Brain,Tongue,27.16430769224688
+Brain,Tonsils,56.64100019
+Brain,Right colon wall (ascending + right transverse),83.54104063000001
+Brain,Left colon wall (left transverse + descending),97.27715168695292
+Brain,Rectosigmoid colon wall (sigmoid + rectum),99.99499987000002
+Brain,Stem cells of right colon (ascending + right transverse),0.0
+Brain,Stem cells of left colon (left transverse + descending),99.99499987
+Brain,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0
+Brain,Basal cells of anterior nasal passages,0.0
+Brain,Basal cells of posterior nasal passages + pharynx,44.06162677
+Brain,Extrathoracic lymph nodes,27.80037635
+Brain,Bronchi basal cells,72.52902960106276
+Brain,Bronchi secretory cells,81.98527845805485
+Brain,Alveolar-interstitium,22.78739705257751
+Brain,Thoracic lymph nodes,99.99499987
+Brain,Right lung lobe,29.61963281
+Brain,Left lung lobe,35.29534342
+Brain,Right adrenal gland,99.99499987
+Brain,Left adrenal gland,0.0
+Brain,Right breast adipose,0.0
+Brain,Right breast glandular,0.0
+Brain,Left breast adipose,99.99499987
+Brain,Left breast glandular,99.99499987
+Brain,RBreast-a + RBreast-g,0.0
+Brain,LBreast-a + LBreast-g,86.06402011666641
+Brain,RBreast-a + LBreast-a,99.99499987000002
+Brain,RBreast-g + LBreast-g,99.99499987
+Brain,Entire lens of eye,0.0
+Brain,Sensitive lens of eye,0.0
+Brain,Right kidney cortex,67.69952588
+Brain,Right kidney medulla,99.99499987
+Brain,Right kidney pelvis,0.0
+Brain,Right kidney C+M+P,63.75318708496989
+Brain,Left kidney cortex,99.99499987000002
+Brain,Left kidney medulla,99.99499987000002
+Brain,Left kidney pelvis,99.99499987
+Brain,Left kidney C+M+P,76.03833487084596
+Brain,Pituitary gland,0.0
+Brain,Spinal cord,72.78881181
+Brain,Ureters,0.0
+Brain,Adipose/residual tissue,4.5054819770000005
+Liver,Red (active) marrow,2.140171017860127
+Liver,Colon wall,9.95320590393188
+Liver,Stem cells of colon,20.62076071287271
+Liver,RLung + LLung,7.691076650867047
+Liver,Stomach wall,10.524891286268472
+Liver,Stem cells of stomach,25.13792095
+Liver,Breast-a + Breast-g,43.72128758200503
+Liver,Testes,80.8162888584679
+Liver,Urinary bladder wall,68.53683072841828
+Liver,Urinary bladder basal cells,71.29112502
+Liver,Oesophagus wall,20.364664324407805
+Liver,Oesophagus basal cells,39.54149714
+Liver,Liver,3.223260246
+Liver,Thyroid,95.12360781
+Liver,50-um endosteal region,2.18783215987728
+Liver,Brain,36.24733115
+Liver,Salivary glands,49.27195074800829
+Liver,Skin,5.256673637108995
+Liver,Basal cells of skin,8.529231434000001
+Liver,RAdrenal + LAdrenal,49.10162578003449
+Liver,ET region,87.03689501268353
+Liver,Gallbladder wall,17.2827756
+Liver,Heart wall,11.33697167
+Liver,RKidney + LKidney,10.409173751250588
+Liver,Systemic lymph nodes,25.83890272
+Liver,Muscle,3.47233122
+Liver,Oral mucosa,99.99499987
+Liver,Pancreas,14.96953574
+Liver,Prostate,99.99499987
+Liver,Small intestine wall,11.371802833019997
+Liver,Stem cells of small intestine,19.70230726
+Liver,Spleen,25.77000306
+Liver,Thymus,70.26604825
+Liver,Tongue,74.01639383202688
+Liver,Tonsils,99.99499987
+Liver,Right colon wall (ascending + right transverse),12.105653248478216
+Liver,Left colon wall (left transverse + descending),19.527349516105748
+Liver,Rectosigmoid colon wall (sigmoid + rectum),35.52894099273591
+Liver,Stem cells of right colon (ascending + right transverse),24.812943480477948
+Liver,Stem cells of left colon (left transverse + descending),40.638252603505926
+Liver,Stem cells of rectosigmoid colon (sigmoid + rectum),61.76225875
+Liver,Basal cells of anterior nasal passages,0.0
+Liver,Basal cells of posterior nasal passages + pharynx,99.99499986999996
+Liver,Extrathoracic lymph nodes,71.89488901
+Liver,Bronchi basal cells,50.410503448562935
+Liver,Bronchi secretory cells,49.011063474521045
+Liver,Alveolar-interstitium,7.691076650867047
+Liver,Thoracic lymph nodes,33.19780283
+Liver,Right lung lobe,8.7086966
+Liver,Left lung lobe,16.38919263
+Liver,Right adrenal gland,52.37247860000001
+Liver,Left adrenal gland,99.4395596
+Liver,Right breast adipose,60.2532883
+Liver,Right breast glandular,76.29884545
+Liver,Left breast adipose,97.14039501
+Liver,Left breast glandular,99.99499987000002
+Liver,RBreast-a + RBreast-g,48.979544527602805
+Liver,LBreast-a + LBreast-g,96.46526990087268
+Liver,RBreast-a + LBreast-a,51.46144322699927
+Liver,RBreast-g + LBreast-g,75.82367689834732
+Liver,Entire lens of eye,0.0
+Liver,Sensitive lens of eye,0.0
+Liver,Right kidney cortex,14.4238766
+Liver,Right kidney medulla,24.09801056
+Liver,Right kidney pelvis,59.63736164
+Liver,Right kidney C+M+P,12.244249396960722
+Liver,Left kidney cortex,23.82786291
+Liver,Left kidney medulla,38.05611368
+Liver,Left kidney pelvis,59.90101983999999
+Liver,Left kidney C+M+P,19.31201071115332
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,31.945313520000003
+Liver,Ureters,70.27916129400722
+Liver,Adipose/residual tissue,2.971365999
