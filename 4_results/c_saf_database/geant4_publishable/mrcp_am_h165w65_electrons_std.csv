@@ -1,0 +1,83 @@
+# Header
+# Document: Statistical Uncertainties (%)
+# Phantom type: ICRP 145 Adult Male Resized to Filipino
+# Source type: electrons
+# Number of source energies: 1
+# Number of source organs: 1
+# Number of target organs: 79
+# End Header
+Source Organ,Target Organ,10 MeV
+Liver,Red (active) marrow,4.129087277916347
+Liver,Colon wall,6.564436746588186
+Liver,Stem cells of colon,16.017415528179786
+Liver,RLung + LLung,3.8444080777028
+Liver,Stomach wall,5.7186779806625445
+Liver,Stem cells of stomach,12.69732392
+Liver,Breast-a + Breast-g,33.52201460476522
+Liver,Testes,0.0
+Liver,Urinary bladder wall,99.99499987000002
+Liver,Urinary bladder basal cells,0.0
+Liver,Oesophagus wall,14.956812957060055
+Liver,Oesophagus basal cells,33.50638512
+Liver,Liver,0.4685971978
+Liver,Thyroid,73.96452547999999
+Liver,50-um endosteal region,4.0192021915932505
+Liver,Brain,73.59154631000001
+Liver,Salivary glands,70.52659143
+Liver,Skin,4.557172634131888
+Liver,Basal cells of skin,7.53010908
+Liver,RAdrenal + LAdrenal,14.147610206652915
+Liver,ET region,99.99499986999996
+Liver,Gallbladder wall,6.770465817
+Liver,Heart wall,6.817937115
+Liver,RKidney + LKidney,6.894157329104489
+Liver,Systemic lymph nodes,21.287138182259028
+Liver,Muscle,2.737418223
+Liver,Oral mucosa,0.0
+Liver,Pancreas,7.794592052
+Liver,Prostate,99.99499987
+Liver,Small intestine wall,15.998501923892372
+Liver,Stem cells of small intestine,30.81496098
+Liver,Spleen,35.68572052999999
+Liver,Thymus,44.11005517
+Liver,Tongue,99.99499987000002
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),6.698770095697856
+Liver,Left colon wall (left transverse + descending),32.97672274909855
+Liver,Rectosigmoid colon wall (sigmoid + rectum),54.99805051999999
+Liver,Stem cells of right colon (ascending + right transverse),16.327107803066323
+Liver,Stem cells of left colon (left transverse + descending),72.55539360184054
+Liver,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0
+Liver,Basal cells of anterior nasal passages,0.0
+Liver,Basal cells of posterior nasal passages + pharynx,0.0
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Bronchi basal cells,85.5139326080113
+Liver,Bronchi secretory cells,88.59628254629382
+Liver,Alveolar-interstitium,3.8444080777028
+Liver,Thoracic lymph nodes,24.41798063
+Liver,Right lung lobe,3.870868346
+Liver,Left lung lobe,25.43895114
+Liver,Right adrenal gland,14.22368998
+Liver,Left adrenal gland,72.55415065000001
+Liver,Right breast adipose,35.69641042
+Liver,Right breast glandular,93.92371914
+Liver,Left breast adipose,99.99499987
+Liver,Left breast glandular,97.22532516
+Liver,RBreast-a + RBreast-g,33.618172260214
+Liver,LBreast-a + LBreast-g,70.51491998364666
+Liver,RBreast-a + LBreast-a,35.65054369917433
+Liver,RBreast-g + LBreast-g,92.10679509954052
+Liver,Entire lens of eye,0.0
+Liver,Sensitive lens of eye,0.0
+Liver,Right kidney cortex,7.906478413999999
+Liver,Right kidney medulla,15.00658331
+Liver,Right kidney pelvis,37.95048993
+Liver,Right kidney C+M+P,6.937322479848689
+Liver,Left kidney cortex,54.911656170000015
+Liver,Left kidney medulla,36.186761540000006
+Liver,Left kidney pelvis,0.0
+Liver,Left kidney C+M+P,53.52562843850378
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,33.57432652
+Liver,Ureters,48.35416473321095
+Liver,Adipose/residual tissue,1.811664978

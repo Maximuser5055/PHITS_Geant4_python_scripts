@@ -22,13 +22,13 @@ The material composition data is preserved. Only the material-definition
 format is changed.
 
 Usage:
-    python 1_scripts/i_miscellaneous/g_convert_material_files_to_GEANT4_format.py Filipino-MRCP-AF.material
+    python 1_scripts/i_miscellaneous/b_misc_SAFs/g_convert_material_files_to_GEANT4_format.py Filipino-MRCP-AF.material
 
 Output:
     Filipino-MRCP-AF_Geant4.material
 
 Or specify an output file:
-    python 1_scripts/i_miscellaneous/g_convert_material_files_to_GEANT4_format.py Filipino-MRCP-AF.material -o Filipino-MRCP-AF_Geant4.material
+    python 1_scripts/i_miscellaneous/b_misc_SAFs/g_convert_material_files_to_GEANT4_format.py Filipino-MRCP-AF.material -o Filipino-MRCP-AF_Geant4.material
 """
 
 from pathlib import Path

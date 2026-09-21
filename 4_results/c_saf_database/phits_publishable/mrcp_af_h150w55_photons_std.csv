@@ -1,0 +1,85 @@
+# Header
+# Document: Statistical Uncertainties (%)
+# Phantom type: ICRP 145 Adult Female Resized to Filipino
+# Source type: photons
+# Number of source energies: 1
+# Number of source organs: 1
+# Number of target organs: 79
+# End Header
+Source Organ,Target Organ,10 MeV
+Liver,Red (active) marrow,13.971528113835202
+Liver,Colon wall,38.21377005255891
+Liver,Stem cells of colon,50.3801615012473
+Liver,RLung + LLung,26.99902218662827
+Liver,Stomach wall,42.46364793098675
+Liver,Stem cells of stomach,52.63
+Liver,Breast-a + Breast-g,38.43093080941971
+Liver,ROvary + LOvary,100.0
+Liver,Urinary bladder wall,100.0
+Liver,Urinary bladder basal cells,0.0
+Liver,Oesophagus wall,94.86623966091618
+Liver,Oesophagus basal cells,100.0
+Liver,Liver,11.07
+Liver,Thyroid,0.0
+Liver,50-um endosteal region,20.733830976113087
+Liver,Brain,0.0
+Liver,Salivary glands,0.0
+Liver,Skin,17.360080972369254
+Liver,Basal cells of skin,19.1
+Liver,RAdrenal + LAdrenal,100.0
+Liver,ET region,0.0
+Liver,Gallbladder wall,59.99
+Liver,Heart wall,54.290000000000006
+Liver,RKidney + LKidney,26.80308737565632
+Liver,Systemic lymph nodes,60.7041917790123
+Liver,Muscle,12.4
+Liver,Oral mucosa,0.0
+Liver,Pancreas,38.690000000000005
+Liver,Small intestine wall,33.393497529708334
+Liver,Stem cells of small intestine,46.02
+Liver,Spleen,86.6
+Liver,Thymus,0.0
+Liver,Uterus/cervix,100.0
+Liver,Tongue,0.0
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),57.795193786080354
+Liver,Left colon wall (left transverse + descending),57.09095091722772
+Liver,Rectosigmoid colon wall (sigmoid + rectum),82.52514155155386
+Liver,Stem cells of right colon (ascending + right transverse),100.0
+Liver,Stem cells of left colon (left transverse + descending),71.34871245968841
+Liver,Stem cells of rectosigmoid colon (sigmoid + rectum),100.0
+Liver,Basal cells of anterior nasal passages,0.0
+Liver,Basal cells of posterior nasal passages + pharynx,0.0
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Bronchi basal cells,0.0
+Liver,Bronchi secretory cells,0.0
+Liver,Alveolar-interstitium,26.99902218662827
+Liver,Thoracic lymph nodes,99.71
+Liver,Right lung lobe,30.72
+Liver,Left lung lobe,49.16
+Liver,Right adrenal gland,100.0
+Liver,Left adrenal gland,0.0
+Liver,Right breast adipose,49.98
+Liver,Right breast glandular,98.71999999999998
+Liver,Left breast adipose,100.0
+Liver,Left breast glandular,92.6
+Liver,RBreast-a + RBreast-g,44.63760917146541
+Liver,LBreast-a + LBreast-g,68.94630839174644
+Liver,RBreast-a + LBreast-a,45.1588397508037
+Liver,RBreast-g + LBreast-g,73.12106125394
+Liver,Entire lens of eye,0.0
+Liver,Sensitive lens of eye,0.0
+Liver,Right kidney cortex,38.50000000000001
+Liver,Right kidney medulla,55.63000000000001
+Liver,Right kidney pelvis,100.0
+Liver,Right kidney C+M+P,32.49199232399805
+Liver,Left kidney cortex,63.29
+Liver,Left kidney medulla,74.32
+Liver,Left kidney pelvis,100.0
+Liver,Left kidney C+M+P,46.94803394495834
+Liver,Right ovary,0.0
+Liver,Left ovary,100.0
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,100.0
+Liver,Ureters,89.29
+Liver,Adipose/residual tissue,9.14

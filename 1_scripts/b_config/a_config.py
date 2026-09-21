@@ -133,7 +133,7 @@ RESULTS_GEANT4_DIR = RESULTS_DIR / "b_geant4"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "PHITS"
+SIMULATION_CODE = "GEANT4"
 
 ############################
 # PHITS Settings
@@ -161,7 +161,7 @@ GEANT4_SOURCE_TYPES = [
     "e-",
 ]
 
-PHANTOM_INPUT_GENERATION = "MRCP_AF_H150W55"
+PHANTOM_INPUT_GENERATION = "MRCP_AM_H165W65"
 
 NPS = 10000
 
@@ -180,7 +180,7 @@ THREADS = 12
 
 SOURCE_ENERGIES = [10.0]
 
-SELECTED_SOURCE_TYPE = "photon"
+SELECTED_SOURCE_TYPE = "gamma"
 
 FLUENCE_SOURCE_TYPES = [
     "photon",

@@ -31,13 +31,13 @@ The material composition data is preserved. Only the material-definition
 format is changed.
 
 Usage:
-    python 1_scripts/i_miscellaneous/f_convert_material_files_to_PHITS_format.py M_H165W65.material
+    python 1_scripts/i_miscellaneous/b_misc_SAFs/f_convert_material_files_to_PHITS_format.py M_H165W65.material
 
 Output:
     input_converted.material
 
 Or specify an output file:
-    python 1_scripts/i_miscellaneous/f_convert_material_files_to_PHITS_format.py input.material -o output.material
+    python 1_scripts/i_miscellaneous/b_misc_SAFs/f_convert_material_files_to_PHITS_format.py input.material -o output.material
 """
 
 from pathlib import Path

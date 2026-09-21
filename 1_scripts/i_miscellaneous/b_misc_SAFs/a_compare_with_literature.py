@@ -74,7 +74,7 @@ def read_literature(path):
             continue
 
         try:
-            energy = float(energy)
+            energy = float(str(energy))
         except (TypeError, ValueError):
             continue
 

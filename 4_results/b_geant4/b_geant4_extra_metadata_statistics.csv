@@ -1,0 +1,5 @@
+Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),Overall Wall Time (s),Overall Wall Time (dhms)
+Type + Energy,e-,10.0,,,1,262.64,0d 00h 04m 23s,,262.64,262.64,,
+Phantom + Type + Energy,e-,10.0,ICRP 145 Adult Male Resized to Filipino,,1,262.64,0d 00h 04m 23s,,262.64,262.64,,
+Source Organ + Type + Energy,e-,10.0,,Liver,1,262.64,0d 00h 04m 23s,,262.64,262.64,,
+All simulations,,,,,1,262.64,0d 00h 04m 23s,,262.64,262.64,263.0,0d 00h 04m 23s

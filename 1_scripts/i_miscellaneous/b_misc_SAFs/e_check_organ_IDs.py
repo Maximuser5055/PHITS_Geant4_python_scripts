@@ -15,14 +15,14 @@ The script produces:
 
 Usage
 -----
-python 1_scripts/i_miscellaneous/e_check_organ_IDs.py \
+python 1_scripts/i_miscellaneous/b_misc_SAFs/e_check_organ_IDs.py \
     organ_ID_names.csv \
     MRCP-AM.cell MRCP-AM.material \
     M_H165W65.cell M_H165W65.material
 
 Example
 -------
-python 1_scripts/i_miscellaneous/e_check_organ_IDs.py \
+python 1_scripts/i_miscellaneous/b_misc_SAFs/e_check_organ_IDs.py \
     organ_ID_names.csv \
     MRCP-AM.cell MRCP-AM.material \
     MFCP-AM.cell MFCP-AM.material
