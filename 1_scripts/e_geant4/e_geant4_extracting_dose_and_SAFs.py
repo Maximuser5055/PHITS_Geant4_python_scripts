@@ -28,7 +28,7 @@ def geant4_calculate_dose_and_SAFs(params):
     # File names
     # -------------------------------------------------------------
 
-    geant4_output_file = "geant4_dose_and_SAFs.csv"
+    geant4_output_file = "c_geant4_dose_and_SAFs.csv"
 
     filename_pattern = re.compile(
         r"geant4_deposit_(.+?)_source_"

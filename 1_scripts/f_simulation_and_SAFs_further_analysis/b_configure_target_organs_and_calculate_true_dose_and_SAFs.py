@@ -46,15 +46,15 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
     if simulation == "PHITS":
 
-        input_csv = results_phits_dir / "phits_dose_and_SAFs.csv"
-        fluence_csv = results_phits_dir / "phits_rbm_endosteum_icrp116.csv"
-        output_csv = results_phits_dir / "phits_target_regions_dose_SAFs.csv"
+        input_csv = results_phits_dir / "c_phits_dose_and_SAFs.csv"
+        fluence_csv = results_phits_dir / "d_phits_rbm_endosteum_icrp116.csv"
+        output_csv = results_phits_dir / "e_phits_target_regions_dose_SAFs.csv"
 
     elif simulation == "GEANT4":
 
-        input_csv = results_geant4_dir / "geant4_dose_and_SAFs.csv"
-        fluence_csv = results_geant4_dir / "geant4_rbm_endosteum_icrp116.csv"
-        output_csv = results_geant4_dir / "geant4_target_regions_dose_SAFs.csv"
+        input_csv = results_geant4_dir / "c_geant4_dose_and_SAFs.csv"
+        fluence_csv = results_geant4_dir / "d_geant4_rbm_endosteum_icrp116.csv"
+        output_csv = results_geant4_dir / "e_geant4_target_regions_dose_SAFs.csv"
 
     else:
         raise ValueError(f"Unsupported simulation code: {simulation}")

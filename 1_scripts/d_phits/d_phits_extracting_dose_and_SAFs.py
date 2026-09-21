@@ -28,7 +28,7 @@ def phits_calculate_dose_and_safs(params):
     # File names
     # -------------------------------------------------------------------------
 
-    phits_saf_file = "phits_dose_and_SAFs.csv"
+    phits_saf_file = "c_phits_dose_and_SAFs.csv"
     
     # -------------------------------------------------------------------------
     # Regex patterns

@@ -66,7 +66,7 @@ mass_file = config.SKELETAL_MASSES_CSV
 phits_generated_inputs_dir = config.GENERATED_INPUTS_DIR
 fluence_to_dose_response_functions = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
 phits_results_dir = config.RESULTS_PHITS_DIR
-phits_output_file = "e_phits_rbm_endosteum_icrp116.csv"
+phits_output_file = "d_phits_rbm_endosteum_icrp116.csv"
 
 # ============================================================
 # PHITS FLUENCE FILENAME PATTERN
