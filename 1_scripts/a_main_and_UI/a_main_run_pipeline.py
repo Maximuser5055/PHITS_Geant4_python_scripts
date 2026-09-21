@@ -16,25 +16,31 @@ def main():
         from c_database.a_parse_cell_and_csv import parse_cell_csv_inputs
         parse_cell_csv_inputs(params) # Parse immediately
 
-        from d_phits.a_phits_generating_inputs import phits_generate_inputs
-        from d_phits.b_phits_running_inputs import run_phits
-        from d_phits.c_phits_extracting_metadata import phits_extract_metadata_stats
-        from d_phits.d_phits_extracting_dose_and_SAFs import phits_calculate_dose_and_safs
-        from d_phits.e_phits_calculate_marrow_endosteum_SAFs import phits_calculate_marrow_endosteum_SAFs
+        from d_phits import (
+            phits_generate_inputs,
+            run_phits,
+            phits_extract_metadata_stats,
+            phits_calculate_dose_and_safs,
+            phits_calculate_marrow_endosteum_SAFs,
+        )
 
-        from e_geant4.a_geant4_setup_and_build_executable import build_geant4
-        from e_geant4.b_geant4_generating_inputs import geant4_generate_inputs
-        from e_geant4.c_geant4_running_inputs import run_geant4
-        from e_geant4.d_geant4_extracting_metadata import geant4_extract_metadata_stats
-        from e_geant4.e_geant4_extracting_dose_and_SAFs import geant4_calculate_dose_and_SAFs
-        from e_geant4.f_geant4_calculate_marrow_endosteum_SAFs import geant4_calculate_marrow_endosteum_SAFs
+        from e_geant4 import (
+            build_geant4,
+            geant4_generate_inputs,
+            run_geant4,
+            geant4_extract_metadata_stats,
+            geant4_calculate_dose_and_SAFs,
+            geant4_calculate_marrow_endosteum_SAFs,
+        )
 
-        from f_simulation_and_SAFs_further_analysis.a_calculating_extra_metadata import calculate_extra_metadata
-        from f_simulation_and_SAFs_further_analysis.b_configure_target_organs_and_calculate_true_dose_and_SAFs import combine_target_organs_and_calculate_true_dose_and_SAFs
-        from f_simulation_and_SAFs_further_analysis.d_create_and_update_master_saf_database import update_master_saf_database
-        from f_simulation_and_SAFs_further_analysis.e_create_and_update_publishable_saf_database import create_publishable_saf_database
-        # Not implemented yet
-        # from f_simulation_and_SAFs_further_analysis.f_limiting_SAF_approach_calculation import limiting_SAF_approach_calculation
+        from f_simulation_and_SAFs_further_analysis import (
+            calculate_extra_metadata,
+            combine_target_organs_and_calculate_true_dose_and_SAFs,
+            update_master_saf_database,
+            create_publishable_saf_database,
+            # Not implemented yet
+            #limiting_SAF_approach_calculation
+        )
 
         # --------------------------------------------------------
         # Transport simulation
@@ -64,7 +70,7 @@ def main():
         
         combine_target_organs_and_calculate_true_dose_and_SAFs(params)
         update_master_saf_database(params)
-        create_publishable_saf_database(params)\
+        create_publishable_saf_database(params)
         # Not implemented yet
         # limiting_SAF_approach_calculation(params)
 
