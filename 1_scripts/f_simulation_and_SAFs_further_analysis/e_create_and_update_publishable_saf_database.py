@@ -48,7 +48,7 @@ below is used.
 import pandas as pd
 
 import b_config.a_config as config
-from b_config.b_phantom_registry import PHANTOMS, get_phantom
+from b_config.b_phantom_registry import get_phantom, get_target_region_file
 
 # ============================================================
 # SETTINGS
@@ -86,8 +86,6 @@ MASTER_DATABASES = {
         config.RESULTS_SAF_DATABASE_DIR
         / "b_geant4_all_safs_and_uncertainties.csv",
 }
-
-target_region_csv = config.TARGET_REGION_CSV
 
 # ============================================================
 # REQUIRED COLUMNS
@@ -319,6 +317,7 @@ def select_skeletal_method(dataframe, source_type):
 def create_publishable_table(
     dataframe,
     value_column,
+    target_region_file
 ):
 
     # --------------------------------------------------------
@@ -438,7 +437,7 @@ def create_publishable_table(
     # Filipino target-region mapping.
     # --------------------------------------------------------
 
-    target_mapping = pd.read_csv(target_region_csv)
+    target_mapping = pd.read_csv(target_region_file)
 
     target_order = (
         target_mapping[
@@ -721,13 +720,15 @@ def create_publishable_saf_database(params):
 
     generated_files = []
 
-    for phantom in sorted(
-        database[
-            "Phantom"
-        ]
+    for phantom_code in sorted(
+        database["Phantom"]
         .dropna()
         .unique()
     ):
+
+        phantom_spec = get_phantom(phantom_code)
+        phantom_name = phantom_spec.display_name
+        target_region_file = get_target_region_file(phantom_code)
 
         for source_type in sorted(
             database[
@@ -745,16 +746,12 @@ def create_publishable_saf_database(params):
 
             subset = database[
                 (
-                    database[
-                        "Phantom"
-                    ]
-                    == phantom
+                    database["Phantom"]
+                    == phantom_code
                 )
                 &
                 (
-                    database[
-                        "Source Type"
-                    ]
+                    database["Source Type"]
                     .str.lower()
                     == source_type
                 )
@@ -799,7 +796,7 @@ def create_publishable_saf_database(params):
             # Target organs
             # ------------------------------------------------
 
-            target_mapping = pd.read_csv(target_region_csv)
+            target_mapping = pd.read_csv(target_region_file)
 
             target_organs = (
                 target_mapping[
@@ -816,7 +813,8 @@ def create_publishable_saf_database(params):
 
             saf_table = create_publishable_table(
                 subset,
-                "SAF (kg^-1)"
+                "SAF (kg^-1)",
+                target_region_file,
             )
 
             # ------------------------------------------------
@@ -825,23 +823,9 @@ def create_publishable_saf_database(params):
 
             std_table = create_publishable_table(
                 subset,
-                "Statistical Uncertainty (%)"
+                "Statistical Uncertainty (%)",
+                target_region_file,
             )
-
-            phantom_code = next(
-                (
-                    code
-                    for code, phantom_spec in PHANTOMS.items()
-                    if phantom_spec.display_name == phantom
-                ),
-                None
-            )
-
-            if phantom_code is None:
-                raise ValueError(
-                    f"Could not find phantom registry code "
-                    f"for display name: {phantom}"
-                )
 
             phantom_filename = phantom_code.lower()
 
@@ -861,7 +845,7 @@ def create_publishable_saf_database(params):
             write_publishable_csv(
                 saf_table,
                 saf_file,
-                phantom,
+                phantom_name,
                 source_type,
                 source_energies,
                 source_organs,
@@ -872,7 +856,7 @@ def create_publishable_saf_database(params):
             write_publishable_csv(
                 std_table,
                 std_file,
-                phantom,
+                phantom_name,
                 source_type,
                 source_energies,
                 source_organs,
