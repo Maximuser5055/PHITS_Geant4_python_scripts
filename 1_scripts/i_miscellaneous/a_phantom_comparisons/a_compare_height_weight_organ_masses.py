@@ -476,6 +476,7 @@ def process_phantom(group_name, sex, config):
         "depth_cm": dimensions["depth_cm"],
         "total_mass_g": total_mass_g,
         "organ_masses": organ_masses,
+        "organ_densities": densities,
     }
 
 
@@ -620,7 +621,7 @@ def write_sex_table(
         start_row=start_row,
         start_column=start_col,
         end_row=start_row,
-        end_column=start_col + 3,
+        end_column=start_col + 5,
     )
 
     title = ws.cell(
@@ -648,7 +649,7 @@ def write_sex_table(
 
     title.fill = title_fill
 
-    for col in range(start_col, start_col + 4):
+    for col in range(start_col, start_col + 6):
         ws.cell(
             start_row,
             col
@@ -666,8 +667,10 @@ def write_sex_table(
 
     headers = [
         "",
-        group_a_display,
-        group_b_display,
+        f"{group_a_display} density",
+        f"{group_a_display} mass",
+        f"{group_b_display} density",
+        f"{group_b_display} mass",
         "% Difference",
     ]
 
@@ -696,26 +699,26 @@ def write_sex_table(
         align="left",
     )
 
-    set_cell(
-        ws,
-        row,
-        start_col + 1,
-        result_a["height_cm"],
-        number_format="0.00",
-    )
-
+    set_cell(ws, row, start_col + 1, "")
     set_cell(
         ws,
         row,
         start_col + 2,
-        result_b["height_cm"],
+        result_a["height_cm"],
         number_format="0.00",
     )
-
+    set_cell(ws, row, start_col + 3, "")
     set_cell(
         ws,
         row,
-        start_col + 3,
+        start_col + 4,
+        result_b["height_cm"],
+        number_format="0.00",
+    )
+    set_cell(
+        ws,
+        row,
+        start_col + 5,
         percent_difference(
             result_a["height_cm"],
             result_b["height_cm"],
@@ -738,26 +741,26 @@ def write_sex_table(
         align="left",
     )
 
-    set_cell(
-        ws,
-        row,
-        start_col + 1,
-        result_a["total_mass_g"] / 1000.0,
-        number_format="0.00",
-    )
-
+    set_cell(ws, row, start_col + 1, "")
     set_cell(
         ws,
         row,
         start_col + 2,
-        result_b["total_mass_g"] / 1000.0,
+        result_a["total_mass_g"] / 1000.0,
         number_format="0.00",
     )
-
+    set_cell(ws, row, start_col + 3, "")
     set_cell(
         ws,
         row,
-        start_col + 3,
+        start_col + 4,
+        result_b["total_mass_g"] / 1000.0,
+        number_format="0.00",
+    )
+    set_cell(
+        ws,
+        row,
+        start_col + 5,
         percent_difference(
             result_a["total_mass_g"],
             result_b["total_mass_g"],
@@ -775,13 +778,13 @@ def write_sex_table(
         start_row=row,
         start_column=start_col,
         end_row=row,
-        end_column=start_col + 3,
+        end_column=start_col + 5,
     )
 
     cell = ws.cell(
         row,
         start_col,
-        "Organ mass (g)"
+        "Density (g cm⁻³) / Organ mass (g)"
     )
 
     cell.font = Font(
@@ -797,7 +800,7 @@ def write_sex_table(
 
     cell.fill = GRAY_FILL
 
-    for col in range(start_col, start_col + 4):
+    for col in range(start_col, start_col + 6):
         ws.cell(row, col).border = BORDER
         ws.cell(row, col).fill = GRAY_FILL
 
@@ -824,6 +827,16 @@ def write_sex_table(
             0.0
         )
 
+        density_a = result_a["organ_densities"].get(
+            organ_id,
+            np.nan
+        )
+
+        density_b = result_b["organ_densities"].get(
+            organ_id,
+            np.nan
+        )
+
         difference = percent_difference(
             mass_a,
             mass_b,
@@ -843,18 +856,36 @@ def write_sex_table(
             align="left",
         )
 
+        # Density immediately to the left of Group A mass.
         set_cell(
             ws,
             row,
             start_col + 1,
-            mass_a,
-            number_format="0.00",
+            density_a,
+            number_format="0.000",
         )
 
         set_cell(
             ws,
             row,
             start_col + 2,
+            mass_a,
+            number_format="0.00",
+        )
+
+        # Density immediately to the left of Group B mass.
+        set_cell(
+            ws,
+            row,
+            start_col + 3,
+            density_b,
+            number_format="0.000",
+        )
+
+        set_cell(
+            ws,
+            row,
+            start_col + 4,
             mass_b,
             number_format="0.00",
         )
@@ -862,7 +893,7 @@ def write_sex_table(
         set_cell(
             ws,
             row,
-            start_col + 3,
+            start_col + 5,
             difference,
             number_format="0.00",
         )
@@ -905,7 +936,7 @@ def create_excel(
     # --------------------------------------------------------
 
     ws.merge_cells(
-        "A1:H1"
+        "A1:M1"
     )
 
     title = ws["A1"]
@@ -925,7 +956,7 @@ def create_excel(
     # Definition of percentage difference
     # --------------------------------------------------------
 
-    ws.merge_cells("A2:H2")
+    ws.merge_cells("A2:M2")
 
     ws["A2"] = (
         f"% Difference = "
@@ -982,7 +1013,7 @@ def create_excel(
     write_sex_table(
         ws,
         start_row=4,
-        start_col=6,
+        start_col=8,
         sex="Female",
         group_a=COMPARISON_GROUP_A,
         group_b=COMPARISON_GROUP_B,
@@ -997,19 +1028,19 @@ def create_excel(
 
     widths = {
         "A": 27,
-        "B": 15,
-        "C": 15,
-        "D": 15,
-        "E": 3,
-        "F": 27,
-        "G": 15,
-        "H": 15,
-        "I": 15,
+        "B": 13,
+        "C": 13,
+        "D": 13,
+        "E": 13,
+        "F": 13,
+        "G": 3,
+        "H": 27,
+        "I": 13,
+        "J": 13,
+        "K": 13,
+        "L": 13,
+        "M": 13,
     }
-
-    # Because the female table starts at column F,
-    # it actually uses F:I.
-    widths["E"] = 3
 
     for column, width in widths.items():
         ws.column_dimensions[column].width = width
