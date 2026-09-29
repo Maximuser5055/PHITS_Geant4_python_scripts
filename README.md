@@ -6,4 +6,4 @@
 
 ## Description
 
-This repository contains TBA
+This repository contains the Python scripting and other input files
