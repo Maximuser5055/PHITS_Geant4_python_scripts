@@ -17,6 +17,9 @@ ${{PARALLELIZATION}}={{THREADS}}
  file(1)  = {{PHITSINSTALLATION}} # PHITS installation folder name
  negs     =           1     # (D=-1) 1:EGS
  ipegs    =           0     # [EGS](D=0) 0:Full
+ emin(12) =       0.001     # 1 x 10^-3 MeV (1 keV) cut-off energy for electrons
+ emin(13) =       0.001     # positrons
+ emin(14) =       0.001     # photons
 
 [ Source ]
   totfact =    1.00         # (D=1.0) global factor
