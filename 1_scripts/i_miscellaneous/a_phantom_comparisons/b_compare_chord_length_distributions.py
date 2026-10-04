@@ -23,8 +23,8 @@ For every source-region/target-region pair:
 The output is:
     - one CLD CSV for every phantom/source/target combination
     - one summary CSV containing mean and standard deviation
-    - one PNG per source organ, with one column for each phantom group
-      and one row for each target region
+    - one PNG per source-organ/target-region combination, with all
+      selected phantom groups combined into a single plot
 
 The NODE/ELE format follows the ICRP mesh phantom convention:
 NODE files contain node coordinates and ELE files contain tetrahedra
@@ -53,6 +53,7 @@ import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 import b_config.a_config as config
 from b_config import b_phantom_registry as registry
@@ -1297,114 +1298,140 @@ def plot_source_clds(
     """
     Create one figure for one source-organ/target-region combination.
 
-    Columns:
-        phantom groups
+    All selected phantom groups are combined into one plot.
 
-    Rows:
-        one target region only
+    The legend order follows the `phantoms=()` tuples in
+    registry.PHANTOM_GROUPS exactly.  The phantom group display names are
+    not used as legend entries.
 
-    Within each subplot:
-        male   = blue, solid
-        female = red, dashed
+    Colors and line styles are assigned automatically from Matplotlib's
+    configured cycles, so adding phantoms does not require
+    sex-specific plotting logic.
     """
 
-    group_names = list(
-        cld_results.keys()
-    )
+    # Build the plotting order directly from the phantom tuples in the
+    # registry.  This makes `PHANTOM_GROUPS[group_code].phantoms` the
+    # authoritative source for the legend order.
+    ordered_phantoms = []
 
-    number_of_columns = len(
-        group_names
-    )
+    for group_code in PHANTOM_GROUPS_TO_COMPARE:
+        group_name = registry.PHANTOM_GROUPS[group_code].display_name
 
-    if number_of_columns == 0:
+        for phantom_code in registry.get_phantom_group(group_code):
+            phantom = registry.get_phantom(phantom_code)
+            ordered_phantoms.append(
+                (
+                    group_name,
+                    phantom_code,
+                    phantom,
+                )
+            )
+
+    if not ordered_phantoms:
         return
 
-    figure, axes = plt.subplots(
+    figure, axis = plt.subplots(
         1,
-        number_of_columns,
+        1,
         figsize=(
-            FIGURE_WIDTH * number_of_columns,
+            FIGURE_WIDTH,
             ROW_HEIGHT,
         ),
-        squeeze=False,
-        sharex=False,
-        sharey=False,
     )
 
-    for column, group_name in enumerate(
-        group_names
+    # Use Matplotlib's configured color cycle instead of hard-coded colors.
+    color_cycle = plt.rcParams["axes.prop_cycle"].by_key().get(
+        "color",
+        [],
+    )
+
+    if not color_cycle:
+        color_cycle = ["C0"]
+
+    # Use Matplotlib's available line-style definitions instead of
+    # hard-coding styles for male/female.
+    line_styles = [
+        linestyle
+        for linestyle in Line2D.lineStyles
+        if linestyle != "None"
+    ]
+
+    if not line_styles:
+        line_styles = ["-"]
+
+    # Combine colors and line styles so additional phantoms can be added
+    # without requiring new sex-specific style logic.
+    style_cycle = [
+        (color, linestyle)
+        for color in color_cycle
+        for linestyle in line_styles
+    ]
+
+    for index, (group_name, phantom_code, phantom) in enumerate(
+        ordered_phantoms
     ):
-
-        axis = axes[0, column]
-
-        entries = cld_results[
-            group_name
-        ].get(
+        entries = cld_results.get(
+            group_name,
+            {},
+        ).get(
             target_region,
             {},
         )
 
-        for sex in ("AM", "AF"):
+        # Results are keyed by phantom code, matching the registry tuple.
+        result = entries.get(phantom_code)
 
-            if sex not in entries:
-                continue
+        if result is None:
+            continue
 
-            result = entries[sex]
+        color, linestyle = style_cycle[
+            index % len(style_cycle)
+        ]
 
-            if sex == "AM":
-                color = "blue"
-                linestyle = "-"
-                label = (
-                    "Male"
-                    f" ({result['mean_mm']:.2f} "
-                    f"± {result['std_mm']:.2f} mm)"
-                )
-            else:
-                color = "red"
-                linestyle = "--"
-                label = (
-                    "Female"
-                    f" ({result['mean_mm']:.2f} "
-                    f"± {result['std_mm']:.2f} mm)"
-                )
-
-            axis.plot(
-                result["distance_mm"],
-                result["relative_number"],
-                color=color,
-                linestyle=linestyle,
-                linewidth=1.4,
-                label=label,
-            )
-
-        axis.set_title(
-            group_name,
-            fontsize=11,
+        label = (
+            f"{phantom.display_name}"
+            f" ({result['mean_mm']:.2f} "
+            f"± {result['std_mm']:.2f} mm)"
         )
 
-        axis.set_xlabel(
-            "Distance (mm)"
+        axis.plot(
+            result["distance_mm"],
+            result["relative_number"],
+            color=color,
+            linestyle=linestyle,
+            linewidth=1.4,
+            label=label,
         )
 
-        axis.set_ylabel(
-            "Relative Number"
-        )
+    # Put the target-region name inside the plot rather than in the
+    # figure title.
+    axis.text(
+        0.02,
+        0.96,
+        target_region,
+        transform=axis.transAxes,
+        ha="left",
+        va="top",
+        fontsize=12,
+    )
 
-        axis.grid(
-            alpha=0.18,
-            linewidth=0.5,
-        )
+    axis.set_xlabel(
+        "Distance (mm)"
+    )
 
-        axis.legend(
-            fontsize=7,
-            frameon=False,
-            loc="best",
-        )
+    axis.set_ylabel(
+        "Relative Number"
+    )
 
-    figure.suptitle(
-        f"Source: {source_name} (ID {source_id})\n"
-        f"Target: {target_region}",
-        fontsize=13,
+    axis.grid(
+        alpha=0.18,
+        linewidth=0.5,
+    )
+
+    axis.legend(
+        fontsize=8,
+        frameon=False,
+        loc="best",
     )
 
     figure.tight_layout()
@@ -1758,9 +1785,10 @@ def main():
     #
     #   group_name
     #       target_region
-    #           sex
+    #           phantom_code
     #
-    # This is convenient for plotting.
+    # The phantom code is used as the key so the plotting order can follow
+    # the `phantoms=()` tuple in registry.PHANTOM_GROUPS exactly.
     cld_results = {
         group_name: {}
         for group_name in resolved_groups
@@ -1868,7 +1896,7 @@ def main():
 
                     cld_results[group_name][
                         target_name
-                    ][phantom.sex] = {
+                    ][phantom.code] = {
                         "phantom": phantom,
                         "distance_mm": distances_mm,
                         "relative_number": relative_number,
@@ -1881,9 +1909,9 @@ def main():
                     # --------------------------------------------------
 
                     csv_name = (
-                        f"{safe_filename(phantom.code)}__"
-                        f"source_{source_id}__"
-                        f"target_{safe_filename(target_name)}__"
+                        f"{safe_filename(phantom.code)}_"
+                        f"source_{source_id}_"
+                        f"target_{safe_filename(target_name)}_"
                         f"cld.csv"
                     )
 
@@ -1930,7 +1958,7 @@ def main():
             target_name = region["name"]
 
             png_name = (
-                f"source_{source_id}__"
+                f"source_{source_id}_"
                 f"target_{safe_filename(target_name)}.png"
             )
 
