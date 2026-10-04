@@ -1900,7 +1900,7 @@ def plot_selected_clds(
         left=0.0975,
         right=0.975,
         bottom=0.060,
-        top=0.910,
+        top=0.925,
         wspace=0.2,
         hspace=0.2,
     )
