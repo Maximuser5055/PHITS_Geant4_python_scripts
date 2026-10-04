@@ -23,8 +23,12 @@ For every source-region/target-region pair:
 The output is:
     - one CLD CSV for every phantom/source/target combination
     - one summary CSV containing mean and standard deviation
-    - one vector PDF per source-organ/target-region combination, with all
-      selected phantom groups combined into a single plot
+    - one user-selected multi-panel vector PDF, with all selected phantom
+      groups combined in every plot
+
+Existing CLD CSVs are reused. If all expected results already exist, the
+user can skip recalculation or redo all calculations; if only some exist,
+only the missing CLDs are calculated.
 
 The NODE/ELE format follows the ICRP mesh phantom convention:
 NODE files contain node coordinates and ELE files contain tetrahedra
@@ -126,11 +130,11 @@ def configure_journal_font() -> str:
 
     plt.rcParams.update({
         "font.family": selected_font,
-        "font.size": 9,
-        "axes.labelsize": 9,
-        "xtick.labelsize": 8,
-        "ytick.labelsize": 8,
-        "legend.fontsize": 7.5,
+        "font.size": 8,
+        "axes.labelsize": 6.5,
+        "xtick.labelsize": 6,
+        "ytick.labelsize": 6,
+        "legend.fontsize": 5.5,
 
         # Embed TrueType fonts in vector PDF output.
         "pdf.fonttype": 42,
@@ -173,19 +177,14 @@ RANDOM_SEED = 20261004
 NODE_UNIT = "cm"
 
 # Plot settings.
-# Elsevier's general artwork guidance gives 140 mm as a typical 1.5-column
-# width.  This is a good default for the four-phantom CLD plots while
-# keeping the figure compact enough for a manuscript.
-FIGURE_WIDTH_MM = 140.0
+# FIGURE_WIDTH_MM is the width of one subplot/panel. The final figure
+# size scales automatically with the user-selected rows x columns layout.
+FIGURE_WIDTH_MM = 70.0
 FIGURE_WIDTH = FIGURE_WIDTH_MM / 25.4
-FIGURE_HEIGHT = 2.8
 
-
-# Prevent very tall multi-row figures from becoming enormous raster images.
-# The row height is reduced automatically when there are many target regions.
-
-# Ask the user which source organs to calculate.
-ASK_SOURCE_SELECTION = True
+# Calculate CLDs for all source organs. Plot selection is handled separately
+# after the CSV results have been generated.
+ASK_SOURCE_SELECTION = False
 
 
 # ======================================================================
@@ -1372,34 +1371,312 @@ def save_summary_csv(
     )
 
 
+
+def cld_csv_path(
+    output_dir: Path,
+    phantom_code: str,
+    source_id: int,
+    target_region: str,
+) -> Path:
+    """Return the expected CSV path for one phantom/source/target CLD."""
+
+    csv_name = (
+        f"{safe_filename(phantom_code)}_"
+        f"source_{source_id}_"
+        f"target_{safe_filename(target_region)}_"
+        f"cld.csv"
+    )
+
+    return output_dir / "csv" / csv_name
+
+
+def existing_cld_csvs(
+    output_dir: Path,
+    resolved_groups: dict[str, list[PhantomInfo]],
+    source_ids: list[int],
+    target_regions: list[dict],
+) -> dict[tuple[str, str, int, str], Path]:
+    """
+    Find existing CLD CSVs for the requested source/target combinations.
+
+    The key is:
+        (group_name, phantom_code, source_id, target_region)
+    """
+
+    existing = {}
+
+    for group_name, phantoms in resolved_groups.items():
+        for phantom in phantoms:
+            phantom_target_regions = filter_target_regions_for_sex(
+                target_regions,
+                phantom.sex,
+            )
+
+            valid_target_names = {
+                region["name"]
+                for region in phantom_target_regions
+            }
+
+            for source_id in source_ids:
+                for target_region in target_regions:
+                    target_name = target_region["name"]
+
+                    # Sex-specific target regions are not expected for a
+                    # phantom that does not contain those organs.
+                    if target_name not in valid_target_names:
+                        continue
+
+                    csv_file = cld_csv_path(
+                        output_dir,
+                        phantom.code,
+                        source_id,
+                        target_name,
+                    )
+
+                    if csv_file.is_file() and csv_file.stat().st_size > 0:
+                        existing[
+                            (
+                                group_name,
+                                phantom.code,
+                                source_id,
+                                target_name,
+                            )
+                        ] = csv_file
+
+    return existing
+
+
+def inspect_cld_csv_status(
+    output_dir: Path,
+    resolved_groups: dict[str, list[PhantomInfo]],
+    source_ids: list[int],
+    target_regions: list[dict],
+) -> tuple[
+    set[tuple[str, str, int, str]],
+    list[tuple[str, str, int, str]],
+]:
+    """
+    Check which expected CLD CSVs already exist.
+
+    Returns:
+        existing_keys
+        missing_keys
+    """
+
+    existing = existing_cld_csvs(
+        output_dir,
+        resolved_groups,
+        source_ids,
+        target_regions,
+    )
+
+    expected_keys = []
+
+    for group_name, phantoms in resolved_groups.items():
+        for phantom in phantoms:
+            phantom_target_regions = filter_target_regions_for_sex(
+                target_regions,
+                phantom.sex,
+            )
+
+            for source_id in source_ids:
+                for target_region in phantom_target_regions:
+                    expected_keys.append(
+                        (
+                            group_name,
+                            phantom.code,
+                            source_id,
+                            target_region["name"],
+                        )
+                    )
+
+    expected_keys = set(expected_keys)
+    existing_keys = set(existing)
+    missing_keys = sorted(expected_keys - existing_keys)
+
+    return existing_keys, missing_keys
+
+
+def ask_existing_results_action(
+    existing_count: int,
+) -> str:
+    """
+    Ask whether to skip or redo calculations when all expected CSVs exist.
+
+    Returns:
+        "skip" or "redo"
+    """
+
+    print()
+    print("=" * 70)
+    print("EXISTING CLD RESULTS")
+    print("=" * 70)
+    print(
+        f"All {existing_count:,} expected CLD CSV results are already present."
+    )
+    print()
+    print("[S] Skip recalculation and use the existing CSV results")
+    print("[R] Redo all CLD calculations and overwrite the existing CSVs")
+
+    while True:
+        choice = input("\nChoose S or R: ").strip().upper()
+
+        if choice == "S":
+            return "skip"
+
+        if choice == "R":
+            return "redo"
+
+        print("Invalid choice. Enter S to skip or R to redo.")
+
+
+def load_cld_csv(
+    csv_file: Path,
+    phantom: PhantomInfo,
+    source_id: int,
+    target_region: str,
+) -> dict:
+    """
+    Load one existing CLD CSV into the same structure used by new results.
+    """
+
+    required_columns = {
+        "Distance (mm)",
+        "Relative Number",
+        "Mean Chord Length (mm)",
+        "Standard Deviation (mm)",
+    }
+
+    df = clean_columns(pd.read_csv(csv_file))
+
+    missing_columns = sorted(
+        required_columns - set(df.columns)
+    )
+
+    if missing_columns:
+        raise ValueError(
+            f"Existing CLD CSV is missing required column(s): "
+            f"{missing_columns}\n{csv_file}"
+        )
+
+    if df.empty:
+        raise ValueError(
+            f"Existing CLD CSV is empty:\n{csv_file}"
+        )
+
+    distances_mm = pd.to_numeric(
+        df["Distance (mm)"],
+        errors="coerce",
+    ).to_numpy(dtype=float)
+
+    relative_number = pd.to_numeric(
+        df["Relative Number"],
+        errors="coerce",
+    ).to_numpy(dtype=float)
+
+    if (
+        not np.isfinite(distances_mm).all()
+        or not np.isfinite(relative_number).all()
+    ):
+        raise ValueError(
+            f"Existing CLD CSV contains invalid distance or "
+            f"relative-number values:\n{csv_file}"
+        )
+
+    mean_values = pd.to_numeric(
+        df["Mean Chord Length (mm)"],
+        errors="coerce",
+    ).dropna()
+
+    std_values = pd.to_numeric(
+        df["Standard Deviation (mm)"],
+        errors="coerce",
+    ).dropna()
+
+    if mean_values.empty or std_values.empty:
+        raise ValueError(
+            f"Existing CLD CSV does not contain mean/std values "
+            f"in its metadata row:\n{csv_file}"
+        )
+
+    mean_mm = float(mean_values.iloc[0])
+    std_mm = float(std_values.iloc[0])
+
+    return {
+        "phantom": phantom,
+        "distance_mm": distances_mm,
+        "relative_number": relative_number,
+        "mean_mm": mean_mm,
+        "std_mm": std_mm,
+    }
+
+
+def load_existing_cld_results(
+    existing_files: dict[tuple[str, str, int, str], Path],
+    resolved_groups: dict[str, list[PhantomInfo]],
+) -> dict:
+    """
+    Load all existing CLD CSVs into the plotting/calculation result structure.
+    """
+
+    phantom_lookup = {
+        phantom.code: phantom
+        for phantoms in resolved_groups.values()
+        for phantom in phantoms
+    }
+
+    cld_results = {
+        group_name: {}
+        for group_name in resolved_groups
+    }
+
+    for (
+        group_name,
+        phantom_code,
+        source_id,
+        target_name,
+    ), csv_file in existing_files.items():
+
+        phantom = phantom_lookup[phantom_code]
+
+        result = load_cld_csv(
+            csv_file,
+            phantom,
+            source_id,
+            target_name,
+        )
+
+        cld_results.setdefault(group_name, {})
+        cld_results[group_name].setdefault(target_name, {})
+        cld_results[group_name][target_name][phantom_code] = result
+
+    return cld_results
+
+
 # ======================================================================
 # PLOTTING
 # ======================================================================
-
-def plot_source_clds(
-    source_id: int,
-    source_name: str,
-    target_region: str,
+def plot_selected_clds(
+    plot_pairs: list[tuple[int, str]],
+    source_names: dict[int, str],
     cld_results: dict,
     output_file: Path,
+    n_rows: int,
+    n_cols: int,
 ):
     """
-    Create one journal-ready figure for one source-organ/target-region combination.
+    Create one multi-panel PDF containing the user-selected source/target
+    CLD pairs.
 
-    All selected phantom groups are combined into one plot.
-
-    The legend order follows the `phantoms=()` tuples in
-    registry.PHANTOM_GROUPS exactly.  The phantom group display names are
-    not used as legend entries.
-
-    Each phantom is assigned a distinct color automatically from
-    Matplotlib's color cycle. The legend contains only the phantom codes
-    in the order defined by the registry `phantoms=()` tuples.
+    Phantom colors and line styles are shared across every subplot. The
+    phantom legend is placed once above the whole figure, while each subplot
+    has its own statistics legend so the line sample remains directly
+    associated with its mean ± standard deviation.
     """
 
     # Build the plotting order directly from the phantom tuples in the
-    # registry. This makes `PHANTOM_GROUPS[group_code].phantoms` the
-    # authoritative source for the legend order.
+    # registry. This makes the registry the authoritative source of legend
+    # order and phantom styling.
     ordered_phantoms = []
 
     for group_code in PHANTOM_GROUPS_TO_COMPARE:
@@ -1415,106 +1692,224 @@ def plot_source_clds(
                 )
             )
 
-    if not ordered_phantoms:
+    if not ordered_phantoms or not plot_pairs:
         return
 
-    figure, axis = plt.subplots(
-        1,
-        1,
+    # Use a slightly wider overall figure so the panels are not cramped
+    # against the left/right edges, while keeping the vertical layout compact.
+    panel_width = FIGURE_WIDTH
+    panel_height = FIGURE_WIDTH * 0.70
+    figure, axes = plt.subplots(
+        n_rows,
+        n_cols,
         figsize=(
-            FIGURE_WIDTH,
-            FIGURE_HEIGHT,
+            panel_width * n_cols,
+            panel_height * n_rows,
         ),
+        squeeze=False,
     )
+    axes = axes.ravel()
 
-    # Give every individual phantom its own color. The order is exactly
-    # the order supplied by the `phantoms=()` tuples in the registry.
-    # This makes the four selected phantoms visually distinct without
-    # hard-coding colors to sex.
+    # Assign colors and line styles automatically from Matplotlib's built-in
+    # cycles. The order follows the registry's phantom tuples.
     color_cycle = plt.rcParams["axes.prop_cycle"].by_key().get(
         "color",
         [],
     )
 
     if not color_cycle:
-        color_cycle = [f"C{i}" for i in range(len(ordered_phantoms))]
+        color_cycle = [
+            f"C{i}"
+            for i in range(len(ordered_phantoms))
+        ]
+
+    line_style_cycle = [
+        "-",
+        "--",
+        "-.",
+        ":",
+    ]
 
     phantom_colors = {
-        phantom_code: color_cycle[index % len(color_cycle)]
-        for index, (_, phantom_code, _) in enumerate(ordered_phantoms)
+        phantom_code: color_cycle[
+            index % len(color_cycle)
+        ]
+        for index, (_, phantom_code, _) in enumerate(
+            ordered_phantoms
+        )
     }
 
-    for index, (group_name, phantom_code, phantom) in enumerate(
-        ordered_phantoms
+    phantom_line_styles = {
+        phantom_code: line_style_cycle[
+            index % len(line_style_cycle)
+        ]
+        for index, (_, phantom_code, _) in enumerate(
+            ordered_phantoms
+        )
+    }
+
+    # Draw every selected source-target pair.
+    used_handles = []
+    used_labels = []
+
+    for axis, (source_id, target_region) in zip(
+        axes,
+        plot_pairs,
     ):
-        entries = cld_results.get(
+        source_name = source_names.get(
+            source_id,
+            f"Organ {source_id}",
+        )
+
+        subplot_handles = []
+        statistics_labels = []
+
+        for (
             group_name,
-            {},
-        ).get(
-            target_region,
-            {},
+            phantom_code,
+            phantom,
+        ) in ordered_phantoms:
+
+            result = (
+                cld_results
+                .get(group_name, {})
+                .get(target_region, {})
+                .get(phantom_code)
+            )
+
+            if result is None:
+                continue
+
+            line, = axis.plot(
+                result["distance_mm"],
+                result["relative_number"],
+                color=phantom_colors[phantom_code],
+                linestyle=phantom_line_styles[phantom_code],
+                linewidth=1.2,
+            )
+
+            subplot_handles.append(line)
+            statistics_labels.append(
+                f"{result['mean_mm']:.2f} ± "
+                f"{result['std_mm']:.2f} mm"
+            )
+
+            if phantom_code not in used_labels:
+                used_handles.append(line)
+                used_labels.append(phantom_code)
+
+        # Show the target region inside each panel. If multiple source
+        # organs are selected, include the source name as well so every
+        # panel remains unambiguous.
+        if len({
+            source_id
+            for source_id, _ in plot_pairs
+        }) == 1:
+            panel_label = target_region
+        else:
+            panel_label = f"{source_name} → {target_region}"
+
+        axis.text(
+            0.02,
+            0.96,
+            panel_label,
+            transform=axis.transAxes,
+            ha="left",
+            va="top",
+            fontsize=7,
         )
 
-        # Results are keyed by phantom code, matching the registry tuple.
-        result = entries.get(phantom_code)
-
-        if result is None:
-            continue
-
-        color = phantom_colors[phantom_code]
-
-        # The legend contains only the phantom registry codes. Mean and
-        # standard deviation remain in the CSV/summary rather than in the
-        # legend text.
-        axis.plot(
-            result["distance_mm"],
-            result["relative_number"],
-            color=color,
-            linestyle="-",
-            linewidth=1.2,
-            label=phantom_code,
+        axis.grid(
+            alpha=0.18,
+            linewidth=0.5,
         )
 
-    # Put the target-region name inside the plot rather than in the
-    # figure title.
-    axis.text(
-        0.02,
-        0.96,
-        target_region,
-        transform=axis.transAxes,
-        ha="left",
-        va="top",
-        fontsize=12,
+        # Keep the line samples in this legend so readers can directly
+        # associate each mean ± SD with the corresponding curve.
+        if subplot_handles:
+            axis.legend(
+                subplot_handles,
+                statistics_labels,
+                fontsize=5.5,
+                frameon=False,
+                loc="best",
+                handletextpad=0.35,
+                handlelength=1.8,
+                borderaxespad=0.2,
+            )
+
+    # Hide unused panels.
+    for axis in axes[len(plot_pairs):]:
+        axis.set_visible(False)
+
+    # Determine the source title for the whole figure.
+    # If all selected panels use the same source organ, show one concise
+    # title such as "Source: Liver". If multiple source organs are selected,
+    # list them together so the title remains unambiguous.
+    selected_source_ids = list(dict.fromkeys(
+        source_id
+        for source_id, _ in plot_pairs
+    ))
+    selected_source_names = [
+        source_names.get(
+            source_id,
+            f"Organ {source_id}",
+        )
+        for source_id in selected_source_ids
+    ]
+
+    source_title = "Source: " + ", ".join(selected_source_names)
+
+    # Put the source title at the top of the entire figure.
+    figure.suptitle(
+        source_title,
+        fontsize=10,
+        y=0.995,
     )
 
-    axis.set_xlabel(
-        "Distance (mm)"
+    # One shared phantom legend for the entire figure, outside the plots
+    # and directly below the source title.
+    if used_handles:
+        figure.legend(
+            used_handles,
+            used_labels,
+            loc="upper center",
+            bbox_to_anchor=(0.5, 0.955),
+            ncol=len(used_labels),
+            fontsize=6,
+            frameon=False,
+            handletextpad=0.25,
+            columnspacing=0.8,
+        )
+
+    # One shared x/y label for the entire multi-panel figure.
+    figure.supxlabel(
+        "Distance (mm)",
+        fontsize=7,
+        y=0.015,
+    )
+    figure.supylabel(
+        "Relative Number",
+        fontsize=7,
+        x=0.015,
     )
 
-    axis.set_ylabel(
-        "Relative Number"
+    # Compact spacing: reserve only the space needed for the title, shared
+    # phantom legend, and common axis labels.
+    figure.subplots_adjust(
+        left=0.0975,
+        right=0.975,
+        bottom=0.060,
+        top=0.910,
+        wspace=0.2,
+        hspace=0.2,
     )
-
-    axis.grid(
-        alpha=0.18,
-        linewidth=0.5,
-    )
-
-    axis.legend(
-        fontsize=8,
-        frameon=False,
-        loc="best",
-    )
-
-    figure.tight_layout()
 
     output_file.parent.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    # PDF is the preferred manuscript output: lines, axes, labels, and
-    # legend remain resolution-independent in LaTeX.
     pdf_file = output_file.with_suffix(".pdf")
 
     figure.savefig(
@@ -1524,6 +1919,223 @@ def plot_source_clds(
     )
 
     plt.close(figure)
+
+
+def ask_plot_layout() -> tuple[int, int]:
+    """Ask the user for the subplot layout, e.g. 3x2 or 2x4."""
+
+    print()
+    print("=" * 70)
+    print("PLOTTING FORMAT")
+    print("=" * 70)
+    print("Enter the number of rows and columns.")
+    print("Examples: 3x2, 2x4, 1x3")
+
+    while True:
+        choice = input("\nPlotting format [rows x columns]: ").strip().lower()
+        match = re.fullmatch(r"(\d+)\s*[x×]\s*(\d+)", choice)
+
+        if match is None:
+            print("Invalid format. Enter something like 3x2 or 2x4.")
+            continue
+
+        n_rows = int(match.group(1))
+        n_cols = int(match.group(2))
+
+        if n_rows < 1 or n_cols < 1:
+            print("Rows and columns must both be at least 1.")
+            continue
+
+        return n_rows, n_cols
+
+
+def available_plot_pairs(
+    cld_results: dict,
+    source_ids: list[int],
+    source_names: dict[int, str],
+    target_regions: list[dict],
+) -> list[tuple[int, str]]:
+    """Return source-target pairs for which at least one CLD CSV exists."""
+
+    pairs = []
+
+    for source_id in source_ids:
+        for region in target_regions:
+            target_name = region["name"]
+
+            found = False
+
+            for group_name in cld_results:
+                entries = (
+                    cld_results
+                    .get(group_name, {})
+                    .get(target_name, {})
+                )
+
+                if entries:
+                    found = True
+                    break
+
+            if found:
+                pairs.append(
+                    (
+                        source_id,
+                        target_name,
+                    )
+                )
+
+    return pairs
+
+
+def select_plot_pairs(
+    pairs: list[tuple[int, str]],
+    source_names: dict[int, str],
+    n_rows: int,
+    n_cols: int,
+) -> list[tuple[int, str]]:
+    """
+    Ask which generated source-target CLDs should be included in the PDF.
+
+    Only pairs with available CSV-backed CLD results are shown.
+    """
+
+    if not pairs:
+        return []
+
+    capacity = n_rows * n_cols
+
+    print()
+    print("=" * 70)
+    print("PLOT SELECTION")
+    print("=" * 70)
+    print(
+        "Select which source-target pairs to include in the PDF."
+    )
+    print(
+        f"Your {n_rows}x{n_cols} layout can contain up to "
+        f"{capacity} plots."
+    )
+
+    for index, (source_id, target_name) in enumerate(
+        pairs,
+        start=1,
+    ):
+        source_name = source_names.get(
+            source_id,
+            f"Organ {source_id}",
+        )
+        print(
+            f"[{index}] {source_name} ({source_id}) → "
+            f"{target_name}"
+        )
+
+    print("[A] All available source-target pairs")
+
+    while True:
+        choice = input(
+            "\nSelect plot(s): "
+        ).strip().upper()
+
+        if choice == "A":
+            selected = pairs
+        else:
+            try:
+                indices = [
+                    int(value.strip()) - 1
+                    for value in choice.split(",")
+                ]
+
+                if not indices:
+                    raise ValueError
+
+                if any(
+                    index < 0 or index >= len(pairs)
+                    for index in indices
+                ):
+                    raise ValueError
+
+                selected = list(
+                    dict.fromkeys(
+                        pairs[index]
+                        for index in indices
+                    )
+                )
+
+            except ValueError:
+                print(
+                    "Invalid selection. Enter plot numbers "
+                    "separated by commas, or A."
+                )
+                continue
+
+        if len(selected) > capacity:
+            print(
+                f"You selected {len(selected)} plots, but the "
+                f"{n_rows}x{n_cols} layout only has {capacity} panels."
+            )
+            print(
+                "Choose a larger plotting format or select fewer plots."
+            )
+            continue
+
+        return selected
+
+
+def create_selected_plot_pdf(
+    cld_results: dict,
+    source_ids: list[int],
+    source_names: dict[int, str],
+    target_regions: list[dict],
+    output_dir: Path,
+) -> None:
+    """Ask for the layout/pairs and create one selected multi-panel PDF."""
+
+    pairs = available_plot_pairs(
+        cld_results,
+        source_ids,
+        source_names,
+        target_regions,
+    )
+
+    if not pairs:
+        print("No CSV-backed CLD results are available for plotting.")
+        return
+
+    n_rows, n_cols = ask_plot_layout()
+
+    selected_pairs = select_plot_pairs(
+        pairs,
+        source_names,
+        n_rows,
+        n_cols,
+    )
+
+    if not selected_pairs:
+        print("No plots selected.")
+        return
+
+    figure_name = (
+        f"selected_clds_{n_rows}x{n_cols}.pdf"
+    )
+
+    figure_base = (
+        output_dir
+        / "figures"
+        / figure_name
+    )
+
+    plot_selected_clds(
+        selected_pairs,
+        source_names,
+        cld_results,
+        figure_base,
+        n_rows,
+        n_cols,
+    )
+
+    print()
+    print("Saved selected journal figure:")
+    print(f"  {figure_base}")
 
 
 # ======================================================================
@@ -1759,10 +2371,9 @@ def main():
                 str(organ_data["name"]),
             )
 
-    selected_source_ids = select_source_organs(
-        source_ids,
-        source_names,
-    )
+    # All source organs are always calculated. The user chooses only which
+    # CSV-backed source-target pairs to include in the PDF later.
+    selected_source_ids = source_ids
 
     # --------------------------------------------------------------
     # Resolve phantom groups
@@ -1771,14 +2382,165 @@ def main():
     resolved_groups = resolve_phantoms(registry)
 
     # Both phantom groups use the user-supplied target-region mapping.
-    # This is intentional: SOURCE_CSV and TARGET_REGION_FILE are the
-    # only CSV inputs required by the CLD script.
     validate_phantom_files(
         resolved_groups
     )
 
     # --------------------------------------------------------------
-    # Load all meshes once
+    # Check existing CLD CSV results BEFORE loading the meshes.
+    # --------------------------------------------------------------
+
+    existing_keys, missing_keys = inspect_cld_csv_status(
+        output_dir,
+        resolved_groups,
+        selected_source_ids,
+        target_regions,
+    )
+
+    total_expected = len(existing_keys) + len(missing_keys)
+
+    if total_expected == 0:
+        print()
+        print("No valid source-target CLD combinations were found.")
+        return
+
+    print()
+    print("=" * 70)
+    print("CLD CSV STATUS")
+    print("=" * 70)
+    print(f"Expected CLD CSVs: {total_expected:,}")
+    print(f"Already present:   {len(existing_keys):,}")
+    print(f"Missing:            {len(missing_keys):,}")
+
+    if not missing_keys:
+        action = ask_existing_results_action(
+            len(existing_keys)
+        )
+
+        if action == "skip":
+            # Use all existing CSVs to regenerate the figures/summary
+            # without repeating the expensive Monte Carlo sampling.
+            existing_files = existing_cld_csvs(
+                output_dir,
+                resolved_groups,
+                selected_source_ids,
+                target_regions,
+            )
+
+            cld_results = load_existing_cld_results(
+                existing_files,
+                resolved_groups,
+            )
+
+            summary_rows = []
+
+            for (
+                group_name,
+                phantom_code,
+                source_id,
+                target_name,
+            ), csv_file in existing_files.items():
+
+                result = cld_results[
+                    group_name
+                ][target_name][phantom_code]
+
+                phantom = result["phantom"]
+                source_name = source_names.get(
+                    source_id,
+                    f"Organ {source_id}",
+                )
+
+                summary_rows.append(
+                    {
+                        "Phantom": phantom.display_name,
+                        "Phantom Code": phantom.code,
+                        "Sex": (
+                            "Male"
+                            if phantom.sex == "AM"
+                            else "Female"
+                        ),
+                        "Source Organ ID": source_id,
+                        "Source Organ": source_name,
+                        "Target Region": target_name,
+                        "Mean Chord Length (mm)": result["mean_mm"],
+                        "Standard Deviation (mm)": result["std_mm"],
+                        "Number of Point Pairs": N_SAMPLES,
+                        "Bin Width (mm)": BIN_WIDTH_MM,
+                    }
+                )
+
+            # Regenerate only the user-selected multi-panel PDF from
+            # the existing CSV results.
+            create_selected_plot_pdf(
+                cld_results,
+                selected_source_ids,
+                source_names,
+                target_regions,
+                output_dir,
+            )
+
+            summary_file = (
+                output_dir
+                / "csv"
+                / "cld_summary.csv"
+            )
+
+            save_summary_csv(
+                summary_rows,
+                summary_file,
+            )
+
+            print()
+            print("=" * 70)
+            print("EXISTING CLD RESULTS USED")
+            print("=" * 70)
+            print(f"CSV files: {output_dir / 'csv'}")
+            print(f"Journal figures: {output_dir / 'figures'}")
+            print(f"Summary:   {summary_file}")
+
+            return
+
+        # Redo means every expected result is recalculated.
+        missing_keys = sorted(
+            existing_keys | set(missing_keys)
+        )
+
+    else:
+        print()
+        print(
+            f"Only the {len(missing_keys):,} missing CLD CSV(s) "
+            "will be calculated."
+        )
+
+    # --------------------------------------------------------------
+    # Load existing CSVs first. These are retained and combined with
+    # newly calculated CLDs for plotting and the summary.
+    # --------------------------------------------------------------
+
+    existing_files = existing_cld_csvs(
+        output_dir,
+        resolved_groups,
+        selected_source_ids,
+        target_regions,
+    )
+
+    # In redo mode, do not load the existing results because every
+    # expected combination will be replaced.
+    if not missing_keys or set(missing_keys) != set(existing_files):
+        existing_files = {
+            key: path
+            for key, path in existing_files.items()
+            if key not in set(missing_keys)
+        }
+
+    cld_results = load_existing_cld_results(
+        existing_files,
+        resolved_groups,
+    )
+
+    # --------------------------------------------------------------
+    # Load all meshes once.
     # --------------------------------------------------------------
 
     meshes = {}
@@ -1830,7 +2592,8 @@ def main():
             # density/volume processing is not repeated for every
             # target region.
             source_samplers[phantom.code] = {}
-            for source_id in source_ids:
+
+            for source_id in selected_source_ids:
                 if source_id not in mesh.organ_ids:
                     continue
 
@@ -1855,23 +2618,10 @@ def main():
             )
 
     # --------------------------------------------------------------
-    # Calculate CLDs
+    # Calculate only missing CLDs.
     # --------------------------------------------------------------
 
-    summary_rows = []
-
-    # Results structure:
-    #
-    #   group_name
-    #       target_region
-    #           phantom_code
-    #
-    # The phantom code is used as the key so the plotting order can follow
-    # the `phantoms=()` tuple in registry.PHANTOM_GROUPS exactly.
-    cld_results = {
-        group_name: {}
-        for group_name in resolved_groups
-    }
+    missing_key_set = set(missing_keys)
 
     for source_id in selected_source_ids:
 
@@ -1895,21 +2645,39 @@ def main():
                 f"Phantom group: {group_name}"
             )
 
-            cld_results[group_name] = {}
+            # Ensure every target dictionary exists, including those
+            # loaded from pre-existing CSVs.
+            for target_region in target_regions:
+                target_name = target_region["name"]
+                cld_results.setdefault(
+                    group_name,
+                    {},
+                ).setdefault(
+                    target_name,
+                    {},
+                )
 
             for target_region in target_regions:
 
                 target_name = target_region["name"]
-
-                cld_results[group_name][
-                    target_name
-                ] = {}
 
                 print(
                     f"  Target: {target_name}"
                 )
 
                 for phantom in phantoms:
+
+                    key = (
+                        group_name,
+                        phantom.code,
+                        source_id,
+                        target_name,
+                    )
+
+                    # Existing result is retained unless redo/missing
+                    # logic explicitly marked this key for calculation.
+                    if key not in missing_key_set:
+                        continue
 
                     mesh = meshes[
                         phantom.code
@@ -1983,19 +2751,16 @@ def main():
                         "std_mm": std_mm,
                     }
 
-                    # --------------------------------------------------
-                    # Save CLD CSV
-                    # --------------------------------------------------
-
-                    csv_name = (
-                        f"{safe_filename(phantom.code)}_"
-                        f"source_{source_id}_"
-                        f"target_{safe_filename(target_name)}_"
-                        f"cld.csv"
+                    # Save CLD CSV.
+                    csv_file = cld_csv_path(
+                        output_dir,
+                        phantom.code,
+                        source_id,
+                        target_name,
                     )
 
                     save_cld_csv(
-                        output_dir / "csv" / csv_name,
+                        csv_file,
                         phantom,
                         source_id,
                         target_name,
@@ -2004,6 +2769,43 @@ def main():
                         mean_mm,
                         std_mm,
                     )
+
+                    print(
+                        f"    {phantom.display_name}: "
+                        f"{mean_mm:.2f} ± {std_mm:.2f} mm"
+                    )
+
+    # --------------------------------------------------------------
+    # Build the summary from every calculated/available CLD.
+    # Plotting is handled separately so only user-selected pairs
+    # are rendered in the PDF.
+    # --------------------------------------------------------------
+
+    summary_rows = []
+
+    for source_id in selected_source_ids:
+
+        source_name = source_names.get(
+            source_id,
+            f"Organ {source_id}",
+        )
+
+        for region in target_regions:
+            target_name = region["name"]
+
+            # Add every available phantom result for this
+            # source/target pair to the summary.
+            for group_name, phantoms in resolved_groups.items():
+                for phantom in phantoms:
+                    result = (
+                        cld_results
+                        .get(group_name, {})
+                        .get(target_name, {})
+                        .get(phantom.code)
+                    )
+
+                    if result is None:
+                        continue
 
                     summary_rows.append(
                         {
@@ -2017,47 +2819,15 @@ def main():
                             "Source Organ ID": source_id,
                             "Source Organ": source_name,
                             "Target Region": target_name,
-                            "Mean Chord Length (mm)": mean_mm,
-                            "Standard Deviation (mm)": std_mm,
+                            "Mean Chord Length (mm)": result["mean_mm"],
+                            "Standard Deviation (mm)": result["std_mm"],
                             "Number of Point Pairs": N_SAMPLES,
                             "Bin Width (mm)": BIN_WIDTH_MM,
                         }
                     )
 
-                    print(
-                        f"    {phantom.display_name}: "
-                        f"{mean_mm:.2f} ± {std_mm:.2f} mm"
-                    )
-
-        # --------------------------------------------------------------
-        # Save one plot per source-organ/target-region combination.
-        # --------------------------------------------------------------
-
-        for region in target_regions:
-            target_name = region["name"]
-
-            figure_name = (
-                f"source_{source_id}_"
-                f"target_{safe_filename(target_name)}.pdf"
-            )
-
-            figure_base = output_dir / "figures" / figure_name
-
-            plot_source_clds(
-                source_id,
-                source_name,
-                target_name,
-                cld_results,
-                figure_base,
-            )
-
-            print(
-                f"\nSaved journal figure:\n"
-                f"  {figure_base}"
-            )
-
     # --------------------------------------------------------------
-    # Save summary
+    # Save summary.
     # --------------------------------------------------------------
 
     summary_file = (
@@ -2069,6 +2839,16 @@ def main():
     save_summary_csv(
         summary_rows,
         summary_file,
+    )
+
+    # Ask which of the generated CSV-backed CLDs should be included in
+    # the multi-panel PDF. All CLDs have already been calculated/saved.
+    create_selected_plot_pdf(
+        cld_results,
+        selected_source_ids,
+        source_names,
+        target_regions,
+        output_dir,
     )
 
     print()
