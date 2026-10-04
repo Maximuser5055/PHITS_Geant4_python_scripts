@@ -23,8 +23,9 @@ For every source-region/target-region pair:
 The output is:
     - one CLD CSV for every phantom/source/target combination
     - one summary CSV containing mean and standard deviation
-    - one PNG per source-organ/target-region combination, with all
-      selected phantom groups combined into a single plot
+    - one vector PDF and one 1000-dpi RGB TIFF per source-organ/
+      target-region combination, with all selected phantom groups
+      combined into a single plot
 
 The NODE/ELE format follows the ICRP mesh phantom convention:
 NODE files contain node coordinates and ELE files contain tetrahedra
@@ -48,12 +49,49 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-# This script only writes PNG files, so use a non-interactive backend.
+# Figures are written as vector PDF and high-resolution TIFF, so use a
+# non-interactive backend suitable for headless systems.
 # This also avoids Qt-specific rendering problems on headless systems.
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+# Journal figure typography.
+# Elsevier recommends Arial (or Helvetica) for artwork.  This script uses
+# Arial and embeds the TrueType font in the PDF when an Arial installation is
+# available on the machine running the script.
+JOURNAL_FONT = "Arial"
+
+plt.rcParams.update({
+    "font.family": JOURNAL_FONT,
+    "font.size": 9,
+    "axes.labelsize": 9,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "legend.fontsize": 7.5,
+
+    # Embed TrueType fonts in vector PDF output.
+    "pdf.fonttype": 42,
+    "ps.fonttype": 42,
+})
 from matplotlib.lines import Line2D
+from matplotlib import font_manager
+
+def validate_journal_font() -> None:
+    """Ensure the required journal font is installed before plotting."""
+    try:
+        font_manager.findfont(
+            JOURNAL_FONT,
+            fallback_to_default=False,
+        )
+    except ValueError as exc:
+        raise RuntimeError(
+            f"{JOURNAL_FONT!r} was not found. Install Arial on the "
+            "machine running this script, or change JOURNAL_FONT to "
+            "'Helvetica' if that is the font available in your "
+            "environment."
+        ) from exc
+
 
 import b_config.a_config as config
 from b_config import b_phantom_registry as registry
@@ -89,9 +127,17 @@ RANDOM_SEED = 20261004
 NODE_UNIT = "cm"
 
 # Plot settings.
-FIGURE_DPI = 300
-FIGURE_WIDTH = 6.8
-ROW_HEIGHT = 2.8
+# Elsevier's general artwork guidance gives 140 mm as a typical 1.5-column
+# width.  This is a good default for the four-phantom CLD plots while
+# keeping the figure compact enough for a manuscript.
+FIGURE_WIDTH_MM = 140.0
+FIGURE_WIDTH = FIGURE_WIDTH_MM / 25.4
+FIGURE_HEIGHT = 2.8
+
+# Resolution for raster artwork.  Elsevier's artwork guidance specifies
+# 1000 dpi for bitmapped line drawings.  The PDF output is vector and does
+# not have a raster DPI limitation.
+TIFF_DPI = 1000
 
 # Prevent very tall multi-row figures from becoming enormous raster images.
 # The row height is reduced automatically when there are many target regions.
@@ -1296,7 +1342,7 @@ def plot_source_clds(
     output_file: Path,
 ):
     """
-    Create one figure for one source-organ/target-region combination.
+    Create one journal-ready figure for one source-organ/target-region combination.
 
     All selected phantom groups are combined into one plot.
 
@@ -1335,7 +1381,7 @@ def plot_source_clds(
         1,
         figsize=(
             FIGURE_WIDTH,
-            ROW_HEIGHT,
+            FIGURE_HEIGHT,
         ),
     )
 
@@ -1399,7 +1445,7 @@ def plot_source_clds(
             result["relative_number"],
             color=color,
             linestyle=linestyle,
-            linewidth=1.4,
+            linewidth=1.2,
             label=label,
         )
 
@@ -1441,10 +1487,27 @@ def plot_source_clds(
         exist_ok=True,
     )
 
+    # The PDF is the preferred manuscript/vector output: lines, axes,
+    # labels, and legend remain resolution-independent in LaTeX.
+    pdf_file = output_file.with_suffix(".pdf")
+
+    # The TIFF is the raster submission alternative.  These CLD graphs are
+    # line-art figures, so use 1000 dpi rather than the 300 dpi used for
+    # photographs/halftones.  RGB is retained for the colored curves.
+    tiff_file = output_file.with_suffix(".tiff")
+
     figure.savefig(
-        output_file,
-        dpi=FIGURE_DPI,
-        format="png",
+        pdf_file,
+        format="pdf",
+        bbox_inches=None,
+    )
+
+    figure.savefig(
+        tiff_file,
+        dpi=TIFF_DPI,
+        format="tiff",
+        bbox_inches=None,
+        facecolor="white",
     )
 
     plt.close(figure)
@@ -1610,6 +1673,8 @@ def validate_phantom_files(
 # ======================================================================
 
 def main():
+
+    validate_journal_font()
 
     print()
     print("=" * 70)
@@ -1957,24 +2022,27 @@ def main():
         for region in target_regions:
             target_name = region["name"]
 
-            png_name = (
+            figure_name = (
                 f"source_{source_id}_"
                 f"target_{safe_filename(target_name)}.png"
             )
 
-            png_file = output_dir / "png" / png_name
+            # The .png suffix here is only used as a temporary base name;
+            # plot_source_clds replaces it with .pdf and .tiff.
+            figure_base = output_dir / "figures" / figure_name
 
             plot_source_clds(
                 source_id,
                 source_name,
                 target_name,
                 cld_results,
-                png_file,
+                figure_base,
             )
 
             print(
-                f"\nSaved plot:\n"
-                f"  {png_file}"
+                f"\nSaved journal figures:\n"
+                f"  {figure_base.with_suffix('.pdf')}\n"
+                f"  {figure_base.with_suffix('.tiff')}"
             )
 
     # --------------------------------------------------------------
@@ -1997,7 +2065,7 @@ def main():
     print("CLD CALCULATION COMPLETE")
     print("=" * 70)
     print(f"CSV files: {output_dir / 'csv'}")
-    print(f"PNG files: {output_dir / 'png'}")
+    print(f"Journal figures: {output_dir / 'figures'}")
     print(f"Summary:   {summary_file}")
 
 
