@@ -23,9 +23,8 @@ For every source-region/target-region pair:
 The output is:
     - one CLD CSV for every phantom/source/target combination
     - one summary CSV containing mean and standard deviation
-    - one vector PDF and one 1000-dpi RGB TIFF per source-organ/
-      target-region combination, with all selected phantom groups
-      combined into a single plot
+    - one vector PDF per source-organ/target-region combination, with all
+      selected phantom groups combined into a single plot
 
 The NODE/ELE format follows the ICRP mesh phantom convention:
 NODE files contain node coordinates and ELE files contain tetrahedra
@@ -49,8 +48,8 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-# Figures are written as vector PDF and high-resolution TIFF, so use a
-# non-interactive backend suitable for headless systems.
+# Figures are written as vector PDF, so use a non-interactive backend
+# suitable for headless systems.
 # This also avoids Qt-specific rendering problems on headless systems.
 import matplotlib
 matplotlib.use("Agg")
@@ -66,7 +65,6 @@ FONT_FALLBACKS = (
     "DejaVu Sans",
 )
 
-from matplotlib.lines import Line2D
 from matplotlib import font_manager
 
 
@@ -182,10 +180,6 @@ FIGURE_WIDTH_MM = 140.0
 FIGURE_WIDTH = FIGURE_WIDTH_MM / 25.4
 FIGURE_HEIGHT = 2.8
 
-# Resolution for raster artwork.  Elsevier's artwork guidance specifies
-# 1000 dpi for bitmapped line drawings.  The PDF output is vector and does
-# not have a raster DPI limitation.
-TIFF_DPI = 1000
 
 # Prevent very tall multi-row figures from becoming enormous raster images.
 # The row height is reduced automatically when there are many target regions.
@@ -1398,13 +1392,13 @@ def plot_source_clds(
     registry.PHANTOM_GROUPS exactly.  The phantom group display names are
     not used as legend entries.
 
-    Colors and line styles are assigned automatically from Matplotlib's
-    configured cycles, so adding phantoms does not require
-    sex-specific plotting logic.
+    Each phantom is assigned a distinct color automatically from
+    Matplotlib's color cycle. The legend contains only the phantom codes
+    in the order defined by the registry `phantoms=()` tuples.
     """
 
     # Build the plotting order directly from the phantom tuples in the
-    # registry.  This makes `PHANTOM_GROUPS[group_code].phantoms` the
+    # registry. This makes `PHANTOM_GROUPS[group_code].phantoms` the
     # authoritative source for the legend order.
     ordered_phantoms = []
 
@@ -1433,33 +1427,22 @@ def plot_source_clds(
         ),
     )
 
-    # Use Matplotlib's configured color cycle instead of hard-coded colors.
+    # Give every individual phantom its own color. The order is exactly
+    # the order supplied by the `phantoms=()` tuples in the registry.
+    # This makes the four selected phantoms visually distinct without
+    # hard-coding colors to sex.
     color_cycle = plt.rcParams["axes.prop_cycle"].by_key().get(
         "color",
         [],
     )
 
     if not color_cycle:
-        color_cycle = ["C0"]
+        color_cycle = [f"C{i}" for i in range(len(ordered_phantoms))]
 
-    # Use Matplotlib's available line-style definitions instead of
-    # hard-coding styles for male/female.
-    line_styles = [
-        linestyle
-        for linestyle in Line2D.lineStyles
-        if linestyle != "None"
-    ]
-
-    if not line_styles:
-        line_styles = ["-"]
-
-    # Combine colors and line styles so additional phantoms can be added
-    # without requiring new sex-specific style logic.
-    style_cycle = [
-        (color, linestyle)
-        for color in color_cycle
-        for linestyle in line_styles
-    ]
+    phantom_colors = {
+        phantom_code: color_cycle[index % len(color_cycle)]
+        for index, (_, phantom_code, _) in enumerate(ordered_phantoms)
+    }
 
     for index, (group_name, phantom_code, phantom) in enumerate(
         ordered_phantoms
@@ -1478,23 +1461,18 @@ def plot_source_clds(
         if result is None:
             continue
 
-        color, linestyle = style_cycle[
-            index % len(style_cycle)
-        ]
+        color = phantom_colors[phantom_code]
 
-        label = (
-            f"{phantom.display_name}"
-            f" ({result['mean_mm']:.2f} "
-            f"± {result['std_mm']:.2f} mm)"
-        )
-
+        # The legend contains only the phantom registry codes. Mean and
+        # standard deviation remain in the CSV/summary rather than in the
+        # legend text.
         axis.plot(
             result["distance_mm"],
             result["relative_number"],
             color=color,
-            linestyle=linestyle,
+            linestyle="-",
             linewidth=1.2,
-            label=label,
+            label=phantom_code,
         )
 
     # Put the target-region name inside the plot rather than in the
@@ -1535,27 +1513,14 @@ def plot_source_clds(
         exist_ok=True,
     )
 
-    # The PDF is the preferred manuscript/vector output: lines, axes,
-    # labels, and legend remain resolution-independent in LaTeX.
+    # PDF is the preferred manuscript output: lines, axes, labels, and
+    # legend remain resolution-independent in LaTeX.
     pdf_file = output_file.with_suffix(".pdf")
-
-    # The TIFF is the raster submission alternative.  These CLD graphs are
-    # line-art figures, so use 1000 dpi rather than the 300 dpi used for
-    # photographs/halftones.  RGB is retained for the colored curves.
-    tiff_file = output_file.with_suffix(".tiff")
 
     figure.savefig(
         pdf_file,
         format="pdf",
         bbox_inches=None,
-    )
-
-    figure.savefig(
-        tiff_file,
-        dpi=TIFF_DPI,
-        format="tiff",
-        bbox_inches=None,
-        facecolor="white",
     )
 
     plt.close(figure)
@@ -2073,11 +2038,9 @@ def main():
 
             figure_name = (
                 f"source_{source_id}_"
-                f"target_{safe_filename(target_name)}.png"
+                f"target_{safe_filename(target_name)}.pdf"
             )
 
-            # The .png suffix here is only used as a temporary base name;
-            # plot_source_clds replaces it with .pdf and .tiff.
             figure_base = output_dir / "figures" / figure_name
 
             plot_source_clds(
@@ -2089,9 +2052,8 @@ def main():
             )
 
             print(
-                f"\nSaved journal figures:\n"
-                f"  {figure_base.with_suffix('.pdf')}\n"
-                f"  {figure_base.with_suffix('.tiff')}"
+                f"\nSaved journal figure:\n"
+                f"  {figure_base}"
             )
 
     # --------------------------------------------------------------
