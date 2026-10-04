@@ -1874,7 +1874,7 @@ def plot_selected_clds(
             used_handles,
             used_labels,
             loc="upper center",
-            bbox_to_anchor=(0.5, 0.955),
+            bbox_to_anchor=(0.5, 0.970),
             ncol=len(used_labels),
             fontsize=6,
             frameon=False,
