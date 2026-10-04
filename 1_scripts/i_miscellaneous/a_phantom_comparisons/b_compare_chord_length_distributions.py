@@ -33,73 +33,34 @@ plus their organ-ID attribute.
 
 from __future__ import annotations
 
+from pathlib import Path
+import sys
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT))
+
 import hashlib
 import math
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+# This script only writes PNG files, so use a non-interactive backend.
+# This also avoids Qt-specific rendering problems on headless systems.
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+import b_config.a_config as config
+from b_config import b_phantom_registry as registry
+from c_database import b_organ_database as organ_database
 
 # ======================================================================
 # USER SETTINGS
 # ======================================================================
-
-# Find the project root from the standard project structure.
-def find_project_root() -> Path:
-    """Find the project root containing 2_phits/phantoms and 5_other_input_files."""
-    script_path = Path(__file__).resolve()
-
-    for directory in [script_path.parent, *script_path.parents]:
-        if (
-            (directory / "2_phits" / "phantoms").is_dir()
-            and (directory / "5_other_input_files").is_dir()
-        ):
-            return directory
-
-    raise FileNotFoundError(
-        "Could not locate the project root. The script expects the project "
-        "to contain '2_phits/phantoms' and '5_other_input_files'."
-    )
-
-
-PROJECT_ROOT = find_project_root()
-
-# Import the project configuration and phantom registry.
-#
-# The phantom registry remains the authoritative source for:
-#   - phantom codes
-#   - NODE/ELE/MATERIAL file paths
-#   - phantom sex/display names
-#   - target-region files
-#
-# compare_height_weight_organ_masses.py is used only as the reference
-# for reading NODE/ELE/MATERIAL files and handling coordinate units.
-def import_project_modules():
-    """Import the project configuration and phantom registry."""
-    import sys
-
-    if str(PROJECT_ROOT) not in sys.path:
-        sys.path.insert(0, str(PROJECT_ROOT))
-
-    try:
-        import b_config.a_config as config
-        import b_config.b_phantom_registry as registry
-    except ImportError as exc:
-        raise ImportError(
-            "Could not import the project configuration/phantom registry.\n"
-            "Make sure the project contains:\n"
-            "  b_config/a_config.py\n"
-            "  b_config/b_phantom_registry.py"
-        ) from exc
-
-    return config, registry
-
 
 # Registry group codes to compare.
 # Phantom file paths are NOT hard-coded here.
@@ -130,6 +91,9 @@ NODE_UNIT = "cm"
 FIGURE_DPI = 300
 FIGURE_WIDTH = 6.8
 ROW_HEIGHT = 2.8
+
+# Prevent very tall multi-row figures from becoming enormous raster images.
+# The row height is reduced automatically when there are many target regions.
 
 # Ask the user which source organs to calculate.
 ASK_SOURCE_SELECTION = True
@@ -383,6 +347,82 @@ def load_target_regions(target_region_file: Path) -> list[dict]:
         )
 
     return regions
+
+
+# ======================================================================
+# SEX-SPECIFIC TARGET REGIONS
+# ======================================================================
+
+# Organ IDs that do not exist in the opposite-sex phantom.
+# These are skipped rather than treated as errors when building
+# target-region samplers.
+SEX_EXCLUDED_ORGAN_IDS = {
+    "AF": {
+        11500,       # Prostate
+        12900, 13000, # Testes
+    },
+    "AM": {
+        11100, 11200, # Ovaries
+        13900,        # Uterus/cervix
+    },
+}
+
+
+def filter_target_regions_for_sex(
+    target_regions: list[dict],
+    sex: str,
+) -> list[dict]:
+    """
+    Remove sex-specific organ IDs that are not present in this phantom.
+
+    Female (AF):
+        skip prostate and testes IDs.
+
+    Male (AM):
+        skip ovaries and uterus/cervix IDs.
+
+    If removing the sex-specific IDs leaves a target region with no IDs,
+    that target region is skipped for that phantom.
+    """
+
+    excluded_ids = SEX_EXCLUDED_ORGAN_IDS.get(sex, set())
+
+    filtered_regions = []
+
+    for region in target_regions:
+
+        remaining_ids = tuple(
+            organ_id
+            for organ_id in region["ids"]
+            if organ_id not in excluded_ids
+        )
+
+        if not remaining_ids:
+            print(
+                f"    [SKIP] {region['name']} "
+                f"({sex} phantom): sex-specific organ IDs "
+                f"{region['ids']}"
+            )
+            continue
+
+        if len(remaining_ids) != len(region["ids"]):
+
+            skipped_ids = tuple(
+                organ_id
+                for organ_id in region["ids"]
+                if organ_id in excluded_ids
+            )
+
+            print(
+                f"    [SKIP IDs] {region['name']} "
+                f"({sex} phantom): {skipped_ids}"
+            )
+
+        filtered_region = dict(region)
+        filtered_region["ids"] = remaining_ids
+        filtered_regions.append(filtered_region)
+
+    return filtered_regions
 
 
 # ======================================================================
@@ -1195,6 +1235,25 @@ def save_cld_csv(
         }
     )
 
+    # The phantom/source/target metadata and the summary statistics are
+    # constant for the entire CLD.  Keep them only on the first row so
+    # the CSV is easier to read without changing the distance distribution.
+    repeated_columns = [
+        "Phantom",
+        "Phantom Code",
+        "Sex",
+        "Source Organ ID",
+        "Target Region",
+        "Mean Chord Length (mm)",
+        "Standard Deviation (mm)",
+    ]
+
+    if len(df) > 1:
+        # Cast these columns to object first so blank strings can be written
+        # without changing the numeric columns or raising dtype warnings.
+        df[repeated_columns] = df[repeated_columns].astype(object)
+        df.loc[1:, repeated_columns] = ""
+
     df.to_csv(
         output_file,
         index=False,
@@ -1231,18 +1290,18 @@ def save_summary_csv(
 def plot_source_clds(
     source_id: int,
     source_name: str,
-    target_regions: list[dict],
+    target_region: str,
     cld_results: dict,
     output_file: Path,
 ):
     """
-    Create one figure for a source region.
+    Create one figure for one source-organ/target-region combination.
 
     Columns:
         phantom groups
 
     Rows:
-        target regions
+        one target region only
 
     Within each subplot:
         male   = blue, solid
@@ -1256,19 +1315,16 @@ def plot_source_clds(
     number_of_columns = len(
         group_names
     )
-    number_of_rows = len(
-        target_regions
-    )
 
     if number_of_columns == 0:
         return
 
     figure, axes = plt.subplots(
-        number_of_rows,
+        1,
         number_of_columns,
         figsize=(
             FIGURE_WIDTH * number_of_columns,
-            ROW_HEIGHT * number_of_rows,
+            ROW_HEIGHT,
         ),
         squeeze=False,
         sharex=False,
@@ -1279,87 +1335,76 @@ def plot_source_clds(
         group_names
     ):
 
-        axes[0, column].set_title(
+        axis = axes[0, column]
+
+        entries = cld_results[
+            group_name
+        ].get(
+            target_region,
+            {},
+        )
+
+        for sex in ("AM", "AF"):
+
+            if sex not in entries:
+                continue
+
+            result = entries[sex]
+
+            if sex == "AM":
+                color = "blue"
+                linestyle = "-"
+                label = (
+                    "Male"
+                    f" ({result['mean_mm']:.2f} "
+                    f"± {result['std_mm']:.2f} mm)"
+                )
+            else:
+                color = "red"
+                linestyle = "--"
+                label = (
+                    "Female"
+                    f" ({result['mean_mm']:.2f} "
+                    f"± {result['std_mm']:.2f} mm)"
+                )
+
+            axis.plot(
+                result["distance_mm"],
+                result["relative_number"],
+                color=color,
+                linestyle=linestyle,
+                linewidth=1.4,
+                label=label,
+            )
+
+        axis.set_title(
             group_name,
             fontsize=11,
         )
 
-        for row, region in enumerate(
-            target_regions
-        ):
+        axis.set_xlabel(
+            "Distance (mm)"
+        )
 
-            target_name = region["name"]
-            axis = axes[row, column]
+        axis.set_ylabel(
+            "Relative Number"
+        )
 
-            entries = cld_results[
-                group_name
-            ].get(
-                target_name,
-                {},
-            )
+        axis.grid(
+            alpha=0.18,
+            linewidth=0.5,
+        )
 
-            for sex in ("AM", "AF"):
-
-                if sex not in entries:
-                    continue
-
-                result = entries[sex]
-
-                if sex == "AM":
-                    color = "blue"
-                    linestyle = "-"
-                    label = (
-                        "Male"
-                        f" ({result['mean_mm']:.2f} "
-                        f"± {result['std_mm']:.2f} mm)"
-                    )
-                else:
-                    color = "red"
-                    linestyle = "--"
-                    label = (
-                        "Female"
-                        f" ({result['mean_mm']:.2f} "
-                        f"± {result['std_mm']:.2f} mm)"
-                    )
-
-                axis.plot(
-                    result["distance_mm"],
-                    result["relative_number"],
-                    color=color,
-                    linestyle=linestyle,
-                    linewidth=1.4,
-                    label=label,
-                )
-
-            axis.set_title(
-                target_name,
-                fontsize=9,
-                loc="left",
-            )
-
-            axis.set_xlabel(
-                "Distance (mm)"
-            )
-
-            axis.set_ylabel(
-                "Relative Number"
-            )
-
-            axis.grid(
-                alpha=0.18,
-                linewidth=0.5,
-            )
-
-            axis.legend(
-                fontsize=7,
-                frameon=False,
-                loc="best",
-            )
+        axis.legend(
+            fontsize=7,
+            frameon=False,
+            loc="best",
+        )
 
     figure.suptitle(
-        f"Source: {source_name} (ID {source_id})",
+        f"Source: {source_name} (ID {source_id})\n"
+        f"Target: {target_region}",
         fontsize=13,
-        y=1.002,
     )
 
     figure.tight_layout()
@@ -1372,7 +1417,6 @@ def plot_source_clds(
     figure.savefig(
         output_file,
         dpi=FIGURE_DPI,
-        bbox_inches="tight",
         format="png",
     )
 
@@ -1545,12 +1589,6 @@ def main():
     print("CHORD-LENGTH DISTRIBUTION CALCULATION")
     print("=" * 70)
 
-    # --------------------------------------------------------------
-    # Configuration
-    # --------------------------------------------------------------
-
-    config, registry = import_project_modules()
-
     source_csv = Path(config.SOURCE_CSV)
 
     output_dir = (
@@ -1604,30 +1642,16 @@ def main():
         Path(target_region_file)
     )
 
-    # Optional source-organ names. The required input remains SOURCE_CSV;
-    # organ_ID_names.csv is only used to make the plot titles more readable.
+    # Source-organ names are taken from c_database.b_organ_database.py.
+    # SOURCE_CSV remains the authoritative source of the selected organ IDs.
     source_names: dict[int, str] = {}
 
-    organ_names_file = (
-        PROJECT_ROOT
-        / "5_other_input_files"
-        / "organ_ID_names.csv"
-    )
-
-    if organ_names_file.is_file():
-        organ_names_df = clean_columns(
-            pd.read_csv(organ_names_file)
-        )
-
-        if {"organ_id", "name"}.issubset(
-            organ_names_df.columns
-        ):
-            source_names = {
-                int(row["organ_id"]): str(row["name"])
-                for _, row in organ_names_df.iterrows()
-                if pd.notna(row["organ_id"])
-                and pd.notna(row["name"])
-            }
+    for phantom_organs in organ_database.ORGANS.values():
+        for organ_id, organ_data in phantom_organs.items():
+            source_names.setdefault(
+                int(organ_id),
+                str(organ_data["name"]),
+            )
 
     selected_source_ids = select_source_organs(
         source_ids,
@@ -1682,10 +1706,15 @@ def main():
                 densities,
             )
 
+            phantom_target_regions = filter_target_regions_for_sex(
+                target_regions,
+                phantom.sex,
+            )
+
             region_samplers = build_region_samplers(
                 mesh,
                 tetra_masses,
-                target_regions,
+                phantom_target_regions,
             )
 
             meshes[phantom.code] = mesh
@@ -1796,6 +1825,11 @@ def main():
                         phantom.code
                     ][source_id]
 
+                    if target_name not in phantom_samplers:
+                        # Sex-specific target region is not present
+                        # in this phantom, so skip this combination.
+                        continue
+
                     target_sampler = phantom_samplers[
                         target_name
                     ]
@@ -1889,26 +1923,31 @@ def main():
                     )
 
         # --------------------------------------------------------------
-        # Save plot for this source region
+        # Save one plot per source-organ/target-region combination.
         # --------------------------------------------------------------
 
-        png_name = (
-            f"source_{source_id}_"
-            f"{safe_filename(source_name)}.png"
-        )
+        for region in target_regions:
+            target_name = region["name"]
 
-        plot_source_clds(
-            source_id,
-            source_name,
-            target_regions,
-            cld_results,
-            output_dir / "png" / png_name,
-        )
+            png_name = (
+                f"source_{source_id}__"
+                f"target_{safe_filename(target_name)}.png"
+            )
 
-        print(
-            f"\nSaved plot:\n"
-            f"  {output_dir / 'png' / png_name}"
-        )
+            png_file = output_dir / "png" / png_name
+
+            plot_source_clds(
+                source_id,
+                source_name,
+                target_name,
+                cld_results,
+                png_file,
+            )
+
+            print(
+                f"\nSaved plot:\n"
+                f"  {png_file}"
+            )
 
     # --------------------------------------------------------------
     # Save summary

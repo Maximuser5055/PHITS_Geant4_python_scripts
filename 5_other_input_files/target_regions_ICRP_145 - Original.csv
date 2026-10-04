@@ -47,6 +47,7 @@ Basal cells of posterior nasal passages + pharynx,ET2-bas,402
 Extrathoracic lymph nodes,LN-ET,10000
 Bronchi basal cells,Bronch-bas,804_805
 Bronchi secretory cells,Bronch-sec,803_804
+Bronchiolar secretory cells,Brchiol-sec,813
 Alveolar-interstitium,AI,9700_9900
 Thoracic lymph nodes,LN-Th,10100
 Right lung lobe,RLung,9900
