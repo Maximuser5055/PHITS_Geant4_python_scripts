@@ -30,6 +30,7 @@ __pycache__/
 2_phits/generated_inputs/**/*.node
 2_phits/generated_inputs/**/*.ele
 3_geant4/phantoms/
+4_results/chord_length_distributions/
 
 # Keep these files
 !.gitignore
