@@ -56,42 +56,90 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-# Journal figure typography.
-# Elsevier recommends Arial (or Helvetica) for artwork.  This script uses
-# Arial and embeds the TrueType font in the PDF when an Arial installation is
-# available on the machine running the script.
+# Preferred journal font. Arial is used whenever it is available.
 JOURNAL_FONT = "Arial"
 
-plt.rcParams.update({
-    "font.family": JOURNAL_FONT,
-    "font.size": 9,
-    "axes.labelsize": 9,
-    "xtick.labelsize": 8,
-    "ytick.labelsize": 8,
-    "legend.fontsize": 7.5,
+# Linux/WSL fallbacks used only when Arial is unavailable. For final journal
+# submission, install/use Arial and regenerate the figures.
+FONT_FALLBACKS = (
+    "Liberation Sans",
+    "DejaVu Sans",
+)
 
-    # Embed TrueType fonts in vector PDF output.
-    "pdf.fonttype": 42,
-    "ps.fonttype": 42,
-})
 from matplotlib.lines import Line2D
 from matplotlib import font_manager
 
-def validate_journal_font() -> None:
-    """Ensure the required journal font is installed before plotting."""
+
+def configure_journal_font() -> str:
+    """Select an installed sans-serif font, preferring Arial."""
+    selected_font = None
+
+    # Arial already registered with Matplotlib.
     try:
         font_manager.findfont(
             JOURNAL_FONT,
             fallback_to_default=False,
         )
-    except ValueError as exc:
-        raise RuntimeError(
-            f"{JOURNAL_FONT!r} was not found. Install Arial on the "
-            "machine running this script, or change JOURNAL_FONT to "
-            "'Helvetica' if that is the font available in your "
-            "environment."
-        ) from exc
+        selected_font = JOURNAL_FONT
+    except ValueError:
+        pass
 
+    # In WSL, Windows fonts are commonly accessible here.
+    if selected_font is None:
+        windows_font_dir = Path("/mnt/c/Windows/Fonts")
+        arial_candidates = [
+            windows_font_dir / "arial.ttf",
+            windows_font_dir / "Arial.ttf",
+            windows_font_dir / "ARIAL.TTF",
+        ]
+
+        for font_file in arial_candidates:
+            if font_file.is_file():
+                font_manager.fontManager.addfont(str(font_file))
+                selected_font = JOURNAL_FONT
+                break
+
+    # Portable Linux fallbacks.
+    if selected_font is None:
+        for fallback in FONT_FALLBACKS:
+            try:
+                font_manager.findfont(
+                    fallback,
+                    fallback_to_default=False,
+                )
+                selected_font = fallback
+                break
+            except ValueError:
+                continue
+
+    if selected_font is None:
+        raise RuntimeError(
+            "No suitable journal sans-serif font was found. "
+            "Install Arial, Liberation Sans, or DejaVu Sans."
+        )
+
+    if selected_font != JOURNAL_FONT:
+        print(
+            f"WARNING: {JOURNAL_FONT!r} was not found. "
+            f"Using {selected_font!r} for this run. "
+            f"For final journal submission, install Arial and "
+            f"regenerate the PDF/TIFF figures."
+        )
+
+    plt.rcParams.update({
+        "font.family": selected_font,
+        "font.size": 9,
+        "axes.labelsize": 9,
+        "xtick.labelsize": 8,
+        "ytick.labelsize": 8,
+        "legend.fontsize": 7.5,
+
+        # Embed TrueType fonts in vector PDF output.
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+    })
+
+    return selected_font
 
 import b_config.a_config as config
 from b_config import b_phantom_registry as registry
@@ -1674,9 +1722,10 @@ def validate_phantom_files(
 
 def main():
 
-    validate_journal_font()
+    selected_font = configure_journal_font()
 
     print()
+    print(f"Figure font: {selected_font}")
     print("=" * 70)
     print("CHORD-LENGTH DISTRIBUTION CALCULATION")
     print("=" * 70)
