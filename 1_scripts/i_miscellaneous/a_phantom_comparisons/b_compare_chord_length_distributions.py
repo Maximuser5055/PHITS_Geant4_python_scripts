@@ -154,7 +154,7 @@ from c_database import b_organ_database as organ_database
 # Registry group codes to compare.
 # Phantom file paths are NOT hard-coded here.
 PHANTOM_GROUPS_TO_COMPARE = [
-    "MRCP_AF_AM_Filipino",
+    "MRCP_AF_AM",
     "MRCP_AF_AM_Filipino_Resized",
 ]
 
@@ -435,6 +435,30 @@ def load_target_regions(target_region_file: Path) -> list[dict]:
         )
 
     return regions
+
+
+def merge_gonads_target_regions(target_regions: list[dict]) -> list[dict]:
+    """Combine testes and ovary target-region entries into one Gonads region."""
+    gonad_ids = []
+    merged = []
+
+    for region in target_regions:
+        name = str(region["name"]).strip().lower()
+        if "test" in name or "ovar" in name:
+            for organ_id in region["ids"]:
+                if organ_id not in gonad_ids:
+                    gonad_ids.append(organ_id)
+        else:
+            merged.append(region)
+
+    if gonad_ids:
+        merged.append({
+            "name": "Gonads",
+            "acronym": "Gonads",
+            "ids": tuple(gonad_ids),
+        })
+
+    return merged
 
 
 # ======================================================================
@@ -1394,7 +1418,7 @@ def existing_cld_csvs(
     output_dir: Path,
     resolved_groups: dict[str, list[PhantomInfo]],
     source_ids: list[int],
-    target_regions: list[dict],
+    target_regions_by_group: dict[str, list[dict]],
 ) -> dict[tuple[str, str, int, str], Path]:
     """
     Find existing CLD CSVs for the requested source/target combinations.
@@ -1406,9 +1430,10 @@ def existing_cld_csvs(
     existing = {}
 
     for group_name, phantoms in resolved_groups.items():
+        group_target_regions = target_regions_by_group[group_name]
         for phantom in phantoms:
             phantom_target_regions = filter_target_regions_for_sex(
-                target_regions,
+                group_target_regions,
                 phantom.sex,
             )
 
@@ -1418,7 +1443,7 @@ def existing_cld_csvs(
             }
 
             for source_id in source_ids:
-                for target_region in target_regions:
+                for target_region in group_target_regions:
                     target_name = target_region["name"]
 
                     # Sex-specific target regions are not expected for a
@@ -1450,7 +1475,7 @@ def inspect_cld_csv_status(
     output_dir: Path,
     resolved_groups: dict[str, list[PhantomInfo]],
     source_ids: list[int],
-    target_regions: list[dict],
+    target_regions_by_group: dict[str, list[dict]],
 ) -> tuple[
     set[tuple[str, str, int, str]],
     list[tuple[str, str, int, str]],
@@ -1467,15 +1492,16 @@ def inspect_cld_csv_status(
         output_dir,
         resolved_groups,
         source_ids,
-        target_regions,
+        target_regions_by_group,
     )
 
     expected_keys = []
 
     for group_name, phantoms in resolved_groups.items():
+        group_target_regions = target_regions_by_group[group_name]
         for phantom in phantoms:
             phantom_target_regions = filter_target_regions_for_sex(
-                target_regions,
+                group_target_regions,
                 phantom.sex,
             )
 
@@ -2338,27 +2364,32 @@ def main():
         source_csv
     )
 
-    # Resolve the target-region file through the phantom registry.
-    target_region_file = registry.get_target_region_file(
-        PHANTOM_GROUPS_TO_COMPARE[0]
-    )
-
-    # All comparison groups must use the same target-region mapping.
+    # Each phantom group uses its own target-region mapping from the registry.
+    # The mappings do not need to be identical.
+    target_regions_by_group_code: dict[str, list[dict]] = {}
     for group_code in PHANTOM_GROUPS_TO_COMPARE:
-        group_target_file = registry.get_target_region_file(
-            group_code
+        target_region_file = registry.get_target_region_file(group_code)
+        target_regions_by_group_code[group_code] = merge_gonads_target_regions(
+            load_target_regions(Path(target_region_file))
         )
 
-        if Path(group_target_file) != Path(target_region_file):
-            raise ValueError(
-                "The selected phantom groups use different "
-                "target-region files. The current CLD calculation "
-                "expects one common source-target mapping."
-            )
+    # Resolve groups so target-region definitions can use the same display
+    # names as cld_results.
+    resolved_groups = resolve_phantoms(registry)
+    target_regions_by_group = {
+        registry.PHANTOM_GROUPS[group_code].display_name:
+        target_regions_by_group_code[group_code]
+        for group_code in PHANTOM_GROUPS_TO_COMPARE
+    }
 
-    target_regions = load_target_regions(
-        Path(target_region_file)
-    )
+    # Union of target-region names is used only for plotting/summary ordering.
+    target_regions = []
+    target_names_seen = set()
+    for regions in target_regions_by_group.values():
+        for region in regions:
+            if region["name"] not in target_names_seen:
+                target_regions.append(region)
+                target_names_seen.add(region["name"])
 
     # Source-organ names are taken from c_database.b_organ_database.py.
     # SOURCE_CSV remains the authoritative source of the selected organ IDs.
@@ -2376,12 +2407,9 @@ def main():
     selected_source_ids = source_ids
 
     # --------------------------------------------------------------
-    # Resolve phantom groups
+    # Validate resolved phantom files
     # --------------------------------------------------------------
 
-    resolved_groups = resolve_phantoms(registry)
-
-    # Both phantom groups use the user-supplied target-region mapping.
     validate_phantom_files(
         resolved_groups
     )
@@ -2394,7 +2422,7 @@ def main():
         output_dir,
         resolved_groups,
         selected_source_ids,
-        target_regions,
+        target_regions_by_group,
     )
 
     total_expected = len(existing_keys) + len(missing_keys)
@@ -2522,7 +2550,7 @@ def main():
         output_dir,
         resolved_groups,
         selected_source_ids,
-        target_regions,
+        target_regions_by_group,
     )
 
     # In redo mode, do not load the existing results because every
@@ -2574,8 +2602,16 @@ def main():
                 densities,
             )
 
+            group_code_for_phantom = next(
+                group_code
+                for group_code in PHANTOM_GROUPS_TO_COMPARE
+                if phantom.code in registry.get_phantom_group(group_code)
+            )
+            group_name_for_phantom = registry.PHANTOM_GROUPS[
+                group_code_for_phantom
+            ].display_name
             phantom_target_regions = filter_target_regions_for_sex(
-                target_regions,
+                target_regions_by_group[group_name_for_phantom],
                 phantom.sex,
             )
 
@@ -2645,9 +2681,11 @@ def main():
                 f"Phantom group: {group_name}"
             )
 
+            group_target_regions = target_regions_by_group[group_name]
+
             # Ensure every target dictionary exists, including those
             # loaded from pre-existing CSVs.
-            for target_region in target_regions:
+            for target_region in group_target_regions:
                 target_name = target_region["name"]
                 cld_results.setdefault(
                     group_name,
@@ -2657,7 +2695,7 @@ def main():
                     {},
                 )
 
-            for target_region in target_regions:
+            for target_region in group_target_regions:
 
                 target_name = target_region["name"]
 
@@ -2796,6 +2834,12 @@ def main():
             # Add every available phantom result for this
             # source/target pair to the summary.
             for group_name, phantoms in resolved_groups.items():
+                if target_name not in {
+                    region["name"]
+                    for region in target_regions_by_group[group_name]
+                }:
+                    continue
+
                 for phantom in phantoms:
                     result = (
                         cld_results

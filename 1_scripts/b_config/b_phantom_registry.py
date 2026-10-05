@@ -177,7 +177,7 @@ PHANTOM_GROUPS = {
             "MRCP_AM",
         ),
         skeletal_ids=config.ICRP145_SKELETAL_IDS,
-         target_region_file=config.OTHER_INPUT_FILES_DIR / "target_regions_ICRP145.csv"
+         target_region_file=config.OTHER_INPUT_FILES_DIR / "target_regions_ICRP_145.csv"
     ),
 
     "MRCP_AF_AM_Filipino_Resized": PhantomGroupSpec(
