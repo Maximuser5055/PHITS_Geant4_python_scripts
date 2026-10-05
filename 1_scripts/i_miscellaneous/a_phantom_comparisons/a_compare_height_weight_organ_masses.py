@@ -254,14 +254,8 @@ def read_node_file(filename):
                 float(parts[3]),
             ]
 
-    if NODE_UNIT == "mm":
-        coordinates /= 10.0
-    elif NODE_UNIT == "m":
-        coordinates *= 100.0
-    elif NODE_UNIT != "cm":
-        raise ValueError(
-            "NODE_UNIT must be 'mm', 'cm', or 'm'."
-        )
+    if NODE_UNIT != "cm":
+        raise ValueError("NODE_UNIT must be 'cm'.")
 
     return coordinates
 

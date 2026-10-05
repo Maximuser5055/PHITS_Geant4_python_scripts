@@ -182,6 +182,10 @@ NODE_UNIT = "cm"
 FIGURE_WIDTH_MM = 70.0
 FIGURE_WIDTH = FIGURE_WIDTH_MM / 25.4
 
+# Round each x-axis maximum upward to the nearest 50 mm.
+# Examples: 1723 mm -> 1750 mm, 1895 mm -> 1900 mm.
+PLOT_X_ROUNDING_MM = 50.0
+
 # Calculate CLDs for all source organs. Plot selection is handled separately
 # after the CSV results have been generated.
 ASK_SOURCE_SELECTION = False
@@ -438,18 +442,61 @@ def load_target_regions(target_region_file: Path) -> list[dict]:
 
 
 def merge_gonads_target_regions(target_regions: list[dict]) -> list[dict]:
-    """Combine testes and ovary target-region entries into one Gonads region."""
-    gonad_ids = []
+    """
+    Keep separate Testes and Ovaries target regions and also add a combined
+    Gonads region.
+
+    The source target-region files are allowed to use either:
+        - Testes / LOvary / ROvary
+        - Testes / Ovaries
+
+    If only left/right ovary entries are present, they are combined into the
+    canonical ``Ovaries`` target region.  The original Testes and Ovaries
+    regions are retained, and ``Gonads`` is added as their union.
+    """
+    testes_ids = []
+    ovary_ids = []
     merged = []
+    has_ovaries_region = False
 
     for region in target_regions:
-        name = str(region["name"]).strip().lower()
-        if "test" in name or "ovar" in name:
+        name = str(region["name"]).strip()
+        name_lower = name.lower()
+
+        if "test" in name_lower:
             for organ_id in region["ids"]:
-                if organ_id not in gonad_ids:
-                    gonad_ids.append(organ_id)
+                if organ_id not in testes_ids:
+                    testes_ids.append(organ_id)
+            # Keep the separate Testes region.
+            merged.append(region)
+
+        elif "ovar" in name_lower:
+            for organ_id in region["ids"]:
+                if organ_id not in ovary_ids:
+                    ovary_ids.append(organ_id)
+
+            # Keep an existing compound Ovaries region, but do not also keep
+            # separate LOvary/ROvary entries in the plot-selection list.
+            if name_lower == "ovaries":
+                has_ovaries_region = True
+                merged.append(region)
+
         else:
             merged.append(region)
+
+    # If the target file only contains LOvary/ROvary, create one canonical
+    # Ovaries region so the plot selection is consistent across target files.
+    if ovary_ids and not has_ovaries_region:
+        merged.append({
+            "name": "Ovaries",
+            "acronym": "Ovaries",
+            "ids": tuple(ovary_ids),
+        })
+
+    gonad_ids = []
+    for organ_id in (*testes_ids, *ovary_ids):
+        if organ_id not in gonad_ids:
+            gonad_ids.append(organ_id)
 
     if gonad_ids:
         merged.append({
@@ -471,11 +518,11 @@ def merge_gonads_target_regions(target_regions: list[dict]) -> list[dict]:
 SEX_EXCLUDED_ORGAN_IDS = {
     "AF": {
         11500,       # Prostate
-        12900, 13000, # Testes
+        12900, 13000 # Testes
     },
     "AM": {
         11100, 11200, # Ovaries
-        13900,        # Uterus/cervix
+        13900         # Uterus/cervix
     },
 }
 
@@ -614,15 +661,7 @@ def read_node_file(filename: Path) -> np.ndarray:
     if NODE_UNIT == "cm":
         return coordinates
 
-    if NODE_UNIT == "mm":
-        return coordinates / 10.0
-
-    if NODE_UNIT == "m":
-        return coordinates * 100.0
-
-    raise ValueError(
-        "NODE_UNIT must be 'mm', 'cm', or 'm'."
-    )
+    raise ValueError("NODE_UNIT must be 'cm'.")
 
 
 def read_ele_file(
@@ -1672,9 +1711,9 @@ def load_existing_cld_results(
             target_name,
         )
 
-        cld_results.setdefault(group_name, {})
-        cld_results[group_name].setdefault(target_name, {})
-        cld_results[group_name][target_name][phantom_code] = result
+        cld_results[group_name].setdefault(source_id, {})
+        cld_results[group_name][source_id].setdefault(target_name, {})
+        cld_results[group_name][source_id][target_name][phantom_code] = result
 
     return cld_results
 
@@ -1682,6 +1721,25 @@ def load_existing_cld_results(
 # ======================================================================
 # PLOTTING
 # ======================================================================
+def plot_x_axis_limit(
+    results: list[dict],
+) -> float:
+    """Return an automatic x-axis maximum rounded up to the nearest 50 mm."""
+
+    finite_maxima = []
+    for result in results:
+        distances = np.asarray(result["distance_mm"], dtype=float)
+        finite_distances = distances[np.isfinite(distances)]
+        if finite_distances.size:
+            finite_maxima.append(float(finite_distances.max()))
+
+    if not finite_maxima:
+        return PLOT_X_ROUNDING_MM
+
+    data_max = max(finite_maxima)
+    return math.ceil(data_max / PLOT_X_ROUNDING_MM) * PLOT_X_ROUNDING_MM
+
+
 def plot_selected_clds(
     plot_pairs: list[tuple[int, str]],
     source_names: dict[int, str],
@@ -1789,6 +1847,7 @@ def plot_selected_clds(
 
         subplot_handles = []
         statistics_labels = []
+        subplot_results = []
 
         for (
             group_name,
@@ -1796,10 +1855,21 @@ def plot_selected_clds(
             phantom,
         ) in ordered_phantoms:
 
+            # Gonads is a display target. For each phantom, plot the
+            # sex-specific CSV that actually represents that phantom:
+            # female -> Ovaries, male -> Testes. Do not plot a mixed
+            # Ovaries+Testes distribution under the Gonads label.
+            csv_target_region = target_region
+            if target_region == "Gonads":
+                csv_target_region = (
+                    "Ovaries" if phantom.sex == "AF" else "Testes"
+                )
+
             result = (
                 cld_results
                 .get(group_name, {})
-                .get(target_region, {})
+                .get(source_id, {})
+                .get(csv_target_region, {})
                 .get(phantom_code)
             )
 
@@ -1815,6 +1885,7 @@ def plot_selected_clds(
             )
 
             subplot_handles.append(line)
+            subplot_results.append(result)
             statistics_labels.append(
                 f"{result['mean_mm']:.2f} ± "
                 f"{result['std_mm']:.2f} mm"
@@ -1843,6 +1914,13 @@ def plot_selected_clds(
             ha="left",
             va="top",
             fontsize=7,
+        )
+
+        # Set the x-axis automatically from the largest sampled distance,
+        # rounded upward to the nearest 50 mm.
+        axis.set_xlim(
+            0.0,
+            plot_x_axis_limit(subplot_results),
         )
 
         axis.grid(
@@ -1991,12 +2069,35 @@ def available_plot_pairs(
 
             found = False
 
-            for group_name in cld_results:
-                entries = (
-                    cld_results
-                    .get(group_name, {})
-                    .get(target_name, {})
-                )
+            for group_name, group_results in cld_results.items():
+                if target_name == "Gonads":
+                    # A Gonads plot is available when at least one
+                    # sex-appropriate Ovaries/Testes CSV exists.
+                    entries = {}
+
+                    for phantom_code, result in (
+                        group_results
+                        .get(source_id, {})
+                        .get("Ovaries", {})
+                        .items()
+                    ):
+                        if result["phantom"].sex == "AF":
+                            entries[phantom_code] = result
+
+                    for phantom_code, result in (
+                        group_results
+                        .get(source_id, {})
+                        .get("Testes", {})
+                        .items()
+                    ):
+                        if result["phantom"].sex == "AM":
+                            entries[phantom_code] = result
+                else:
+                    entries = (
+                        group_results
+                        .get(source_id, {})
+                        .get(target_name, {})
+                    )
 
                 if entries:
                     found = True
@@ -2452,7 +2553,7 @@ def main():
                 output_dir,
                 resolved_groups,
                 selected_source_ids,
-                target_regions,
+                target_regions_by_group,
             )
 
             cld_results = load_existing_cld_results(
@@ -2469,9 +2570,16 @@ def main():
                 target_name,
             ), csv_file in existing_files.items():
 
-                result = cld_results[
-                    group_name
-                ][target_name][phantom_code]
+                result = (
+                    cld_results
+                    .get(group_name, {})
+                    .get(source_id, {})
+                    .get(target_name, {})
+                    .get(phantom_code)
+                )
+
+                if result is None:
+                    continue
 
                 phantom = result["phantom"]
                 source_name = source_names.get(
@@ -2691,6 +2799,9 @@ def main():
                     group_name,
                     {},
                 ).setdefault(
+                    source_id,
+                    {},
+                ).setdefault(
                     target_name,
                     {},
                 )
@@ -2779,9 +2890,16 @@ def main():
                         seed,
                     )
 
-                    cld_results[group_name][
-                        target_name
-                    ][phantom.code] = {
+                    cld_results.setdefault(
+                        group_name,
+                        {},
+                    ).setdefault(
+                        source_id,
+                        {},
+                    ).setdefault(
+                        target_name,
+                        {},
+                    )[phantom.code] = {
                         "phantom": phantom,
                         "distance_mm": distances_mm,
                         "relative_number": relative_number,
@@ -2844,6 +2962,7 @@ def main():
                     result = (
                         cld_results
                         .get(group_name, {})
+                        .get(source_id, {})
                         .get(target_name, {})
                         .get(phantom.code)
                     )
