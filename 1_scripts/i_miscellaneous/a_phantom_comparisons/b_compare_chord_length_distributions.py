@@ -287,13 +287,60 @@ def clean_columns(df: pd.DataFrame) -> pd.DataFrame:
 # ======================================================================
 # SOURCE / TARGET CSV
 # ======================================================================
+# Source regions use the same compound-region representation as targets:
+# one region can contain one or more organ IDs, stored in `ids`.
 
-def load_source_organs(source_csv: Path) -> list[int]:
+
+def parse_region_ids(
+    ids_text: str,
+    region_name: str,
+    row_number: int,
+    source_or_target: str,
+) -> tuple[int, ...]:
+    """Parse underscore-separated organ IDs from a region definition."""
+    ids = []
+
+    for value in str(ids_text).split("_"):
+        value = value.strip()
+
+        if not value:
+            continue
+
+        try:
+            ids.append(int(float(value)))
+        except ValueError as exc:
+            raise ValueError(
+                f"Invalid organ ID '{value}' for '{region_name}' "
+                f"at row {row_number} in the {source_or_target}-region file."
+            ) from exc
+
+    if not ids:
+        raise ValueError(
+            f"No valid organ IDs for '{region_name}' "
+            f"at row {row_number} in the {source_or_target}-region file."
+        )
+
+    # Remove accidental duplicate IDs while preserving the CSV order.
+    return tuple(dict.fromkeys(ids))
+
+
+def load_source_regions(source_csv: Path) -> list[dict]:
     """
-    Load source-organ IDs from SOURCE_CSV.
+    Load source-region definitions.
 
-    The existing project uses the column:
+    Preferred source CSV columns:
+        Source region
+        Acronym
+        ID number(s)
+
+    IDs are underscore-separated, e.g.:
+        12000_12100
+        10000_10100_10200_10300_10400_10500
+
+    For backward compatibility, a CSV containing only:
         source_organ_ID
+    is also accepted. Each ID becomes a one-ID source region whose key is
+    the numeric ID as a string.
     """
 
     if not source_csv.is_file():
@@ -303,31 +350,120 @@ def load_source_organs(source_csv: Path) -> list[int]:
 
     df = clean_columns(pd.read_csv(source_csv))
 
-    if "source_organ_ID" not in df.columns:
-        raise ValueError(
-            f"Column 'source_organ_ID' was not found in:\n{source_csv}\n"
-            f"Available columns: {list(df.columns)}"
-        )
+    compound_columns = [
+        "Source region",
+        "Acronym",
+        "ID number(s)",
+    ]
 
-    source_ids = []
+    if all(column in df.columns for column in compound_columns):
+        regions = []
 
-    for value in df["source_organ_ID"].dropna():
-        try:
-            source_id = int(float(str(value).strip()))
-        except ValueError as exc:
+        for row_number, (_, row) in enumerate(df.iterrows(), start=2):
+            if pd.isna(row["Source region"]):
+                continue
+
+            name = str(row["Source region"]).strip()
+            acronym = (
+                str(row["Acronym"]).strip()
+                if pd.notna(row["Acronym"])
+                else ""
+            )
+            ids_text = (
+                str(row["ID number(s)"]).strip()
+                if pd.notna(row["ID number(s)"])
+                else ""
+            )
+
+            if not name:
+                raise ValueError(
+                    f"Empty 'Source region' at row {row_number} "
+                    f"in {source_csv}."
+                )
+
+            if not ids_text:
+                raise ValueError(
+                    f"Empty 'ID number(s)' for '{name}' "
+                    f"at row {row_number} in {source_csv}."
+                )
+
+            ids = parse_region_ids(
+                ids_text,
+                name,
+                row_number,
+                "source",
+            )
+
+            # The acronym is the stable internal key when available;
+            # otherwise the source-region name is used.
+            key = acronym or name
+
+            if any(existing["key"] == key for existing in regions):
+                raise ValueError(
+                    f"Duplicate source-region key '{key}' in {source_csv}. "
+                    "Use unique values in the 'Acronym' column."
+                )
+
+            regions.append(
+                {
+                    "key": key,
+                    "name": name,
+                    "acronym": acronym,
+                    "ids": ids,
+                }
+            )
+
+        if not regions:
             raise ValueError(
-                f"Invalid source organ ID '{value}' in {source_csv}."
-            ) from exc
+                f"No source regions were found in {source_csv}."
+            )
 
-        if source_id not in source_ids:
-            source_ids.append(source_id)
+        return regions
 
-    if not source_ids:
-        raise ValueError(
-            f"No source-organ IDs were found in {source_csv}."
+    # Backward-compatible support for the previous one-ID format.
+    if "source_organ_ID" in df.columns:
+        regions = []
+        seen_ids = set()
+
+        for value in df["source_organ_ID"].dropna():
+            try:
+                source_key = int(float(str(value).strip()))
+            except ValueError as exc:
+                raise ValueError(
+                    f"Invalid source organ ID '{value}' in {source_csv}."
+                ) from exc
+
+            if source_key in seen_ids:
+                continue
+
+            seen_ids.add(source_key)
+            regions.append(
+                {
+                    "key": str(source_key),
+                    "name": "",
+                    "acronym": str(source_key),
+                    "ids": (source_key,),
+                }
+            )
+
+        if not regions:
+            raise ValueError(
+                f"No source-organ IDs were found in {source_csv}."
+            )
+
+        print(
+            "WARNING: SOURCE_CSV is using the legacy 'source_organ_ID' "
+            "format. Compound source regions require the columns "
+            "'Source region', 'Acronym', and 'ID number(s)'."
         )
 
-    return source_ids
+        return regions
+
+    raise ValueError(
+        f"SOURCE_CSV must contain either the compound source-region columns "
+        f"{compound_columns} or the legacy column 'source_organ_ID'.\n"
+        f"Available columns: {list(df.columns)}"
+    )
 
 
 def load_target_regions(target_region_file: Path) -> list[dict]:
@@ -1354,7 +1490,7 @@ def safe_filename(text: str) -> str:
 def save_cld_csv(
     output_file: Path,
     phantom: PhantomInfo,
-    source_id: int,
+    source_region: dict,
     target_region: str,
     distances_mm: np.ndarray,
     relative_number: np.ndarray,
@@ -1368,6 +1504,11 @@ def save_cld_csv(
         exist_ok=True,
     )
 
+    source_ids_text = "_".join(
+        str(organ_id)
+        for organ_id in source_region["ids"]
+    )
+
     df = pd.DataFrame(
         {
             "Phantom": phantom.display_name,
@@ -1377,7 +1518,9 @@ def save_cld_csv(
                 if phantom.sex == "AM"
                 else "Female"
             ),
-            "Source Organ ID": source_id,
+            "Source Region": source_region["name"],
+            "Source Acronym": source_region["acronym"],
+            "Source Organ ID(s)": source_ids_text,
             "Target Region": target_region,
             "Distance (mm)": distances_mm,
             "Relative Number": relative_number,
@@ -1387,13 +1530,15 @@ def save_cld_csv(
     )
 
     # The phantom/source/target metadata and the summary statistics are
-    # constant for the entire CLD.  Keep them only on the first row so
+    # constant for the entire CLD. Keep them only on the first row so
     # the CSV is easier to read without changing the distance distribution.
     repeated_columns = [
         "Phantom",
         "Phantom Code",
         "Sex",
-        "Source Organ ID",
+        "Source Region",
+        "Source Acronym",
+        "Source Organ ID(s)",
         "Target Region",
         "Mean Chord Length (mm)",
         "Standard Deviation (mm)",
@@ -1422,7 +1567,7 @@ def save_summary_csv(
     if not df.empty:
         df = df.sort_values(
             [
-                "Source Organ ID",
+                "Source Region",
                 "Target Region",
                 "Phantom",
             ]
@@ -1434,18 +1579,23 @@ def save_summary_csv(
     )
 
 
-
 def cld_csv_path(
     output_dir: Path,
     phantom_code: str,
-    source_id: int,
+    source_region: dict,
     target_region: str,
 ) -> Path:
     """Return the expected CSV path for one phantom/source/target CLD."""
 
+    source_label = (
+        source_region["acronym"]
+        or source_region["name"]
+        or "_".join(map(str, source_region["ids"]))
+    )
+
     csv_name = (
         f"{safe_filename(phantom_code)}_"
-        f"source_{source_id}_"
+        f"source_{safe_filename(source_label)}_"
         f"target_{safe_filename(target_region)}_"
         f"cld.csv"
     )
@@ -1456,20 +1606,23 @@ def cld_csv_path(
 def existing_cld_csvs(
     output_dir: Path,
     resolved_groups: dict[str, list[PhantomInfo]],
-    source_ids: list[int],
+    source_regions: list[dict],
     target_regions_by_group: dict[str, list[dict]],
-) -> dict[tuple[str, str, int, str], Path]:
+) -> dict[tuple[str, str, str, str], Path]:
     """
     Find existing CLD CSVs for the requested source/target combinations.
 
     The key is:
-        (group_name, phantom_code, source_id, target_region)
+        (group_name, phantom_code, source_key, target_region)
+
+    A source region can contain one or many organ IDs.
     """
 
     existing = {}
 
     for group_name, phantoms in resolved_groups.items():
         group_target_regions = target_regions_by_group[group_name]
+
         for phantom in phantoms:
             phantom_target_regions = filter_target_regions_for_sex(
                 group_target_regions,
@@ -1481,19 +1634,19 @@ def existing_cld_csvs(
                 for region in phantom_target_regions
             }
 
-            for source_id in source_ids:
+            for source_region in source_regions:
+                source_key = source_region["key"]
+
                 for target_region in group_target_regions:
                     target_name = target_region["name"]
 
-                    # Sex-specific target regions are not expected for a
-                    # phantom that does not contain those organs.
                     if target_name not in valid_target_names:
                         continue
 
                     csv_file = cld_csv_path(
                         output_dir,
                         phantom.code,
-                        source_id,
+                        source_region,
                         target_name,
                     )
 
@@ -1502,7 +1655,7 @@ def existing_cld_csvs(
                             (
                                 group_name,
                                 phantom.code,
-                                source_id,
+                                source_key,
                                 target_name,
                             )
                         ] = csv_file
@@ -1513,11 +1666,11 @@ def existing_cld_csvs(
 def inspect_cld_csv_status(
     output_dir: Path,
     resolved_groups: dict[str, list[PhantomInfo]],
-    source_ids: list[int],
+    source_regions: list[dict],
     target_regions_by_group: dict[str, list[dict]],
 ) -> tuple[
-    set[tuple[str, str, int, str]],
-    list[tuple[str, str, int, str]],
+    set[tuple[str, str, str, str]],
+    list[tuple[str, str, str, str]],
 ]:
     """
     Check which expected CLD CSVs already exist.
@@ -1530,7 +1683,7 @@ def inspect_cld_csv_status(
     existing = existing_cld_csvs(
         output_dir,
         resolved_groups,
-        source_ids,
+        source_regions,
         target_regions_by_group,
     )
 
@@ -1538,19 +1691,22 @@ def inspect_cld_csv_status(
 
     for group_name, phantoms in resolved_groups.items():
         group_target_regions = target_regions_by_group[group_name]
+
         for phantom in phantoms:
             phantom_target_regions = filter_target_regions_for_sex(
                 group_target_regions,
                 phantom.sex,
             )
 
-            for source_id in source_ids:
+            for source_region in source_regions:
+                source_key = source_region["key"]
+
                 for target_region in phantom_target_regions:
                     expected_keys.append(
                         (
                             group_name,
                             phantom.code,
-                            source_id,
+                            source_key,
                             target_region["name"],
                         )
                     )
@@ -1598,7 +1754,7 @@ def ask_existing_results_action(
 def load_cld_csv(
     csv_file: Path,
     phantom: PhantomInfo,
-    source_id: int,
+    source_key: str,
     target_region: str,
 ) -> dict:
     """
@@ -1677,7 +1833,7 @@ def load_cld_csv(
 
 
 def load_existing_cld_results(
-    existing_files: dict[tuple[str, str, int, str], Path],
+    existing_files: dict[tuple[str, str, str, str], Path],
     resolved_groups: dict[str, list[PhantomInfo]],
 ) -> dict:
     """
@@ -1698,7 +1854,7 @@ def load_existing_cld_results(
     for (
         group_name,
         phantom_code,
-        source_id,
+        source_key,
         target_name,
     ), csv_file in existing_files.items():
 
@@ -1707,13 +1863,13 @@ def load_existing_cld_results(
         result = load_cld_csv(
             csv_file,
             phantom,
-            source_id,
+            source_key,
             target_name,
         )
 
-        cld_results[group_name].setdefault(source_id, {})
-        cld_results[group_name][source_id].setdefault(target_name, {})
-        cld_results[group_name][source_id][target_name][phantom_code] = result
+        cld_results[group_name].setdefault(source_key, {})
+        cld_results[group_name][source_key].setdefault(target_name, {})
+        cld_results[group_name][source_key][target_name][phantom_code] = result
 
     return cld_results
 
@@ -1742,7 +1898,7 @@ def plot_x_axis_limit(
 
 def plot_selected_clds(
     plot_pairs: list[tuple[int, str]],
-    source_names: dict[int, str],
+    source_names: dict[str, str],
     cld_results: dict,
     output_file: Path,
     n_rows: int,
@@ -1836,13 +1992,13 @@ def plot_selected_clds(
     used_handles = []
     used_labels = []
 
-    for axis, (source_id, target_region) in zip(
+    for axis, (source_key, target_region) in zip(
         axes,
         plot_pairs,
     ):
         source_name = source_names.get(
-            source_id,
-            f"Organ {source_id}",
+            source_key,
+            f"Organ {source_key}",
         )
 
         subplot_handles = []
@@ -1868,7 +2024,7 @@ def plot_selected_clds(
             result = (
                 cld_results
                 .get(group_name, {})
-                .get(source_id, {})
+                .get(source_key, {})
                 .get(csv_target_region, {})
                 .get(phantom_code)
             )
@@ -1899,8 +2055,8 @@ def plot_selected_clds(
         # organs are selected, include the source name as well so every
         # panel remains unambiguous.
         if len({
-            source_id
-            for source_id, _ in plot_pairs
+            source_key
+            for source_key, _ in plot_pairs
         }) == 1:
             panel_label = target_region
         else:
@@ -1950,16 +2106,16 @@ def plot_selected_clds(
     # If all selected panels use the same source organ, show one concise
     # title such as "Source: Liver". If multiple source organs are selected,
     # list them together so the title remains unambiguous.
-    selected_source_ids = list(dict.fromkeys(
-        source_id
-        for source_id, _ in plot_pairs
+    selected_source_keys = list(dict.fromkeys(
+        source_key
+        for source_key, _ in plot_pairs
     ))
     selected_source_names = [
         source_names.get(
-            source_id,
-            f"Organ {source_id}",
+            source_key,
+            f"Organ {source_key}",
         )
-        for source_id in selected_source_ids
+        for source_key in selected_source_keys
     ]
 
     source_title = "Source: " + ", ".join(selected_source_names)
@@ -2055,15 +2211,15 @@ def ask_plot_layout() -> tuple[int, int]:
 
 def available_plot_pairs(
     cld_results: dict,
-    source_ids: list[int],
-    source_names: dict[int, str],
+    source_keys: list[str],
+    source_names: dict[str, str],
     target_regions: list[dict],
 ) -> list[tuple[int, str]]:
     """Return source-target pairs for which at least one CLD CSV exists."""
 
     pairs = []
 
-    for source_id in source_ids:
+    for source_key in source_keys:
         for region in target_regions:
             target_name = region["name"]
 
@@ -2077,7 +2233,7 @@ def available_plot_pairs(
 
                     for phantom_code, result in (
                         group_results
-                        .get(source_id, {})
+                        .get(source_key, {})
                         .get("Ovaries", {})
                         .items()
                     ):
@@ -2086,7 +2242,7 @@ def available_plot_pairs(
 
                     for phantom_code, result in (
                         group_results
-                        .get(source_id, {})
+                        .get(source_key, {})
                         .get("Testes", {})
                         .items()
                     ):
@@ -2095,7 +2251,7 @@ def available_plot_pairs(
                 else:
                     entries = (
                         group_results
-                        .get(source_id, {})
+                        .get(source_key, {})
                         .get(target_name, {})
                     )
 
@@ -2106,7 +2262,7 @@ def available_plot_pairs(
             if found:
                 pairs.append(
                     (
-                        source_id,
+                        source_key,
                         target_name,
                     )
                 )
@@ -2116,7 +2272,7 @@ def available_plot_pairs(
 
 def select_plot_pairs(
     pairs: list[tuple[int, str]],
-    source_names: dict[int, str],
+    source_names: dict[str, str],
     n_rows: int,
     n_cols: int,
 ) -> list[tuple[int, str]]:
@@ -2143,16 +2299,16 @@ def select_plot_pairs(
         f"{capacity} plots."
     )
 
-    for index, (source_id, target_name) in enumerate(
+    for index, (source_key, target_name) in enumerate(
         pairs,
         start=1,
     ):
         source_name = source_names.get(
-            source_id,
-            f"Organ {source_id}",
+            source_key,
+            f"Organ {source_key}",
         )
         print(
-            f"[{index}] {source_name} ({source_id}) → "
+            f"[{index}] {source_name} ({source_key}) → "
             f"{target_name}"
         )
 
@@ -2210,8 +2366,8 @@ def select_plot_pairs(
 
 def create_selected_plot_pdf(
     cld_results: dict,
-    source_ids: list[int],
-    source_names: dict[int, str],
+    source_keys: list[str],
+    source_names: dict[str, str],
     target_regions: list[dict],
     output_dir: Path,
 ) -> None:
@@ -2219,7 +2375,7 @@ def create_selected_plot_pdf(
 
     pairs = available_plot_pairs(
         cld_results,
-        source_ids,
+        source_keys,
         source_names,
         target_regions,
     )
@@ -2270,29 +2426,29 @@ def create_selected_plot_pdf(
 # ======================================================================
 
 def select_source_organs(
-    source_ids: list[int],
-    source_names: dict[int, str],
-) -> list[int]:
+    source_keys: list[str],
+    source_names: dict[str, str],
+) -> list[str]:
 
     if not ASK_SOURCE_SELECTION:
-        return source_ids
+        return source_keys
 
     print()
     print("=" * 70)
     print("SOURCE ORGAN SELECTION")
     print("=" * 70)
 
-    for index, source_id in enumerate(
-        source_ids,
+    for index, source_key in enumerate(
+        source_keys,
         start=1,
     ):
         name = source_names.get(
-            source_id,
+            source_key,
             "Unknown",
         )
 
         print(
-            f"[{index}] {source_id} ({name})"
+            f"[{index}] {source_key} ({name})"
         )
 
     print("[A] All source organs")
@@ -2304,7 +2460,7 @@ def select_source_organs(
         ).strip().upper()
 
         if choice == "A":
-            return source_ids
+            return source_keys
 
         try:
             indices = [
@@ -2317,14 +2473,14 @@ def select_source_organs(
 
             if any(
                 index < 0
-                or index >= len(source_ids)
+                or index >= len(source_keys)
                 for index in indices
             ):
                 raise ValueError
 
             selected = list(
                 dict.fromkeys(
-                    source_ids[index]
+                    source_keys[index]
                     for index in indices
                 )
             )
@@ -2461,7 +2617,7 @@ def main():
     # Load source and target definitions
     # --------------------------------------------------------------
 
-    source_ids = load_source_organs(
+    source_regions = load_source_regions(
         source_csv
     )
 
@@ -2492,20 +2648,40 @@ def main():
                 target_regions.append(region)
                 target_names_seen.add(region["name"])
 
-    # Source-organ names are taken from c_database.b_organ_database.py.
-    # SOURCE_CSV remains the authoritative source of the selected organ IDs.
-    source_names: dict[int, str] = {}
+    # SOURCE_CSV is authoritative for source-region names and IDs.
+    # Legacy one-ID source CSVs use the organ database only to recover the
+    # human-readable organ name for plotting/summary output.
+    source_names: dict[str, str] = {}
+    source_regions_by_key = {}
 
-    for phantom_organs in organ_database.ORGANS.values():
-        for organ_id, organ_data in phantom_organs.items():
-            source_names.setdefault(
-                int(organ_id),
-                str(organ_data["name"]),
-            )
+    for source_region in source_regions:
+        source_key = source_region["key"]
+        source_name = source_region["name"]
 
-    # All source organs are always calculated. The user chooses only which
+        if not source_name:
+            source_id = source_region["ids"][0]
+            source_name = None
+
+            for phantom_organs in organ_database.ORGANS.values():
+                for organ_id, organ_data in phantom_organs.items():
+                    if int(organ_id) == source_id:
+                        source_name = str(organ_data["name"])
+                        break
+                if source_name is not None:
+                    break
+
+            if source_name is None:
+                source_name = f"Organ {source_id}"
+
+        source_names[source_key] = source_name
+        source_regions_by_key[source_key] = source_region
+
+    # All source regions are always calculated. The user chooses only which
     # CSV-backed source-target pairs to include in the PDF later.
-    selected_source_ids = source_ids
+    selected_source_keys = [
+        source_region["key"]
+        for source_region in source_regions
+    ]
 
     # --------------------------------------------------------------
     # Validate resolved phantom files
@@ -2522,7 +2698,7 @@ def main():
     existing_keys, missing_keys = inspect_cld_csv_status(
         output_dir,
         resolved_groups,
-        selected_source_ids,
+        source_regions,
         target_regions_by_group,
     )
 
@@ -2552,7 +2728,7 @@ def main():
             existing_files = existing_cld_csvs(
                 output_dir,
                 resolved_groups,
-                selected_source_ids,
+                source_regions,
                 target_regions_by_group,
             )
 
@@ -2566,14 +2742,14 @@ def main():
             for (
                 group_name,
                 phantom_code,
-                source_id,
+                source_key,
                 target_name,
             ), csv_file in existing_files.items():
 
                 result = (
                     cld_results
                     .get(group_name, {})
-                    .get(source_id, {})
+                    .get(source_key, {})
                     .get(target_name, {})
                     .get(phantom_code)
                 )
@@ -2582,10 +2758,8 @@ def main():
                     continue
 
                 phantom = result["phantom"]
-                source_name = source_names.get(
-                    source_id,
-                    f"Organ {source_id}",
-                )
+                source_region = source_regions_by_key[source_key]
+                source_name = source_names[source_key]
 
                 summary_rows.append(
                     {
@@ -2596,8 +2770,12 @@ def main():
                             if phantom.sex == "AM"
                             else "Female"
                         ),
-                        "Source Organ ID": source_id,
-                        "Source Organ": source_name,
+                        "Source Region": source_name,
+                        "Source Acronym": source_region["acronym"],
+                        "Source Organ ID(s)": "_".join(
+                            str(organ_id)
+                            for organ_id in source_region["ids"]
+                        ),
                         "Target Region": target_name,
                         "Mean Chord Length (mm)": result["mean_mm"],
                         "Standard Deviation (mm)": result["std_mm"],
@@ -2610,7 +2788,7 @@ def main():
             # the existing CSV results.
             create_selected_plot_pdf(
                 cld_results,
-                selected_source_ids,
+                selected_source_keys,
                 source_names,
                 target_regions,
                 output_dir,
@@ -2657,7 +2835,7 @@ def main():
     existing_files = existing_cld_csvs(
         output_dir,
         resolved_groups,
-        selected_source_ids,
+        source_regions,
         target_regions_by_group,
     )
 
@@ -2732,26 +2910,51 @@ def main():
             meshes[phantom.code] = mesh
             samplers[phantom.code] = region_samplers
 
-            # Pre-build samplers for every source organ so that
+            # Pre-build samplers for every source region so that
             # density/volume processing is not repeated for every
             # target region.
             source_samplers[phantom.code] = {}
 
-            for source_id in selected_source_ids:
-                if source_id not in mesh.organ_ids:
+            mesh_organ_ids = set(
+                int(organ_id)
+                for organ_id in np.unique(mesh.organ_ids)
+            )
+
+            for source_key in selected_source_keys:
+                source_region = source_regions_by_key[source_key]
+
+                # Apply the same sex-specific handling used by target
+                # regions. This also allows a compound source such as
+                # Gonads to resolve to Testes in a male phantom or
+                # Ovaries in a female phantom.
+                phantom_source_regions = filter_target_regions_for_sex(
+                    [source_region],
+                    phantom.sex,
+                )
+
+                if not phantom_source_regions:
                     continue
 
-                source_samplers[phantom.code][source_id] = (
+                source_region_for_phantom = phantom_source_regions[0]
+                missing_ids = sorted(
+                    set(source_region_for_phantom["ids"])
+                    - mesh_organ_ids
+                )
+
+                if missing_ids:
+                    print(
+                        f"    [SKIP] {phantom.display_name}: source region "
+                        f"'{source_region['name']}' contains organ ID(s) "
+                        f"not present in mesh: {missing_ids}"
+                    )
+                    continue
+
+                source_samplers[phantom.code][source_key] = (
                     build_region_samplers(
                         mesh,
                         tetra_masses,
-                        [
-                            {
-                                "name": f"Source_{source_id}",
-                                "ids": (source_id,),
-                            }
-                        ],
-                    )[f"Source_{source_id}"]
+                        [source_region_for_phantom],
+                    )[source_region_for_phantom["name"]]
                 )
 
             print(
@@ -2767,18 +2970,20 @@ def main():
 
     missing_key_set = set(missing_keys)
 
-    for source_id in selected_source_ids:
+    for source_key in selected_source_keys:
 
-        source_name = source_names.get(
-            source_id,
-            f"Organ {source_id}",
+        source_region = source_regions_by_key[source_key]
+        source_name = source_names[source_key]
+        source_ids_text = "_".join(
+            str(organ_id)
+            for organ_id in source_region["ids"]
         )
 
         print()
         print("=" * 70)
         print(
             f"SOURCE: {source_name} "
-            f"(ID {source_id})"
+            f"(IDs {source_ids_text})"
         )
         print("=" * 70)
 
@@ -2799,7 +3004,7 @@ def main():
                     group_name,
                     {},
                 ).setdefault(
-                    source_id,
+                    source_key,
                     {},
                 ).setdefault(
                     target_name,
@@ -2819,7 +3024,7 @@ def main():
                     key = (
                         group_name,
                         phantom.code,
-                        source_id,
+                        source_key,
                         target_name,
                     )
 
@@ -2836,18 +3041,22 @@ def main():
                         phantom.code
                     ]
 
-                    # SOURCE_CSV contains individual source organ IDs.
-                    if source_id not in mesh.organ_ids:
+                    # The source sampler was built from the complete
+                    # compound source region. If any required source IDs
+                    # were absent in this phantom, the sampler is omitted.
+                    source_sampler = (
+                        source_samplers
+                        .get(phantom.code, {})
+                        .get(source_key)
+                    )
+
+                    if source_sampler is None:
                         print(
                             f"    [SKIP] {phantom.display_name}: "
-                            f"source organ ID {source_id} "
-                            "not present in mesh."
+                            f"source region '{source_name}' "
+                            f"({source_ids_text}) is not available."
                         )
                         continue
-
-                    source_sampler = source_samplers[
-                        phantom.code
-                    ][source_id]
 
                     if target_name not in phantom_samplers:
                         # Sex-specific target region is not present
@@ -2861,7 +3070,7 @@ def main():
                     # Create a deterministic but distinct seed
                     # for each source/group/target/phantom.
                     stable_key = (
-                        f"{source_id}|"
+                        f"{source_key}|"
                         f"{group_name}|"
                         f"{target_name}|"
                         f"{phantom.code}|"
@@ -2894,7 +3103,7 @@ def main():
                         group_name,
                         {},
                     ).setdefault(
-                        source_id,
+                        source_key,
                         {},
                     ).setdefault(
                         target_name,
@@ -2911,14 +3120,14 @@ def main():
                     csv_file = cld_csv_path(
                         output_dir,
                         phantom.code,
-                        source_id,
+                        source_region,
                         target_name,
                     )
 
                     save_cld_csv(
                         csv_file,
                         phantom,
-                        source_id,
+                        source_region,
                         target_name,
                         distances_mm,
                         relative_number,
@@ -2939,12 +3148,10 @@ def main():
 
     summary_rows = []
 
-    for source_id in selected_source_ids:
+    for source_key in selected_source_keys:
 
-        source_name = source_names.get(
-            source_id,
-            f"Organ {source_id}",
-        )
+        source_region = source_regions_by_key[source_key]
+        source_name = source_names[source_key]
 
         for region in target_regions:
             target_name = region["name"]
@@ -2962,7 +3169,7 @@ def main():
                     result = (
                         cld_results
                         .get(group_name, {})
-                        .get(source_id, {})
+                        .get(source_key, {})
                         .get(target_name, {})
                         .get(phantom.code)
                     )
@@ -2979,8 +3186,12 @@ def main():
                                 if phantom.sex == "AM"
                                 else "Female"
                             ),
-                            "Source Organ ID": source_id,
-                            "Source Organ": source_name,
+                            "Source Region": source_name,
+                            "Source Acronym": source_region["acronym"],
+                            "Source Organ ID(s)": "_".join(
+                                str(organ_id)
+                                for organ_id in source_region["ids"]
+                            ),
                             "Target Region": target_name,
                             "Mean Chord Length (mm)": result["mean_mm"],
                             "Standard Deviation (mm)": result["std_mm"],
@@ -3008,7 +3219,7 @@ def main():
     # the multi-panel PDF. All CLDs have already been calculated/saved.
     create_selected_plot_pdf(
         cld_results,
-        selected_source_ids,
+        selected_source_keys,
         source_names,
         target_regions,
         output_dir,

@@ -76,6 +76,8 @@ ORGAN_ID_CSV = OTHER_INPUT_FILES_DIR / "organ_ID_names.csv"
 
 SOURCE_CSV = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs.csv")
 
+SOURCE_CSV_CLD = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs_cld.csv")
+
 SKELETAL_MASSES_CSV = OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116.csv"
 
 SKELETAL_RESPONSE_FUNCTIONS_CSV = OTHER_INPUT_FILES_DIR / "ICRP116-Table-D-1-Updated.csv"
