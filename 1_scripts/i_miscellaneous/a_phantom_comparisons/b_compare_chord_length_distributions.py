@@ -2590,7 +2590,7 @@ def main():
     print("CHORD-LENGTH DISTRIBUTION CALCULATION")
     print("=" * 70)
 
-    source_csv = Path(config.SOURCE_CSV)
+    source_csv = Path(config.SOURCE_CSV_CLD)
 
     output_dir = (
         Path(config.RESULTS_DIR)

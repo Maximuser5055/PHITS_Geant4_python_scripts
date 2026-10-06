@@ -1,3 +1,5 @@
 ﻿Source region,Acronym,ID number(s)
 Liver,Liver,9500
 Brain,Brain,6100
+RLung + LLung,Lungs,9700_9900
+Thyroid,Thyroid,13200
