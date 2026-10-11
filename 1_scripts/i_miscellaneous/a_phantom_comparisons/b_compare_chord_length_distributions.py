@@ -2113,7 +2113,7 @@ def plot_selected_clds(
     ))
     selected_source_names = [
         source_names.get(
-            source_key,
+            str(source_key),
             f"Organ {source_key}",
         )
         for source_key in selected_source_keys
