@@ -906,73 +906,6 @@ def read_ele_file(
     return tetrahedra, organ_ids
 
 
-def load_mesh(
-    node_file: Path,
-    element_file: Path,
-) -> MeshData:
-    """Load a tetrahedral mesh and return the canonical in-memory layout."""
-
-    nodes_cm = read_node_file(node_file)
-    tetrahedra, organ_ids = read_ele_file(element_file)
-
-    if len(nodes_cm) == 0:
-        raise ValueError(f"NODE file contains no nodes: {node_file}")
-
-    if len(tetrahedra) == 0:
-        raise ValueError(f"ELE file contains no tetrahedra: {element_file}")
-
-    if tetrahedra.shape[1] != 4:
-        raise ValueError(
-            f"Expected tetrahedra with 4 vertices, got {tetrahedra.shape} "
-            f"in {element_file}."
-        )
-
-    if tetrahedra.shape[0] != len(organ_ids):
-        raise ValueError(
-            f"ELE element count and organ-ID count do not match: "
-            f"{tetrahedra.shape[0]} vs {len(organ_ids)} in {element_file}."
-        )
-
-    return MeshData(
-        nodes_cm=nodes_cm,
-        tetrahedra=tetrahedra,
-        organ_ids=organ_ids,
-    )
-
-
-def calculate_tetrahedron_masses(
-    mesh: MeshData,
-    densities: dict[int, float],
-) -> np.ndarray:
-    """Return each tetrahedron mass in grams using the organ density map."""
-
-    masses = np.empty(len(mesh.tetrahedra), dtype=np.float64)
-
-    for tet_index, tetra in enumerate(mesh.tetrahedra):
-        organ_id = int(mesh.organ_ids[tet_index])
-        density_g_cm3 = densities.get(organ_id)
-
-        if density_g_cm3 is None:
-            raise ValueError(
-                f"No density found for organ ID {organ_id} in the material file."
-            )
-
-        vertices = mesh.nodes_cm[tetra]
-        volume_cm3 = abs(
-            np.linalg.det(
-                np.column_stack([
-                    vertices[1] - vertices[0],
-                    vertices[2] - vertices[0],
-                    vertices[3] - vertices[0],
-                ])
-            )
-            / 6.0
-        )
-        masses[tet_index] = volume_cm3 * density_g_cm3
-
-    return masses
-
-
 def read_material_densities(
     filename: Path,
 ) -> dict[int, float]:
@@ -1049,153 +982,153 @@ def read_material_densities(
 
 
 # ======================================================================
-# SKELETAL TISSUE MASS WEIGHTING
+# MESH PREPARATION
 # ======================================================================
 
-SKELETAL_TISSUE_TYPES = ("marrow", "endosteum")
-
-
-def infer_skeletal_tissue_type(region: dict) -> str | None:
+def tetrahedron_volumes(
+    nodes_cm: np.ndarray,
+    tetrahedra: np.ndarray,
+) -> np.ndarray:
     """
-    Infer whether a skeletal region represents marrow or endosteum.
+    Calculate tetrahedron volumes in cm^3.
 
-    The tissue label is taken from the source/target region name or acronym.
-    If neither tissue is identified, None is returned and ordinary mesh-mass
-    weighting is used.
+    This follows the reference calculation:
+
+        V = |(b-a) dot ((c-a) x (d-a))| / 6
     """
-    text = " ".join(
-        str(region.get(key, "")).strip().lower()
-        for key in ("name", "acronym")
+
+    a = nodes_cm[tetrahedra[:, 0]]
+    b = nodes_cm[tetrahedra[:, 1]]
+    c = nodes_cm[tetrahedra[:, 2]]
+    d = nodes_cm[tetrahedra[:, 3]]
+
+    ab = b - a
+    ac = c - a
+    ad = d - a
+
+    volumes = np.abs(
+        np.einsum(
+            "ij,ij->i",
+            ab,
+            np.cross(ac, ad),
+        )
+    ) / 6.0
+
+    return volumes
+
+
+def load_mesh(
+    node_file: Path,
+    element_file: Path,
+) -> MeshData:
+    """Load NODE and ELE files using the reference convention."""
+
+    nodes_cm = read_node_file(node_file)
+
+    tetrahedra, organ_ids = read_ele_file(
+        element_file
     )
 
-    if "endosteum" in text:
-        return "endosteum"
-
-    if "marrow" in text or "red bone marrow" in text or "rbm" in text:
-        return "marrow"
-
-    return None
-
-
-def load_skeletal_tissue_masses(
-    csv_file: Path,
-) -> dict[int, dict[str, dict[str, float]]]:
-    """
-    Load ICRP 116 skeletal tissue masses.
-
-    The tissue masses are used as relative weights between skeletal organ IDs.
-    This is equivalent to weighting by:
-
-        whole-organ mass * tissue mass fraction within that organ.
-
-    Therefore the whole skeletal-organ mass is not used as a proxy for the
-    marrow/endosteum subset.
-    """
-    if not csv_file.is_file():
-        raise FileNotFoundError(
-            f"Skeletal tissue-mass CSV was not found:\n{csv_file}"
+    if (
+        tetrahedra.min() < 0
+        or tetrahedra.max() >= len(nodes_cm)
+    ):
+        raise ValueError(
+            f"Tetrahedron node indices in {element_file} "
+            "are inconsistent with the NODE file."
         )
 
-    df = clean_columns(pd.read_csv(csv_file))
+    return MeshData(
+        nodes_cm=nodes_cm,
+        tetrahedra=tetrahedra,
+        organ_ids=organ_ids,
+    )
 
-    required_columns = {
-        "Organ ID",
-        "Ref_AM_Marrow_Mass(g)",
-        "Ref_AM_Endosteum_Mass(g)",
-        "Ref_AF_Marrow_Mass(g)",
-        "Ref_AF_Endosteum_Mass(g)",
-    }
 
-    missing = sorted(required_columns - set(df.columns))
+def calculate_tetrahedron_masses(
+    mesh: MeshData,
+    densities: dict[int, float],
+) -> np.ndarray:
+    """
+    Calculate tetrahedron masses in grams.
+
+    NODE coordinates are kept in cm, so:
+
+        volume = cm^3
+        density = g/cm^3
+        mass = volume * density
+    """
+
+    volumes_cm3 = tetrahedron_volumes(
+        mesh.nodes_cm,
+        mesh.tetrahedra,
+    )
+
+    density_array = np.empty(
+        len(mesh.organ_ids),
+        dtype=np.float64,
+    )
+
+    missing = []
+
+    for index, organ_id in enumerate(
+        mesh.organ_ids
+    ):
+
+        organ_id = int(organ_id)
+
+        if organ_id not in densities:
+            missing.append(organ_id)
+        else:
+            density_array[index] = densities[organ_id]
+
     if missing:
+        missing = sorted(set(missing))
+
         raise ValueError(
-            f"Skeletal tissue-mass CSV is missing required column(s): "
-            f"{missing}\n{csv_file}"
+            "No density was found for organ ID(s): "
+            + ", ".join(map(str, missing))
         )
 
-    tissue_masses = {}
-
-    for _, row in df.iterrows():
-        organ_id = int(float(row["Organ ID"]))
-        tissue_masses[organ_id] = {
-            "AM": {
-                "marrow": float(row["Ref_AM_Marrow_Mass(g)"]),
-                "endosteum": float(row["Ref_AM_Endosteum_Mass(g)"]),
-            },
-            "AF": {
-                "marrow": float(row["Ref_AF_Marrow_Mass(g)"]),
-                "endosteum": float(row["Ref_AF_Endosteum_Mass(g)"]),
-            },
-        }
-
-    if not tissue_masses:
-        raise ValueError(
-            f"No skeletal tissue masses were found in {csv_file}."
-        )
-
-    return tissue_masses
-
-
-def get_group_skeletal_tissue_mass_file(group_code: str) -> Path:
-    """Return the skeletal tissue-mass reference appropriate to a phantom group."""
-    mapping = getattr(config, "SKELETAL_TISSUE_MASS_FILES", {})
-
-    if group_code in mapping:
-        return Path(mapping[group_code])
-
-    # Sensible fallback for group codes not explicitly listed in config.
-    if "Filipino" in group_code:
-        return Path(config.SKELETAL_TISSUE_MASSES_ASIANS_CSV)
-
-    return Path(config.SKELETAL_TISSUE_MASSES_ICRP145_CSV)
-
-
-def get_group_skeletal_ids(group_code: str) -> tuple[int, ...]:
-    """Return the skeletal IDs for the selected phantom group."""
-    if "Filipino_Resized" in group_code:
-        return tuple(config.RESIZED_ICRP145_SKELETAL_IDS)
-
-    if "Filipino" in group_code:
-        return tuple(config.FILIPINO_SKELETAL_IDS)
-
-    return tuple(config.ICRP145_SKELETAL_IDS)
+    return volumes_cm3 * density_array
 
 
 def build_region_samplers(
     mesh: MeshData,
     tetra_masses_g: np.ndarray,
-    regions: list[dict],
-    *,
-    sex: str,
-    skeletal_tissue_masses: dict[int, dict[str, dict[str, float]]] | None = None,
-    skeletal_ids: Sequence[int] = (),
+    target_regions: list[dict],
 ) -> dict[str, RegionSampler]:
     """
-    Build mass-weighted samplers for ordinary and skeletal tissue regions.
+    Build mass-weighted samplers.
 
-    Ordinary regions:
-        P(organ ID) = whole-organ mesh mass / total region mesh mass.
+    For a compound region:
+        P(organ ID) = organ mass / total region mass
 
-    Skeletal marrow/endosteum regions:
-        P(organ ID) = reference marrow/endosteum mass for that organ ID
-                      / total reference tissue mass in the region.
+    Then:
+        P(tetrahedron | organ) = tetrahedron mass / organ mass
 
-    Within a selected organ ID, tetrahedra are still sampled proportional to
-    their mesh mass. Thus the correction changes the relative probability of
-    selecting skeletal organ IDs without changing the spatial sampling rule
-    inside an individual ID.
+    Since each organ has a fixed density, this is equivalent to
+    volume-weighted sampling within an individual organ while ensuring
+    that compound-organ components are selected according to their
+    mass fractions.
     """
+
     samplers = {}
 
-    unique_ids = np.unique(mesh.organ_ids)
-    skeletal_id_set = set(int(value) for value in skeletal_ids)
+    unique_ids = np.unique(
+        mesh.organ_ids
+    )
 
-    for region in regions:
+    for region in target_regions:
+
         name = region["name"]
-        organ_ids = tuple(int(organ_id) for organ_id in region["ids"])
+        organ_ids = tuple(
+            region["ids"]
+        )
 
         missing_ids = sorted(
-            set(organ_ids) - set(unique_ids.tolist())
+            set(organ_ids)
+            - set(unique_ids.tolist())
         )
 
         if missing_ids:
@@ -1216,100 +1149,23 @@ def build_region_samplers(
                 f"No tetrahedra were found for region '{name}'."
             )
 
-        tissue_type = infer_skeletal_tissue_type(region)
-        use_tissue_weights = (
-            tissue_type is not None
-            and bool(set(organ_ids) & skeletal_id_set)
+        weights = tetra_masses_g[
+            region_tet_indices
+        ]
+
+        total_mass = float(
+            weights.sum()
         )
-
-        if use_tissue_weights:
-            if skeletal_tissue_masses is None:
-                raise ValueError(
-                    f"Region '{name}' is a skeletal {tissue_type} region, "
-                    "but no skeletal tissue-mass table was supplied."
-                )
-
-            missing_tissue_ids = sorted(
-                set(organ_ids) - set(skeletal_tissue_masses)
-            )
-            if missing_tissue_ids:
-                raise ValueError(
-                    f"Region '{name}' requires skeletal tissue masses for "
-                    f"organ ID(s) not present in the tissue-mass CSV: "
-                    f"{missing_tissue_ids}"
-                )
-
-            if sex not in ("AM", "AF"):
-                raise ValueError(
-                    f"Unsupported phantom sex '{sex}' for skeletal "
-                    "tissue-mass weighting."
-                )
-
-            assert tissue_type is not None
-            tissue_mass_by_id = {
-                organ_id: skeletal_tissue_masses[organ_id][sex][tissue_type]
-                for organ_id in organ_ids
-            }
-
-            if any(mass < 0 for mass in tissue_mass_by_id.values()):
-                raise ValueError(
-                    f"Negative skeletal {tissue_type} mass found for "
-                    f"region '{name}'."
-                )
-
-            if sum(tissue_mass_by_id.values()) <= 0:
-                raise ValueError(
-                    f"Region '{name}' has zero reference {tissue_type} mass "
-                    f"for sex {sex}."
-                )
-
-            # Calculate the complete mesh mass of each parent skeletal ID.
-            # Multiplying each tetrahedron's mesh mass by
-            # tissue_mass / whole_organ_mesh_mass makes the total effective
-            # weight of that ID equal to its marrow/endosteum mass.
-            organ_mesh_masses = {}
-            for organ_id in organ_ids:
-                organ_indices = region_tet_indices[
-                    mesh.organ_ids[region_tet_indices] == organ_id
-                ]
-                organ_mesh_masses[organ_id] = float(
-                    tetra_masses_g[organ_indices].sum()
-                )
-
-            weights = np.empty(
-                len(region_tet_indices),
-                dtype=np.float64,
-            )
-
-            for index, tet_index in enumerate(region_tet_indices):
-                organ_id = int(mesh.organ_ids[tet_index])
-                mesh_organ_mass = organ_mesh_masses[organ_id]
-
-                if mesh_organ_mass <= 0:
-                    raise ValueError(
-                        f"Organ ID {organ_id} in region '{name}' has zero "
-                        "mesh mass, so its tissue weighting cannot be applied."
-                    )
-
-                weights[index] = (
-                    tetra_masses_g[tet_index]
-                    * tissue_mass_by_id[organ_id]
-                    / mesh_organ_mass
-                )
-
-            total_mass = float(weights.sum())
-
-        else:
-            # Existing behavior for ordinary organs/regions.
-            weights = tetra_masses_g[region_tet_indices]
-            total_mass = float(weights.sum())
 
         if total_mass <= 0:
             raise ValueError(
-                f"Region '{name}' has zero effective sampling mass."
+                f"Region '{name}' has zero mass."
             )
 
-        cumulative = np.cumsum(weights)
+        cumulative = np.cumsum(
+            weights
+        )
+
         cumulative /= cumulative[-1]
 
         samplers[name] = RegionSampler(
@@ -2784,15 +2640,6 @@ def main():
         for group_code in PHANTOM_GROUPS_TO_COMPARE
     }
 
-    # Use the appropriate ICRP 116 skeletal-tissue reference for each
-    # phantom group.
-    skeletal_tissue_masses_by_group_code = {
-        group_code: load_skeletal_tissue_masses(
-            get_group_skeletal_tissue_mass_file(group_code)
-        )
-        for group_code in PHANTOM_GROUPS_TO_COMPARE
-    }
-
     # Union of target-region names is used only for plotting/summary ordering.
     target_regions = []
     target_names_seen = set()
@@ -3055,18 +2902,10 @@ def main():
                 phantom.sex,
             )
 
-            skeletal_tissue_masses = skeletal_tissue_masses_by_group_code[
-                group_code_for_phantom
-            ]
-            skeletal_ids = get_group_skeletal_ids(group_code_for_phantom)
-
             region_samplers = build_region_samplers(
                 mesh,
                 tetra_masses,
                 phantom_target_regions,
-                sex=phantom.sex,
-                skeletal_tissue_masses=skeletal_tissue_masses,
-                skeletal_ids=skeletal_ids,
             )
 
             meshes[phantom.code] = mesh
@@ -3116,9 +2955,6 @@ def main():
                         mesh,
                         tetra_masses,
                         [source_region_for_phantom],
-                        sex=phantom.sex,
-                        skeletal_tissue_masses=skeletal_tissue_masses,
-                        skeletal_ids=skeletal_ids,
                     )[source_region_for_phantom["name"]]
                 )
 
