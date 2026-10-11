@@ -38,6 +38,7 @@ plus their organ-ID attribute.
 from __future__ import annotations
 
 from pathlib import Path
+from collections.abc import Sequence
 import sys
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
@@ -1897,7 +1898,7 @@ def plot_x_axis_limit(
 
 
 def plot_selected_clds(
-    plot_pairs: list[tuple[int, str]],
+    plot_pairs: Sequence[tuple[int | str, str]],
     source_names: dict[str, str],
     cld_results: dict,
     output_file: Path,
@@ -1997,7 +1998,7 @@ def plot_selected_clds(
         plot_pairs,
     ):
         source_name = source_names.get(
-            source_key,
+            str(source_key),
             f"Organ {source_key}",
         )
 
@@ -2304,7 +2305,7 @@ def select_plot_pairs(
         start=1,
     ):
         source_name = source_names.get(
-            source_key,
+            str(source_key),
             f"Organ {source_key}",
         )
         print(
