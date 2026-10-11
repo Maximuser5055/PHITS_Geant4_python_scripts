@@ -2,7 +2,7 @@
 Calculate active red bone marrow (RBM) and endosteum dose and SAF using:
 
 1. Geant4 energy-binned photon fluence in skeletal tissues.
-2. ICRP Publication 116, Table D.1 photon response functions.
+2. phantom-specific photon dose-response functions (DRFs).
 
 Geant4 CSV columns:
     Skeletal ID
@@ -11,10 +11,10 @@ Geant4 CSV columns:
     Energy Center (MeV)
     Fluence (photons/m2/source)
 
-ICRP CSV:
+Skeletal DRF CSV:
     Photon energy (MeV)
-    AM response function
-    TM50 response function
+    RBM response function
+    endosteum response function
 
 The Geant4 fluence values are histogram/bin fluences,
 so they are NOT multiplied by Delta E again.
@@ -44,7 +44,12 @@ import numpy as np
 import pandas as pd
 
 import b_config.a_config as config
-from b_config.b_phantom_registry import get_phantom, get_phantom_group, get_skeletal_ids
+from b_config.b_phantom_registry import (
+    get_phantom,
+    get_phantom_group,
+    get_skeletal_ids,
+    get_skeletal_response_functions_file,
+)
 
 # ============================================================
 # CONSTANTS
@@ -58,7 +63,7 @@ MeV_to_J = config.MEV_TO_J
 
 mass_file = config.SKELETAL_MASSES_CSV
 geant4_generated_inputs_dir = config.GEANT4_GENERATED_INPUTS_DIR
-fluence_to_dose_response_functions = config.SKELETAL_RESPONSE_FUNCTIONS_CSV
+# The actual DRF file is selected from the phantom registry.
 geant4_source_type_map = config.GEANT4_SOURCE_TYPE_MAP
 geant4_results_dir = config.RESULTS_GEANT4_DIR
 geant4_output_file = "d_geant4_rbm_endosteum_icrp116.csv"
@@ -129,135 +134,212 @@ def find_fluence_files():
     return sorted(root.rglob("geant4_deposit_*_source_*_gamma_energy_*_photon_fluence.csv"))
 
 # ============================================================
-# LOAD ICRP 116 RESPONSE FUNCTIONS
+# LOAD SKELETAL RESPONSE FUNCTIONS
 # ============================================================
 
-def load_icrp_response_functions():
+def load_response_functions(response_file):
 
-    icrp_file = fluence_to_dose_response_functions
+    if not response_file.exists():
 
-    if not icrp_file.exists():
+        raise FileNotFoundError(
+            f"Could not find skeletal photon dose-response function file:\n"
+            f"{response_file}"
+        )
 
-        raise FileNotFoundError(f"Could not find ICRP 116 Table D.1:\n {icrp_file}")
-
-    icrp_raw = pd.read_csv(icrp_file, header=None)
+    raw = pd.read_csv(
+        response_file,
+        header=None,
+        dtype=object
+    )
 
     response_functions = {}
 
     # --------------------------------------------------------
-    # The ICRP CSV structure is:
-    # Column 0 = Photon energy
-    # Column 1 = AM
-    # Column 2 = TM50
-    # Organ ID is found in column 1.
+    # Supported CSV block formats
+    #
+    # Each skeletal-site block is expected to contain:
+    #
+    #   row     = Organ ID: <ID>
+    #   row + 1 = column headers
+    #   row + 2 onward = energy / RBM / endosteum data
+    #
+    # The loader accepts either:
+    #
+    #   ICRP-116: AM / TM50
+    #   Korean/Asian: RBM / BE
+    #
+    # and standardizes them internally to:
+    #
+    #   RBM_Gy_m2
+    #   Endosteum_Gy_m2
+    #
+    # Organ ID may appear in any column of the Organ ID row.
     # --------------------------------------------------------
 
-    for row in range(
-        icrp_raw.shape[0]
-    ):
-
-        value = icrp_raw.iat[row, 1] 
-
+    def parse_float(value):
         if pd.isna(value):
-            continue
+            return np.nan
 
-        match = re.search(
-            r"Organ\s*ID\s*:\s*(\d+)",
-            str(value),
-            re.IGNORECASE
-        )
+        try:
+            return float(
+                str(value).strip().replace("E", "e")
+            )
+        except (ValueError, TypeError):
+            return np.nan
 
-        if match is None:
-            continue
+    def find_column(headers, keywords):
+        for index, header in enumerate(headers):
+            header = str(header).strip().lower()
 
-        organ_id = int(match.group(1))
+            if any(keyword in header for keyword in keywords):
+                return index
+
+        return None
+
+    for row in range(raw.shape[0]):
 
         # ----------------------------------------------------
-        # First data row
-        # row     = Organ ID
-        # row + 1 = Photon Energy / AM / TM50
-        # row + 2 = first data point
+        # Find "Organ ID: ####" anywhere in this row.
         # ----------------------------------------------------
 
-        data_start = row + 2
+        organ_id = None
 
-        energies = []
-        am_values = []
-        tm50_values = []
+        for column in range(raw.shape[1]):
 
-        current_row = data_start
+            value = raw.iat[row, column]
 
-        while (current_row < icrp_raw.shape[0]):
+            if pd.isna(value):
+                continue
 
-            energy_value = icrp_raw.iat[current_row,0]
+            match = re.search(
+                r"Organ\s*ID\s*:\s*(\d+)",
+                str(value),
+                re.IGNORECASE
+            )
 
-            try:
-                energy = float(str(energy_value).strip())
-
-            except (ValueError, TypeError):
+            if match is not None:
+                organ_id = int(match.group(1))
                 break
 
-            # ------------------------------------------------
-            # AM
-            # ------------------------------------------------
+        if organ_id is None:
+            continue
 
-            am_value = icrp_raw.iat[current_row, 1]
+        header_row = row + 1
 
-            try:
-                am = float(
-                    str(am_value)
-                    .strip()
-                    .replace("E", "e")
-                )
+        if header_row >= raw.shape[0]:
+            raise RuntimeError(
+                f"Missing response-function header after Organ ID {organ_id} "
+                f"in {response_file.name}."
+            )
 
-            except (ValueError, TypeError):
-                am = np.nan
+        headers = [
+            str(raw.iat[header_row, column]).strip()
+            if not pd.isna(raw.iat[header_row, column])
+            else ""
+            for column in range(raw.shape[1])
+        ]
 
-            # ------------------------------------------------
-            # TM50
-            # ------------------------------------------------
+        energy_column = find_column(
+            headers,
+            ("photon energy", "energy")
+        )
 
-            tm50_value = icrp_raw.iat[current_row, 2]
+        rbm_column = find_column(
+            headers,
+            ("rbm", "am response", "am")
+        )
 
-            try:
-                tm50 = float(
-                    str(tm50_value)
-                    .strip()
-                    .replace("E", "e")
-                )
+        endosteum_column = find_column(
+            headers,
+            ("tm50", "be", "endosteum")
+        )
 
-            except (ValueError, TypeError):
-                tm50 = np.nan
+        if energy_column is None:
+            energy_column = 0
+
+        if rbm_column is None or endosteum_column is None:
+            raise RuntimeError(
+                f"Could not identify RBM/endosteum response columns "
+                f"for Organ ID {organ_id} in {response_file.name}.\\n"
+                f"Headers found: {headers}"
+            )
+
+        # ----------------------------------------------------
+        # Read the data rows until the next block.
+        # ----------------------------------------------------
+
+        energies = []
+        rbm_values = []
+        endosteum_values = []
+
+        current_row = row + 2
+
+        while current_row < raw.shape[0]:
+
+            # A new Organ ID marks the next block.
+            row_contains_organ_id = False
+
+            for column in range(raw.shape[1]):
+                value = raw.iat[current_row, column]
+
+                if pd.isna(value):
+                    continue
+
+                if re.search(
+                    r"Organ\s*ID\s*:\s*\d+",
+                    str(value),
+                    re.IGNORECASE
+                ):
+                    row_contains_organ_id = True
+                    break
+
+            if row_contains_organ_id:
+                break
+
+            energy = parse_float(
+                raw.iat[current_row, energy_column]
+            )
+
+            # Stop at non-data rows.
+            if not np.isfinite(energy):
+                break
+
+            rbm = parse_float(
+                raw.iat[current_row, rbm_column]
+            )
+
+            endosteum = parse_float(
+                raw.iat[current_row, endosteum_column]
+            )
 
             energies.append(energy)
-
-            am_values.append(am)
-
-            tm50_values.append(tm50)
+            rbm_values.append(rbm)
+            endosteum_values.append(endosteum)
 
             current_row += 1
 
-        # ----------------------------------------------------
-        # Store response function
-        # ----------------------------------------------------
-
         response_df = pd.DataFrame({
             "Energy_MeV": energies,
-            "AM_Gy_m2": am_values,
-            "TM50_Gy_m2": tm50_values,
+            "RBM_Gy_m2": rbm_values,
+            "Endosteum_Gy_m2": endosteum_values,
         })
 
-        # Keep the region if it has at least one valid
-        # response function.
         response_df = response_df[
-            (response_df["AM_Gy_m2"].notna())
-            |
-            (response_df["TM50_Gy_m2"].notna())
+            response_df["RBM_Gy_m2"].notna()
+            | response_df["Endosteum_Gy_m2"].notna()
         ].reset_index(drop=True)
 
-        response_functions[organ_id] = response_df
+        if not response_df.empty:
+            response_functions[organ_id] = response_df
+
+    if not response_functions:
+        raise RuntimeError(
+            f"No skeletal response-function blocks were found in:\\n"
+            f"{response_file}"
+        )
 
     return response_functions
+
 
 # ============================================================
 # LOG-LOG INTERPOLATION
@@ -488,7 +570,7 @@ def calculate_from_fluence(
         # ----------------------------------------------------
 
         rbm_table_E = response_df[
-            response_df["AM_Gy_m2"].notna()
+            response_df["RBM_Gy_m2"].notna()
         ]["Energy_MeV"]
 
         if rbm_table_E.empty:
@@ -527,7 +609,7 @@ def calculate_from_fluence(
             R_AM = interpolate_response(
                 E,
                 response_df,
-                "AM_Gy_m2"
+                "RBM_Gy_m2"
             )
 
             dose_contribution = Phi * R_AM
@@ -573,7 +655,7 @@ def calculate_from_fluence(
         # ----------------------------------------------------
 
         endo_table_E = response_df[
-            response_df["TM50_Gy_m2"].notna()
+            response_df["Endosteum_Gy_m2"].notna()
         ]["Energy_MeV"]
 
         if endo_table_E.empty:
@@ -612,7 +694,7 @@ def calculate_from_fluence(
             R_TM50 = interpolate_response(
                 E,
                 response_df,
-                "TM50_Gy_m2"
+                "Endosteum_Gy_m2"
             )
 
             dose_contribution = Phi * R_TM50
@@ -1061,62 +1143,99 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
     # LOAD DATA
     # ========================================================
 
-    response_functions = (load_icrp_response_functions())
-
-    skeletal_masses = (load_skeletal_masses())
-
-    # ========================================================
-    # SELECT PHANTOMS
-    # ========================================================
+    skeletal_masses = load_skeletal_masses()
 
     phantom_selection = params["phantom"]
+    selected_phantoms = get_phantom_group(phantom_selection)
 
-    selected_phantoms = get_phantom_group(
-        phantom_selection
-    )
+    # --------------------------------------------------------
+    # Load the correct DRF file for EACH phantom.
+    #
+    # ICRP 145 adult male/female:
+    #     ICRP116-Table-D-1-Updated.csv
+    #
+    # Resized ICRP 145 + Filipino male:
+    #     DRFs-Male-Korean-Asian-Updated.csv
+    #
+    # Resized ICRP 145 + Filipino female:
+    #     DRFs-Female-Korean-Asian-Updated.csv
+    #
+    # This is important because a phantom group may contain
+    # both male and female phantoms, but their DRF files are
+    # not necessarily the same.
+    # --------------------------------------------------------
 
-    configured_skeletal_ids = set(
-        get_skeletal_ids(phantom_selection)
-    )
+    response_cache = {}
+    phantom_response_data = {}
 
-    # ========================================================
-    # VALID ICRP RESPONSE-FUNCTION IDs
-    # ========================================================
+    for phantom_code in selected_phantoms:
 
-    rbm_ids = {
-        organ_id
-        for organ_id in configured_skeletal_ids
-        if (
-            organ_id in response_functions
-            and response_functions[organ_id][
-                "AM_Gy_m2"
-            ].notna().any()
-        )
-    }
-
-    endosteum_ids = {
-        organ_id
-        for organ_id in configured_skeletal_ids
-        if (
-            organ_id in response_functions
-            and response_functions[organ_id][
-                "TM50_Gy_m2"
-            ].notna().any()
-        )
-    }
-
-    if not rbm_ids:
-        raise RuntimeError(
-            f"No valid RBM skeletal IDs configured for "
-            f"phantom/group '{phantom_selection}'."
+        response_file = get_skeletal_response_functions_file(
+            phantom_code
         )
 
-    if not endosteum_ids:
-        raise RuntimeError(
-            f"No valid endosteum skeletal IDs configured for "
-            f"phantom/group '{phantom_selection}'."
+        response_cache_key = str(response_file.resolve())
+
+        if response_cache_key not in response_cache:
+
+            response_cache[response_cache_key] = (
+                load_response_functions(response_file)
+            )
+
+        response_functions = response_cache[response_cache_key]
+
+        configured_skeletal_ids = set(
+            get_skeletal_ids(phantom_code)
         )
 
+        rbm_ids = {
+            organ_id
+            for organ_id in configured_skeletal_ids
+            if (
+                organ_id in response_functions
+                and response_functions[organ_id][
+                    "RBM_Gy_m2"
+                ].notna().any()
+            )
+        }
+
+        endosteum_ids = {
+            organ_id
+            for organ_id in configured_skeletal_ids
+            if (
+                organ_id in response_functions
+                and response_functions[organ_id][
+                    "Endosteum_Gy_m2"
+                ].notna().any()
+            )
+        }
+
+        if not rbm_ids:
+            raise RuntimeError(
+                f"No valid RBM skeletal IDs were found for "
+                f"phantom '{phantom_code}' using:\\n"
+                f"{response_file}"
+            )
+
+        if not endosteum_ids:
+            raise RuntimeError(
+                f"No valid endosteum skeletal IDs were found for "
+                f"phantom '{phantom_code}' using:\\n"
+                f"{response_file}"
+            )
+
+        phantom_response_data[phantom_code] = (
+            response_functions,
+            rbm_ids,
+            endosteum_ids,
+        )
+
+        print()
+        print(f"Phantom: {phantom_code}")
+        print(f"  DRF file              : {response_file.name}")
+        print(f"  Configured skeletal IDs: {len(configured_skeletal_ids)}")
+        print(f"  RBM DRF regions       : {len(rbm_ids)}")
+        print(f"  Endosteum DRF regions : {len(endosteum_ids)}")
     # ========================================================
     # FIND FLUENCE FILES
     # ========================================================
@@ -1196,6 +1315,12 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         )
 
         try:
+
+            (
+                response_functions,
+                rbm_ids,
+                endosteum_ids,
+            ) = phantom_response_data[phantom_code]
 
             result = calculate_from_fluence(
                 fluence_file,
