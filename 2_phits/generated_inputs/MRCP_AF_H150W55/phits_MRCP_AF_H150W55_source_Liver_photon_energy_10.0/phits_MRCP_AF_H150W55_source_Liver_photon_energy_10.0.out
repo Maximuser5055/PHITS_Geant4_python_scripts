@@ -27,8 +27,8 @@
           |                 Last Revised  2026-03-24                |
           |_________________________________________________________|
 
-                        Starting Date = 2026-09-21
-                        Starting Time = 11h 58m 52
+                        Starting Date = 2026-10-11
+                        Starting Time = 17h 06m 03
 
 >>> Input Echo >>>=============================================================
 
@@ -42,6 +42,9 @@
  itetra   =           0     # (D=0) tetra data is read(=1)/write(=2) on binary
  negs     =           1     # (D=-1) =-1:original, =0:No, =1:EGS, =2:EGS(HE)
  ipegs    =           0     # [EGS](D=0) -1:PEGSonly, 0:Full, 1:PEGSrun+PHITS, 2:skipPEGS
+ emin(12) = 1.000000000E-03 # (D=1.e+9) cut-off energy of electron (MeV)
+ emin(13) = 1.000000000E-03 # (D=1.e+9) cut-off energy of positron (MeV)
+ emin(14) = 1.000000000E-03 # (D=1.0e-3) cut-off energy of photon (MeV)
  file(1)  = /home/clarence/Software/phits/phits # (D=PhitsPath) PHITS install folder name
  file(6)  = phits_MRCP_AF_H150W55_source_Liver_photon_energy_10.0.out # (D=phits.out) general output file name
 
@@ -2319,52 +2322,52 @@ MAT[ 14000 ]
 -------------------------------------------------------------------------------
 bat[       1] ncas =            100.
  bitrseed = 0100001010011000001011101100011110011000110110100110010000000000
-          cpu time =  14.696 s.
+          cpu time =  23.524 s.
 
 -------------------------------------------------------------------------------
 bat[       2] ncas =            200.
  bitrseed = 1010101001001011110110011011100111111000111010101111101001110001
-          cpu time =   3.870 s.
+          cpu time =  15.532 s.
 
 -------------------------------------------------------------------------------
 bat[       3] ncas =            300.
  bitrseed = 0110111111101010001000010010111011101010001101101101010011000001
-          cpu time =   4.126 s.
+          cpu time =  10.188 s.
 
 -------------------------------------------------------------------------------
 bat[       4] ncas =            400.
  bitrseed = 0110011110011011101111101000011101011110111011100011101010101000
-          cpu time =   4.171 s.
+          cpu time =  11.547 s.
 
 -------------------------------------------------------------------------------
 bat[       5] ncas =            500.
  bitrseed = 0111011110010110010001001100111101000000011101000011010001001110
-          cpu time =   3.827 s.
+          cpu time =  12.978 s.
 
 -------------------------------------------------------------------------------
 bat[       6] ncas =            600.
  bitrseed = 0110000011011111010000110000100111011010100111111010000000001000
-          cpu time =   3.733 s.
+          cpu time =  12.544 s.
 
 -------------------------------------------------------------------------------
 bat[       7] ncas =            700.
  bitrseed = 0101010011011111100001111111110101111011111110111001110000110111
-          cpu time =   6.348 s.
+          cpu time =  11.182 s.
 
 -------------------------------------------------------------------------------
 bat[       8] ncas =            800.
  bitrseed = 0111100011011100010111111011110111010100001000010100111000000111
-          cpu time =   4.876 s.
+          cpu time =  11.003 s.
 
 -------------------------------------------------------------------------------
 bat[       9] ncas =            900.
  bitrseed = 1011011111110010011101000011100111001001010010100110011111011100
-          cpu time =   6.232 s.
+          cpu time =  10.520 s.
 
 -------------------------------------------------------------------------------
 bat[      10] ncas =           1000.
  bitrseed = 1111010100000000010100111010001101000100010001001110111100111100
-          cpu time =   5.511 s.
+          cpu time =  14.256 s.
 
 ===============================================================================
 
@@ -2383,11 +2386,11 @@ bat[      10] ncas =           1000.
         7              0.   : termination by geometry error   
         8              0.   : termination by weight cut-off   
         9              0.   : termination by time cut-off     
-       10         191460.   : geometry boundary crossing      
-       11           1186.   : termination by energy cut-off   
-       12           1173.   : termination by escape or leakage
-       13            266.   : reaction : (n,x) type           
-       14          99675.   : reaction : (n,n'x) type         
+       10         192414.   : geometry boundary crossing      
+       11         125283.   : termination by energy cut-off   
+       12           1197.   : termination by escape or leakage
+       13            351.   : reaction : (n,x) type           
+       14        2754625.   : reaction : (n,n'x) type         
        15              0.   : sequential transport for tally  
 
 -------------------------------------------------------------------------------
@@ -2400,26 +2403,27 @@ bat[      10] ncas =           1000.
 -------------------------------------------------------------------------------
  prod. particles       number        weight        weight per source
 -------------------------------------------------------------------------------
-     photon              100.     1.0000000E+02     1.0000000E-01
-     positron             50.     5.0000000E+01     5.0000000E-02
+     photon               98.     9.8000000E+01     9.8000000E-02
+     positron             49.     4.9000000E+01     4.9000000E-02
 
 -------------------------------------------------------------------------------
  particle decays       number        weight        weight per source
 -------------------------------------------------------------------------------
-     positron             50.     5.0000000E+01     5.0000000E-02
+     positron             49.     4.9000000E+01     4.9000000E-02
 
 -------------------------------------------------------------------------------
  stop. particles.    number        weight        weight per source
 -------------------------------------------------------------------------------
-     electron           2591.     2.5910000E+03     2.5910000E+00
-     positron             50.     5.0000000E+01     5.0000000E-02
+     electron         126510.     1.2651000E+05     1.2651000E+02
+     positron             49.     4.9000000E+01     4.9000000E-02
+     photon                2.     2.0000000E+00     2.0000000E-03
 
 -------------------------------------------------------------------------------
  leak. particles       number        weight        weight per source
 -------------------------------------------------------------------------------
-     photon             1111.     1.1110000E+03     1.1110000E+00
-     electron             55.     5.5000000E+01     5.5000000E-02
-     positron              7.     7.0000000E+00     7.0000000E-03
+     photon             1125.     1.1250000E+03     1.1250000E+00
+     electron             63.     6.3000000E+01     6.3000000E-02
+     positron              9.     9.0000000E+00     9.0000000E-03
 
 -------------------------------------------------------------------------------
  source: maxcas    maxbch      irskip   average weight          total source
@@ -2440,30 +2444,30 @@ bat[      10] ncas =           1000.
    bitrseed = 0101000011000111010110101100111000100101101011010111101101011101
 
 -------------------------------------------------------------------------------
- job termination date : 2026/09/21
-                 time :   12:07:17
+ job termination date : 2026/10/11
+                 time :   17:14:33
 
 -------------------------------------------------------------------------------
     CPU time and number of event called in PHITS
 -------------------------------------------------------------------------------
 
                              sec
-total cpu time =          560.35
+total cpu time =          635.08
 
 
                            count
-      analysis =         294770.  : data processing
+      analysis =        3074880.  : data processing
          nevap =              0.  : evaporation
         dexgam =              0.  : de-excitation
-         nreac =          99941.  : atomic and nuclear reactions
-         dklos =             50.  : particle decay
+         nreac =        2754976.  : atomic and nuclear reactions
+         dklos =             49.  : particle decay
          hydro =              0.  : nucleon-nucleon scattering
         n-data =              0.  : neutron data library
         h-data =              0.  : p, d, a data library
         p-data =              0.  : photon data library
         e-data =              0.  : electron data library
-        p-egs5 =           1107.  : photon interaction with EGS5
-        e-egs5 =          98784.  : electron interaction with EGS5
+        p-egs5 =           1236.  : photon interaction with EGS5
+        e-egs5 =        2753691.  : electron interaction with EGS5
       e-tsmode =              0.  : electron track structure mode
     ion-tsmode =              0.  : ion track structure mode
      photonucl =              0.  : photo-nuclear reaction

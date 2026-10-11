@@ -1,0 +1,7 @@
+Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),Overall Wall Time (s),Overall Wall Time (dhms)
+Type + Energy,gamma,10.0,,,4,188.09,0d 00h 03m 08s,1.91,186.08,189.73,,
+Phantom + Type + Energy,gamma,10.0,Filipino Adult Female,,2,186.46,0d 00h 03m 06s,0.54,186.08,186.83,,
+Phantom + Type + Energy,gamma,10.0,Filipino Adult Male,,2,189.73,0d 00h 03m 10s,0.0,189.72,189.73,,
+Source Organ + Type + Energy,gamma,10.0,,Brain,2,188.28,0d 00h 03m 08s,2.04,186.83,189.72,,
+Source Organ + Type + Energy,gamma,10.0,,Liver,2,187.9,0d 00h 03m 08s,2.58,186.08,189.73,,
+All simulations,,,,,4,188.09,0d 00h 03m 08s,1.91,186.08,189.73,776.0,0d 00h 12m 56s

@@ -593,7 +593,6 @@ def get_user_parameters():
         config.RESULTS_SAF_DATABASE_DIR,
         config.RESULTS_GEANT4_PUBLISHABLE_SAF_DATABASE_DIR,
         config.RESULTS_PHITS_PUBLISHABLE_SAF_DATABASE_DIR,
-        config.RESULTS_S_VALUES_DIR,
     ]
 
     for directory in DIRECTORIES:

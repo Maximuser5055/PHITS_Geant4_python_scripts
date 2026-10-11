@@ -1,166 +1,166 @@
 Phantom,Source Organ ID,Source Organ Name,Source Type,Source Energy (MeV),Number of Particles,Target Organ ID,Target Organ Name,Target Organ Mass (g),Dose (Gy/source),SAF (kg^-1),Relative Error,Statistical Uncertainty (%)
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,100,Adrenal_left,6.07144455,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,200,Adrenal_right,7.703215199999999,6.8617e-16,0.00042827362816230083,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,300,ET1_0~8 um,0.00792453406,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,301,ET1_8~40 um,0.031966979799999996,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,302,ET1_40~50 um,0.01007870546,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,303,ET1_50 um~surface,4.04565431,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,400,ET2_-15~0 um,0.0958725,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,401,ET2_0~40 um,0.264961845,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,402,ET2_40~50 um,0.0665561019,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,403,ET2_50~55 um,0.0333505818,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,404,ET2_55~65 um,0.06671302009999999,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,405,ET2_65 um~surface,13.046583299999998,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,500,Oral mucosa_tongue,0.06047538,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,501,Oral mucosa_mouth floor,0.014827365,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,600,Oral mucosa_lips_and cheeks,0.017277645,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,700,Trachea,7.310625109999999,3.8212e-15,0.002385005447533095,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,800,BB1_-11~-6 um,0.00911599,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,801,BB1_-6~0 um,0.0112521278,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,802,BB1_0~10 um,0.018796264099999998,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,803,BB1_10~35 um,0.04721598529999999,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,804,BB1_35~40 um,0.009485622709999999,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,805,BB1_40~50 um,0.019015763999999998,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,806,BB1_50~60 um,0.019069169799999997,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,807,BB1_60~70 um,0.019123297299999998,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,808,BB1_70 um~surface,1.0501353599999999,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,900,Blood in large arteries_head,217.55016,5.1397e-15,0.003207948419000798,0.4483,44.83
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,910,Blood in large veins_head,652.59324,1.7957e-15,0.001120787784500989,0.5377,53.769999999999996
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1300,Humeri_upper_cortical,193.259808,3.5208e-15,0.002197510514936282,0.6969,69.69
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1400,Humeri_upper_spongiosa,95.94340650000001,5.7781e-17,3.6064063583143984e-05,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1500,Humeri_upper_medullary cavity,36.526554000000004,3.5717e-15,0.0022292797961252896,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1700,Humeri_lower_spongiosa,44.7699185,3.1018e-16,0.000193599128471636,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1900,Ulnae and radii_cortical,139.5791936,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2000,Ulnae and radii_spongiosa,77.38598339999999,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2100,Ulnae and radii_medullary cavity,30.3443901,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2200,Wrists and hand bones_cortical,93.64005279999999,3.2748e-15,0.002043969391704538,0.8117,81.17
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2300,Wrists and hand bones_spongiosa,61.7788126,8.9998e-15,0.005617233336833546,0.7069,70.69
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,200,Adrenal_right,7.703215199999999,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,300,ET1(0-8),0.00792453406,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,301,ET1(8-40),0.031966979799999996,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,302,ET1(40-50),0.01007870546,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,303,ET1(50-surface),4.04565431,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,400,ET2(-15-0),0.0958725,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,401,ET2(0-40),0.264961845,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,402,ET2(40-50),0.0665561019,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,403,ET2(50-55),0.0333505818,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,404,ET2(55-65),0.06671302009999999,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,405,ET2(65-surface),13.046583299999998,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,500,Oral_mucosa_tongue,0.06047538,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,501,Oral_mucosa_mouth_floor,0.014827365,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,600,Oral_mucosa_lips_and_cheeks,0.017277645,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,700,Trachea,7.310625109999999,3.7603e-15,0.002346994657269627,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,800,BB(-11--6),0.00911599,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,801,BB(-6-0),0.0112521278,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,802,BB(0-10),0.018796264099999998,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,803,BB(10-35),0.04721598529999999,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,804,BB(35-40),0.009485622709999999,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,805,BB(40-50),0.019015763999999998,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,806,BB(50-60),0.019069169799999997,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,807,BB(60-70),0.019123297299999998,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,808,BB(70-surface),1.0501353599999999,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,900,Blood_in_large_arteries,217.55016,3.5572e-15,0.002220229607967321,0.5254,52.54
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,910,Blood_in_large_veins,652.59324,1.9429e-15,0.0012126627980770571,0.5954,59.540000000000006
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1300,Humeri_cortical,193.259808,3.8362e-15,0.0023943677111447873,0.7132,71.32
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1400,Humeri_upper_spongiosa,95.94340650000001,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1500,Humeri_medullary_cavity,36.526554000000004,1.2273e-14,0.007660204087086172,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1700,Humeri_lower_spongiosa,44.7699185,3.1937e-16,0.0001993350753110658,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,1900,Ulnae_and_radii_cortical,139.5791936,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2000,Ulnae_and_radii_spongiosa,77.38598339999999,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2100,Ulnae_and_radii_medullary_cavity,30.3443901,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2200,Wrists_and_hand_bones_cortical,93.64005279999999,2.8219e-15,0.0017612914457221923,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2300,Wrists_and_hand_bones_spongiosa,61.7788126,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2400,Clavicles_cortical,29.2620048,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2500,Clavicles_spongiosa,34.5808736,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2600,Cranium_cortical,385.563808,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2700,Cranium_spongiosa,368.925588,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2800,Femora_upper_cortical,412.00846399999995,7.3427e-16,0.00045829528681045896,0.9608,96.08
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2800,Femora_cortical,412.00846399999995,2.9375e-17,1.8334432906229633e-05,1.0,100.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,2900,Femora_upper_spongiosa,205.17813,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3000,Femora_upper_medullary cavity,81.165978,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3000,Femora_medullary_cavity,81.165978,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3200,Femora_lower_spongiosa,144.433685,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3400,Tibiae_fibulae_and patellae_cortical,493.93948800000004,1.9171e-16,0.00011965597046649473,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3500,Tibiae_fibulae_and patellae_spongiosa,505.05490100000003,3.8147e-16,0.00023809484666346956,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3600,Tibiae_fibulae_and patellae_medullary cavity,81.0475713,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3700,Ankles and foot_cortical,166.2292912,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3800,Ankles and foot_spongiosa,246.606792,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3900,Mandible_cortical,41.61896479999999,1.3276e-15,0.0008286227447254624,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3400,Tibiae_fibulae_and_patellae_cortical,493.93948800000004,3.6927e-16,0.00023048020559262694,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3500,Tibiae_fibulae_and_patellae_spongiosa,505.05490100000003,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3600,Tibiae_fibulae_and_patellae_medullary_cavity,81.0475713,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3700,Ankles_and_foot_cortical,166.2292912,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3800,Ankles_and_foot_spongiosa,246.606792,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,3900,Mandible_cortical,41.61896479999999,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4000,Mandible_spongiosa,30.6408867,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4100,Pelvis_cortical,233.77121599999998,2.6027e-15,0.001624477566810004,0.7139,71.39
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4200,Pelvis_spongiosa,405.79909499999997,1.9456e-15,0.0012143480055271615,0.6248,62.480000000000004
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4300,Ribs_cortical,146.5074688,1.0427e-14,0.006508021511940643,0.236,23.599999999999998
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4400,Ribs_spongiosa,247.01205399999998,1.3103e-14,0.008178249340266447,0.259,25.900000000000002
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4500,Scapulae_cortical,108.3846288,6.7649e-17,4.222318473782224e-05,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4100,Pelvis_cortical,233.77121599999998,1.3509e-15,0.0008431654608689569,0.693,69.3
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4200,Pelvis_spongiosa,405.79909499999997,9.7668e-16,0.0006095957082844716,0.6423,64.23
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4300,Ribs_cortical,146.5074688,1.0908e-14,0.006808238098422224,0.2545,25.45
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4400,Ribs_spongiosa,247.01205399999998,8.4149e-15,0.005252167471068315,0.3202,32.019999999999996
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4500,Scapulae_cortical,108.3846288,1.433e-15,0.0008944082503702831,1.0,100.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4600,Scapulae_spongiosa,86.16194999999999,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4700,Cervical spine_cortical,65.29120640000001,2.3228e-16,0.00014497777278158362,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4800,Cervical spine_spongiosa,68.8796126,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4900,Thoracic spine_cortical,183.3296864,1.2352e-14,0.007709512008774414,0.3327,33.269999999999996
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5000,Thoracic spine_spongiosa,242.19324,2.1103e-14,0.013171456599835367,0.3808,38.080000000000005
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5100,Lumbar spine_cortical,139.10414559999998,1.392e-14,0.008688180631649924,0.4152,41.52
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5200,Lumbar spine_spongiosa,236.01269000000002,1.084e-14,0.006765795836715888,0.4277,42.77
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5300,Sacrum_cortical,71.4696864,2.1605e-16,0.0001348478035537332,0.9925,99.25
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5400,Sacrum_spongiosa,137.91509600000003,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5500,Sternum_cortical,1.501086944,3.3991e-14,0.0212155134950009,0.8269,82.69
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5600,Sternum_spongiosa,45.73447899999999,2.212e-14,0.013806218072708067,0.5146,51.459999999999994
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5700,Cartilage_costal,37.372703900000005,2.9089e-14,0.018155925746700045,0.531,53.1
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5800,Cartilage_discs,61.8490824,1.4811e-14,0.009244299090184411,0.5063,50.629999999999995
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4700,Cervical_spine_cortical,65.29120640000001,3.1595e-15,0.001972004792076001,0.9292,92.92
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4800,Cervical_spine_spongiosa,68.8796126,4.4313e-15,0.00276579991616597,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,4900,Thoracic_spine_cortical,183.3296864,7.7335e-15,0.004826871042734531,0.4284,42.84
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5000,Thoracic_spine_spongiosa,242.19324,1.6896e-14,0.010545653732209562,0.4385,43.85
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5100,Lumbar_spine_cortical,139.10414559999998,1.645e-14,0.010267282427488594,0.4155,41.55
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5200,Lumbar_spine_spongiosa,236.01269000000002,1.3272e-14,0.00828373084362484,0.4118,41.18
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5300,Sacrum_cortical,71.4696864,2.9747e-16,0.00018566617043799585,0.773,77.3
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5400,Sacrum_spongiosa,137.91509600000003,1.89e-17,1.1796452150731576e-05,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5500,Sternum_cortical,1.501086944,8.1021e-15,0.00505693306721917,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5600,Sternum_spongiosa,45.73447899999999,8.8145e-15,0.005501578173683782,0.6947,69.47
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5700,Cartilage_costal,37.372703900000005,1.1543e-14,0.007204573924650507,0.509,50.9
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,5800,Cartilage_discs,61.8490824,1.5235e-14,0.009508939074941564,0.5064,50.63999999999999
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6100,Brain,1276.25559,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6200,Breast_left_adipose tissue,147.12112799999997,2.4319e-15,0.0015178725918182075,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6300,Breast_left_glandular tissue,91.28852889999999,3.238e-15,0.002021000638310521,0.926,92.60000000000001
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6400,Breast_right_adipose tissue,147.173488,1.4584e-14,0.009102616834194142,0.4998,49.980000000000004
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6500,Breast_right_glandular tissue,91.28852889999999,6.7276e-15,0.004199037644934484,0.9872,98.72
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6600,Eye lens_sensitive_left,0.036222956,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6601,Eye lens_insensitive_left,0.17629284,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6200,Breast_left_adipose_tissue,147.12112799999997,2.4128e-15,0.0015059513094859867,0.9413,94.13
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6300,Breast_left_glandular_tissue,91.28852889999999,3.2636e-15,0.0020369789015411413,0.9202,92.02
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6400,Breast_right_adipose_tissue,147.173488,9.3392e-15,0.005829070154820758,0.6233,62.33
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6500,Breast_right_glandular_tissue,91.28852889999999,1.5415e-14,0.009621286238281864,0.6123,61.23
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6600,Eye_lens_sensitive_left,0.036222956,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6601,Eye_lens_insensitive_left,0.17629284,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6700,Cornea_left,1.024694247,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6701,Aqueous_left,0.28340793,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6702,Vitreous_left,5.63584444,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6800, Eye lens_sensitive_right,0.03621755000000001,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6801,Eye lens_insensitive_right,0.17626846000000002,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6800,Eye_lens_sensitive_right,0.03621755000000001,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6801,Eye_lens_insensitive_right,0.17626846000000002,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6900,Cornea_right,1.024555111,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6901,Aqueous_right,0.283368384,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,6902,Vitreous_right,5.63509038,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7000,Gallbladder wall,7.30468655,6.8918e-14,0.04301523223937137,0.5999,59.99
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7100,Gallbladder contents,42.753343,9.3911e-15,0.005861463586917213,0.7213,72.13000000000001
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7200,Stomach wall_0~60 um,1.39035344,1.4069e-14,0.008781179116859394,0.5363,53.63
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7201,Stomach wall_60~100 um,0.929635952,9.9381e-15,0.006202874133290237,0.5263,52.629999999999995
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7202,Stomach wall_100~300 um,4.68165292,1.6744e-14,0.010450782794277752,0.6083,60.83
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7203,Stomach wall_300 um~surface,146.975248,1.5254e-14,0.009520797942183041,0.4444,44.440000000000005
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7300,Stomach contents,204.86024,2.9556e-14,0.01844740422047738,0.4322,43.22
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7400,Small intestine wall_0~130 um,10.9922708,3.1209e-15,0.0019479125670485806,0.4569,45.69
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7401,Small intestine wall_130~150 um,1.7115963200000002,3.1316e-15,0.001954590981758254,0.4602,46.02
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7402,Small intestine wall_150~200 um,4.30296384,3.1281e-15,0.001952406453582193,0.4602,46.02
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7403,Small intestine wall_200 um~surface,656.151636,6.9583e-15,0.004343029259282303,0.3378,33.78
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7500,Small intestine contents_-500~0 um,40.283152,3.2524e-15,0.002029988411377745,0.4568,45.68
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7501,Small intestine contents_centre~500 um,209.11176,9.7946e-15,0.00611330847807172,0.4876,48.76
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7600,Ascending colon wall_0~280 um,3.9643576,7.1114e-15,0.004438586763212303,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7601,Ascending colon wall_280~300 um,0.286708856,5.8199e-15,0.0036324958662456454,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7602,Ascending colon wall_300 um~surface,96.0025976,1.5843e-14,0.009888422826668804,0.6158,61.58
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7700,Ascending colon contents,89.075688,1.3249e-14,0.00826937537275358,0.9849,98.49
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7800,Transverse colon wall_right_0~280 um,3.2778936400000003,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7801,Transverse colon wall_right_280~300 um,0.23720359600000002,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7802,Transverse colon wall_right_300 um~surface,57.7592792,1.3112e-15,0.0008183866698433462,0.997,99.7
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7900,Transverse colon contents_right,53.437176,4.373e-16,0.00027294119182618614,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8000,Transverse colon wall_left_0~280 um,1.95593692,8.4587e-15,0.0052795052808144545,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8001,Transverse colon wall_left_280~300 um,0.14251319599999998,1.5855e-14,0.009895912637558155,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8002,Transverse colon wall_left_300 um~surface,59.166996,2.007e-14,0.01252670871244353,0.6385,63.849999999999994
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8100,Transverse colon contents_left,26.725296,1.2476e-15,0.0007786906721297732,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8200,Descending colon wall_0~280 um,2.6905852400000003,9.289e-15,0.005797737779266963,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8201,Descending colon wall_280~300 um,0.195545,8.8128e-15,0.005500517117141124,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8202,Descending colon wall_300 um~surface,97.37105,1.1276e-15,0.0007037925632362395,0.9942,99.42
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8300,Descending colon contents,44.537376,4.6552e-15,0.0029055473043431554,0.9624,96.24000000000001
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8400,Sigmoid colon wall_0~280 um,3.76055568,8.9601e-15,0.005592454545807936,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8401,Sigmoid colon wall_280~300 um,0.27248354,6.7688e-15,0.004224752662321264,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8402,Sigmoid colon wall_300 um~surface,46.0767216,4.6732e-15,0.0029167820206771854,0.9486,94.86
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8500,Sigmoid colon contents,71.24936,2.5675e-16,0.00016025074548679005,0.7964,79.64
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8600,Rectum wall,27.8499592,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8700,Heart wall,259.084112,9.6001e-15,0.0059919111265734504,0.5429,54.290000000000006
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8800,Blood in heart chamber,329.55718,1.0053e-14,0.006274589072555795,0.4212,42.120000000000005
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8900,Kidney_left_cortex,132.795012,1.522e-14,0.009499576811329872,0.6329,63.29
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9000,Kidney_left_medulla,33.3486104,2.5406e-14,0.015857177954576,0.7432,74.32
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9100,Kidney_left_pelvis,6.67508728,2.9587e-14,0.018466752898608208,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9200,Kidney_right_cortex,111.467816,3.9303e-14,0.024531003115354666,0.385,38.5
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9300,Kidney_right_medulla,28.003188,2.7696e-14,0.017286483532627604,0.5563,55.63
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9400,Kidney_right_pelvis,5.604214400000001,4.6745e-14,0.029175934168568653,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9500,Liver,1612.1540000000002,5.392e-14,0.03365421692949453,0.1107,11.07
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9700,Lung (AI)_left,380.55430699999994,4.29e-15,0.002677607392943834,0.4916,49.16
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9900,Lung (AI)_right,465.40557,1.8618e-14,0.011620441594831773,0.3072,30.72
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10000,Lymphatic nodes_ET,11.7300216,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10100,Lymphatic nodes_thoracic,11.3077272,7.9379e-15,0.004954447488216517,0.9971,99.71
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10200,Lymphatic nodes_head,3.97836,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10300,Lymphatic nodes_trunk,92.0630688,4.7356e-15,0.002955729037301823,0.7012,70.12
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10400,Lymphatic nodes_arms,7.8126837600000005,1.1281e-14,0.007041046386899625,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10500,Lymphatic nodes_legs,7.65855456,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10600,Muscle_head,15824.550000000001,3.0415e-15,0.0018983549849973592,0.124,12.4
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11000,Oesophagus wall_0~190 um,1.6678564000000002,7.066e-15,0.00441025031201425,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11001,Oesophagus wall_190~200 um,0.0896955332,6.9753e-15,0.004353639824708887,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11002,Oesophagus wall_200 um~surface,36.7617348,6.0733e-15,0.003790655706192491,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11003,Oesophagus contents,18.930392,7.3483e-15,0.0045864481131862875,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11100,Ovary_left,5.627653069999999,1.3216e-14,0.008248778392807857,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7000,Gall_bladder_wall,7.30468655,2.399e-14,0.014973380269632302,0.9037,90.36999999999999
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7100,Gall_bladder_contents,42.753343,6.9005e-15,0.004306953336831918,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7200,Stomach_wall(0-60),1.39035344,2.8923e-14,0.01805231669606399,0.5104,51.04
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7201,Stomach_wall(60-100),0.929635952,1.5388e-14,0.00960443416378082,0.4161,41.61
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7202,Stomach_wall(100-300),4.68165292,2.4821e-14,0.015492049673720023,0.5031,50.31
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7203,Stomach_wall(300-surface),146.975248,1.6948e-14,0.01057810957939676,0.3429,34.29
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7300,Stomach_contents,204.86024,3.7794e-14,0.023589159396018477,0.3733,37.330000000000005
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7400,Small_intestine_wall(0-130),10.9922708,4.8829e-15,0.0030476664659686353,0.4826,48.26
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7401,Small_intestine_wall(130-150),1.7115963200000002,7.4812e-15,0.004669397768785877,0.5877,58.77
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7402,Small_intestine_wall(150-200),4.30296384,5.1395e-15,0.0032078235888193087,0.4782,47.82
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7403,Small_intestine_wall(200-surface),656.151636,5.5371e-15,0.0034559859896198843,0.3791,37.91
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7500,Small_intestine_contents(-500-0),40.283152,6.6647e-15,0.004159778552856123,0.4295,42.95
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7501,Small_intestine_contents(centre--500),209.11176,1.3488e-14,0.008418547439633202,0.5171,51.71
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7600,Ascending_colon_wall(0-280),3.9643576,2.5918e-15,0.0016176743219188413,0.8574,85.74000000000001
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7601,Ascending_colon_wall(280-300),0.286708856,1.6217e-15,0.0010121855266053649,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7602,Ascending_colon_wall(300-surface),96.0025976,1.3389e-14,0.008356756499796036,0.6038,60.38
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7700,Ascending_colon_contents,89.075688,1.169e-14,0.007296324108045087,0.9166,91.66
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7800,Transverse_colon_wall_right(0-280),3.2778936400000003,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7801,Transverse_colon_wall_right(280-300),0.23720359600000002,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7802,Transverse_colon_wall_right(300-surface),57.7592792,3.3561e-15,0.002094712860479907,0.7099,70.99
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,7900,Transverse_colon_contents_right,53.437176,4.7205e-16,0.0002946304358599387,0.9231,92.31
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8000,Transverse_colon_wall_left(0-280),1.95593692,2.013e-14,0.012564157766890297,0.7069,70.69
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8001,Transverse_colon_wall_left(280-300),0.14251319599999998,1.7689e-14,0.01104060540181433,0.728,72.8
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8002,Transverse_colon_wall_left(300-surface),59.166996,1.9281e-14,0.012034253646468547,0.6371,63.71
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8100,Transverse_colon_content_left,26.725296,1.2379e-14,0.00772636408327546,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8200,Descending_colon_wall(0-280),2.6905852400000003,5.4195e-15,0.003382585842904221,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8201,Descending_colon_wall(280-300),0.195545,1.4038e-14,0.008761830438728564,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8202,Descending_colon_wall(300-surface),97.37105,9.1751e-17,5.726646990908851e-05,0.9311,93.11
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8300,Descending_colon_contents,44.537376,4.1148e-15,0.0025682561539592742,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8400,Sigmoid_colon_wall(0-280),3.76055568,2.8392e-15,0.0017720892564210102,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8401,Sigmoid_colon_wall(280-300),0.27248354,2.0398e-15,0.0012731430210085857,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8402,Sigmoid_colon_wall(300-surface),46.0767216,2.4137e-15,0.0015065130453026882,0.9018,90.18
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8500,Sigmoid_colon_contents,71.24936,2.5518e-15,0.0015927082856209967,0.976,97.6
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8600,Rectum_wall,27.8499592,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8700,Heart_wall,259.084112,1.0395e-14,0.006488048682902366,0.5768,57.68
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8800,Blood_in_heart_chamber,329.55718,1.4033e-14,0.008758709684191334,0.432,43.2
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,8900,Kidney_left_cortex,132.795012,1.1452e-14,0.007147776192072911,0.5429,54.290000000000006
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9000,Kidney_left_medulla,33.3486104,4.3007e-14,0.026842858076535074,0.7323,73.22999999999999
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9100,Kidney_left_pelvis,6.67508728,6.5102e-14,0.04063347237655699,0.7341,73.41
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9200,Kidney_right_cortex,111.467816,4.4644e-14,0.027864593112024365,0.3576,35.76
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9300,Kidney_right_medulla,28.003188,2.3468e-14,0.014647573495945431,0.7109,71.09
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9400,Kidney_right_pelvis,5.604214400000001,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9500,Liver,1612.1540000000002,5.4039e-14,0.03372849088748062,0.1113,11.129999999999999
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9700,Lung(AI)_left,380.55430699999994,6.5566e-15,0.004092307839761199,0.4514,45.14
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,9900,Lung(AI)_right,465.40557,2.0404e-14,0.012735175115530533,0.3031,30.31
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10000,Lymphatic_nodes_ET,11.7300216,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10100,Lymphatic_nodes_thoracic,11.3077272,2.345e-17,1.4636338779611401e-05,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10200,Lymphatic_nodes_head,3.97836,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10300,Lymphatic_nodes_trunk,92.0630688,2.7267e-17,1.7018722793333224e-05,0.7119,71.19
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10400,Lymphatic_nodes_arms,7.8126837600000005,1.0621e-14,0.0066291067879851884,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10500,Lymphatic_nodes_legs,7.65855456,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,10600,Muscle,15824.550000000001,2.8739e-15,0.0017937472929093904,0.1275,12.75
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11000,Oesophagus_wall(0-190),1.6678564000000002,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11001,Oesophagus_wall(190-200),0.0896955332,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11002,Oesophagus_wall(200-surface),36.7617348,4.5632e-16,0.00028481254208581125,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11003,Oesophagus_contents,18.930392,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11100,Ovary_left,5.627653069999999,1.3199e-14,0.008238167827381274,1.0,100.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11200,Ovary_right,5.627653069999999,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11300,Pancreas,128.751049,2.2042e-14,0.01375753430192727,0.3869,38.690000000000005
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11400,Pituitary gland,0.5736277799999999,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11600,RST_head,22170.81548,4.0056e-15,0.002500098874866159,0.0914,9.139999999999999
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12000,Salivary glands_left,33.0048875,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12100,Salivary glands_right,33.0202494,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12200,Skin_head_insensitive,2159.53856,2.6596e-15,0.0016599917534436878,0.1791,17.91
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12201,Skin_head_sensitive_50~100 um,82.17761920000001,2.2567e-15,0.0014085213528336482,0.191,19.1
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12600,Spinal cord,17.1395502,7.4882e-15,0.004673766825138,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12700,Spleen,166.91608,5.2812e-15,0.0032962657724044235,0.866,86.6
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11300,Pancreas,128.751049,1.8935e-14,0.01181829743249219,0.3978,39.78
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11400,Pituitary_gland,0.5736277799999999,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,11600,RST,22170.81548,4.088e-15,0.002551528909639719,0.0939,9.39
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12000,Salivary_gland_left,33.0048875,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12100,Salivary_gland_right,33.0202494,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12200,Skin_insensitive,2159.53856,2.983e-15,0.0018618421569117616,0.1771,17.71
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12201,Skin_sensitive(50-100),82.17761920000001,3.3949e-15,0.0021189299156888163,0.2533,25.330000000000002
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12600,Spinal_cord,17.1395502,6.4722e-15,0.004039629503172746,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12700,Spleen,166.91608,4.661e-15,0.0029091673796063427,0.9256,92.56
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12800,Teeth,37.225296,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12801,Teeth_retention region,0.033123376,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,12801,Teeth_retention_region,0.033123376,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13100,Thymus,18.261690599999998,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13200,Thyroid,17.3287829,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13300,Tongue_upper (food),19.308030000000002,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13300,Tongue_upper(food),19.308030000000002,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13301,Tongue_lower,36.988455,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13400,Tonsils,2.8321260699999997,0.0,0.0,0.0,0.0
 ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13500,Ureter_left,6.848149439999999,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13600,Ureter_right,6.848149439999999,2.3804e-14,0.014857288200847325,0.8929,89.29
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13700,Urinary bladder wall_insensitive,34.332272,9.0207e-17,5.630278090799171e-05,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13701,Urinary bladder wall_sensitive_118/116~193/185 um,2.0121088,0.0,0.0,0.0,0.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13800,Urinary bladder contents,178.13848000000002,3.334e-16,0.0002080919125425348,0.7314,73.14
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13900,Uterus,73.0309048,9.8992e-16,0.0006178594662990583,1.0,100.0
-ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,14000,Air inside body,0.0328097,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13600,Ureter_right,6.848149439999999,2.8216e-14,0.017611042004499585,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13700,Urinary_bladder_wall_insensitive,34.332272,8.7331e-17,5.450772289817668e-05,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13701,Urinary_bladder_wall_sensitive(69-116),2.0121088,0.0,0.0,0.0,0.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13800,Urinary_bladder_contents,178.13848000000002,2.3996e-16,0.0001497712517507698,0.8821,88.21
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,13900,Uterus,73.0309048,2.6028e-16,0.00016245399819007485,1.0,100.0
+ICRP 145 Adult Female Resized to Filipino,9500,Liver,photon,10.0,1000,14000,Air_remaining,0.0328097,0.0,0.0,0.0,0.0
