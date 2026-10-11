@@ -6,10 +6,19 @@ from pathlib import Path
 import b_config.a_config as config
 
 def get_phantom(code: str) -> PhantomSpec:
-    try:
+    """
+    Return the phantom specification using a case-insensitive phantom code.
+    """
+    if code in PHANTOMS:
         return PHANTOMS[code]
-    except KeyError:
-        raise ValueError(f"Unknown phantom: {code}")
+
+    code_normalized = code.casefold()
+
+    for phantom_code, phantom_spec in PHANTOMS.items():
+        if phantom_code.casefold() == code_normalized:
+            return phantom_spec
+
+    raise ValueError(f"Unknown phantom: {code}")
 
 def get_phantom_group(code: str) -> tuple[str, ...]:
 

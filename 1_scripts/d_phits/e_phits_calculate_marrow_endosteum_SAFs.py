@@ -158,12 +158,7 @@ def find_fluence_files():
 
     root = phits_generated_inputs_dir
 
-    return sorted(
-        root.rglob(
-            "phits_fluence_*_*_photon_energy_*.out"
-        )
-    )
-
+    return sorted(root.rglob("phits_fluence_*.out"))
 
 # ============================================================
 # LOAD SKELETAL RESPONSE FUNCTIONS
@@ -1542,36 +1537,81 @@ def phits_calculate_marrow_endosteum_SAFs(
         print(f"  Configured skeletal IDs: {len(configured_skeletal_ids)}")
         print(f"  RBM DRF regions       : {len(rbm_ids)}")
         print(f"  Endosteum DRF regions : {len(endosteum_ids)}")
+
     # ========================================================
     # FIND PHITS FLUENCE FILES
     # ========================================================
 
-    fluence_files = [
-        f
-        for f in find_fluence_files()
-        if any(
-            f.name.upper().startswith(
-                f"PHITS_FLUENCE_{phantom_code}_"
+    selected_phantom_names = {
+        phantom_code.casefold(): phantom_code
+        for phantom_code in selected_phantoms
+    }
+
+    selected_energies = np.asarray(
+        params["source_energies"],
+        dtype=float,
+    )
+
+    fluence_files = []
+
+    for fluence_file in find_fluence_files():
+
+        match = fluence_filename_pattern.fullmatch(
+            fluence_file.name
+        )
+
+        if match is None:
+            continue
+
+        file_phantom = match.group(1).casefold()
+        file_energy = float(match.group(4))
+
+        # Only selected phantoms.
+        if file_phantom not in selected_phantom_names:
+            continue
+
+        # Compare energies numerically.
+        if not np.any(
+            np.isclose(
+                file_energy,
+                selected_energies,
+                rtol=1e-9,
+                atol=1e-12,
             )
-            for phantom_code in selected_phantoms
-        )
-        and any(
-            f"energy_{energy}.out" in f.name
-            for energy in params["source_energies"]
-        )
-    ]
+        ):
+            continue
+
+        fluence_files.append(fluence_file)
+
+    fluence_files.sort()
 
     if not fluence_files:
+        print(
+            f"\nPHITS search directory: "
+            f"{phits_generated_inputs_dir}"
+        )
+        print(
+            f"Selected phantoms: {selected_phantoms}"
+        )
+        print(
+            f"Selected energies: "
+            f"{selected_energies.tolist()}"
+        )
+        print(
+            "Discovered PHITS fluence files:",
+            len(find_fluence_files()),
+        )
 
         raise FileNotFoundError(
-            "No PHITS photon-fluence "
-            "output files were found in:\n"
-            f"{phits_generated_inputs_dir}"
+            "No matching PHITS photon-fluence files found.\n"
+            f"Search directory: {phits_generated_inputs_dir}\n"
+            f"Selected phantoms: {selected_phantoms}\n"
+            f"Selected energies: {selected_energies.tolist()}"
         )
 
     print(
-        f"\nFound {len(fluence_files)} "
-        "PHITS photon-fluence file(s)."
+        f"\nFound {len(fluence_files)} matching "
+        "PHITS fluence file(s)."
     )
 
     # ========================================================
@@ -1598,7 +1638,7 @@ def phits_calculate_marrow_endosteum_SAFs(
 
             continue
 
-        phantom_code = match.group(1).upper()
+        phantom_code = selected_phantom_names[match.group(1).casefold()]
 
         source_organ = match.group(2)
         source_type = match.group(3).lower()

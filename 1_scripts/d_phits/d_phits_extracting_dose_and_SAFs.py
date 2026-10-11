@@ -86,8 +86,12 @@ def phits_calculate_dose_and_safs(params):
         if not filename_match:
             raise ValueError(f"Could not parse filename:\n{deposit_file.name}")
 
-        phantom = filename_match.group(1).upper()
-        phantom_spec = get_phantom(phantom)
+
+        parsed_phantom_code = filename_match.group(1)
+        phantom_spec = get_phantom(parsed_phantom_code)
+
+        # Use the canonical registry code for database lookups.
+        phantom = phantom_spec.code
 
         source_organ = filename_match.group(2)
         source_type = filename_match.group(3)
@@ -96,7 +100,9 @@ def phits_calculate_dose_and_safs(params):
         number_of_particles = params["maxcas"] * params["maxbch"]
 
         if phantom not in ORGANS:
-            raise KeyError(f"Phantom '{phantom}' was not found in ORGANS.")
+            raise KeyError(
+                f"Phantom '{phantom}' was not found in ORGANS."
+            )
 
         organ_database = ORGANS[phantom]
 

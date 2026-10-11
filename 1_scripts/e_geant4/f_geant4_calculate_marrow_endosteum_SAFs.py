@@ -131,7 +131,7 @@ def find_fluence_files():
 
     root = geant4_generated_inputs_dir
 
-    return sorted(root.rglob("geant4_deposit_*_source_*_gamma_energy_*_photon_fluence.csv"))
+    return sorted(root.rglob("*_photon_fluence.csv"))
 
 # ============================================================
 # LOAD SKELETAL RESPONSE FUNCTIONS
@@ -1236,36 +1236,73 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
         print(f"  Configured skeletal IDs: {len(configured_skeletal_ids)}")
         print(f"  RBM DRF regions       : {len(rbm_ids)}")
         print(f"  Endosteum DRF regions : {len(endosteum_ids)}")
+
     # ========================================================
-    # FIND FLUENCE FILES
+    # FIND GEANT4 FLUENCE FILES
     # ========================================================
 
-    fluence_files = [
-        f
-        for f in find_fluence_files()
-        if any(
-            f.name.upper().startswith(
-                f"GEANT4_DEPOSIT_{phantom_code}_"
+    selected_phantom_names = {
+        phantom_code.casefold()
+        for phantom_code in selected_phantoms
+    }
+
+    selected_energies = np.asarray(
+        params["source_energies"],
+        dtype=float,
+    )
+
+    fluence_files = []
+
+    for fluence_file in find_fluence_files():
+
+        match = fluence_filename_pattern.fullmatch(
+            fluence_file.name
+        )
+
+        if match is None:
+            continue
+
+        file_phantom = match.group(1).casefold()
+        file_energy = float(match.group(4))
+
+        # Keep only the selected phantoms.
+        if file_phantom not in selected_phantom_names:
+            continue
+
+        # Compare energies numerically, not as strings.
+        if not np.any(
+            np.isclose(
+                file_energy,
+                selected_energies,
+                rtol=1e-9,
+                atol=1e-12,
             )
-            for phantom_code in selected_phantoms
-        )
-        and any(
-            f"energy_{energy}_photon_fluence.csv"
-            in f.name
-            for energy in params["source_energies"]
-        )
-    ]
+        ):
+            continue
+
+        fluence_files.append(fluence_file)
+
+    fluence_files.sort()
 
     if not fluence_files:
+        print(f"\nFluence search directory: {geant4_generated_inputs_dir}")
+        print(f"Selected phantoms: {selected_phantoms}")
+        print(f"Selected energies: {selected_energies.tolist()}")
+        print(
+            "CSV files discovered:",
+            len(find_fluence_files()),
+        )
+
         raise FileNotFoundError(
-            "No Geant4 photon-fluence CSV "
-            "files were found in:\n"
-            f"{geant4_generated_inputs_dir}"
+            "No matching Geant4 photon-fluence CSV files were found.\n"
+            f"Search directory: {geant4_generated_inputs_dir}\n"
+            f"Selected phantoms: {selected_phantoms}\n"
+            f"Selected energies: {selected_energies.tolist()}"
         )
 
     print(
-        f"\nFound {len(fluence_files)} "
-        "photon-fluence file(s)."
+        f"\nFound {len(fluence_files)} matching "
+        "Geant4 photon-fluence CSV file(s)."
     )
 
     # ========================================================
@@ -1292,7 +1329,11 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
 
             continue
 
-        phantom_code = match.group(1).upper()
+        phantom_code = next(
+            name
+            for name in selected_phantoms
+            if name.casefold() == match.group(1).casefold()
+        )
 
         source_organ = match.group(2)
 

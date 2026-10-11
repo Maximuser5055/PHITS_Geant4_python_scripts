@@ -104,13 +104,18 @@ def geant4_calculate_dose_and_SAFs(params):
                 f"Cannot parse filename:\n{deposit_file.name}"
             )
 
-        phantom_code = match.group(1).upper()
-        phantom_spec = get_phantom(phantom_code)
+        
+        parsed_phantom_code = match.group(1)
+        phantom_spec = get_phantom(parsed_phantom_code)
 
+        phantom_code = phantom_spec.code
         phantom = phantom_spec.display_name
 
         source_organ = match.group(2)
-        source_type = source_type_map.get(match.group(3).lower(), match.group(3).lower())
+        source_type = source_type_map.get(
+            match.group(3).lower(),
+            match.group(3).lower()
+        )
         source_energy = float(match.group(4))
 
         number_of_particles = params["nps"]

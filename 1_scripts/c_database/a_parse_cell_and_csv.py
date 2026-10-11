@@ -17,10 +17,10 @@ database_file_path = config.DATABASE_FILE
 cell_pattern = re.compile(
     r"^\s*(\d+)\s+"          # Cell number
     r"(\d+)\s+"              # Organ/material ID
-    r"(-?\d+\.\d+)\s+"       # Density
+    r"(-?\d+(?:\.\d+)?)\s+" # Density (integer or decimal)
     r"-?\d+\s+"              # Surface (ignore)
     r"u=\d+\s+"              # Universe (ignore)
-    r"VOL=(\d+\.\d+)"        # Volume
+    r"VOL=(\d+(?:\.\d+)?)"  # Volume (integer or decimal)
 )
 
 
