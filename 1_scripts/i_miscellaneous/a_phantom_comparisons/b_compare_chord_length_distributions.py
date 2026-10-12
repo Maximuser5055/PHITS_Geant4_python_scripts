@@ -156,11 +156,11 @@ from c_database import b_organ_database as organ_database
 # Phantom file paths are NOT hard-coded here.
 PHANTOM_GROUPS_TO_COMPARE = [
     "MRCP_AF_AM",
-    "MRCP_AF_AM_Filipino_Resized",
+    #"MRCP_AF_AM_Filipino_Resized",
 ]
 
 # Output directory name under config.RESULTS_DIR.
-OUTPUT_DIR_NAME = "chord_length_distributions"
+OUTPUT_DIR_NAME = "d_chord_length_distributions"
 
 # Number of source-target point pairs per CLD.
 N_SAMPLES = 10_000_000
