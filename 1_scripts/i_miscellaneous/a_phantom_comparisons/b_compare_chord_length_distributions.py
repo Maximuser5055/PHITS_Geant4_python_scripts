@@ -1083,22 +1083,27 @@ def calculate_tetrahedron_masses(
 
 def load_skeletal_tissue_mass_fractions(
     phantom: registry.PhantomSpec,
+    mesh: MeshData,
+    tetra_masses_g: np.ndarray,
 ) -> dict[str, dict[int, float]]:
-    """Load organ-ID-specific marrow/endosteum mass fractions."""
+    """
+    Calculate organ-ID-specific marrow/endosteum mass fractions.
 
-    if phantom.skeletal_mass_columns is None:
-        raise ValueError(
-            f"No skeletal mass columns are configured for phantom "
-            f"'{phantom.code}'."
-        )
+    The CSV provides the reference marrow/endosteum masses in grams.
+    For each skeletal organ ID, the tissue mass is divided by that organ
+    ID's total mesh-derived mass (g) to obtain the tissue mass fraction.
+    """
 
-    if not phantom.skeletal_mass_file.is_file():
+    if phantom.skeletal_mass_file is None or not phantom.skeletal_mass_file.is_file():
         raise FileNotFoundError(
             f"Skeletal tissue mass file not found for phantom "
             f"'{phantom.code}':\n{phantom.skeletal_mass_file}"
         )
 
-    marrow_column, endosteum_column = phantom.skeletal_mass_columns
+    # Select the mass-in-grams columns based on phantom sex.
+    sex_prefix = "Ref_AM" if phantom.sex == "AM" else "Ref_AF"
+    marrow_column = f"{sex_prefix}_Marrow_Mass(g)"
+    endosteum_column = f"{sex_prefix}_Endosteum_Mass(g)"
 
     df = clean_columns(pd.read_csv(phantom.skeletal_mass_file))
     required_columns = {"Organ ID", marrow_column, endosteum_column}
@@ -1116,9 +1121,7 @@ def load_skeletal_tissue_mass_fractions(
     df[endosteum_column] = pd.to_numeric(
         df[endosteum_column], errors="coerce"
     )
-    df = df.dropna(
-        subset=["Organ ID", marrow_column, endosteum_column]
-    )
+    df = df.dropna(subset=["Organ ID", marrow_column, endosteum_column])
     df["Organ ID"] = df["Organ ID"].astype(int)
 
     if df["Organ ID"].duplicated().any():
@@ -1130,16 +1133,38 @@ def load_skeletal_tissue_mass_fractions(
             f"'{phantom.code}': {duplicate_ids}"
         )
 
-    return {
-        "marrow": {
-            int(row["Organ ID"]): float(row[marrow_column])
-            for _, row in df.iterrows()
-        },
-        "endosteum": {
-            int(row["Organ ID"]): float(row[endosteum_column])
-            for _, row in df.iterrows()
-        },
+    # Mesh-derived total mass for each organ ID, in grams.
+    organ_mesh_masses = {
+        int(organ_id): float(tetra_masses_g[mesh.organ_ids == organ_id].sum())
+        for organ_id in np.unique(mesh.organ_ids)
     }
+
+    result = {"marrow": {}, "endosteum": {}}
+    for _, row in df.iterrows():
+        organ_id = int(row["Organ ID"])
+        if organ_id not in organ_mesh_masses:
+            # The table may contain skeletal sites not represented in this mesh.
+            continue
+
+        organ_total_mass_g = organ_mesh_masses[organ_id]
+        if organ_total_mass_g <= 0:
+            raise ValueError(
+                f"Organ ID {organ_id} has non-positive mesh-derived mass "
+                f"in phantom '{phantom.code}'."
+            )
+
+        marrow_mass_g = float(row[marrow_column])
+        endosteum_mass_g = float(row[endosteum_column])
+        if marrow_mass_g < 0 or endosteum_mass_g < 0:
+            raise ValueError(
+                f"Negative skeletal tissue mass for organ ID {organ_id} "
+                f"in phantom '{phantom.code}'."
+            )
+
+        result["marrow"][organ_id] = marrow_mass_g / organ_total_mass_g
+        result["endosteum"][organ_id] = endosteum_mass_g / organ_total_mass_g
+
+    return result
 
 
 def get_skeletal_target_tissue(region: dict) -> str | None:
@@ -1176,15 +1201,6 @@ def build_region_samplers(
 
     samplers = {}
     unique_ids = np.unique(mesh.organ_ids)
-
-    # Cache the total mesh mass of every organ so it is not recomputed for
-    # every tetrahedron.
-    organ_mesh_masses = {}
-    for organ_id in unique_ids:
-        organ_id = int(organ_id)
-        organ_mesh_masses[organ_id] = float(
-            tetra_masses_g[mesh.organ_ids == organ_id].sum()
-        )
 
     for region in target_regions:
 
@@ -1252,17 +1268,14 @@ def build_region_samplers(
                     f"target region '{name}'."
                 )
 
-            # Weight each tetrahedron by:
+            # tissue_fractions already equals:
+            #   reference tissue mass (g) / total mesh-derived organ mass (g)
             #
-            #   tissue fraction of its skeletal organ
-            #   ------------------------------------------------
-            #   total mesh mass of that skeletal organ
-            #
-            # times the tetrahedron's mesh mass.
-            #
-            # Therefore, summing over all tetrahedra belonging to one
-            # organ gives exactly that organ's specified tissue mass
-            # fraction (up to the common normalization factor).
+            # Therefore, weight each tetrahedron by its mesh mass times
+            # that organ ID's tissue mass fraction. Summing over an organ ID
+            # gives its reference tissue mass (up to common normalization):
+            #   sum_t(m_t * tissue_mass_i / organ_mesh_mass_i)
+            #       = tissue_mass_i.
             organ_fraction = np.asarray(
                 [
                     tissue_fractions[int(organ_id)]
@@ -1270,25 +1283,7 @@ def build_region_samplers(
                 ],
                 dtype=np.float64,
             )
-            organ_total_mass = np.asarray(
-                [
-                    organ_mesh_masses[int(organ_id)]
-                    for organ_id in mesh.organ_ids[region_tet_indices]
-                ],
-                dtype=np.float64,
-            )
-
-            if np.any(organ_total_mass <= 0):
-                raise ValueError(
-                    f"At least one skeletal organ has zero mesh mass "
-                    f"in target region '{name}'."
-                )
-
-            weights = (
-                tetra_masses_g[region_tet_indices]
-                * organ_fraction
-                / organ_total_mass
-            )
+            weights = tetra_masses_g[region_tet_indices] * organ_fraction
 
         total_mass = float(weights.sum())
 
@@ -3002,8 +2997,10 @@ def main():
                 phantom.sex,
             )
 
-            skeletal_tissue_fractions = (
-                load_skeletal_tissue_mass_fractions(phantom)
+            skeletal_tissue_fractions = load_skeletal_tissue_mass_fractions(
+                phantom,
+                mesh,
+                tetra_masses,
             )
 
             region_samplers = build_region_samplers(
