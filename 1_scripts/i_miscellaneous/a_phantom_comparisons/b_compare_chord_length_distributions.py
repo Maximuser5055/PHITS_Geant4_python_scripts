@@ -217,20 +217,6 @@ class RegionSampler:
     total_mass_g: float
 
 
-@dataclass
-class PhantomInfo:
-    """Resolved phantom information."""
-
-    code: str
-    display_name: str
-    sex: str
-    node_file: Path
-    element_file: Path
-    material_file: Path
-    skeletal_mass_file: Path
-    skeletal_mass_columns: tuple[str, str] | None
-
-
 # ======================================================================
 # GENERAL UTILITIES
 # ======================================================================
@@ -1096,7 +1082,7 @@ def calculate_tetrahedron_masses(
 
 
 def load_skeletal_tissue_mass_fractions(
-    phantom: PhantomInfo,
+    phantom: registry.PhantomSpec,
 ) -> dict[str, dict[int, float]]:
     """Load organ-ID-specific marrow/endosteum mass fractions."""
 
@@ -1324,7 +1310,7 @@ def build_region_samplers(
 
     return samplers
 
-
+# ======================================================================
 # RANDOM POINT SAMPLING
 # ======================================================================
 
@@ -1635,7 +1621,7 @@ def safe_filename(text: str) -> str:
 
 def save_cld_csv(
     output_file: Path,
-    phantom: PhantomInfo,
+    phantom: registry.PhantomSpec,
     source_region: dict,
     target_region: str,
     distances_mm: np.ndarray,
@@ -1751,7 +1737,7 @@ def cld_csv_path(
 
 def existing_cld_csvs(
     output_dir: Path,
-    resolved_groups: dict[str, list[PhantomInfo]],
+    resolved_groups: dict[str, list[registry.PhantomSpec]],
     source_regions: list[dict],
     target_regions_by_group: dict[str, list[dict]],
 ) -> dict[tuple[str, str, str, str], Path]:
@@ -1811,7 +1797,7 @@ def existing_cld_csvs(
 
 def inspect_cld_csv_status(
     output_dir: Path,
-    resolved_groups: dict[str, list[PhantomInfo]],
+    resolved_groups: dict[str, list[registry.PhantomSpec]],
     source_regions: list[dict],
     target_regions_by_group: dict[str, list[dict]],
 ) -> tuple[
@@ -1899,7 +1885,7 @@ def ask_existing_results_action(
 
 def load_cld_csv(
     csv_file: Path,
-    phantom: PhantomInfo,
+    phantom: registry.PhantomSpec,
     source_key: str,
     target_region: str,
 ) -> dict:
@@ -1980,7 +1966,7 @@ def load_cld_csv(
 
 def load_existing_cld_results(
     existing_files: dict[tuple[str, str, str, str], Path],
-    resolved_groups: dict[str, list[PhantomInfo]],
+    resolved_groups: dict[str, list[registry.PhantomSpec]],
 ) -> dict:
     """
     Load all existing CLD CSVs into the plotting/calculation result structure.
@@ -2066,7 +2052,7 @@ def plot_selected_clds(
     ordered_phantoms = []
 
     for group_code in PHANTOM_GROUPS_TO_COMPARE:
-        group_name = registry.PHANTOM_GROUPS[group_code].display_name
+        group_name = registry.get_phantom_group_spec(group_code).display_name
 
         for phantom_code in registry.get_phantom_group(group_code):
             phantom = registry.get_phantom(phantom_code)
@@ -2645,54 +2631,21 @@ def select_source_organs(
 # PHANTOM RESOLUTION
 # ======================================================================
 
-def resolve_phantoms(
-    registry,
-) -> dict[str, list[PhantomInfo]]:
-    """
-    Resolve phantom groups through b_phantom_registry.py.
-
-    The registry is the authoritative source for NODE/ELE/MATERIAL
-    file paths. This function only converts PhantomSpec objects into
-    the local PhantomInfo representation used by the CLD calculation.
-    """
-
-    resolved = {}
+def resolve_phantoms() -> dict[str, list[registry.PhantomSpec]]:
+    """Resolve selected groups directly to the registry's phantom specs."""
+    resolved: dict[str, list[registry.PhantomSpec]] = {}
 
     for group_code in PHANTOM_GROUPS_TO_COMPARE:
-
-        phantom_codes = registry.get_phantom_group(
-            group_code
-        )
-
-        group = registry.PHANTOM_GROUPS[group_code]
-
-        phantoms = []
-
-        for phantom_code in phantom_codes:
-
-            spec = registry.get_phantom(
-                phantom_code
-            )
-
-            phantoms.append(
-                PhantomInfo(
-                    code=spec.code,
-                    display_name=spec.display_name,
-                    sex=spec.sex,
-                    node_file=Path(spec.node_file),
-                    element_file=Path(spec.element_file),
-                    material_file=Path(spec.material_file),
-                    skeletal_mass_file=Path(spec.skeletal_mass_file),
-                    skeletal_mass_columns=spec.skeletal_mass_columns,
-                )
-            )
-
-        resolved[group.display_name] = phantoms
+        group = registry.get_phantom_group_spec(group_code)
+        resolved[group.display_name] = [
+            registry.get_phantom(phantom_code)
+            for phantom_code in registry.get_phantom_group(group_code)
+        ]
 
     return resolved
 
 def validate_phantom_files(
-    resolved_groups: dict[str, list[PhantomInfo]],
+    resolved_groups: dict[str, list[registry.PhantomSpec]],
 ) -> None:
     """Check all NODE/ELE/MATERIAL files before starting sampling."""
 
@@ -2780,9 +2733,9 @@ def main():
 
     # Resolve groups so target-region definitions can use the same display
     # names as cld_results.
-    resolved_groups = resolve_phantoms(registry)
+    resolved_groups = resolve_phantoms()
     target_regions_by_group = {
-        registry.PHANTOM_GROUPS[group_code].display_name:
+        registry.get_phantom_group_spec(group_code).display_name:
         target_regions_by_group_code[group_code]
         for group_code in PHANTOM_GROUPS_TO_COMPARE
     }
@@ -3041,9 +2994,9 @@ def main():
                 for group_code in PHANTOM_GROUPS_TO_COMPARE
                 if phantom.code in registry.get_phantom_group(group_code)
             )
-            group_name_for_phantom = registry.PHANTOM_GROUPS[
+            group_name_for_phantom = registry.get_phantom_group_spec(
                 group_code_for_phantom
-            ].display_name
+            ).display_name
             phantom_target_regions = filter_target_regions_for_sex(
                 target_regions_by_group[group_name_for_phantom],
                 phantom.sex,

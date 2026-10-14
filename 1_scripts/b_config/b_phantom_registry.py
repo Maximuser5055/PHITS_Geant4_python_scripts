@@ -1,5 +1,7 @@
 # Add phantoms in this registry to make them available for use in the simulation framework.
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -30,6 +32,13 @@ def get_phantom_group(code: str) -> tuple[str, ...]:
 
     raise ValueError(f"Unknown phantom or phantom group: {code}")
 
+def get_phantom_group_spec(code: str) -> PhantomGroupSpec:
+    """Return the registry specification for a phantom group."""
+    try:
+        return PHANTOM_GROUPS[code]
+    except KeyError as exc:
+        raise ValueError(f"Unknown phantom group: {code}") from exc
+    
 def get_phantom_by_sex(phantom_group: str, sex: str) -> str:
 
     for phantom in get_phantom_group(phantom_group):

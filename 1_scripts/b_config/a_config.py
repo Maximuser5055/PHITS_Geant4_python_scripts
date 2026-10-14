@@ -74,22 +74,7 @@ DRFS_DIR = OTHER_INPUT_FILES_DIR / "DRFs"
 
 SOURCE_CSV = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs.csv")
 
-SOURCE_CSV_CLD = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs_cld.csv")
-
-SKELETAL_TISSUE_MASSES_ASIANS_CSV = OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116_for_Asians.csv"
-
-SKELETAL_TISSUE_MASSES_ICRP145_CSV = OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116_for_ICRP145.csv"
-
-SKELETAL_TISSUE_MASS_FILES = {
-    "MRCP_AF": SKELETAL_TISSUE_MASSES_ICRP145_CSV,
-    "MRCP_AM": SKELETAL_TISSUE_MASSES_ICRP145_CSV,
-
-    "MRCP_AF_H150W55": SKELETAL_TISSUE_MASSES_ASIANS_CSV,
-    "MRCP_AM_H165W65": SKELETAL_TISSUE_MASSES_ASIANS_CSV,
-
-    "MRCP_AF_Filipino": SKELETAL_TISSUE_MASSES_ASIANS_CSV,
-    "MRCP_AM_Filipino": SKELETAL_TISSUE_MASSES_ASIANS_CSV,
-}
+SOURCE_CSV_CLD = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs_cld_test.csv")
 
 ############################
 # PHITS Directories and Files
