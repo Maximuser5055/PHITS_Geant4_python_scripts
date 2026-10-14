@@ -64,6 +64,16 @@ def get_target_region_file(code: str) -> Path:
         f"No target-region file configured for phantom or group '{code}'."
     )
 
+def get_skeletal_mass_file(code: str) -> Path:
+    """Return the skeletal tissue mass CSV configured for a phantom."""
+    if code in PHANTOMS:
+        return PHANTOMS[code].skeletal_mass_file
+
+    raise ValueError(
+        f"Skeletal tissue mass file must be requested for a phantom code, "
+        f"not phantom/group '{code}'."
+    )
+
 def get_skeletal_response_functions_file(code: str) -> Path:
 
     if code in PHANTOMS:
@@ -92,6 +102,7 @@ class PhantomSpec:
     node_file: Path
     element_file: Path
     skeletal_response_functions_file: Path
+    skeletal_mass_file: Path
     skeletal_mass_columns: tuple[str, str] | None = None
 
 @dataclass(frozen=True)
@@ -112,7 +123,8 @@ PHANTOMS = {
         material_file=config.INCLUDE_FILES_DIR / "MRCP-AF.material",
         node_file=config.INCLUDE_FILES_DIR / "MRCP-AF.node",
         element_file=config.INCLUDE_FILES_DIR / "MRCP-AF.ele",
-        skeletal_response_functions_file=config.SKELETAL_RESPONSE_FUNCTIONS_ICRP116_CSV,
+        skeletal_response_functions_file=config.DRFS_DIR / "ICRP116-Table-D-1-Updated.csv",
+        skeletal_mass_file=config.OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116_for_ICRP145.csv",
         skeletal_mass_columns=(
             "Ref_AF_Marrow_Mass(g)",
             "Ref_AF_Endosteum_Mass(g)",
@@ -128,7 +140,8 @@ PHANTOMS = {
         material_file=config.INCLUDE_FILES_DIR / "MRCP-AM.material",
         node_file=config.INCLUDE_FILES_DIR / "MRCP-AM.node",
         element_file=config.INCLUDE_FILES_DIR / "MRCP-AM.ele",
-        skeletal_response_functions_file=config.SKELETAL_RESPONSE_FUNCTIONS_ICRP116_CSV,
+        skeletal_response_functions_file=config.DRFS_DIR / "ICRP116-Table-D-1-Updated.csv",
+        skeletal_mass_file=config.OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116_for_ICRP145.csv",
         skeletal_mass_columns=(
             "Ref_AM_Marrow_Mass(g)",
             "Ref_AM_Endosteum_Mass(g)",
@@ -144,7 +157,8 @@ PHANTOMS = {
         material_file=config.INCLUDE_FILES_DIR / "F_H150W55.material",
         node_file=config.INCLUDE_FILES_DIR / "F_H150W55.node",
         element_file=config.INCLUDE_FILES_DIR / "F_H150W55.ele",
-        skeletal_response_functions_file=config.SKELETAL_RESPONSE_FUNCTIONS_KOREAN_ASIAN_FEMALE_CSV,
+        skeletal_response_functions_file=config.DRFS_DIR / "DRFs-Female-Korean-Asian-Updated.csv",
+        skeletal_mass_file=config.OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116_for_Asians.csv",
         skeletal_mass_columns=(
             "Ref_AF_Marrow_Mass(g)",
             "Ref_AF_Endosteum_Mass(g)",
@@ -160,7 +174,8 @@ PHANTOMS = {
         material_file=config.INCLUDE_FILES_DIR / "M_H165W65.material",
         node_file=config.INCLUDE_FILES_DIR / "M_H165W65.node",
         element_file=config.INCLUDE_FILES_DIR / "M_H165W65.ele",
-        skeletal_response_functions_file=config.SKELETAL_RESPONSE_FUNCTIONS_KOREAN_ASIAN_MALE_CSV,
+        skeletal_response_functions_file=config.DRFS_DIR / "DRFs-Male-Korean-Asian-Updated.csv",
+        skeletal_mass_file=config.OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116_for_Asians.csv",
         skeletal_mass_columns=(
             "Ref_AM_Marrow_Mass(g)",
             "Ref_AM_Endosteum_Mass(g)",
@@ -176,7 +191,8 @@ PHANTOMS = {
         material_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AF.material",
         node_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AF.node",
         element_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AF.ele",
-        skeletal_response_functions_file=config.SKELETAL_RESPONSE_FUNCTIONS_KOREAN_ASIAN_FEMALE_CSV,
+        skeletal_response_functions_file=config.DRFS_DIR / "DRFs-Female-Korean-Asian-Updated.csv",
+        skeletal_mass_file=config.OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116_for_Asians.csv",
         skeletal_mass_columns=(
             "Ref_AF_Marrow_Mass(g)",
             "Ref_AF_Endosteum_Mass(g)",
@@ -192,7 +208,8 @@ PHANTOMS = {
         material_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AM.material",
         node_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AM.node",
         element_file=config.INCLUDE_FILES_DIR / "Filipino-MRCP-AM.ele",
-        skeletal_response_functions_file=config.SKELETAL_RESPONSE_FUNCTIONS_KOREAN_ASIAN_MALE_CSV,
+        skeletal_response_functions_file=config.DRFS_DIR / "DRFs-Male-Korean-Asian-Updated.csv",
+        skeletal_mass_file=config.OTHER_INPUT_FILES_DIR / "skeletal_tissue_masses_ICRP116_for_Asians.csv",
         skeletal_mass_columns=(
             "Ref_AM_Marrow_Mass(g)",
             "Ref_AM_Endosteum_Mass(g)",

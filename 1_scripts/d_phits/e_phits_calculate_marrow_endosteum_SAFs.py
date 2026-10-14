@@ -50,6 +50,7 @@ from b_config.b_phantom_registry import (
     get_phantom,
     get_phantom_group,
     get_skeletal_ids,
+    get_skeletal_mass_file,
     get_skeletal_response_functions_file,
 )
 
@@ -67,7 +68,6 @@ CM2_TO_M2 = 1.0e4
 # Configs
 # ============================================================
 
-mass_file = config.SKELETAL_MASSES_CSV
 phits_generated_inputs_dir = config.GENERATED_INPUTS_DIR
 # The actual DRF file is selected from the phantom registry.
 phits_results_dir = config.RESULTS_PHITS_DIR
@@ -91,7 +91,7 @@ fluence_filename_pattern = re.compile(
 # LOAD SKELETAL TISSUE MASSES
 # ============================================================
 
-def load_skeletal_masses():
+def load_skeletal_masses(mass_file):
 
     if not mass_file.exists():
 
@@ -1444,10 +1444,14 @@ def phits_calculate_marrow_endosteum_SAFs(
     # LOAD DATA
     # ========================================================
 
-    skeletal_masses = load_skeletal_masses()
-
     phantom_selection = params["phantom"]
     selected_phantoms = get_phantom_group(phantom_selection)
+
+    # Load the skeletal tissue mass file required by each phantom.
+    # ICRP 145 mesh -> ICRP 145 mass file;
+    # Filipino / Filipino-sized -> Asian mass file.
+    skeletal_mass_cache = {}
+    phantom_mass_data = {}
 
     # --------------------------------------------------------
     # Load the correct DRF file for EACH phantom.
@@ -1470,6 +1474,17 @@ def phits_calculate_marrow_endosteum_SAFs(
     phantom_response_data = {}
 
     for phantom_code in selected_phantoms:
+
+        mass_file = get_skeletal_mass_file(phantom_code)
+        mass_cache_key = str(mass_file.resolve())
+
+        if mass_cache_key not in skeletal_mass_cache:
+            skeletal_mass_cache[mass_cache_key] = load_skeletal_masses(
+                mass_file
+            )
+
+        skeletal_masses = skeletal_mass_cache[mass_cache_key]
+        phantom_mass_data[phantom_code] = skeletal_masses
 
         response_file = get_skeletal_response_functions_file(
             phantom_code
@@ -1651,6 +1666,8 @@ def phits_calculate_marrow_endosteum_SAFs(
                 rbm_ids,
                 endosteum_ids,
             ) = phantom_response_data[phantom_code]
+
+            skeletal_masses = phantom_mass_data[phantom_code]
 
             result = calculate_from_fluence(
                 fluence_file,

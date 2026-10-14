@@ -48,6 +48,7 @@ from b_config.b_phantom_registry import (
     get_phantom,
     get_phantom_group,
     get_skeletal_ids,
+    get_skeletal_mass_file,
     get_skeletal_response_functions_file,
 )
 
@@ -61,7 +62,6 @@ MeV_to_J = config.MEV_TO_J
 # Configs
 # ============================================================
 
-mass_file = config.SKELETAL_MASSES_CSV
 geant4_generated_inputs_dir = config.GEANT4_GENERATED_INPUTS_DIR
 # The actual DRF file is selected from the phantom registry.
 geant4_source_type_map = config.GEANT4_SOURCE_TYPE_MAP
@@ -85,7 +85,7 @@ fluence_filename_pattern = re.compile(
 # LOAD SKELETAL TISSUE MASSES
 # ============================================================
 
-def load_skeletal_masses():
+def load_skeletal_masses(mass_file):
 
     if not mass_file.exists():
         raise FileNotFoundError(f"Could not find skeletal tissue mass file:\n {mass_file}")
@@ -1143,10 +1143,14 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
     # LOAD DATA
     # ========================================================
 
-    skeletal_masses = load_skeletal_masses()
-
     phantom_selection = params["phantom"]
     selected_phantoms = get_phantom_group(phantom_selection)
+
+    # Load the skeletal tissue mass file required by each phantom.
+    # ICRP 145 mesh -> ICRP 145 mass file;
+    # Filipino / Filipino-sized -> Asian mass file.
+    skeletal_mass_cache = {}
+    phantom_mass_data = {}
 
     # --------------------------------------------------------
     # Load the correct DRF file for EACH phantom.
@@ -1169,6 +1173,17 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
     phantom_response_data = {}
 
     for phantom_code in selected_phantoms:
+
+        mass_file = get_skeletal_mass_file(phantom_code)
+        mass_cache_key = str(mass_file.resolve())
+
+        if mass_cache_key not in skeletal_mass_cache:
+            skeletal_mass_cache[mass_cache_key] = load_skeletal_masses(
+                mass_file
+            )
+
+        skeletal_masses = skeletal_mass_cache[mass_cache_key]
+        phantom_mass_data[phantom_code] = skeletal_masses
 
         response_file = get_skeletal_response_functions_file(
             phantom_code
@@ -1362,6 +1377,8 @@ def geant4_calculate_marrow_endosteum_SAFs(params):
                 rbm_ids,
                 endosteum_ids,
             ) = phantom_response_data[phantom_code]
+
+            skeletal_masses = phantom_mass_data[phantom_code]
 
             result = calculate_from_fluence(
                 fluence_file,
