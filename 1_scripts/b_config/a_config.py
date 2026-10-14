@@ -74,7 +74,7 @@ DRFS_DIR = OTHER_INPUT_FILES_DIR / "DRFs"
 
 SOURCE_CSV = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs.csv")
 
-SOURCE_CSV_CLD = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs_cld_test.csv")
+SOURCE_CSV_CLD = Path(r"/home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/5_other_input_files/source_organs_cld.csv")
 
 ############################
 # PHITS Directories and Files
