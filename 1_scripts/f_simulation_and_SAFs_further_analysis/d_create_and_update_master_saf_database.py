@@ -4,6 +4,8 @@
 # The user is asked to inspect the updated database before the
 # current result files are deleted.
 
+from pathlib import Path
+
 import pandas as pd
 
 import b_config.a_config as config
@@ -98,6 +100,101 @@ def validate_columns(df, filename):
 # ============================================================
 # NORMALIZE PHANTOM IDENTIFIERS
 # ============================================================
+
+def normalize_source_organ_ids(dataframe):
+    """Normalize source IDs so single- and multi-ID sources compare safely."""
+    dataframe = dataframe.copy()
+
+    def normalize_id(value):
+        if pd.isna(value):
+            return value
+
+        value = str(value).strip()
+        # Convert numeric-looking IDs such as 6100.0 to 6100, but
+        # preserve multi-ID strings such as 9700_9900 exactly.
+        if value.endswith(".0") and value[:-2].isdigit():
+            value = value[:-2]
+        return value
+
+    dataframe["Source Organ ID"] = dataframe["Source Organ ID"].map(normalize_id)
+    return dataframe
+
+
+def normalize_source_organ_metadata(dataframe):
+    """
+    Canonicalize Source Organ ID and Source Organ Name using source_organs.csv.
+
+    The CSV schema is:
+        Source region | Acronym | ID number(s)
+
+    Multi-organ source IDs (e.g. 9700_9900) are treated as one combined
+    source-region identifier, with the corresponding acronym (e.g. Lungs).
+    """
+    dataframe = normalize_source_organ_ids(dataframe)
+
+    source_csv = getattr(config, "SOURCE_CSV", None)
+    if source_csv is None:
+        raise AttributeError(
+            "config.SOURCE_CSV is required to map source IDs and names."
+        )
+
+    source_csv = Path(source_csv)
+    if not source_csv.exists():
+        raise FileNotFoundError(f"Source-organ CSV was not found: {source_csv}")
+
+    source_df = pd.read_csv(source_csv, dtype=str).fillna("")
+    required = {"Source region", "Acronym", "ID number(s)"}
+    missing = required - set(source_df.columns)
+    if missing:
+        raise ValueError(
+            f"Source-organ CSV is missing required columns: {sorted(missing)}. "
+            f"Found columns: {list(source_df.columns)}"
+        )
+
+    def clean(value):
+        return str(value).strip()
+
+    id_to_name = {}
+    name_to_id = {}
+
+    for _, row in source_df.iterrows():
+        source_id = clean(row["ID number(s)"])
+        source_name = clean(row["Acronym"])
+
+        if not source_id or not source_name:
+            continue
+
+        # Keep the combined ID as a single string, not an integer/list.
+        id_to_name[source_id] = source_name
+        name_to_id[source_name.casefold()] = source_id
+
+    # First map IDs to canonical acronyms. This fixes old result rows that
+    # already contain a combined ID but have a missing/legacy source name.
+    normalized_ids = dataframe["Source Organ ID"].map(clean)
+    mapped_names = normalized_ids.map(id_to_name)
+
+    existing_names = (
+        dataframe["Source Organ Name"].fillna("").astype(str).str.strip()
+        if "Source Organ Name" in dataframe.columns
+        else pd.Series("", index=dataframe.index, dtype=str)
+    )
+
+    dataframe["Source Organ ID"] = normalized_ids
+    dataframe["Source Organ Name"] = mapped_names.where(
+        mapped_names.notna(), existing_names
+    )
+
+    # If an ID is absent but the name matches the source CSV, fill the ID
+    # from the CSV. Do not split multi-organ IDs into separate organ IDs.
+    blank_ids = dataframe["Source Organ ID"].eq("")
+    if blank_ids.any():
+        mapped_ids = dataframe.loc[blank_ids, "Source Organ Name"].str.casefold().map(
+            name_to_id
+        )
+        dataframe.loc[blank_ids, "Source Organ ID"] = mapped_ids.fillna("")
+
+    return dataframe
+
 
 def normalize_phantom_codes(dataframe):
 
@@ -593,6 +690,8 @@ def update_master_saf_database(params):
 
     current_results = pd.concat(current_dataframes, ignore_index=True)
     current_results = normalize_phantom_codes(current_results)
+    current_results = normalize_source_organ_metadata(current_results)
+    current_results = normalize_source_organ_ids(current_results)
 
     # --------------------------------------------------------
     # Read existing database if it exists
@@ -610,6 +709,8 @@ def update_master_saf_database(params):
         validate_columns(existing_database, database_file.name)
 
         existing_database = normalize_phantom_codes(existing_database)
+        existing_database = normalize_source_organ_metadata(existing_database)
+        existing_database = normalize_source_organ_ids(existing_database)
     else:
 
         print()
@@ -618,6 +719,7 @@ def update_master_saf_database(params):
         print("A new database will be created.")
 
         existing_database = pd.DataFrame(columns=REQUIRED_COLUMNS)
+        existing_database = normalize_source_organ_ids(existing_database)
 
     # --------------------------------------------------------
     # Check whether any complete source simulations already

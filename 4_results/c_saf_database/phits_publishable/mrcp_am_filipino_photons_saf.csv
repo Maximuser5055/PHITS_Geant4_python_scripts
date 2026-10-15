@@ -1,0 +1,231 @@
+# Header
+# Document: Specific Absorbed Fractions (kg^-1)
+# Phantom type: Filipino Adult Male
+# Source type: photons
+# Number of source energies: 1
+# Number of source organs: 3
+# Number of target organs: 78
+# End Header
+Source Organ,Target Organ,10 MeV
+Brain,Red (active) marrow,0.0002424870817794
+Brain,Colon wall,0.0
+Brain,Stem cells of colon,0.0
+Brain,RLung + LLung,0.0007798071179102
+Brain,Stomach wall,0.0
+Brain,Stem cells of stomach,0.0
+Brain,Breast-a + Breast-g,0.0
+Brain,Testes,0.0
+Brain,Urinary bladder wall,0.0
+Brain,Urinary bladder basal cells,0.0
+Brain,Oesophagus wall,0.0
+Brain,Oesophagus basal cells,0.0
+Brain,Liver,0.0001217593590245
+Brain,Thyroid,0.0
+Brain,50-um endosteal region,0.0002884779717385
+Brain,Brain,0.0355903330443923
+Brain,Salivary glands,0.012610002040516
+Brain,Skin,0.0008805550849636
+Brain,Basal cells of skin,0.0008313690087182
+Brain,RAdrenal + LAdrenal,0.0
+Brain,ET region,0.0162021163210388
+Brain,Gallbladder wall,0.0
+Brain,Heart wall,0.0
+Brain,RKidney + LKidney,0.0
+Brain,Systemic lymph nodes,0.0
+Brain,Muscle,0.0007460475796703
+Brain,Oral mucosa,0.0090978035822294
+Brain,Pancreas,0.0
+Brain,Prostate,0.0
+Brain,Small intestine wall,0.0
+Brain,Stem cells of small intestine,0.0
+Brain,Spleen,0.0
+Brain,Thymus,0.0
+Brain,Tongue,0.0145384830191831
+Brain,Tonsils,0.0279800610299018
+Brain,Right colon wall (ascending + right transverse),0.0
+Brain,Left colon wall (left transverse + descending),0.0
+Brain,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Brain,Stem cells of right colon (ascending + right transverse),0.0
+Brain,Stem cells of left colon (left transverse + descending),0.0
+Brain,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0
+Brain,Basal cells of anterior nasal passages,0.0
+Brain,Basal cells of posterior nasal passages + pharynx,0.0216049836612472
+Brain,Extrathoracic lymph nodes,0.0123494498547288
+Brain,Bronchi basal cells,0.0
+Brain,Bronchi secretory cells,0.0
+Brain,Alveolar-interstitium,0.0007798071179102
+Brain,Thoracic lymph nodes,0.0001932308794362
+Brain,Right lung lobe,0.0011040605401814
+Brain,Left lung lobe,0.0003914861736774
+Brain,Right adrenal gland,0.0
+Brain,Left adrenal gland,0.0
+Brain,Right breast adipose,0.0
+Brain,Right breast glandular,0.0
+Brain,Left breast adipose,0.0
+Brain,Left breast glandular,0.0
+Brain,RBreast-a + RBreast-g,0.0
+Brain,LBreast-a + LBreast-g,0.0
+Brain,RBreast-a + LBreast-a,0.0
+Brain,RBreast-g + LBreast-g,0.0
+Brain,Entire lens of eye,0.0
+Brain,Sensitive lens of eye,0.0
+Brain,Right kidney cortex,0.0
+Brain,Right kidney medulla,0.0
+Brain,Right kidney pelvis,0.0
+Brain,Right kidney C+M+P,0.0
+Brain,Left kidney cortex,0.0
+Brain,Left kidney medulla,0.0
+Brain,Left kidney pelvis,0.0
+Brain,Left kidney C+M+P,0.0
+Brain,Pituitary gland,0.0
+Brain,Spinal cord,0.0070223218596762
+Brain,Ureters,0.0
+Brain,Adipose/residual tissue,0.0007115944495793
+Liver,Red (active) marrow,0.0005041985332712
+Liver,Colon wall,0.0097978033707228
+Liver,Stem cells of colon,0.0076318579059595
+Liver,RLung + LLung,0.005699160828222
+Liver,Stomach wall,0.0078150059964434
+Liver,Stem cells of stomach,0.0272454354118378
+Liver,Breast-a + Breast-g,0.0027689168924313
+Liver,Testes,0.0
+Liver,Urinary bladder wall,0.000701936916483
+Liver,Urinary bladder basal cells,0.0027054445234159
+Liver,Oesophagus wall,0.0045036873265342
+Liver,Oesophagus basal cells,0.0047026650121527
+Liver,Liver,0.0324246396418256
+Liver,Thyroid,0.0
+Liver,50-um endosteal region,0.0003126202319523
+Liver,Brain,0.0008210081036546
+Liver,Salivary glands,0.0060483967748956
+Liver,Skin,0.0011505368907533
+Liver,Basal cells of skin,0.0009957703577395
+Liver,RAdrenal + LAdrenal,0.009851916844328
+Liver,ET region,0.0
+Liver,Gallbladder wall,0.0234624567618069
+Liver,Heart wall,0.0096400107655052
+Liver,RKidney + LKidney,0.0088592396346146
+Liver,Systemic lymph nodes,1.4174226237838068e-06
+Liver,Muscle,0.0018396223846066
+Liver,Oral mucosa,0.0
+Liver,Pancreas,0.0137706414709836
+Liver,Prostate,0.0
+Liver,Small intestine wall,0.0031134489851229
+Liver,Stem cells of small intestine,0.0014812349335511
+Liver,Spleen,0.0037874101214737
+Liver,Thymus,0.0292608186919813
+Liver,Tongue,0.0
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),0.0150371437396345
+Liver,Left colon wall (left transverse + descending),0.0074685671922095
+Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0035506907470107
+Liver,Stem cells of right colon (ascending + right transverse),0.0033003867807908
+Liver,Stem cells of left colon (left transverse + descending),0.018297233558675
+Liver,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0010269779031118
+Liver,Basal cells of anterior nasal passages,0.0
+Liver,Basal cells of posterior nasal passages + pharynx,0.0
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Bronchi basal cells,0.0
+Liver,Bronchi secretory cells,0.0
+Liver,Alveolar-interstitium,0.005699160828222
+Liver,Thoracic lymph nodes,0.0051953697384907
+Liver,Right lung lobe,0.0081445451912643
+Liver,Left lung lobe,0.0027706058781533
+Liver,Right adrenal gland,0.0197038199971664
+Liver,Left adrenal gland,0.0
+Liver,Right breast adipose,0.0090851406087856
+Liver,Right breast glandular,0.0
+Liver,Left breast adipose,0.0
+Liver,Left breast glandular,0.0
+Liver,RBreast-a + RBreast-g,0.0055377952769582
+Liver,LBreast-a + LBreast-g,0.0
+Liver,RBreast-a + LBreast-a,0.0045426221260549
+Liver,RBreast-g + LBreast-g,0.0
+Liver,Entire lens of eye,0.0
+Liver,Sensitive lens of eye,0.0
+Liver,Right kidney cortex,0.0106242967465477
+Liver,Right kidney medulla,0.0212130168913711
+Liver,Right kidney pelvis,0.0253186815605516
+Liver,Right kidney C+M+P,0.0131162431278039
+Liver,Left kidney cortex,0.0022596135302271
+Liver,Left kidney medulla,0.0167284926213707
+Liver,Left kidney pelvis,0.0
+Liver,Left kidney C+M+P,0.0048405022040331
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,0.0
+Liver,Ureters,0.0132990935341824
+Liver,Adipose/residual tissue,0.0028367034592518
+Lungs,Red (active) marrow,0.0004525796650543
+Lungs,Colon wall,0.0029503128200638
+Lungs,Stem cells of colon,0.0017054549235795
+Lungs,RLung + LLung,0.0141574177313209
+Lungs,Stomach wall,0.0016927086844708
+Lungs,Stem cells of stomach,0.0017291476739887
+Lungs,Breast-a + Breast-g,0.0089636342685887
+Lungs,Testes,0.0
+Lungs,Urinary bladder wall,0.0
+Lungs,Urinary bladder basal cells,0.0
+Lungs,Oesophagus wall,0.028713467041528
+Lungs,Oesophagus basal cells,0.0319864857047985
+Lungs,Liver,0.0075640848473394
+Lungs,Thyroid,0.0117359095127093
+Lungs,50-um endosteal region,0.0002955477806143
+Lungs,Brain,0.0011720305740023
+Lungs,Salivary glands,0.0
+Lungs,Skin,0.0012873484661608
+Lungs,Basal cells of skin,0.0012516098147016
+Lungs,RAdrenal + LAdrenal,0.0097414420569451
+Lungs,ET region,0.0040263140932175
+Lungs,Gallbladder wall,0.0015804125127443
+Lungs,Heart wall,0.0134741697899467
+Lungs,RKidney + LKidney,0.0009493959193973
+Lungs,Systemic lymph nodes,0.0016753513636674
+Lungs,Muscle,0.0019962218472849
+Lungs,Oral mucosa,0.0
+Lungs,Pancreas,0.0010702315609978
+Lungs,Prostate,0.0
+Lungs,Small intestine wall,0.0010566916508239
+Lungs,Stem cells of small intestine,0.0010856480884117
+Lungs,Spleen,0.0008832983642177
+Lungs,Thymus,0.0251913547754326
+Lungs,Tongue,0.0002930248357203
+Lungs,Tonsils,0.0
+Lungs,Right colon wall (ascending + right transverse),0.0044813125920683
+Lungs,Left colon wall (left transverse + descending),0.0026716683250416
+Lungs,Rectosigmoid colon wall (sigmoid + rectum),0.0002618857898098
+Lungs,Stem cells of right colon (ascending + right transverse),0.0041433877068935
+Lungs,Stem cells of left colon (left transverse + descending),0.0
+Lungs,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0
+Lungs,Basal cells of anterior nasal passages,0.0
+Lungs,Basal cells of posterior nasal passages + pharynx,0.0048592644748309
+Lungs,Extrathoracic lymph nodes,0.0
+Lungs,Bronchi basal cells,0.0063313845669796
+Lungs,Bronchi secretory cells,0.006353224523146
+Lungs,Alveolar-interstitium,0.0141574177313209
+Lungs,Thoracic lymph nodes,0.0
+Lungs,Right lung lobe,0.0158359568237228
+Lungs,Left lung lobe,0.0121472249607162
+Lungs,Right adrenal gland,0.0194828705759304
+Lungs,Left adrenal gland,0.0
+Lungs,Right breast adipose,0.0255845698471237
+Lungs,Right breast glandular,0.0059730617691685
+Lungs,Left breast adipose,0.0
+Lungs,Left breast glandular,0.0
+Lungs,RBreast-a + RBreast-g,0.0179271438780468
+Lungs,LBreast-a + LBreast-g,0.0
+Lungs,RBreast-a + LBreast-a,0.0127924308580048
+Lungs,RBreast-g + LBreast-g,0.0029865308845842
+Lungs,Entire lens of eye,0.0
+Lungs,Sensitive lens of eye,0.0
+Lungs,Right kidney cortex,0.0
+Lungs,Right kidney medulla,0.0001585842625639
+Lungs,Right kidney pelvis,0.0
+Lungs,Right kidney C+M+P,2.919697892489045e-05
+Lungs,Left kidney cortex,0.0023333881674873
+Lungs,Left kidney medulla,0.0
+Lungs,Left kidney pelvis,0.0
+Lungs,Left kidney C+M+P,0.0018180909842649
+Lungs,Pituitary gland,0.0
+Lungs,Spinal cord,0.0047391154251476
+Lungs,Ureters,0.0
+Lungs,Adipose/residual tissue,0.0022853285476139
