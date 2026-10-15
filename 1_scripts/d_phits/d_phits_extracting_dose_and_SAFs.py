@@ -66,14 +66,31 @@ def phits_calculate_dose_and_safs(params):
 
     print(f"Found {len(deposit_files)} deposit tally file(s).\n")
 
-    # Find source organ ID
-    ORGAN_NAME_TO_ID = {
-        phantom: {
-            organ["name"]: organ["organ_id"]
-            for organ in ORGANS[phantom].values()
-        }
-        for phantom in ORGANS
-    }
+    # Load source-region metadata from the same CSV used by input generation.
+    # "ID number(s)" is kept as text so multi-ID sources such as 9700_9900
+    # remain intact instead of being forced into a single integer.
+    source_csv = config.SOURCE_CSV
+    if not source_csv.exists():
+        raise FileNotFoundError(f"Source-organ CSV not found: {source_csv}")
+
+    source_df = pd.read_csv(source_csv, dtype=str, encoding="utf-8-sig")
+    required_columns = {"Acronym", "ID number(s)"}
+    missing_columns = required_columns - set(source_df.columns)
+    if missing_columns:
+        raise ValueError(
+            f"Source-organ CSV is missing column(s): {sorted(missing_columns)}. "
+            f"Found: {list(source_df.columns)}"
+        )
+
+    source_df["Acronym"] = source_df["Acronym"].fillna("").str.strip()
+    source_df["ID number(s)"] = source_df["ID number(s)"].fillna("").str.strip()
+    source_df = source_df[
+        (source_df["Acronym"] != "") & (source_df["ID number(s)"] != "")
+    ]
+    source_name_to_id = dict(zip(source_df["Acronym"], source_df["ID number(s)"]))
+
+    if not source_name_to_id:
+        raise ValueError(f"No valid source regions found in {source_csv}")
 
     # -------------------------------------------------------------------------
     # Extract one deposit tally
@@ -131,7 +148,16 @@ def phits_calculate_dose_and_safs(params):
             if target_organ is None:
                 continue
 
-            source_organ_id = ORGAN_NAME_TO_ID[phantom][source_organ]
+            # Source name comes from the input filename and is the Acronym
+            # in source_organs.csv. Its ID may contain multiple region IDs.
+            try:
+                source_organ_id = source_name_to_id[source_organ]
+            except KeyError as exc:
+                available = ", ".join(sorted(source_name_to_id))
+                raise KeyError(
+                    f"Source acronym '{source_organ}' from '{deposit_file.name}' "
+                    f"was not found in {source_csv}. Available acronyms: {available}"
+                ) from exc
 
             source_energy_joule = source_energy * MeV_to_J
 

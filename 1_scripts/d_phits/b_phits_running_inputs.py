@@ -130,7 +130,7 @@ def run_phits(params):
     # ------------------------------------------------------
     while True:
         source_choice = input(
-            "\\nSelect source organ group(s): "
+            "\nSelect source organ group(s): "
         ).strip().upper()
 
         if source_choice == "A":
@@ -153,15 +153,15 @@ def run_phits(params):
 
         except ValueError:
             print(
-                "\\nInvalid selection. Enter valid row numbers "
+                "\nInvalid selection. Enter valid row numbers "
                 "separated by commas, or A."
             )
 
-    print("\\nSelected source organ group(s):")
+    print("\nSelected source organ group(s):")
     for source in selected_sources:
         print(
             f"  - {source['source_region']} "
-            f"(Acronym: {source['acronym']}; IDs: {source['ids_text']})"
+            f"({source['acronym']}; IDs: {source['ids_text']})"
         )
 
     selected_source_acronyms = {
@@ -199,7 +199,7 @@ def run_phits(params):
             # named with the phantom in the filename, e.g.
             # phits_MRCP_AF_H150W55_source_Lungs_...inp.
             print(
-                f"\\nDirectory not found for {phantom}: {phantom_dir}"
+                f"\nDirectory not found for {phantom}: {phantom_dir}"
             )
             print(
                 "Searching the configured input root for matching "
