@@ -28,14 +28,15 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
     else:
         raise ValueError(f"Unsupported simulation code: {simulation}")
 
-    skeletal = pd.read_csv(config.SKELETAL_MASSES_CSV)
     results_phits_dir = config.RESULTS_PHITS_DIR
     results_geant4_dir = config.RESULTS_GEANT4_DIR
     
     RBM_REGION = "Red (active) marrow"
     ENDOSTEUM_REGION = "50-um endosteal region"
 
-    skeletal = skeletal.set_index("Organ ID")
+    # Skeletal mass tables are loaded from each phantom's registry entry.
+    # Different phantom families use different reference CSV files.
+    skeletal_mass_cache = {}
 
     # ==========================================================
     # Determine selected phantoms
@@ -108,12 +109,65 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
 
         phantom_spec = get_phantom(phantom_code)
 
+        if phantom_spec.skeletal_mass_file is None:
+            raise ValueError(
+                f"No skeletal tissue mass CSV defined for "
+                f"phantom '{phantom_code}'."
+            )
+
         if phantom_spec.skeletal_mass_columns is None:
             raise ValueError(
                 f"No skeletal mass columns defined for "
                 f"phantom '{phantom_code}'."
             )
 
+        skeletal_mass_file = phantom_spec.skeletal_mass_file
+
+        if not skeletal_mass_file.is_file():
+            raise FileNotFoundError(
+                f"Skeletal tissue mass CSV not found for phantom "
+                f"'{phantom_code}':\\n{skeletal_mass_file}"
+            )
+
+        cache_key = str(skeletal_mass_file.resolve())
+        if cache_key not in skeletal_mass_cache:
+            skeletal_table = pd.read_csv(skeletal_mass_file)
+
+            required_columns = {
+                "Organ ID",
+                *phantom_spec.skeletal_mass_columns,
+            }
+            missing_columns = required_columns - set(skeletal_table.columns)
+            if missing_columns:
+                raise ValueError(
+                    f"Skeletal tissue mass CSV for phantom '{phantom_code}' "
+                    f"is missing column(s): {sorted(missing_columns)}\\n"
+                    f"File: {skeletal_mass_file}"
+                )
+
+            skeletal_table["Organ ID"] = pd.to_numeric(
+                skeletal_table["Organ ID"], errors="coerce"
+            )
+            skeletal_table = skeletal_table.dropna(
+                subset=["Organ ID"]
+            ).copy()
+            skeletal_table["Organ ID"] = skeletal_table["Organ ID"].astype(int)
+
+            if skeletal_table["Organ ID"].duplicated().any():
+                duplicate_ids = sorted(
+                    skeletal_table.loc[
+                        skeletal_table["Organ ID"].duplicated(),
+                        "Organ ID",
+                    ].unique().tolist()
+                )
+                raise ValueError(
+                    f"Duplicate Organ ID(s) in skeletal tissue mass CSV "
+                    f"for phantom '{phantom_code}': {duplicate_ids}"
+                )
+
+            skeletal_mass_cache[cache_key] = skeletal_table.set_index("Organ ID")
+
+        skeletal = skeletal_mass_cache[cache_key]
         marrow_column, endosteum_column = phantom_spec.skeletal_mass_columns
 
         marrow_lookup = skeletal[marrow_column]

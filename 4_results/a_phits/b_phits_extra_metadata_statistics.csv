@@ -1,6 +1,6 @@
 Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),Overall Wall Time (s),Overall Wall Time (dhms)
-Type + Energy,photon,10.0,,,2,747.39,0d 00h 12m 27s,38.52,720.15,774.63,,
-Phantom + Type + Energy,photon,10.0,ICRP 145 Adult Female Resized to Filipino,,1,774.63,0d 00h 12m 55s,,774.63,774.63,,
-Phantom + Type + Energy,photon,10.0,ICRP 145 Adult Male Resized to Filipino,,1,720.15,0d 00h 12m 00s,,720.15,720.15,,
-Source Organ + Type + Energy,photon,10.0,,Lungs,2,747.39,0d 00h 12m 27s,38.52,720.15,774.63,,
-All simulations,,,,,2,747.39,0d 00h 12m 27s,38.52,720.15,774.63,1179.0,0d 00h 19m 39s
+Type + Energy,photon,10.0,,,2,702.62,0d 00h 11m 43s,13.27,693.24,712.0,,
+Phantom + Type + Energy,photon,10.0,ICRP 145 Adult Female Resized to Filipino,,1,712.0,0d 00h 11m 52s,,712.0,712.0,,
+Phantom + Type + Energy,photon,10.0,ICRP 145 Adult Male Resized to Filipino,,1,693.24,0d 00h 11m 33s,,693.24,693.24,,
+Source Organ + Type + Energy,photon,10.0,,Lungs,2,702.62,0d 00h 11m 43s,13.27,693.24,712.0,,
+All simulations,,,,,2,702.62,0d 00h 11m 43s,13.27,693.24,712.0,1151.0,0d 00h 19m 11s
