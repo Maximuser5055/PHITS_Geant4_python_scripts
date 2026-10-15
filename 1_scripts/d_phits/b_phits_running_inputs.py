@@ -19,7 +19,6 @@ import pandas as pd
 
 import b_config.a_config as config
 from b_config.b_phantom_registry import get_phantom_group
-from c_database.b_organ_database import SOURCE_ORGANS
 
 def run_phits(params):
 
@@ -74,140 +73,100 @@ def run_phits(params):
     )
 
     # ------------------------------------------------------
-    # Source-organ column
+    # Validate the updated source-organ CSV schema
     # ------------------------------------------------------
+    # Current source_organs.csv columns:
+    #   Source region | Acronym | ID number(s)
+    required_columns = {"Source region", "Acronym", "ID number(s)"}
+    missing_columns = required_columns.difference(source_df.columns)
 
-    source_organ_column = "source_organ_ID"
-
-    if source_organ_column not in source_df.columns:
-
+    if missing_columns:
         raise ValueError(
-            f"Column '{source_organ_column}' was not found "
-            f"in {source_csv}"
+            "The source-organ CSV is missing required column(s): "
+            f"{', '.join(sorted(missing_columns))}. "
+            f"Found columns: {source_df.columns.tolist()}\n"
+            f"File: {source_csv}"
         )
 
-    # ------------------------------------------------------
-    # Get source-organ IDs
-    # ------------------------------------------------------
+    # Clean up labels and IDs while preserving multi-ID groups
+    for column in required_columns:
+        source_df[column] = source_df[column].astype("string").str.strip()
 
-    available_source_organs = (
-        source_df[source_organ_column]
-        .dropna()
-        .astype(str)
-        .str.strip()
-        .unique()
-        .tolist()
-    )
+    source_df = source_df.dropna(subset=["Acronym", "ID number(s)"])
+    source_df = source_df[
+        source_df["Acronym"].ne("") & source_df["ID number(s)"].ne("")
+    ].drop_duplicates(subset=["Acronym"], keep="first").reset_index(drop=True)
 
-    if not available_source_organs:
-
-        raise ValueError(
-            "No source organs were found in "
-            f"{source_csv}"
-        )
+    if source_df.empty:
+        raise ValueError(f"No valid source-organ rows were found in {source_csv}")
 
     # ------------------------------------------------------
-    # Build source-organ ID → name lookup
+    # CSV acronyms are the same labels used in generated input filenames.
+    # The IDs column may contain multiple IDs, e.g. "9700_9900".
+    available_sources = []
+    for _, row in source_df.iterrows():
+        acronym = str(row["Acronym"]).strip()
+        ids_text = str(row["ID number(s)"]).strip()
+        source_region = str(row["Source region"]).strip()
+        available_sources.append({
+            "source_region": source_region,
+            "acronym": acronym,
+            "ids_text": ids_text,
+        })
+
     # ------------------------------------------------------
-
-    source_organ_names = {}
-
-    for phantom in selected_phantoms:
-        phantom_sources = SOURCE_ORGANS.get(phantom, {})
-
-        for organ_id, organ_name in phantom_sources.items():
-            source_organ_names[str(organ_id)] = organ_name
-
+    # Display source-organ groups
     # ------------------------------------------------------
-    # Display source organs
-    # ------------------------------------------------------
-
-    for i, organ_id in enumerate(
-        available_source_organs,
-        start=1
-    ):
-
-        organ_name = source_organ_names.get(
-            organ_id,
-            "Unknown"
-        )
-
+    for i, source in enumerate(available_sources, start=1):
         print(
-            f"[{i}] {organ_id} ({organ_name})"
+            f"[{i}] {source['source_region']} "
+            f"(Acronym: {source['acronym']}; IDs: {source['ids_text']})"
         )
 
     print("[A] All source organs")
 
     # ------------------------------------------------------
-    # Select source organs
+    # Select source-organ groups by CSV row
     # ------------------------------------------------------
-
     while True:
-
         source_choice = input(
-            "\nSelect source organ(s): "
+            "\\nSelect source organ group(s): "
         ).strip().upper()
 
         if source_choice == "A":
-
-            selected_source_organs = (
-                available_source_organs.copy()
-            )
-
+            selected_sources = available_sources.copy()
             break
 
         try:
-
-            indices = [
-                int(x.strip()) - 1
-                for x in source_choice.split(",")
-            ]
-
-            if not indices:
-                raise ValueError
-
-            if any(
-                index < 0
-                or index >= len(
-                    available_source_organs
-                )
+            indices = [int(x.strip()) - 1 for x in source_choice.split(",")]
+            if not indices or any(
+                index < 0 or index >= len(available_sources)
                 for index in indices
             ):
                 raise ValueError
 
-            selected_source_organs = list(
-                dict.fromkeys(
-                    available_source_organs[index]
-                    for index in indices
-                )
-            )
-
+            selected_sources = [
+                available_sources[index]
+                for index in dict.fromkeys(indices)
+            ]
             break
 
         except ValueError:
-
             print(
-                "\nInvalid selection. "
-                "Please enter valid numbers "
+                "\\nInvalid selection. Enter valid row numbers "
                 "separated by commas, or A."
             )
 
-    # ------------------------------------------------------
-    # Display selected source organs
-    # ------------------------------------------------------
-
-    print("\nSelected source organ(s):")
-
-    for organ_id in selected_source_organs:
-
-        organ_name = source_organ_names.get(
-            organ_id,
-            "Unknown"
-        )
-
+    print("\\nSelected source organ group(s):")
+    for source in selected_sources:
         print(
-            f"  - {organ_id} ({organ_name})"
+            f"  - {source['source_region']} "
+            f"(Acronym: {source['acronym']}; IDs: {source['ids_text']})"
         )
+
+    selected_source_acronyms = {
+        source["acronym"] for source in selected_sources
+    }
 
     # ==========================================================
     # Find input files
@@ -215,27 +174,9 @@ def run_phits(params):
 
     input_files = []
 
-    # Convert selected IDs → organ names
-    selected_source_organ_names = []
-
-    for organ_id in selected_source_organs:
-
-        organ_name = source_organ_names.get(
-            organ_id
-        )
-
-        if organ_name is None:
-
-            print(
-                f"[WARNING] No organ name found "
-                f"for source organ ID {organ_id}."
-            )
-
-            continue
-
-        selected_source_organ_names.append(
-            organ_name
-        )
+    # The launcher matches the selected CSV acronym directly against
+    # the source label in each generated filename. This supports both
+    # single-ID sources (e.g. Brain) and multi-ID groups (e.g. Lungs).
 
     # ------------------------------------------------------
     # Search generated PHITS input files
@@ -248,41 +189,42 @@ def run_phits(params):
             phantom
         )
 
-        if not phantom_dir.exists():
-
-            print(
-                f"\nSkipping {phantom}: "
-                f"input directory does not exist."
+        if phantom_dir.exists():
+            # Standard layout: one subdirectory per phantom.
+            phantom_input_files = sorted(
+                phantom_dir.rglob("*.inp")
             )
-
-            continue
-
-        phantom_input_files = sorted(
-            phantom_dir.rglob("*.inp")
-        )
+        else:
+            # Also support a flat/nested input directory where files are
+            # named with the phantom in the filename, e.g.
+            # phits_MRCP_AF_H150W55_source_Lungs_...inp.
+            print(
+                f"\\nDirectory not found for {phantom}: {phantom_dir}"
+            )
+            print(
+                "Searching the configured input root for matching "
+                "phantom filenames instead."
+            )
+            phantom_token = f"_{phantom}_source_"
+            phantom_input_files = sorted(
+                infile
+                for infile in input_root.rglob("*.inp")
+                if phantom_token in infile.name
+                or infile.name.startswith(f"{phantom}_source_")
+            )
 
         for infile in phantom_input_files:
 
             filename = infile.name
 
             # --------------------------------------------------
-            # Match source organ name in filename
+            # Match source acronym in filename
             # --------------------------------------------------
-
-            matched = False
-
-            for organ_name in selected_source_organ_names:
-
-                safe_name = (
-                    organ_name
-                    .replace(",", "")
-                    .replace(" ", "_")
-                )
-
-                if f"_source_{safe_name}_" in filename:
-
-                    matched = True
-                    break
+            matched = any(
+                f"_source_{acronym.replace(',', '').replace(' ', '_')}_"
+                in filename
+                for acronym in selected_source_acronyms
+            )
 
             if matched:
 

@@ -47,9 +47,6 @@ def parse_material(material_file_path):
         $ Liver 1.060 g/cm3
         MAT[9500]
         ...
-
-    Therefore, the organ name is taken directly from the material-file
-    comment rather than from ORGAN_ID_CSV.
     """
     material_names = {}
     pending_name = None
@@ -144,16 +141,39 @@ def parse_cell_csv_inputs(params):
 
         phantoms.append((phantom_code, organs))
 
-    # Reading the source organs
+    # Read source organs directly from source_organs.csv.
+    # Each row can contain multiple IDs separated by underscores, and the
+    # CSV acronym is used as the source-organ name.
     organ_groups = pd.read_csv(source_organs_csv_file_path)
 
-    main_source_organs = (
-        organ_groups["source_organ_ID"]
-        .dropna()
-        .astype(int)
-        .unique()
-        .tolist()
-    )
+    required_columns = {"Acronym", "ID number(s)"}
+    missing_columns = required_columns.difference(organ_groups.columns)
+    if missing_columns:
+        raise ValueError(
+            "The source-organ CSV is missing required column(s): "
+            + ", ".join(sorted(missing_columns))
+        )
+
+    # Preserve CSV order and group IDs that share the same acronym.
+    grouped_source_organs = {}
+    for _, row in organ_groups.iterrows():
+        if pd.isna(row["Acronym"]) or pd.isna(row["ID number(s)"]):
+            continue
+
+        acronym = str(row["Acronym"]).strip()
+        organ_ids = [
+            int(value.strip())
+            for value in str(row["ID number(s)"]).split("_")
+            if value.strip()
+        ]
+
+        if not acronym:
+            continue
+
+        grouped_source_organs.setdefault(acronym, [])
+        for organ_id in organ_ids:
+            if organ_id not in grouped_source_organs[acronym]:
+                grouped_source_organs[acronym].append(organ_id)
 
     # -------------------------------------------------------------------------
     # Write the organ database
@@ -195,21 +215,27 @@ def parse_cell_csv_inputs(params):
 
             f.write(f'    "{phantom_code}": {{\n')
 
-            for organ_id in main_source_organs:
+            for acronym, organ_ids in grouped_source_organs.items():
+                # Keep only IDs that exist in this phantom.
+                valid_ids = []
+                for organ_id in organ_ids:
+                    if organ_id not in organs:
+                        print(
+                            f"Warning: Source organ ID {organ_id} does not "
+                            f"exist in phantom {phantom_code}. Skipping."
+                        )
+                        continue
+                    valid_ids.append(organ_id)
 
-                organ = organs.get(organ_id)
-
-                if organ is None:
-
-                    print(
-                        f"Warning: Source organ ID {organ_id} does not "
-                        f"exist in phantom {phantom_code}. Skipping."
-                    )
-
+                if not valid_ids:
                     continue
 
+                # Use dict.fromkeys so multiple IDs sharing an acronym can
+                # be written compactly while remaining valid Python.
+                ids_repr = repr(valid_ids)
+                acronym_repr = repr(acronym)
                 f.write(
-                    f'        {organ_id}: "{organ["name"]}",\n'
+                    f"        **dict.fromkeys({ids_repr}, {acronym_repr}),\n"
                 )
 
             f.write("    },\n\n")
