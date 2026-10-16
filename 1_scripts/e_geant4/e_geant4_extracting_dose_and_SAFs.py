@@ -73,16 +73,37 @@ def geant4_calculate_dose_and_SAFs(params):
     print(f"\nFound {len(deposit_files)} Geant4 deposit CSV file(s).\n")
 
     # -------------------------------------------------------------
-    # Organ name -> organ ID lookup
+    # Load source-region metadata from the same CSV used by the
+    # input generators. Keep IDs as strings because one source region
+    # may contain multiple IDs (e.g. 9700_9900).
     # -------------------------------------------------------------
 
-    ORGAN_NAME_TO_ID = {
-        phantom: {
-            organ["name"]: organ["organ_id"]
-            for organ in ORGANS[phantom].values()
-        }
-        for phantom in ORGANS
-    }
+    source_csv = config.SOURCE_CSV
+    if not source_csv.is_file():
+        raise FileNotFoundError(f"Source-organ CSV not found: {source_csv}")
+
+    source_df = pd.read_csv(source_csv, dtype=str, encoding="utf-8-sig")
+    source_df.columns = [str(column).strip() for column in source_df.columns]
+
+    required_columns = {"Acronym", "ID number(s)"}
+    missing_columns = required_columns - set(source_df.columns)
+    if missing_columns:
+        raise ValueError(
+            f"Source-organ CSV is missing column(s): {sorted(missing_columns)}. "
+            f"Found columns: {list(source_df.columns)}. File: {source_csv}"
+        )
+
+    source_df["Acronym"] = source_df["Acronym"].fillna("").str.strip()
+    source_df["ID number(s)"] = source_df["ID number(s)"].fillna("").str.strip()
+    source_df = source_df[
+        (source_df["Acronym"] != "") & (source_df["ID number(s)"] != "")
+    ]
+
+    source_name_to_id = dict(
+        zip(source_df["Acronym"], source_df["ID number(s)"])
+    )
+    if not source_name_to_id:
+        raise ValueError(f"No valid source regions found in {source_csv}")
 
     # -------------------------------------------------------------
     # Read one CSV
@@ -120,9 +141,22 @@ def geant4_calculate_dose_and_SAFs(params):
 
         number_of_particles = params["nps"]
 
-        source_organ_id = ORGAN_NAME_TO_ID[
-            phantom_code
-        ][source_organ]
+        # The source acronym comes from the output filename and its ID(s)
+        # come from source_organs.csv. Do not infer source IDs from the
+        # target-organ database: a source may comprise multiple region IDs.
+        try:
+            source_organ_id = source_name_to_id[source_organ]
+        except KeyError as exc:
+            available = ", ".join(sorted(source_name_to_id))
+            raise KeyError(
+                f"Source acronym '{source_organ}' from '{deposit_file.name}' "
+                f"was not found in {source_csv}. Available acronyms: {available}"
+            ) from exc
+
+        if phantom_code not in ORGANS:
+            raise KeyError(
+                f"Phantom '{phantom_code}' was not found in the organ database."
+            )
 
         organ_database = ORGANS[phantom_code]
 
@@ -255,6 +289,11 @@ def geant4_calculate_dose_and_SAFs(params):
     # -------------------------------------------------------------
     # Combine
     # -------------------------------------------------------------
+
+    if not all_tallies:
+        raise RuntimeError(
+            "No Geant4 deposit CSV files were successfully processed."
+        )
 
     combined_df = pd.concat(
         all_tallies,
