@@ -25,6 +25,25 @@ def calculate_extra_metadata(params):
 
     df = pd.read_csv(input_file)
 
+    # Geant4 now records only total elapsed wall time. PHITS retains its
+    # existing column name, so support both schemas.
+    wall_time_candidates = [
+        "Total Elapsed Wall Time (s)",
+        "Individual Wall Time (s)",
+    ]
+    wall_time_column = next(
+        (column for column in wall_time_candidates if column in df.columns),
+        None,
+    )
+    if wall_time_column is None:
+        raise KeyError(
+            "No wall-time column found in metadata CSV. Expected one of: "
+            + ", ".join(wall_time_candidates)
+            + f". Available columns: {df.columns.tolist()}"
+        )
+
+    df[wall_time_column] = pd.to_numeric(df[wall_time_column], errors="coerce")
+
     # Format seconds to days, hours, minutes, and seconds
     def format_duration(seconds):
         if pd.isna(seconds):
@@ -42,7 +61,7 @@ def calculate_extra_metadata(params):
     def summarize(df, group_cols, category):
 
         summary = (
-            df.groupby(group_cols)["Individual Wall Time (s)"]
+            df.groupby(group_cols)[wall_time_column]
             .agg(
                 Count="count",
                 Average="mean",
@@ -112,29 +131,24 @@ def calculate_extra_metadata(params):
         "Source Organ + Type + Energy"
     )
 
-    # Starting and termination datetime to calculate for the total elapsed time
-    df["Starting Datetime"] = pd.to_datetime(df["Starting Datetime"])
-    df["Termination Datetime"] = pd.to_datetime(df["Termination Datetime"])
-
-    earliest_start = df["Starting Datetime"].min()
-    latest_finish = df["Termination Datetime"].max()
-    total_elapsed = latest_finish - earliest_start
-    total_elapsed_seconds = total_elapsed.total_seconds()
-
+    # With Geant4's new timing format, start/termination timestamps are no
+    # longer stored. Report the sum of per-job wall times instead; this is
+    # cumulative simulation time, not calendar elapsed time across parallel jobs.
+    mean_wall_time = df[wall_time_column].mean()
     summary_all = pd.DataFrame({
         "Category": ["All simulations"],
         "Source Type": [""],
         "Source Energy (MeV)": [""],
         "Phantom": [""],
         "Source Organ": [""],
-        "Count": [df["Individual Wall Time (s)"].count()],
-        "Average (s)": [round(df["Individual Wall Time (s)"].mean(), 2)],
-        "Average (dhms)": [format_duration(round(df["Individual Wall Time (s)"].mean(), 2))],
-        "StdDev (s)": [round(df["Individual Wall Time (s)"].std(), 2)],
-        "Minimum (s)": [round(df["Individual Wall Time (s)"].min(), 2)],
-        "Maximum (s)": [round(df["Individual Wall Time (s)"].max(), 2)],
-        "Overall Wall Time (s)": [total_elapsed_seconds],
-        "Overall Wall Time (dhms)": [format_duration(total_elapsed_seconds)],
+        "Count": [df[wall_time_column].count()],
+        "Average (s)": [round(mean_wall_time, 2) if pd.notna(mean_wall_time) else float("nan")],
+        "Average (dhms)": [format_duration(mean_wall_time)],
+        "StdDev (s)": [round(df[wall_time_column].std(), 2)],
+        "Minimum (s)": [round(df[wall_time_column].min(), 2)],
+        "Maximum (s)": [round(df[wall_time_column].max(), 2)],
+        "Total Simulation Wall Time (sum of jobs, s)": [df[wall_time_column].sum()],
+        "Total Simulation Wall Time (sum of jobs, dhms)": [format_duration(df[wall_time_column].sum())],
     })
 
     summary = pd.concat(

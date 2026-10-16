@@ -1,9 +1,9 @@
-Starting Datetime,Termination Datetime,Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Setup Time (s),Execution Time (s),Individual Wall Time (s)
-,,ICRP 145 Adult Female,Cortical_bone,gamma,10.0,MT-32,100,1,,,
-2026-10-17T02:15:26,2026-10-17T02:16:29,ICRP 145 Adult Female,Liver,gamma,10.0,MT-32,100,1,7.97103,54.3451,62.3162
-2026-10-17T02:16:32,2026-10-17T02:17:33,ICRP 145 Adult Female,Lungs,gamma,10.0,MT-32,100,1,7.77551,52.8784,60.6539
-2026-10-17T02:17:36,2026-10-17T02:18:39,ICRP 145 Adult Female,Thyroid,gamma,10.0,MT-32,100,1,7.95997,54.5726,62.5326
-,,ICRP 145 Adult Male,Cortical_bone,gamma,10.0,MT-32,100,1,,,
-2026-10-17T02:19:48,2026-10-17T02:20:54,ICRP 145 Adult Male,Liver,gamma,10.0,MT-32,100,1,7.44859,58.2498,65.6984
-,,ICRP 145 Adult Male,Lungs,gamma,10.0,MT-32,100,1,,,
-2026-10-17T02:22:03,2026-10-17T02:23:08,ICRP 145 Adult Male,Thyroid,gamma,10.0,MT-32,100,1,7.58755,57.4649,65.0524
+Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Total Elapsed Wall Time (s)
+ICRP 145 Adult Female,Cortical_bone,gamma,10.0,MT-32,100,1,65.153865
+ICRP 145 Adult Female,Liver,gamma,10.0,MT-32,100,1,62.622429
+ICRP 145 Adult Female,Lungs,gamma,10.0,MT-32,100,1,63.350608
+ICRP 145 Adult Female,Thyroid,gamma,10.0,MT-32,100,1,63.298967
+ICRP 145 Adult Male,Cortical_bone,gamma,10.0,MT-32,100,1,64.106524
+ICRP 145 Adult Male,Liver,gamma,10.0,MT-32,100,1,65.834228
+ICRP 145 Adult Male,Lungs,gamma,10.0,MT-32,100,1,66.925848
+ICRP 145 Adult Male,Thyroid,gamma,10.0,MT-32,100,1,66.666774
