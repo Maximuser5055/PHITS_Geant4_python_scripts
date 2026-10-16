@@ -27,9 +27,15 @@ def phits_extract_metadata_stats():
         "starting_time":
             re.compile(r"Starting Time\s*=\s*(.+)"),
 
+        # Keep the source type explicit and let the organ name contain
+        # underscores (e.g. Cortical_bone) without truncating it.
         "file(6)":
-            re.compile(r"file\(6\)\s*=\s*phits_(.+?)_source_(.+?)_(photon|electron)_energy_.+?\.out", 
-                       re.IGNORECASE),
+            re.compile(
+                r"file\(6\)\s*=\s*phits_(?P<phantom>.+?)_source_"
+                r"(?P<source_organ>.+)_(?P<source_type>photon|electron)_"
+                r"energy_[0-9Ee.+-]+\.out",
+                re.IGNORECASE
+            ),
 
         "maxcas":
             re.compile(r"maxcas\s*=\s*(\d+)"),
@@ -134,11 +140,12 @@ def phits_extract_metadata_stats():
 
                 if match:
 
-                    phantom_code = match.group(1).upper()
+                    phantom_code = match.group("phantom").upper()
                     phantom = get_phantom(phantom_code)
 
                     results["phantom"] = phantom.display_name
-                    results["source_organ"] = match.group(2)
+                    results["source_organ"] = match.group("source_organ")
+                    results["source_type"] = match.group("source_type")
 
             # Particle transport times per batch
             if "bat[" in line:
