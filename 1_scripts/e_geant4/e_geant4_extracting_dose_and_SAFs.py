@@ -8,6 +8,11 @@ import b_config.a_config as config
 from b_config.b_phantom_registry import get_phantom, get_phantom_group
 from c_database.b_organ_database import ORGANS
 
+
+def _normalize_source_acronym(value):
+    """Normalize filename/CSV acronyms (spaces may become underscores in filenames)."""
+    return " ".join(str(value).replace("_", " ").split()).casefold()
+
 def geant4_calculate_dose_and_SAFs(params):
 
     # -------------------------------------------------------------
@@ -30,11 +35,10 @@ def geant4_calculate_dose_and_SAFs(params):
 
     geant4_output_file = "c_geant4_dose_and_SAFs.csv"
 
+    # Source type is a single filename token; source acronyms may contain underscores.
     filename_pattern = re.compile(
-        r"geant4_deposit_(.+?)_source_"
-        r"(.+?)_"
-        r"(.+?)_energy_"
-        r"([0-9Ee.+-]+)\.csv",
+        r"^geant4_deposit_(.+?)_source_(.+)_([A-Za-z0-9+-]+)_energy_"
+        r"([0-9Ee.+-]+)\.csv$",
         re.IGNORECASE
     )
 
@@ -102,6 +106,9 @@ def geant4_calculate_dose_and_SAFs(params):
     source_name_to_id = dict(
         zip(source_df["Acronym"], source_df["ID number(s)"])
     )
+    normalized_source_name_to_name = {
+        _normalize_source_acronym(name): name for name in source_name_to_id
+    }
     if not source_name_to_id:
         raise ValueError(f"No valid source regions found in {source_csv}")
 
@@ -144,14 +151,18 @@ def geant4_calculate_dose_and_SAFs(params):
         # The source acronym comes from the output filename and its ID(s)
         # come from source_organs.csv. Do not infer source IDs from the
         # target-organ database: a source may comprise multiple region IDs.
-        try:
-            source_organ_id = source_name_to_id[source_organ]
-        except KeyError as exc:
+        normalized_source = _normalize_source_acronym(source_organ)
+        matched_source_name = normalized_source_name_to_name.get(normalized_source)
+        if matched_source_name is None:
             available = ", ".join(sorted(source_name_to_id))
             raise KeyError(
                 f"Source acronym '{source_organ}' from '{deposit_file.name}' "
-                f"was not found in {source_csv}. Available acronyms: {available}"
-            ) from exc
+                f"was not found in {source_csv} (spaces/underscores are treated "
+                f"as equivalent). Available acronyms: {available}"
+            )
+        source_organ_id = source_name_to_id[matched_source_name]
+        # Preserve the canonical acronym as written in source_organs.csv.
+        source_organ = matched_source_name
 
         if phantom_code not in ORGANS:
             raise KeyError(

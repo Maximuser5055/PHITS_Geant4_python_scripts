@@ -1,8 +1,9 @@
 //
 // TETPrimaryGeneratorAction.cc
 // Primary particles are allocated among selected source organ IDs in
-// proportion to their phantom-geometry masses. Each source ID has its own
-// bounding box and rejection sampler.
+// proportion to their phantom-geometry masses. Within each source ID,
+// tetrahedra are selected proportional to volume and positions are generated
+// uniformly using barycentric coordinates.
 //
 
 #include "TETPrimaryGeneratorAction.hh"
@@ -10,10 +11,13 @@
 #include "G4Exception.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4Threading.hh"
 
 #include <algorithm>
-#include <cfloat>
 #include <cmath>
+#include <fstream>
+#include <filesystem>
+#include <iomanip>
 #include <numeric>
 #include <sstream>
 #include <string>
@@ -21,11 +25,13 @@
 
 TETPrimaryGeneratorAction::TETPrimaryGeneratorAction(
     TETModelImport* tetData,
-    const std::vector<G4int>& internalSources)
+    const std::vector<G4int>& internalSources,
+    const G4String& outputFilePath)
     : G4VUserPrimaryGeneratorAction(),
       fParticleGun(nullptr),
       fLastPreparedRunID(-1),
-      fPreparedEventCount(-1)
+      fPreparedEventCount(-1),
+      fOutputFilePath(outputFilePath)
 {
     if (internalSources.empty()) {
         G4Exception("TETPrimaryGeneratorAction::TETPrimaryGeneratorAction", "",
@@ -45,13 +51,10 @@ TETPrimaryGeneratorAction::TETPrimaryGeneratorAction(
         SourceRegion region;
         region.organID = organID;
         region.mass = 0.0;
-        region.bBoxMin = G4ThreeVector(0., 0., 0.);
-        region.bBoxDim = G4ThreeVector(0., 0., 0.);
+        region.totalVolume = 0.0;
         region.allocatedParticles = 0;
         region.cumulativeParticleEnd = 0;
         region.fractionalRemainder = 0.0;
-        region.xMin = region.yMin = region.zMin = DBL_MAX;
-        region.xMax = region.yMax = region.zMax = -DBL_MAX;
 
         fSourceIndexByID[organID] = fSourceRegions.size();
         fSourceRegions.push_back(region);
@@ -73,7 +76,9 @@ TETPrimaryGeneratorAction::TETPrimaryGeneratorAction(
         region.mass = massIt->second;
     }
 
-    // Collect tetrahedra and compute an independent bounding box for each ID.
+    // Collect tetrahedra for each requested source ID. Cache each tetrahedron's
+    // vertices and cumulative volume so source positions can be generated
+    // directly, without bounding-box rejection or repeated Inside() checks.
     for (G4int i = 0; i < tetData->GetNumTetrahedron(); ++i) {
         const G4int organID = tetData->GetMaterialIndex(i);
         const auto indexIt = fSourceIndexByID.find(organID);
@@ -81,31 +86,33 @@ TETPrimaryGeneratorAction::TETPrimaryGeneratorAction(
 
         SourceRegion& region = fSourceRegions[indexIt->second];
         G4Tet* tetSolid = tetData->GetTetrahedron(i);
-        region.tetrahedra.push_back(tetSolid);
 
-        for (const auto& vertex : tetSolid->GetVertices()) {
-            region.xMin = std::min(region.xMin, vertex.getX());
-            region.xMax = std::max(region.xMax, vertex.getX());
-            region.yMin = std::min(region.yMin, vertex.getY());
-            region.yMax = std::max(region.yMax, vertex.getY());
-            region.zMin = std::min(region.zMin, vertex.getZ());
-            region.zMax = std::max(region.zMax, vertex.getZ());
+        TetrahedronData tetDataForSampling;
+        tetSolid->GetVertices(
+            tetDataForSampling.vertices[0],
+            tetDataForSampling.vertices[1],
+            tetDataForSampling.vertices[2],
+            tetDataForSampling.vertices[3]);
+
+        const G4double volume = tetSolid->GetCubicVolume();
+        if (!(volume > 0.0)) {
+            continue; // Ignore degenerate or invalid zero-volume tetrahedra.
         }
+
+        region.totalVolume += volume;
+        tetDataForSampling.cumulativeVolume = region.totalVolume;
+        region.tetrahedra.push_back(tetDataForSampling);
     }
 
-    for (auto& region : fSourceRegions) {
-        if (region.tetrahedra.empty()) {
+    for (const auto& region : fSourceRegions) {
+        if (region.tetrahedra.empty() || !(region.totalVolume > 0.0)) {
             std::ostringstream message;
-            message << "There are no tetrahedra for requested source organ ID "
+            message << "There are no positive-volume tetrahedra for requested source organ ID "
                     << region.organID << ".";
             G4Exception("TETPrimaryGeneratorAction::TETPrimaryGeneratorAction", "",
                         FatalErrorInArgument, message.str().c_str());
             return;
         }
-        region.bBoxMin = G4ThreeVector(region.xMin, region.yMin, region.zMin);
-        region.bBoxDim = G4ThreeVector(region.xMax - region.xMin,
-                                       region.yMax - region.yMin,
-                                       region.zMax - region.zMin);
     }
 
     // Initialise the gamma particle gun. Energy is still set by the existing
@@ -186,6 +193,54 @@ void TETPrimaryGeneratorAction::PrepareAllocationForCurrentRun()
         region.cumulativeParticleEnd = cumulativeEnd;
     }
 
+    // Export the planned allocation to a text file instead of the terminal.
+    // In multithreaded builds, only worker thread 0 writes the report.
+#ifdef G4MULTITHREADED
+    if (G4Threading::G4GetThreadId() == 0) {
+#endif
+        namespace fs = std::filesystem;
+        const fs::path outputPath(fOutputFilePath.c_str());
+        const fs::path outputDirectory = outputPath.has_parent_path()
+                                             ? outputPath.parent_path()
+                                             : fs::current_path();
+        const fs::path logPath = outputDirectory / "source_particle_distribution.txt";
+        std::ofstream logFile(logPath, std::ios::out | std::ios::app);
+
+        if (logFile.is_open()) {
+            logFile << "========================================\n";
+            logFile << "Source Particle Allocation\n";
+            logFile << "Run ID: " << runID << "\n";
+            logFile << "Total requested events: " << nEvents << "\n";
+            logFile << "----------------------------------------\n";
+
+            G4int reportedTotal = 0;
+            for (const auto& region : fSourceRegions) {
+                const G4double fraction =
+                    (nEvents > 0)
+                        ? static_cast<G4double>(region.allocatedParticles) / nEvents
+                        : 0.0;
+
+                logFile << "Organ ID " << region.organID
+                        << ": " << region.allocatedParticles
+                        << " particles (" << std::fixed
+                        << std::setprecision(4) << 100.0 * fraction << "%)"
+                        << " | mass = " << std::setprecision(10)
+                        << region.mass / g << " g\n";
+                reportedTotal += region.allocatedParticles;
+            }
+
+            logFile << "----------------------------------------\n";
+            logFile << "Total allocated: " << reportedTotal << "\n";
+            if (reportedTotal != nEvents) {
+                logFile << "WARNING: allocated count does not equal requested event count!\n";
+            }
+            logFile << "========================================\n\n";
+            logFile.close();
+        }
+#ifdef G4MULTITHREADED
+    }
+#endif
+
     fLastPreparedRunID = runID;
     fPreparedEventCount = nEvents;
 
@@ -211,22 +266,44 @@ void TETPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         return;
     }
 
-    // Rejection-sample only within this organ ID's own bounding box and
-    // tetrahedra. This avoids sampling the empty space between distant IDs.
-    G4bool insideChk = false;
-    G4ThreeVector pos;
-    do {
-        pos = G4ThreeVector(
-            selectedRegion->bBoxMin.getX() + selectedRegion->bBoxDim.getX() * G4UniformRand(),
-            selectedRegion->bBoxMin.getY() + selectedRegion->bBoxDim.getY() * G4UniformRand(),
-            selectedRegion->bBoxMin.getZ() + selectedRegion->bBoxDim.getZ() * G4UniformRand());
+    // Select a tetrahedron with probability proportional to its volume.
+    // The cached cumulative volumes are sorted, so binary search selects the
+    // tetrahedron without rejection sampling or scanning the full mesh.
+    const G4double targetVolume =
+        G4UniformRand() * selectedRegion->totalVolume;
 
-        for (const auto* tet : selectedRegion->tetrahedra) {
-            if (tet->Inside(pos) == kOutside) continue;
-            insideChk = true;
-            break;
-        }
-    } while (!insideChk);
+    const auto tetIt = std::lower_bound(
+        selectedRegion->tetrahedra.begin(),
+        selectedRegion->tetrahedra.end(),
+        targetVolume,
+        [](const TetrahedronData& tet, G4double target) {
+            return tet.cumulativeVolume < target;
+        });
+
+    const TetrahedronData& selectedTet =
+        (tetIt == selectedRegion->tetrahedra.end())
+            ? selectedRegion->tetrahedra.back()
+            : *tetIt;
+
+    // Draw four independent exponential variates and normalize them. The
+    // resulting barycentric weights are uniform on the tetrahedral simplex.
+    G4double weights[4];
+    G4double weightSum = 0.0;
+    for (G4int i = 0; i < 4; ++i) {
+        G4double u = 0.0;
+        do {
+            u = G4UniformRand();
+        } while (u <= 0.0);
+
+        weights[i] = -std::log(u);
+        weightSum += weights[i];
+    }
+
+    G4ThreeVector pos(0., 0., 0.);
+    for (G4int i = 0; i < 4; ++i) {
+        weights[i] /= weightSum;
+        pos += weights[i] * selectedTet.vertices[i];
+    }
 
     fParticleGun->SetParticlePosition(pos);
     fParticleGun->SetParticleMomentumDirection(G4RandomDirection());

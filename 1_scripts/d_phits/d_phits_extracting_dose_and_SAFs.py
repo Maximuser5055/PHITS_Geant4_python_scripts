@@ -9,6 +9,11 @@ import b_config.a_config as config
 from b_config.b_phantom_registry import get_phantom
 from c_database.b_organ_database import ORGANS
 
+
+def _normalize_source_acronym(value):
+    """Normalize filename/CSV acronyms (spaces may become underscores in filenames)."""
+    return " ".join(str(value).replace("_", " ").split()).casefold()
+
 def phits_calculate_dose_and_safs(params):
 
     # -------------------------------------------------------------------------
@@ -36,8 +41,9 @@ def phits_calculate_dose_and_safs(params):
 
     patterns = {
 
+        # Source acronyms may contain underscores; source type is one token.
         "file_name":
-            re.compile(r"phits_deposit_(.+?)_source_(.+?)_([A-Za-z0-9+-]+)_energy_([0-9Ee.+-]+)\.out",
+            re.compile(r"^phits_deposit_(.+?)_source_(.+)_([A-Za-z0-9+-]+)_energy_([0-9Ee.+-]+)\.out$",
                 re.IGNORECASE),
 
         "tally_row":
@@ -88,6 +94,9 @@ def phits_calculate_dose_and_safs(params):
         (source_df["Acronym"] != "") & (source_df["ID number(s)"] != "")
     ]
     source_name_to_id = dict(zip(source_df["Acronym"], source_df["ID number(s)"]))
+    normalized_source_name_to_name = {
+        _normalize_source_acronym(name): name for name in source_name_to_id
+    }
 
     if not source_name_to_id:
         raise ValueError(f"No valid source regions found in {source_csv}")
@@ -150,14 +159,17 @@ def phits_calculate_dose_and_safs(params):
 
             # Source name comes from the input filename and is the Acronym
             # in source_organs.csv. Its ID may contain multiple region IDs.
-            try:
-                source_organ_id = source_name_to_id[source_organ]
-            except KeyError as exc:
+            normalized_source = _normalize_source_acronym(source_organ)
+            matched_source_name = normalized_source_name_to_name.get(normalized_source)
+            if matched_source_name is None:
                 available = ", ".join(sorted(source_name_to_id))
                 raise KeyError(
                     f"Source acronym '{source_organ}' from '{deposit_file.name}' "
-                    f"was not found in {source_csv}. Available acronyms: {available}"
-                ) from exc
+                    f"was not found in {source_csv} (spaces/underscores are treated "
+                    f"as equivalent). Available acronyms: {available}"
+                )
+            source_organ_id = source_name_to_id[matched_source_name]
+            source_organ = matched_source_name
 
             source_energy_joule = source_energy * MeV_to_J
 

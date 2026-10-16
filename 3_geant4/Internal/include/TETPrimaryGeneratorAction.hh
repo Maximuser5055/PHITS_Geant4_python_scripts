@@ -52,19 +52,23 @@ class TETPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     TETPrimaryGeneratorAction(TETModelImport* tetData,
-                              const std::vector<G4int>& internalSources);
+                              const std::vector<G4int>& internalSources,
+                              const G4String& outputFilePath);
     virtual ~TETPrimaryGeneratorAction();
 
     virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
+    struct TetrahedronData {
+        G4ThreeVector vertices[4];
+        G4double cumulativeVolume;
+    };
+
     struct SourceRegion {
         G4int organID;
         G4double mass;
-        std::vector<G4Tet*> tetrahedra;
-        G4ThreeVector bBoxMin;
-        G4ThreeVector bBoxDim;
-        G4double xMin, xMax, yMin, yMax, zMin, zMax;
+        std::vector<TetrahedronData> tetrahedra;
+        G4double totalVolume;
         G4int allocatedParticles;
         G4int cumulativeParticleEnd;
         G4double fractionalRemainder;
@@ -77,6 +81,7 @@ class TETPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* fParticleGun;
     G4int fLastPreparedRunID;
     G4int fPreparedEventCount;
+    G4String fOutputFilePath;
 };
 
 #endif

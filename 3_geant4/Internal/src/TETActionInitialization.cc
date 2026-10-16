@@ -45,7 +45,7 @@ void TETActionInitialization::BuildForMaster() const
 
 void TETActionInitialization::Build() const
 {
-    SetUserAction(new TETPrimaryGeneratorAction(tetData, internalSources));
+    SetUserAction(new TETPrimaryGeneratorAction(tetData, internalSources, output));
 
     fRunAction = new TETRunAction(tetData, output);
     SetUserAction(fRunAction);
