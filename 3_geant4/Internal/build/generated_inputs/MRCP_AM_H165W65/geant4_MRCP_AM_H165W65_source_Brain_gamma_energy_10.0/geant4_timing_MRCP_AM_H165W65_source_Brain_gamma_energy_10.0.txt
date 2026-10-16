@@ -1,0 +1,12 @@
+Geant4 Timing Summary
+=====================
+
+Macro      : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/MRCP_AM_H165W65/geant4_MRCP_AM_H165W65_source_Brain_gamma_energy_10.0/geant4_MRCP_AM_H165W65_source_Brain_gamma_energy_10.0.in
+Output     : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/MRCP_AM_H165W65/geant4_MRCP_AM_H165W65_source_Brain_gamma_energy_10.0/geant4_deposit_MRCP_AM_H165W65_source_Brain_gamma_energy_10.0.out
+
+Starting Datetime    : 2026-10-16T11:39:06
+Termination Datetime : 2026-10-16T11:40:10
+
+Setup Time (s)       : 7.69702
+Execution Time (s)   : 55.8485
+Total Wall Time (s)  : 63.5456

@@ -41,6 +41,7 @@
 #include "G4RandomDirection.hh"
 
 #include <vector>
+#include <utility>
 
 #include "TETModelImport.hh"
 
@@ -56,7 +57,7 @@
 class TETPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-	TETPrimaryGeneratorAction(TETModelImport* tetData, G4int internalSource);
+	TETPrimaryGeneratorAction(TETModelImport* tetData, const std::vector<G4int>& internalSources);
 	virtual ~TETPrimaryGeneratorAction();
 
   public:

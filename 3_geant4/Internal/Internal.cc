@@ -34,6 +34,9 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#include <vector>
+#include <string>
+#include <stdexcept>
 
 #include "G4Timer.hh"
 
@@ -57,8 +60,42 @@
 #include "Randomize.hh"
 
 void PrintUsage(){
-	G4cerr<< "Usage: ./Internal -i [SOURCE ORGAN ID] -m [MACRO] -o [OUTPUT] -f (option for MRCP-AF phantom)"  <<G4endl;
-	G4cerr<< "Example: ./Internal -i 9500 -m run.mac -o run.out (-f)" <<G4endl;
+	G4cerr << "Usage: ./Internal -i [SOURCE_ID[,SOURCE_ID...]] -m [MACRO] -o [OUTPUT] -f (option for MRCP-AF phantom)" << G4endl;
+	G4cerr << "Example (one source ID): ./Internal -i 9500 -m run.mac -o run.out (-f)" << G4endl;
+	G4cerr << "Example (multiple source IDs): ./Internal -i 9700,9900 -m run.mac -o run.out (-f)" << G4endl;
+}
+
+// Parse a comma-separated list of source-region IDs, e.g. "9700,9900".
+std::vector<G4int> ParseSourceIDs(const std::string& sourceIDsText)
+{
+	std::vector<G4int> sourceIDs;
+	std::stringstream stream(sourceIDsText);
+	std::string token;
+
+	while (std::getline(stream, token, ',')) {
+		const auto first = token.find_first_not_of(" \t\r\n");
+		const auto last  = token.find_last_not_of(" \t\r\n");
+
+		if (first == std::string::npos) {
+			throw std::invalid_argument("empty source ID in comma-separated list");
+		}
+
+		token = token.substr(first, last - first + 1);
+
+		size_t parsedChars = 0;
+		int sourceID = std::stoi(token, &parsedChars);
+		if (parsedChars != token.size() || sourceID < 0) {
+			throw std::invalid_argument("source IDs must be non-negative integers");
+		}
+
+		sourceIDs.push_back(static_cast<G4int>(sourceID));
+	}
+
+	if (sourceIDs.empty()) {
+		throw std::invalid_argument("no source IDs were provided");
+	}
+
+	return sourceIDs;
 }
 
 std::string GetISODateTime()
@@ -93,7 +130,7 @@ int main(int argc,char** argv)
 	//
 	G4String macro;
 	G4String output;
-	G4int    internalSource(-1);
+	std::vector<G4int> internalSources;
 	G4bool   isAF(false);
 	G4UIExecutive* ui = 0;
 
@@ -109,8 +146,21 @@ int main(int argc,char** argv)
 			i++;
 		}
 		// ID of the source organ
-		else if ( G4String(argv[i]) == "-i" ) {
-			internalSource = G4UIcommand::ConvertToInt(G4String(argv[i+1]));
+ 		else if ( G4String(argv[i]) == "-i" ) {
+			if (i + 1 >= argc) {
+				G4cerr << "ERROR: -i requires one or more comma-separated source IDs." << G4endl;
+				PrintUsage();
+				return 1;
+			}
+			try {
+				internalSources = ParseSourceIDs(argv[i + 1]);
+			}
+			catch (const std::exception& e) {
+				G4cerr << "ERROR: Invalid source ID list '" << argv[i + 1]
+				       << "': " << e.what() << G4endl;
+				PrintUsage();
+				return 1;
+			}
 			i++;
 		}
 		// switch for MRCP-AF phantom
@@ -122,8 +172,8 @@ int main(int argc,char** argv)
 		}
 	}
 
-	// print usage when there is no internal source input
-	if ( internalSource<0 ) {
+	// Require at least one source-region ID.
+	if (internalSources.empty()) {
 		PrintUsage();
 		return 1;
 	}
@@ -169,9 +219,9 @@ int main(int argc,char** argv)
 	runManager->SetUserInitialization(new TETPhysicsList());
 	// user action initialisation
 	auto* actions =
-		new TETActionInitialization(
+ 		new TETActionInitialization(
 			tetData,
-			internalSource,
+			internalSources,
 			output
 		);
 

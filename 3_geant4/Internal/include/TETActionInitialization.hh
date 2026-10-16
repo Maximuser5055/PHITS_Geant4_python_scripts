@@ -36,6 +36,7 @@
 #include "TETRunAction.hh"
 #include "TETSteppingAction.hh"
 #include "TETPrimaryGeneratorAction.hh"
+#include <vector>
 
 class TETModelImport;
 
@@ -52,7 +53,7 @@ class TETActionInitialization : public G4VUserActionInitialization
 {
   public:
 	TETActionInitialization(TETModelImport* tetData,
-			                G4int           internalSource,
+			                std::vector<G4int> internalSources,
 							G4String        outputFileName);
 	TETRunAction* GetRunAction() const { return fRunAction; }
 	virtual ~TETActionInitialization();
@@ -62,7 +63,7 @@ class TETActionInitialization : public G4VUserActionInitialization
 
   private:
 	TETModelImport* tetData;
-	G4int           internalSource;
+	std::vector<G4int> internalSources;
 	G4String        output;
 	mutable TETRunAction* fRunAction = nullptr;
 };

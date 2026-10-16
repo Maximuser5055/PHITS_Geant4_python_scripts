@@ -48,8 +48,8 @@ TETModelImport::TETModelImport(G4bool isAF, G4UIExecutive* ui)
 
 // PHANTOM_SELECTION_BEGIN
 // set phantom name
-if(!isAF) phantomName = "Filipino-MRCP-AM";
-else      phantomName = "Filipino-MRCP-AF";
+if(!isAF) phantomName = "M_H165W65";
+else      phantomName = "F_H150W55";
 // PHANTOM_SELECTION_END
 
 	G4cout << "================================================================================"<<G4endl;

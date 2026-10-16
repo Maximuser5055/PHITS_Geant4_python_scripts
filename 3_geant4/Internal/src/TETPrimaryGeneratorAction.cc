@@ -30,30 +30,45 @@
 
 #include "TETPrimaryGeneratorAction.hh"
 
-TETPrimaryGeneratorAction::TETPrimaryGeneratorAction(TETModelImport* tetData, G4int internalSource)
+#include <algorithm>
+#include <cfloat>
+
+TETPrimaryGeneratorAction::TETPrimaryGeneratorAction(TETModelImport* tetData, const std::vector<G4int>& internalSources)
 :G4VUserPrimaryGeneratorAction()
 {
 	// Find the tetrahedrons to be the source
 	//
 	G4double xMin(DBL_MAX), yMin(DBL_MAX), zMin(DBL_MAX);
-	G4double xMax(DBL_MIN), yMax(DBL_MIN), zMax(DBL_MIN);
+	G4double xMax(-DBL_MAX), yMax(-DBL_MAX), zMax(-DBL_MAX);
+	if (internalSources.empty()) {
+		G4Exception("TETPrimaryGeneratorAction::TETPrimaryGeneratorAction", "",
+		            FatalErrorInArgument,
+		            "No source organ IDs were provided.");
+		return;
+	}
+
 	for(G4int i=0;i<tetData->GetNumTetrahedron();i++){
-		if(tetData->GetMaterialIndex(i) != internalSource) continue;
+		const G4int organID = tetData->GetMaterialIndex(i);
+		if (std::find(internalSources.begin(), internalSources.end(), organID)
+		    == internalSources.end()) continue;
 		G4Tet* tetSolid = tetData->GetTetrahedron(i);
 		for(auto vertex:tetSolid->GetVertices()){
-			if      (vertex.getX() < xMin) xMin = vertex.getX();
-			else if (vertex.getX() > xMax) xMax = vertex.getX();
-			if      (vertex.getY() < yMin) yMin = vertex.getY();
-			else if (vertex.getY() > yMax) yMax = vertex.getY();
-			if      (vertex.getZ() < zMin) zMin = vertex.getZ();
-			else if (vertex.getZ() > zMax) zMax = vertex.getZ();
+			if (vertex.getX() < xMin) xMin = vertex.getX();
+			if (vertex.getX() > xMax) xMax = vertex.getX();
+			if (vertex.getY() < yMin) yMin = vertex.getY();
+			if (vertex.getY() > yMax) yMax = vertex.getY();
+			if (vertex.getZ() < zMin) zMin = vertex.getZ();
+			if (vertex.getZ() > zMax) zMax = vertex.getZ();
 		}
 		internalTetVec.push_back(tetData->GetTetrahedron(i));
 	}
 
-	if(internalTetVec.empty())
-		G4Exception("TETPrimaryGeneratorAction::TETPrimaryGeneratorAction","",FatalErrorInArgument,
-				     G4String("There is no tetrahedron for internal source").c_str());
+	if(internalTetVec.empty()) {
+		G4Exception("TETPrimaryGeneratorAction::TETPrimaryGeneratorAction", "",
+		            FatalErrorInArgument,
+		            "There are no tetrahedra for the requested source organ ID(s).");
+		return;
+	}
 
 	bBoxMin = G4ThreeVector(xMin, yMin, zMin);
 	bBoxDim = G4ThreeVector(xMax-xMin, yMax-yMin, zMax-zMin);

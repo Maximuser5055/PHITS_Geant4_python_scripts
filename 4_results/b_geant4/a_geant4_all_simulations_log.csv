@@ -1,5 +1,7 @@
 Starting Datetime,Termination Datetime,Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Setup Time (s),Execution Time (s),Individual Wall Time (s)
-2026-10-11T16:47:23,2026-10-11T16:50:29,Filipino Adult Female,Brain,gamma,10.0,MT-12,1000,1,28.0369,158.797,186.834
-2026-10-11T16:50:37,2026-10-11T16:53:43,Filipino Adult Female,Liver,gamma,10.0,MT-12,1000,1,27.9198,158.157,186.077
-2026-10-11T16:53:51,2026-10-11T16:57:01,Filipino Adult Male,Brain,gamma,10.0,MT-12,1000,1,24.3377,165.386,189.724
-2026-10-11T16:57:09,2026-10-11T17:00:19,Filipino Adult Male,Liver,gamma,10.0,MT-12,1000,1,26.3553,163.374,189.729
+2026-10-16T11:35:50,2026-10-16T11:36:53,ICRP 145 Adult Female Resized to Filipino,Brain,gamma,10.0,MT-32,1000,1,9.162,54.4807,63.6427
+2026-10-16T11:36:57,2026-10-16T11:38:01,ICRP 145 Adult Female Resized to Filipino,Liver,gamma,10.0,MT-32,1000,1,8.55216,55.6024,64.1546
+,,ICRP 145 Adult Female Resized to Filipino,Lungs,gamma,10.0,MT-32,1000,1,,,
+2026-10-16T11:39:06,2026-10-16T11:40:10,ICRP 145 Adult Male Resized to Filipino,Brain,gamma,10.0,MT-32,1000,1,7.69702,55.8485,63.5456
+2026-10-16T11:40:14,2026-10-16T11:41:17,ICRP 145 Adult Male Resized to Filipino,Liver,gamma,10.0,MT-32,1000,1,7.67145,55.4236,63.095
+2026-10-16T11:41:20,2026-10-16T11:42:24,ICRP 145 Adult Male Resized to Filipino,Lungs,gamma,10.0,MT-32,1000,1,8.01362,56.2139,64.2275

@@ -30,8 +30,8 @@
 
 #include "TETActionInitialization.hh"
 
-TETActionInitialization::TETActionInitialization(TETModelImport* _tetData, G4int _i, G4String _output)
- : G4VUserActionInitialization(), tetData(_tetData), internalSource(_i), output(_output)
+TETActionInitialization::TETActionInitialization(TETModelImport* _tetData, std::vector<G4int> _sources, G4String _output)
+ : G4VUserActionInitialization(), tetData(_tetData), internalSources(_sources), output(_output)
 {}
 
 TETActionInitialization::~TETActionInitialization()
@@ -45,7 +45,7 @@ void TETActionInitialization::BuildForMaster() const
 
 void TETActionInitialization::Build() const
 {
-    SetUserAction(new TETPrimaryGeneratorAction(tetData, internalSource));
+    SetUserAction(new TETPrimaryGeneratorAction(tetData, internalSources));
 
     fRunAction = new TETRunAction(tetData, output);
     SetUserAction(fRunAction);
