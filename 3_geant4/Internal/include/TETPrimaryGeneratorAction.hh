@@ -39,35 +39,44 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4RandomDirection.hh"
+#include "G4ThreeVector.hh"
+#include "G4Tet.hh"
 
+#include <cstddef>
+#include <map>
 #include <vector>
-#include <utility>
 
 #include "TETModelImport.hh"
-
-// *********************************************************************
-// This is UserPrimaryGeneratorAction, internal source is defined by
-// G4ParticleGun class. The source positions are sampled by rejection
-// method.
-// -- GeneratePrimaries: The source positions are sampled by rejection
-//                       method, and the source directions are sampled
-//                       by using G4RandomDirection().
-// *********************************************************************
 
 class TETPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-	TETPrimaryGeneratorAction(TETModelImport* tetData, const std::vector<G4int>& internalSources);
-	virtual ~TETPrimaryGeneratorAction();
+    TETPrimaryGeneratorAction(TETModelImport* tetData,
+                              const std::vector<G4int>& internalSources);
+    virtual ~TETPrimaryGeneratorAction();
 
-  public:
     virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
-    std::vector<G4Tet*>      internalTetVec;
-    G4ThreeVector            bBoxMin;
-    G4ThreeVector            bBoxDim;
-    G4ParticleGun*           fParticleGun;
+    struct SourceRegion {
+        G4int organID;
+        G4double mass;
+        std::vector<G4Tet*> tetrahedra;
+        G4ThreeVector bBoxMin;
+        G4ThreeVector bBoxDim;
+        G4double xMin, xMax, yMin, yMax, zMin, zMax;
+        G4int allocatedParticles;
+        G4int cumulativeParticleEnd;
+        G4double fractionalRemainder;
+    };
+
+    void PrepareAllocationForCurrentRun();
+
+    std::vector<SourceRegion> fSourceRegions;
+    std::map<G4int, std::size_t> fSourceIndexByID;
+    G4ParticleGun* fParticleGun;
+    G4int fLastPreparedRunID;
+    G4int fPreparedEventCount;
 };
 
 #endif

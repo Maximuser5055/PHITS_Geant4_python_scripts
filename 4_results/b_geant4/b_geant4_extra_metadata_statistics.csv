@@ -1,8 +1,12 @@
 Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),Overall Wall Time (s),Overall Wall Time (dhms)
-Type + Energy,gamma,10.0,,,6,64.28,0d 00h 01m 04s,1.02,62.99,65.47,,
-Phantom + Type + Energy,gamma,10.0,ICRP 145 Adult Female Resized to Filipino,,3,63.41,0d 00h 01m 03s,0.44,62.99,63.88,,
-Phantom + Type + Energy,gamma,10.0,ICRP 145 Adult Male Resized to Filipino,,3,65.15,0d 00h 01m 05s,0.29,64.9,65.47,,
-Source Organ + Type + Energy,gamma,10.0,,Brain,2,64.49,0d 00h 01m 04s,0.86,63.88,65.09,,
-Source Organ + Type + Energy,gamma,10.0,,Liver,2,64.23,0d 00h 01m 04s,1.75,62.99,65.47,,
-Source Organ + Type + Energy,gamma,10.0,,Lungs,2,64.12,0d 00h 01m 04s,1.1,63.35,64.9,,
-All simulations,,,,,6,64.28,0d 00h 01m 04s,1.02,62.99,65.47,403.0,0d 00h 06m 43s
+Type + Energy,bone_gamma,10.0,,,2,124.75,0d 00h 02m 05s,18.73,111.51,138.0,,
+Type + Energy,gamma,10.0,,,3,63.2,0d 00h 01m 03s,1.44,62.37,64.86,,
+Phantom + Type + Energy,bone_gamma,10.0,ICRP 145 Adult Female,,1,138.0,0d 00h 02m 18s,,138.0,138.0,,
+Phantom + Type + Energy,gamma,10.0,ICRP 145 Adult Female,,2,62.38,0d 00h 01m 02s,0.01,62.37,62.39,,
+Phantom + Type + Energy,bone_gamma,10.0,ICRP 145 Adult Male,,1,111.51,0d 00h 01m 52s,,111.51,111.51,,
+Phantom + Type + Energy,gamma,10.0,ICRP 145 Adult Male,,1,64.86,0d 00h 01m 05s,,64.86,64.86,,
+Source Organ + Type + Energy,bone_gamma,10.0,,Cortical,2,124.75,0d 00h 02m 05s,18.73,111.51,138.0,,
+Source Organ + Type + Energy,gamma,10.0,,Liver,1,62.37,0d 00h 01m 02s,,62.37,62.37,,
+Source Organ + Type + Energy,gamma,10.0,,Lungs,1,62.39,0d 00h 01m 02s,,62.39,62.39,,
+Source Organ + Type + Energy,gamma,10.0,,Thyroid,1,64.86,0d 00h 01m 05s,,64.86,64.86,,
+All simulations,,,,,5,87.82,0d 00h 01m 28s,35.0,62.37,138.0,640.0,0d 00h 10m 40s

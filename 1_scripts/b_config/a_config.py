@@ -157,9 +157,9 @@ GEANT4_SOURCE_TYPES = [
     "e-",
 ]
 
-PHANTOM_INPUT_GENERATION = "MRCP_AF_AM_Filipino_Resized"
+PHANTOM_INPUT_GENERATION = "MRCP_AF_AM"
 
-NPS = 1000
+NPS = 100
 
 GEANT4_SOURCE_TYPE_MAP = {
     "gamma": "photon",

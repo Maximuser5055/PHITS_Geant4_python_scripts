@@ -1,0 +1,12 @@
+Geant4 Timing Summary
+=====================
+
+Macro      : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/MRCP_AM/geant4_MRCP_AM_source_Cortical_bone_gamma_energy_10.0/geant4_MRCP_AM_source_Cortical_bone_gamma_energy_10.0.in
+Output     : /home/clarence/Geant4_SAF_Calculations/PHITS_Geant4_python_scripts/3_geant4/Internal/build/generated_inputs/MRCP_AM/geant4_MRCP_AM_source_Cortical_bone_gamma_energy_10.0/geant4_deposit_MRCP_AM_source_Cortical_bone_gamma_energy_10.0.out
+
+Starting Datetime    : 2026-10-16T22:46:19
+Termination Datetime : 2026-10-16T22:48:10
+
+Setup Time (s)       : 7.47132
+Execution Time (s)   : 104.037
+Total Wall Time (s)  : 111.509
