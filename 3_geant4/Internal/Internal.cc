@@ -30,15 +30,11 @@
 
 #include <filesystem>
 #include <fstream>
-#include <chrono>
-#include <ctime>
-#include <iomanip>
 #include <sstream>
 #include <vector>
 #include <string>
 #include <stdexcept>
 
-#include "G4Timer.hh"
 
 #include "TETDetectorConstruction.hh"
 #include "TETModelImport.hh"
@@ -98,35 +94,10 @@ std::vector<G4int> ParseSourceIDs(const std::string& sourceIDsText)
 	return sourceIDs;
 }
 
-std::string GetISODateTime()
-{
-	auto now = std::chrono::system_clock::now();
-	std::time_t t = std::chrono::system_clock::to_time_t(now);
-
-	std::tm tm = *std::localtime(&t);
-
-	std::ostringstream oss;
-	oss << std::put_time(&tm, "%Y-%m-%dT%H:%M:%S");
-
-	return oss.str();
-}
 
 int main(int argc,char** argv) 
 {
-
-	std::string startDateTime = GetISODateTime();
-
-	G4Timer totalTimer;
-	G4Timer setupTimer;
-	G4Timer runTimer;
-
-	totalTimer.Start();
-	setupTimer.Start();
-
-	double setupSeconds = 0.0;
-	double runSeconds   = 0.0;
-
-	// Read the arguments for batch mode
+// Read the arguments for batch mode
 	//
 	G4String macro;
 	G4String output;
@@ -235,12 +206,7 @@ int main(int argc,char** argv)
 	// Process macro or start UI session
 	//
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-	setupTimer.Stop();
-	setupSeconds = setupTimer.GetRealElapsed();
-
-	runTimer.Start();
-	/*
+/*
 	if ( ! ui ){
 		// batch mode
 		G4String command = "/control/execute ";
@@ -269,73 +235,7 @@ int main(int argc,char** argv)
 		delete visManager;
 		delete ui;
 	}
-
-	runTimer.Stop();
-	runSeconds = runTimer.GetRealElapsed();
-
-	totalTimer.Stop();
-	double totalSeconds = totalTimer.GetRealElapsed();
-
-	std::string endDateTime = GetISODateTime();
-
-	namespace fs = std::filesystem;
-
-	fs::path timingPath(output.data());
-
-	std::string filename = timingPath.filename().string();
-
-	const std::string depositPrefix = "geant4_deposit_";
-	const std::string timingPrefix  = "geant4_timing_";
-
-	if (filename.rfind(depositPrefix, 0) == 0)
-	{
-		filename.replace(
-			0,
-			depositPrefix.size(),
-			timingPrefix
-		);
-	}
-
-	timingPath =
-		timingPath.parent_path() / filename;
-
-	timingPath.replace_extension(".txt");
-
-	std::ofstream timing(timingPath);
-
-	if (timing)
-	{
-		timing << "Geant4 Timing Summary\n";
-		timing << "=====================\n\n";
-
-		timing << "Macro      : "
-			<< macro << "\n";
-
-		timing << "Output     : "
-			<< output << "\n\n";
-
-		timing << "Starting Datetime    : "
-			<< startDateTime << "\n";
-
-		timing << "Termination Datetime : "
-			<< endDateTime << "\n\n";
-
-		timing << "Setup Time (s)       : "
-			<< setupSeconds << "\n";
-
-		timing << "Execution Time (s)   : "
-			<< runSeconds << "\n";
-
-		timing << "Total Wall Time (s)  : "
-			<< totalSeconds << "\n";
-	}
-	else
-	{
-		G4cerr
-			<< "ERROR: Unable to create timing file: "
-			<< timingPath
-			<< G4endl;
-	}
+namespace fs = std::filesystem;
 
 	// Job termination
 	delete runManager;

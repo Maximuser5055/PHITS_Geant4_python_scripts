@@ -15,24 +15,12 @@ def geant4_extract_metadata_stats():
     timing_files = sorted(root.rglob("geant4_timing_*.txt"))
     metadata_output_file = (config.RESULTS_GEANT4_DIR / "a_geant4_all_simulations_log.csv")
 
-    timing_patterns = {
-
-        "starting_datetime":
-            re.compile(r"Starting\s+Datetime\s*:\s*(.+)"),
-
-        "termination_datetime":
-            re.compile(r"Termination\s+Datetime\s*:\s*(.+)"),
-
-        "setup_time":
-            re.compile(r"Setup\s+Time.*?:\s*([0-9.]+)"),
-
-        "execution_time":
-            re.compile(r"Execution\s+Time.*?:\s*([0-9.]+)"),
-
-        "total_wall_time":
-            re.compile(r"Total\s+Wall\s+Time.*?:\s*([0-9.]+)",
-                       re.IGNORECASE),
-    }
+    # Python runner writes only total elapsed wall time.
+    # Accept both the current label and the older C++ timing-file label.
+    total_wall_time_pattern = re.compile(
+        r"Total\s+(?:Elapsed\s+)?Wall\s+Time\s*\(s\)\s*:\s*([0-9.eE+-]+)",
+        re.IGNORECASE,
+    )
 
     # Match the source particle type explicitly so organ names containing
     # underscores (e.g. Cortical_bone) are not split into Source Organ/Type.
@@ -58,33 +46,15 @@ def geant4_extract_metadata_stats():
         results = {}
 
         # --------------------------
-        # Timing file
+        # Timing file: total elapsed wall time only
         # --------------------------
 
-        with open(timing_file, encoding="utf-8",
-                  errors="ignore") as f:
-
+        with open(timing_file, encoding="utf-8", errors="ignore") as f:
             for line in f:
-
-                for key, pattern in timing_patterns.items():
-
-                    if key in results:
-                        continue
-
-                    match = pattern.search(line)
-
-                    if match:
-
-                        value = match.group(1).strip()
-
-                        if key in [
-                            "setup_time",
-                            "execution_time",
-                            "total_wall_time",
-                        ]:
-                            value = float(value)
-
-                        results[key] = value
+                match = total_wall_time_pattern.search(line)
+                if match:
+                    results["total_wall_time"] = float(match.group(1))
+                    break
 
         # --------------------------
         # Corresponding .in file
@@ -154,21 +124,16 @@ def geant4_extract_metadata_stats():
 
         ordered_results = {
 
-            "Starting Datetime":results.get("starting_datetime"),
-            "Termination Datetime":results.get("termination_datetime"),
+            "Phantom": results.get("phantom"),
+            "Source Organ": results.get("source_organ"),
+            "Source Type": results.get("source_type"),
+            "Source Energy (MeV)": results.get("source_energy"),
 
-            "Phantom":results.get("phantom"),
-            "Source Organ":results.get("source_organ"),
-            "Source Type":results.get("source_type"),
-            "Source Energy (MeV)":results.get("source_energy"),
+            "Parallel Mode": results.get("parallel_mode"),
+            "maxcas (nps if Geant4)": results.get("nps"),
+            "maxbch (1 if Geant4)": results.get("maxbch"),
 
-            "Parallel Mode":results.get("parallel_mode"),
-            "maxcas (nps if Geant4)":results.get("nps"),
-            "maxbch (1 if Geant4)":results.get("maxbch"),
-
-            "Setup Time (s)":results.get("setup_time"),
-            "Execution Time (s)":results.get("execution_time"),
-            "Individual Wall Time (s)":results.get("total_wall_time"),
+            "Total Elapsed Wall Time (s)": results.get("total_wall_time"),
         }
 
         print(f"\nProcessing:")

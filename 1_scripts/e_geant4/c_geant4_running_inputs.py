@@ -3,6 +3,8 @@
 # Import necessary libraries
 #from pathlib import Path
 import subprocess
+from datetime import datetime
+from time import perf_counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 import pandas as pd
@@ -387,27 +389,44 @@ def run_geant4(params):
         if phantom_spec.sex == "AF":
             cmd += " -f"
 
-        print(f"Starting {infile.name}")
-
-        process = subprocess.Popen(
-            ["bash", "-c", cmd],
-            cwd=current_working_dir
+        # Measure total elapsed wall time in Python and write the summary
+        # beside this simulation's input/output files.
+        timing_file = infile.with_name(
+            infile.stem.replace(
+                "geant4_",
+                "geant4_timing_"
+            ) + ".txt"
         )
 
-        returncode = process.wait()
+        start_clock = perf_counter()
+        returncode = -1
+        launch_error = None
+
+        try:
+            process = subprocess.Popen(
+                ["bash", "-c", cmd],
+                cwd=current_working_dir
+            )
+            returncode = process.wait()
+        except Exception as exc:
+            launch_error = repr(exc)
+            print(f"Error launching {infile.name}: {exc}")
+        finally:
+            elapsed_seconds = perf_counter() - start_clock
+            try:
+                with timing_file.open("w", encoding="utf-8") as f:
+                    f.write("Geant4 Timing Summary\n")
+                    f.write("=====================\n\n")
+                    f.write(f"Total Wall Time (s): {elapsed_seconds:.6f}\n")
+                    if launch_error:
+                        f.write(f"Launch Error: {launch_error}\n")
+            except OSError as exc:
+                print(f"WARNING: Could not write timing file {timing_file}: {exc}")
 
         if returncode == 0:
-
-            print(
-                f"Finished {infile.name}"
-            )
-
+            print(f"Finished {infile.name}")
         else:
-
-            print(
-                f"Failed {infile.name} "
-                f"(return code {returncode})"
-            )
+            print(f"Failed {infile.name} (return code {returncode})")
 
         return infile, returncode
 
