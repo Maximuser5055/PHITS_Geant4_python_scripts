@@ -1,275 +1,192 @@
-# This script extracts useful metadata from PHITS .out and .inp files using keyword matching.
+# This script extracts useful metadata from Geant4 output files using keyword matching.
 
-# import necessary libraries
+# Import necessary libraries
 import re
 from pathlib import Path
 import csv
+
 import b_config.a_config as config
 from b_config.b_phantom_registry import get_phantom
 
-def phits_extract_metadata_stats():
-    # PHITS output file
-    root = config.GENERATED_INPUTS_DIR 
-    output_files = [file for file in sorted(root.rglob("phits_*.out"))
-                    if "_deposit_" not in file.name
-                    and "_fluence_" not in file.name
-                    ]
+def geant4_extract_metadata_stats():
 
-    # Define metadata output file
-    metadata_output_file = config.RESULTS_PHITS_DIR / "a_phits_all_simulations_log.csv"
+    # Configs
+    root = config.GEANT4_GENERATED_INPUTS_DIR
+    timing_files = sorted(root.rglob("geant4_timing_*.txt"))
+    metadata_output_file = (config.RESULTS_GEANT4_DIR / "a_geant4_all_simulations_log.csv")
 
-    # Regex patterns
-    patterns = {
+    timing_patterns = {
 
-        "starting_date":
-            re.compile(r"Starting Date\s*=\s*(.+)"),
+        "starting_datetime":
+            re.compile(r"Starting\s+Datetime\s*:\s*(.+)"),
 
-        "starting_time":
-            re.compile(r"Starting Time\s*=\s*(.+)"),
+        "termination_datetime":
+            re.compile(r"Termination\s+Datetime\s*:\s*(.+)"),
 
-        # Keep the source type explicit and let the organ name contain
-        # underscores (e.g. Cortical_bone) without truncating it.
-        "file(6)":
-            re.compile(
-                r"file\(6\)\s*=\s*phits_(?P<phantom>.+?)_source_"
-                r"(?P<source_organ>.+)_(?P<source_type>photon|electron)_"
-                r"energy_[0-9Ee.+-]+\.out",
-                re.IGNORECASE
-            ),
+        "setup_time":
+            re.compile(r"Setup\s+Time.*?:\s*([0-9.]+)"),
 
-        "maxcas":
-            re.compile(r"maxcas\s*=\s*(\d+)"),
+        "execution_time":
+            re.compile(r"Execution\s+Time.*?:\s*([0-9.]+)"),
 
-        "maxbch":
-            re.compile(r"maxbch\s*=\s*(\d+)"),
-
-        "source_energy":
-            re.compile(r"e0\s*=\s*([0-9Ee.+-]+)"),
-
-        "source_type":
-        re.compile(r"proj\s*=\s*(\S+)", re.IGNORECASE),
-
-        "parallelization_pattern":
-            re.compile(r"\$(OMP|MPI)\s*=\s*(\d+)",re.IGNORECASE),
-
-        "cpu_time_pattern":
-            re.compile(r"cpu\s+time\s*=\s*(.+)$",re.IGNORECASE),
-
-        "elapsed_time":
-            re.compile(r"total cpu time\s*=\s*([0-9.]+)")
+        "total_wall_time":
+            re.compile(r"Total\s+Wall\s+Time.*?:\s*([0-9.]+)",
+                       re.IGNORECASE),
     }
 
-    def parse_cpu_time(cpu_string):
-        """
-        Convert PHITS cpu time strings into seconds.
+    # Match the source particle type explicitly so organ names containing
+    # underscores (e.g. Cortical_bone) are not split into Source Organ/Type.
+    filename_pattern = re.compile(
+        r"^geant4_(?P<phantom>.+?)_source_(?P<source_organ>.+)_"
+        r"(?P<source_type>gamma|photon|electron|positron|proton|neutron)_"
+        r"energy_(?P<energy>[0-9Ee.+-]+)\.in$",
+        re.IGNORECASE
+    )
 
-        Examples
-        --------
-        5.20 s.
-        1 m. 5.20 s.
-        2 h. 1 m. 5.20 s.
-        1 d. 2 h. 1 m. 5.20 s.
-        """
+    thread_pattern = re.compile(
+        r"^\s*/run/numberOfThreads\s+(\d+)",
+        re.IGNORECASE
+    )
 
-        total = 0.0
+    beamon_pattern = re.compile(
+        r"/run/beamOn\s+(\d+)",
+        re.IGNORECASE
+    )
 
-        day = re.search(r"([0-9.]+)\s*d\.", cpu_string)
-        hour = re.search(r"([0-9.]+)\s*h\.", cpu_string)
-        minute = re.search(r"([0-9.]+)\s*m\.", cpu_string)
-        second = re.search(r"([0-9.]+)\s*s\.?", cpu_string)
+    def extract_metadata(timing_file: Path):
 
-        if day:
-            total += float(day.group(1)) * 86400
-
-        if hour:
-            total += float(hour.group(1)) * 3600
-
-        if minute:
-            total += float(minute.group(1)) * 60
-
-        if second:
-            total += float(second.group(1))
-
-        return total
-
-    # Function for extracting metadata from a PHITS output and input file
-    def extract_metadata(output_file: Path):
-
-        # Determine the corresponding PHITS input file   
-        input_files = output_file.with_suffix(".inp")
-
-        # For extracting the particle transport times per batch
-        batch_cpu_times = []
-
-        start_collecting = False
-
-        # Read the files
         results = {}
 
-        lines = output_file.read_text(encoding="utf-8",errors="ignore").splitlines()
+        # --------------------------
+        # Timing file
+        # --------------------------
 
-        # Search every line
-        for i, line in enumerate(lines):
-
-            for key, pattern in patterns.items():
-
-                if key == "cpu_time_pattern":
-                    continue
-                if key in results:
-                    continue
-                if key in ["cpu_time_pattern", "parallelization_pattern"]:
-                    continue
-
-                match = pattern.search(line)
-
-                if match:
-
-                    value = match.group(1).strip()
-
-                    if key in ["source_energy", "elapsed_time"]:
-                        value = float(value)
-                    elif key in ["maxcas", "maxbch"]:
-                        value = int(value)
-
-                    results[key] = value
-
-            # Phantom, source organ and source type
-            if "file(6)" in line.lower():
-
-                match = patterns["file(6)"].search(line)
-
-                if match:
-
-                    phantom_code = match.group("phantom").upper()
-                    phantom = get_phantom(phantom_code)
-
-                    results["phantom"] = phantom.display_name
-                    results["source_organ"] = match.group("source_organ")
-                    results["source_type"] = match.group("source_type")
-
-            # Particle transport times per batch
-            if "bat[" in line:
-                start_collecting = True
-
-            if not start_collecting:
-                continue
-
-            match = patterns["cpu_time_pattern"].search(line)
-
-            if match:
-
-                batch_cpu_times.append(
-                    parse_cpu_time(match.group(1))
-                )
-            # Job termination date/time
-            if "job termination date" in line.lower():
-
-                date_match = re.search(
-                    r"job termination date\s*:\s*(.+)",
-                    line,
-                    re.IGNORECASE
-                )
-
-                if date_match:
-
-                    results["termination_date"] = date_match.group(1).strip()
-
-                # look ahead for the next line containing "time"
-                for j in range(i + 1, min(i + 6, len(lines))):
-
-                    if "time" in lines[j].lower():
-
-                        time_match = re.search(
-                            r"time\s*:\s*(.+)",
-                            lines[j],
-                            re.IGNORECASE
-                        )
-
-                        if time_match:
-
-                            results["termination_time"] = time_match.group(1).strip()
-
-                        break
-                
-        with open(input_files, encoding="utf-8", errors="ignore") as f:
+        with open(timing_file, encoding="utf-8",
+                  errors="ignore") as f:
 
             for line in f:
 
-                match = patterns["parallelization_pattern"].search(line)
+                for key, pattern in timing_patterns.items():
 
-                if match:
-                    results["parallelization"] = (
-                        f"{match.group(1).upper()}-{match.group(2)}"
-                    )
-                    break
+                    if key in results:
+                        continue
 
-        # Format starting datetime (ISO 8601)
-        start_time = results["starting_time"]
+                    match = pattern.search(line)
 
-        start_time = (
-            start_time.replace("h", ":")
-                    .replace("m", ":")
-                    .replace(" ", "")
+                    if match:
+
+                        value = match.group(1).strip()
+
+                        if key in [
+                            "setup_time",
+                            "execution_time",
+                            "total_wall_time",
+                        ]:
+                            value = float(value)
+
+                        results[key] = value
+
+        # --------------------------
+        # Corresponding .in file
+        # --------------------------
+
+        input_files = timing_file.with_name(
+            timing_file.name
+                .replace("geant4_timing_", "geant4_")
+                .replace(".txt", ".in")
         )
 
-        results["starting_datetime"] = (
-            f'{results["starting_date"]}T{start_time}'
-        )
+        match = filename_pattern.match(input_files.name)
 
-        results["termination_datetime"] = (
-            f'{results["termination_date"].replace("/", "-")}T'
-            f'{results["termination_time"]}'
-        )
+        if not match:
+            raise RuntimeError(
+                f"Cannot parse filename:\n{input_files.name}"
+            )
 
-        # Remove old entries
-        del results["starting_date"]
-        del results["starting_time"]
-        del results["termination_date"]
-        del results["termination_time"]
+        phantom_code = match.group("phantom").upper()
+        phantom_spec = get_phantom(phantom_code)
 
-        # Sum the batch particle transport times and store the total particle transport time
-        results["particle_transport_time"] = sum(batch_cpu_times)
+        source_organ = match.group("source_organ")
+        source_type = match.group("source_type")
+        source_energy = float(match.group("energy"))
 
-        # Calculate the initialization time. This represents the time it takes for the mesh generation, source definition, and 
-        # other setup processes before the actual particle transport begins.
-        results["initialization_time"] = results["elapsed_time"] - results["particle_transport_time"]
+        results["phantom"] = phantom_spec.display_name
+        results["source_organ"] = source_organ
+        results["source_type"] = source_type
+        results["source_energy"] = source_energy
 
-        # Order the results for better readability
+        parallel_mode = "SEQ"
+
+        nps = None
+
+        with open(input_files,
+                  encoding="utf-8",
+                  errors="ignore") as f:
+
+            for line in f:
+
+                stripped = line.strip()
+
+                # Ignore commented commands
+
+                if stripped.startswith("#"):
+                    continue
+
+                thread_match = thread_pattern.search(line)
+
+                if thread_match:
+
+                    nthreads = int(thread_match.group(1))
+
+                    if nthreads > 1:
+                        parallel_mode = f"MT-{nthreads}"
+                    else:
+                        parallel_mode = "SEQ"
+
+                beamon_match = beamon_pattern.search(line)
+
+                if beamon_match:
+                    nps = int(beamon_match.group(1))
+
+        results["parallel_mode"] = parallel_mode
+        results["nps"] = nps
+        results["maxbch"] = 1
+
         ordered_results = {
-            "Starting Datetime": results["starting_datetime"],
-            "Termination Datetime": results["termination_datetime"],
 
-            "Phantom": results.get("phantom"),
-            "Source Organ": results.get("source_organ"),
-            "Source Type": results.get("source_type"),
-            "Source Energy (MeV)": results.get("source_energy"),
+            "Starting Datetime":results.get("starting_datetime"),
+            "Termination Datetime":results.get("termination_datetime"),
 
-            "Parallel Mode": results.get("parallelization"),
-            "maxcas (nps if Geant4)": results.get("maxcas"),
-            "maxbch": results.get("maxbch"),
+            "Phantom":results.get("phantom"),
+            "Source Organ":results.get("source_organ"),
+            "Source Type":results.get("source_type"),
+            "Source Energy (MeV)":results.get("source_energy"),
 
-            "Setup Time (s)": results.get("initialization_time"),
-            "Execution Time (s)": results.get("particle_transport_time"),
-            "Individual Wall Time (s)": results.get("elapsed_time"),
+            "Parallel Mode":results.get("parallel_mode"),
+            "maxcas (nps if Geant4)":results.get("nps"),
+            "maxbch (1 if Geant4)":results.get("maxbch"),
 
+            "Setup Time (s)":results.get("setup_time"),
+            "Execution Time (s)":results.get("execution_time"),
+            "Individual Wall Time (s)":results.get("total_wall_time"),
         }
 
-        print("\nProcessing:")
-        print(output_file.name)
-        print(input_files.name)
+        print(f"\nProcessing:")
+        print(f"{timing_file.name}")
+        print(f"{input_files.name}")
 
         return ordered_results
 
     all_results = []
 
-    if not output_files:
-        print("\n[WARNING] No PHITS output files were found.")
+    if not timing_files:
+        print("\n[WARNING] No Geant4 timing files were found.")
         print(f"Search directory: {root}")
         return
 
-    for output_file in output_files:
+    for timing_file in timing_files:
         all_results.append(
-            extract_metadata(output_file)
+            extract_metadata(timing_file)
         )
 
     with open(metadata_output_file,
