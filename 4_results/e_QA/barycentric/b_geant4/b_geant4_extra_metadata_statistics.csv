@@ -1,0 +1,9 @@
+Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),"Total Simulation Wall Time (sum of jobs, s)","Total Simulation Wall Time (sum of jobs, dhms)"
+Type + Energy,gamma,10.0,,,8,4686.66,0d 01h 18m 07s,579.89,3789.15,5396.4,,
+Phantom + Type + Energy,gamma,10.0,ICRP 145 Adult Female,,4,4607.67,0d 01h 16m 48s,660.14,3789.15,5396.4,,
+Phantom + Type + Energy,gamma,10.0,ICRP 145 Adult Male,,4,4765.64,0d 01h 19m 26s,576.37,3967.28,5244.62,,
+Source Organ + Type + Energy,gamma,10.0,,Cortical_bone,2,3878.22,0d 01h 04m 38s,125.96,3789.15,3967.28,,
+Source Organ + Type + Energy,gamma,10.0,,Liver,2,4916.27,0d 01h 21m 56s,293.54,4708.71,5123.84,,
+Source Organ + Type + Energy,gamma,10.0,,Lungs,2,4631.62,0d 01h 17m 12s,134.63,4536.42,4726.81,,
+Source Organ + Type + Energy,gamma,10.0,,Thyroid,2,5320.51,0d 01h 28m 41s,107.32,5244.62,5396.4,,
+All simulations,,,,,8,4686.66,0d 01h 18m 07s,579.89,3789.15,5396.4,37493.247277,0d 10h 24m 53s
