@@ -257,28 +257,31 @@ def run_phits(params):
     print("Existing Simulation Check")
     print("=" * 90)
 
-    print(
-        "[1] Skip jobs that have already been simulated"
-    )
-
-    print(
-        "[2] Re-run completed jobs "
-        "(overwrite outputs)"
-    )
+    print("[1] Skip jobs that have already been simulated")
+    print("[2] Re-run completed jobs (overwrite outputs)")
+    print("[3] Skip running simulations (exit without running jobs)")
 
     while True:
 
         overwrite_choice = input(
-            "Enter your choice (1-2): "
+            "Enter your choice (1-3): "
         ).strip()
 
-        if overwrite_choice in {"1", "2"}:
+        if overwrite_choice in {"1", "2", "3"}:
             break
 
         print(
             "Invalid choice. "
-            "Please enter 1 or 2."
+            "Please enter 1, 2, or 3."
         )
+
+    if overwrite_choice == "3":
+        print(
+            f"\nSimulation execution skipped. "
+            f"Found {len(input_files)} matching PHITS input file(s); "
+            "no simulations were launched."
+        )
+        return
 
     skip_completed = (
         overwrite_choice == "1"

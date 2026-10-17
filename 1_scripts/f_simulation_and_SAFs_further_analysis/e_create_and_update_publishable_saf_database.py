@@ -181,6 +181,28 @@ def validate_master_database(
         )
 
 
+def filter_sex_inapplicable_target_regions(target_mapping, phantom_code):
+    """Remove target regions that do not apply to the phantom's sex."""
+    phantom_spec = get_phantom(phantom_code)
+    sex = str(phantom_spec.sex).strip().upper()
+
+    target_names = target_mapping["Target region"].fillna("").astype(str).str.strip().str.lower()
+
+    if sex == "AF":
+        # Female phantoms do not have prostate or testes.
+        inapplicable = target_names.str.contains(r"prostat|testis|testes", regex=True)
+    elif sex == "AM":
+        # Male phantoms do not have ovaries or uterus/cervix.
+        inapplicable = target_names.str.contains(r"ovar|uterus|cervix", regex=True)
+    else:
+        # Leave target regions unchanged if the registry uses an
+        # unrecognized sex code rather than silently filtering data.
+        return target_mapping.copy()
+
+    return target_mapping.loc[~inapplicable].copy()
+
+
+
 # ============================================================
 # CLEAN SOURCE TYPE
 # ============================================================
@@ -367,6 +389,68 @@ def create_publishable_table(
         )
 
     # --------------------------------------------------------
+    # Validate the full source-organ / target-region / energy
+    # grid before pivoting. DataFrame.pivot preserves missing
+    # combinations as NaN, which can otherwise make an
+    # incomplete table look like a successful publishable file.
+    # --------------------------------------------------------
+
+    phantom_code = dataframe["Phantom"].dropna().iloc[0]
+    target_mapping = pd.read_csv(target_region_file)
+    target_mapping = filter_sex_inapplicable_target_regions(
+        target_mapping, phantom_code
+    )
+    expected_targets = set(
+        target_mapping["Target region"].dropna().astype(str)
+    )
+
+    actual_targets = set(
+        dataframe["Target Region Name"].dropna().astype(str)
+    )
+    missing_targets = expected_targets - actual_targets
+    if missing_targets:
+        raise ValueError(
+            "Cannot create a publishable SAF table: target region(s) "
+            "are absent from this phantom/source-type subset:\\n"
+            + "\\n".join(f"  {name}" for name in sorted(missing_targets))
+        )
+
+    expected_sources = dataframe[
+        ["Source Organ ID", "Source Organ Name"]
+    ].drop_duplicates()
+    expected_energies = dataframe["Source Energy (MeV)"].dropna().unique()
+
+    present_keys = set(
+        dataframe[
+            ["Source Organ ID", "Target Region Name", "Source Energy (MeV)"]
+        ].itertuples(index=False, name=None)
+    )
+
+    missing_combinations = []
+    for source_id, source_name in expected_sources.itertuples(index=False, name=None):
+        for target_name in expected_targets:
+            for energy in expected_energies:
+                if (source_id, target_name, energy) not in present_keys:
+                    missing_combinations.append(
+                        f"Source={source_name} (ID {source_id}), "
+                        f"Target={target_name}, Energy={energy} MeV"
+                    )
+                    if len(missing_combinations) >= 20:
+                        break
+            if len(missing_combinations) >= 20:
+                break
+        if len(missing_combinations) >= 20:
+            break
+
+    if missing_combinations:
+        raise ValueError(
+            "Cannot create a publishable SAF table because the master "
+            "database has missing source-target-energy combinations. "
+            "First missing combinations (up to 20):\\n"
+            + "\\n".join(f"  {item}" for item in missing_combinations)
+        )
+
+    # --------------------------------------------------------
     # Pivot:
     #
     # rows    = Source Organ + Target Region
@@ -437,7 +521,11 @@ def create_publishable_table(
     # Filipino target-region mapping.
     # --------------------------------------------------------
 
+    phantom_code = dataframe["Phantom"].dropna().iloc[0]
     target_mapping = pd.read_csv(target_region_file)
+    target_mapping = filter_sex_inapplicable_target_regions(
+        target_mapping, phantom_code
+    )
 
     target_order = (
         target_mapping[
@@ -662,6 +750,7 @@ def create_publishable_saf_database(params):
         raise ValueError(f"Unsupported simulation code: {simulation_code}")
 
     master_database_file = (MASTER_DATABASES[simulation_code])
+    publishable_dir.mkdir(parents=True, exist_ok=True)
 
     # --------------------------------------------------------
     # Check master database
@@ -797,6 +886,9 @@ def create_publishable_saf_database(params):
             # ------------------------------------------------
 
             target_mapping = pd.read_csv(target_region_file)
+            target_mapping = filter_sex_inapplicable_target_regions(
+                target_mapping, phantom_code
+            )
 
             target_organs = (
                 target_mapping[

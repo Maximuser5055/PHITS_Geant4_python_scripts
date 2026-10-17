@@ -347,6 +347,23 @@ def filter_new_results(current_results, existing_database, override_duplicates=F
 
             continue
 
+        # ----------------------------------------------------
+        # When replacing a duplicate, append the COMPLETE
+        # current simulation group. The later database step
+        # removes all old rows for this key; appending only
+        # missing rows here would therefore discard valid rows.
+        # ----------------------------------------------------
+        if override_duplicates:
+            source_set_key = (group_key[1], group_key[2], group_key[3])
+            print(
+                f"\\n[REPLACE] Replacing the full source simulation: "
+                f"{group_key[0]} | {group_key[1]} | "
+                f"{group_key[2]} | {group_key[3]} MeV"
+            )
+            new_rows.append(current_group.copy())
+            partial_source_sets.add(source_set_key)
+            continue
+
         # ====================================================
         # Determine whether the source + target-organ results
         # are already complete
