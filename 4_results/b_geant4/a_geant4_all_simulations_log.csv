@@ -1,9 +1,9 @@
 Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Total Elapsed Wall Time (s)
-ICRP 145 Adult Female,Cortical_bone,gamma,10.0,MT-32,100,1,65.153865
-ICRP 145 Adult Female,Liver,gamma,10.0,MT-32,100,1,62.622429
-ICRP 145 Adult Female,Lungs,gamma,10.0,MT-32,100,1,63.350608
-ICRP 145 Adult Female,Thyroid,gamma,10.0,MT-32,100,1,63.298967
-ICRP 145 Adult Male,Cortical_bone,gamma,10.0,MT-32,100,1,64.106524
-ICRP 145 Adult Male,Liver,gamma,10.0,MT-32,100,1,65.834228
-ICRP 145 Adult Male,Lungs,gamma,10.0,MT-32,100,1,66.925848
-ICRP 145 Adult Male,Thyroid,gamma,10.0,MT-32,100,1,66.666774
+ICRP 145 Adult Female,Cortical_bone,gamma,10.0,MT-32,100000000,1,3789.154826
+ICRP 145 Adult Female,Liver,gamma,10.0,MT-32,100000000,1,4708.708903
+ICRP 145 Adult Female,Lungs,gamma,10.0,MT-32,100000000,1,4536.422827
+ICRP 145 Adult Female,Thyroid,gamma,10.0,MT-32,100000000,1,5396.401369
+ICRP 145 Adult Male,Cortical_bone,gamma,10.0,MT-32,100000000,1,3967.283271
+ICRP 145 Adult Male,Liver,gamma,10.0,MT-32,100000000,1,5123.839177
+ICRP 145 Adult Male,Lungs,gamma,10.0,MT-32,100000000,1,4726.814149
+ICRP 145 Adult Male,Thyroid,gamma,10.0,MT-32,100000000,1,5244.622755

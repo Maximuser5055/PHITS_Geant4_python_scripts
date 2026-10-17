@@ -5,6 +5,14 @@ import numpy as np
 import pandas as pd
 
 from b_config import a_config as config
+
+
+def normalize_source_organ_name(value):
+    """Normalize source-organ names for matching across CSV files."""
+    return " ".join(
+        str(value).replace("_", " ").split()
+    ).casefold()
+
 from b_config.b_phantom_registry import get_phantom, get_phantom_group, get_target_region_file
 
 def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
@@ -360,13 +368,21 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
             source_fluence = fluence_df[
                 (fluence_df["Phantom"] == group_key[0])
                 &
-                (fluence_df["Source Organ"] == group_key[2]
+                (
+                    fluence_df["Source Organ"].map(normalize_source_organ_name)
+                    == normalize_source_organ_name(group_key[2])
                 )
                 &
-                (fluence_df["Source Type"] == group_key[3]
-                )
+                (fluence_df["Source Type"] == group_key[3])
                 &
-                (fluence_df["Source Energy (MeV)"] == group_key[4]
+                np.isclose(
+                    pd.to_numeric(
+                        fluence_df["Source Energy (MeV)"],
+                        errors="coerce",
+                    ),
+                    float(group_key[4]),
+                    rtol=1e-9,
+                    atol=1e-12,
                 )
             ]
 
@@ -393,7 +409,7 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
                             group_key[1],
 
                         "Source Organ Name":
-                            fluence_result["Source Organ"],
+                            group_key[2],
 
                         "Source Type":
                             fluence_result["Source Type"],
@@ -464,7 +480,7 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
                             group_key[1],
 
                         "Source Organ Name":
-                            fluence_result["Source Organ"],
+                            group_key[2],
 
                         "Source Type":
                             fluence_result["Source Type"],
