@@ -1,0 +1,28 @@
+========================================
+Source Particle Allocation
+Run ID: 0
+Total requested events: 1000000000
+----------------------------------------
+Organ ID 1300: 35171160 particles (3.5171%) | mass = 113.6814173946 g
+Organ ID 1600: 31957970 particles (3.1958%) | mass = 103.2956325790 g
+Organ ID 1900: 48482958 particles (4.8483%) | mass = 156.7082606464 g
+Organ ID 2200: 32525972 particles (3.2526%) | mass = 105.1315483432 g
+Organ ID 2400: 10155592 particles (1.0156%) | mass = 32.8252502374 g
+Organ ID 2600: 126126399 particles (12.6126%) | mass = 407.6700225958 g
+Organ ID 2800: 75528656 particles (7.5529%) | mass = 244.1262813454 g
+Organ ID 3100: 74539598 particles (7.4540%) | mass = 240.9294144816 g
+Organ ID 3400: 168566151 particles (16.8566%) | mass = 544.8452248228 g
+Organ ID 3700: 53670543 particles (5.3671%) | mass = 173.4757470187 g
+Organ ID 3900: 14044188 particles (1.4044%) | mass = 45.3940998746 g
+Organ ID 4100: 81200074 particles (8.1200%) | mass = 262.4576300754 g
+Organ ID 4300: 50894829 particles (5.0895%) | mass = 164.5039907826 g
+Organ ID 4500: 37640963 particles (3.7641%) | mass = 121.6643960915 g
+Organ ID 4700: 22150778 particles (2.2151%) | mass = 71.5964960558 g
+Organ ID 4900: 63679736 particles (6.3680%) | mass = 205.8277997232 g
+Organ ID 5100: 48317952 particles (4.8318%) | mass = 156.1749221178 g
+Organ ID 5300: 24825078 particles (2.4825%) | mass = 80.2404585409 g
+Organ ID 5500: 521403 particles (0.0521%) | mass = 1.6852962481 g
+----------------------------------------
+Total allocated: 1000000000
+========================================
+
