@@ -4,7 +4,7 @@
 /run/verbose 1
 
 # Set the number of threads for multi-threading mode
-/run/numberOfThreads 32
+/run/numberOfThreads 12
 
 # Initialize
 /run/initialize
