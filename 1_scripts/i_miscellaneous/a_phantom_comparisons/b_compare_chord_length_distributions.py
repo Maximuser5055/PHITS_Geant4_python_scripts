@@ -155,8 +155,8 @@ from c_database import b_organ_database as organ_database
 # Registry group codes to compare.
 # Phantom file paths are NOT hard-coded here.
 PHANTOM_GROUPS_TO_COMPARE = [
-    "MRCP_AF_AM",
-    #"MRCP_AF_AM_Filipino_Resized",
+    "MRCP_AF_AM_Filipino_Resized",
+    "MRCP_AF_AM_Filipino",
 ]
 
 # Output directory name under config.RESULTS_DIR.
