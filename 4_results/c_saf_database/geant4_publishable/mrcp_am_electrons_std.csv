@@ -1,0 +1,83 @@
+# Header
+# Document: Statistical Uncertainties (%)
+# Phantom type: ICRP 145 Adult Male
+# Source type: electrons
+# Number of source energies: 1
+# Number of source organs: 1
+# Number of target organs: 74
+# End Header
+Source Organ,Target Organ,0.01 MeV
+Liver,Red (active) marrow,0.0
+Liver,Colon wall,42.98947173626266
+Liver,Stem cells of colon,0.0
+Liver,RLung + LLung,4.935100819
+Liver,Stomach wall,12.31548938
+Liver,Stem cells of stomach,0.0
+Liver,Breast-a + Breast-g,0.0
+Liver,Testes,0.0
+Liver,Urinary bladder wall,0.0
+Liver,Urinary bladder basal cells,0.0
+Liver,Oesophagus wall,0.0
+Liver,Oesophagus basal cells,0.0
+Liver,Liver,1.053831587e-05
+Liver,Thyroid,0.0
+Liver,50-um endosteal region,0.0
+Liver,Brain,0.0
+Liver,Salivary glands,0.0
+Liver,Skin,0.0
+Liver,Basal cells of skin,0.0
+Liver,RAdrenal + LAdrenal,33.19982817
+Liver,ET region,0.0
+Liver,Gallbladder wall,6.9462239640000005
+Liver,Heart wall,18.24309372
+Liver,RKidney + LKidney,15.603545469999998
+Liver,Systemic lymph nodes,0.0
+Liver,Muscle,31.915447109999995
+Liver,Oral mucosa,0.0
+Liver,Pancreas,0.0
+Liver,Prostate,0.0
+Liver,Small intestine wall,0.0
+Liver,Stem cells of small intestine,0.0
+Liver,Spleen,0.0
+Liver,Thymus,0.0
+Liver,Tongue,0.0
+Liver,Tonsils,0.0
+Liver,Right colon wall (ascending + right transverse),42.989471736262665
+Liver,Left colon wall (left transverse + descending),0.0
+Liver,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Liver,Stem cells of right colon (ascending + right transverse),0.0
+Liver,Stem cells of left colon (left transverse + descending),0.0
+Liver,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0
+Liver,Basal cells of anterior nasal passages,0.0
+Liver,Basal cells of posterior nasal passages + pharynx,0.0
+Liver,Extrathoracic lymph nodes,0.0
+Liver,Bronchi basal cells,0.0
+Liver,Bronchi secretory cells,0.0
+Liver,Alveolar-interstitium,4.935100819
+Liver,Thoracic lymph nodes,0.0
+Liver,Right lung lobe,4.935100819
+Liver,Left lung lobe,0.0
+Liver,Right adrenal gland,33.19982817
+Liver,Left adrenal gland,0.0
+Liver,Right breast adipose,0.0
+Liver,Right breast glandular,0.0
+Liver,Left breast adipose,0.0
+Liver,Left breast glandular,0.0
+Liver,RBreast-a + RBreast-g,0.0
+Liver,LBreast-a + LBreast-g,0.0
+Liver,RBreast-a + LBreast-a,0.0
+Liver,RBreast-g + LBreast-g,0.0
+Liver,Entire lens of eye,0.0
+Liver,Sensitive lens of eye,0.0
+Liver,Right kidney cortex,15.603545469999998
+Liver,Right kidney medulla,0.0
+Liver,Right kidney pelvis,0.0
+Liver,Right kidney C+M+P,15.603545470000002
+Liver,Left kidney cortex,0.0
+Liver,Left kidney medulla,0.0
+Liver,Left kidney pelvis,0.0
+Liver,Left kidney C+M+P,0.0
+Liver,Pituitary gland,0.0
+Liver,Spinal cord,0.0
+Liver,Ureters,0.0
+Liver,Adipose/residual tissue,0.7247243430999999

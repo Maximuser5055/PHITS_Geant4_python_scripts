@@ -1,14 +1,5 @@
 Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),"Total Simulation Wall Time (sum of jobs, s)","Total Simulation Wall Time (sum of jobs, dhms)"
-Type + Energy,gamma,10.0,,,16,5007.8,0d 01h 23m 28s,694.5,3430.38,6171.31,,
-Phantom + Type + Energy,gamma,10.0,ICRP 145 Adult Female,,8,4894.79,0d 01h 21m 35s,667.16,3430.38,5457.75,,
-Phantom + Type + Energy,gamma,10.0,ICRP 145 Adult Male,,8,5120.81,0d 01h 25m 21s,747.85,3521.63,6171.31,,
-Source Organ + Type + Energy,gamma,10.0,,Brain,2,3476.0,0d 00h 57m 56s,64.52,3430.38,3521.63,,
-Source Organ + Type + Energy,gamma,10.0,,Ht-wall,2,5043.58,0d 01h 24m 04s,187.33,4911.12,5176.04,,
-Source Organ + Type + Energy,gamma,10.0,,Kidneys,2,5465.59,0d 01h 31m 06s,121.63,5379.59,5551.6,,
-Source Organ + Type + Energy,gamma,10.0,,Liver,2,4892.07,0d 01h 21m 32s,352.77,4642.63,5141.52,,
-Source Organ + Type + Energy,gamma,10.0,,Pancreas,2,5814.53,0d 01h 36m 55s,504.56,5457.75,6171.31,,
-Source Organ + Type + Energy,gamma,10.0,,Prostate,1,4935.34,0d 01h 22m 15s,,4935.34,4935.34,,
-Source Organ + Type + Energy,gamma,10.0,,Spleen,2,4969.65,0d 01h 22m 50s,306.17,4753.15,5186.14,,
-Source Organ + Type + Energy,gamma,10.0,,Thyroid,2,5337.47,0d 01h 28m 57s,77.14,5282.92,5392.01,,
-Source Organ + Type + Energy,gamma,10.0,,Uterus,1,5191.68,0d 01h 26m 32s,,5191.68,5191.68,,
-All simulations,,,,,16,5007.8,0d 01h 23m 28s,694.5,3430.38,6171.31,80124.81499,0d 22h 15m 25s
+Type + Energy,e-,1.0,,,1,2094.39,0d 00h 34m 54s,,2094.39,2094.39,,
+Phantom + Type + Energy,e-,1.0,ICRP 145 Adult Female,,1,2094.39,0d 00h 34m 54s,,2094.39,2094.39,,
+Source Organ + Type + Energy,e-,1.0,,Thyroid,1,2094.39,0d 00h 34m 54s,,2094.39,2094.39,,
+All simulations,,,,,1,2094.39,0d 00h 34m 54s,,2094.39,2094.39,2094.391587,0d 00h 34m 54s
