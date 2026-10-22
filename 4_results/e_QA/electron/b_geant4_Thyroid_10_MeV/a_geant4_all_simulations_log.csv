@@ -1,0 +1,3 @@
+Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Total Elapsed Wall Time (s)
+ICRP 145 Adult Female,Thyroid,e-,10.0,MT-32,100000000,1,13305.43934
+ICRP 145 Adult Male,Thyroid,e-,10.0,MT-32,100000000,1,12397.095794

@@ -1,5 +1,10 @@
 ﻿Source region,Acronym,ID number(s)
-Cortical bone,Cortical bone,1300_1600_1900_2200_2400_2600_2800_3100_3400_3700_3900_4100_4300_4500_4700_4900_5100_5300_5500
+Brain,Brain,6100
+Heart,Ht-wall,8700
+RKidney + LKidney,Kidneys,8900_9000_9100_9200_9300_9400
 Liver,Liver,9500
-RLung + LLung,Lungs,9700_9900
+Pancreas,Pancreas,11300
+Prostate,Prostate,11500
+Spleen,Spleen,12700
 Thyroid,Thyroid,13200
+Uterus/cervix,Uterus,13900

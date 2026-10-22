@@ -3001,16 +3001,24 @@ ORGANS = {
 
 SOURCE_ORGANS = {
     "MRCP_AF": {
-        **dict.fromkeys([1300, 1600, 1900, 2200, 2400, 2600, 2800, 3100, 3400, 3700, 3900, 4100, 4300, 4500, 4700, 4900, 5100, 5300, 5500], 'Cortical bone'),
+        **dict.fromkeys([6100], 'Brain'),
+        **dict.fromkeys([8700], 'Ht-wall'),
+        **dict.fromkeys([8900, 9000, 9100, 9200, 9300, 9400], 'Kidneys'),
         **dict.fromkeys([9500], 'Liver'),
-        **dict.fromkeys([9700, 9900], 'Lungs'),
+        **dict.fromkeys([11300], 'Pancreas'),
+        **dict.fromkeys([12700], 'Spleen'),
         **dict.fromkeys([13200], 'Thyroid'),
+        **dict.fromkeys([13900], 'Uterus'),
     },
 
     "MRCP_AM": {
-        **dict.fromkeys([1300, 1600, 1900, 2200, 2400, 2600, 2800, 3100, 3400, 3700, 3900, 4100, 4300, 4500, 4700, 4900, 5100, 5300, 5500], 'Cortical bone'),
+        **dict.fromkeys([6100], 'Brain'),
+        **dict.fromkeys([8700], 'Ht-wall'),
+        **dict.fromkeys([8900, 9000, 9100, 9200, 9300, 9400], 'Kidneys'),
         **dict.fromkeys([9500], 'Liver'),
-        **dict.fromkeys([9700, 9900], 'Lungs'),
+        **dict.fromkeys([11300], 'Pancreas'),
+        **dict.fromkeys([11500], 'Prostate'),
+        **dict.fromkeys([12700], 'Spleen'),
         **dict.fromkeys([13200], 'Thyroid'),
     },
 

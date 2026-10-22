@@ -26,7 +26,7 @@ def geant4_extract_metadata_stats():
     # underscores (e.g. Cortical_bone) are not split into Source Organ/Type.
     filename_pattern = re.compile(
         r"^geant4_(?P<phantom>.+?)_source_(?P<source_organ>.+)_"
-        r"(?P<source_type>gamma|photon|electron|positron|proton|neutron)_"
+        r"(?P<source_type>gamma|e-)_"
         r"energy_(?P<energy>[0-9Ee.+-]+)\.in$",
         re.IGNORECASE
     )
