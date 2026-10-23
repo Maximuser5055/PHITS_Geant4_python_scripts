@@ -2,84 +2,84 @@
 # Document: Statistical Uncertainties (%)
 # Phantom type: ICRP 145 Adult Female
 # Source type: electrons
-# Number of source energies: 2
+# Number of source energies: 4
 # Number of source organs: 1
 # Number of target organs: 76
 # End Header
-Source Organ,Target Organ,0.01 MeV,1 MeV
-Thyroid,Red (active) marrow,0.0,0.3043611150512371
-Thyroid,Colon wall,0.0,8.330171667005194
-Thyroid,Stem cells of colon,0.0,99.9999995
-Thyroid,RLung + LLung,0.0,0.3821933744505104
-Thyroid,Stomach wall,0.0,3.48828634533698
-Thyroid,Stem cells of stomach,0.0,24.03786469
-Thyroid,Breast-a + Breast-g,0.0,0.9606723626735136
-Thyroid,ROvary + LOvary,0.0,90.38441776703004
-Thyroid,Urinary bladder wall,0.0,47.42598894
-Thyroid,Urinary bladder basal cells,0.0,0.0
-Thyroid,Oesophagus wall,18.73739289,0.1081798642600252
-Thyroid,Oesophagus basal cells,0.0,1.8005560019999998
-Thyroid,Liver,0.0,0.9497981223
-Thyroid,Thyroid,2.604919383e-05,0.003286332018
-Thyroid,50-um endosteal region,0.0,0.3060262896340521
-Thyroid,Brain,0.0,0.9396059719
-Thyroid,Salivary glands,0.0,1.126576753097182
-Thyroid,Skin,0.0,0.5368170036441408
-Thyroid,Basal cells of skin,0.0,2.087502608276576
-Thyroid,RAdrenal + LAdrenal,0.0,11.188002433372237
-Thyroid,ET region,0.0,1.6510675241040478
-Thyroid,Gallbladder wall,0.0,12.45767366
-Thyroid,Heart wall,0.0,0.8808785787
-Thyroid,RKidney + LKidney,0.0,3.5581645176783256
-Thyroid,Systemic lymph nodes,0.0,1.071068031676683
-Thyroid,Muscle,5.924588308,0.038886013407027
-Thyroid,Oral mucosa,0.0,13.35553989615534
-Thyroid,Pancreas,0.0,5.221113406000001
-Thyroid,Small intestine wall,0.0,4.952014305840398
-Thyroid,Stem cells of small intestine,0.0,52.99435857
-Thyroid,Spleen,0.0,2.9202525420000005
-Thyroid,Thymus,0.0,0.7853869051999999
-Thyroid,Uterus/cervix,0.0,35.15171079
-Thyroid,Tongue,0.0,1.1242089131920951
-Thyroid,Tonsils,0.0,5.960170763
-Thyroid,Right colon wall (ascending + right transverse),0.0,11.58485444902664
-Thyroid,Left colon wall (left transverse + descending),0.0,12.339495441741292
-Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0,25.42457575659532
-Thyroid,Stem cells of right colon (ascending + right transverse),0.0,99.9999995
-Thyroid,Stem cells of left colon (left transverse + descending),0.0,0.0
-Thyroid,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0,0.0
-Thyroid,Basal cells of anterior nasal passages,0.0,76.22750654000001
-Thyroid,Basal cells of posterior nasal passages + pharynx,0.0,13.78410645
-Thyroid,Extrathoracic lymph nodes,0.0,3.107405608
-Thyroid,Bronchi basal cells,0.0,23.51134906103717
-Thyroid,Bronchi secretory cells,0.0,21.407171059980804
-Thyroid,Alveolar-interstitium,0.0,0.3821933744505104
-Thyroid,Thoracic lymph nodes,0.0,2.812316157
-Thyroid,Right lung lobe,0.0,0.5125986994
-Thyroid,Left lung lobe,0.0,0.5733274150000001
-Thyroid,Right adrenal gland,0.0,17.21723861
-Thyroid,Left adrenal gland,0.0,13.75859718
-Thyroid,Right breast adipose,0.0,1.579758962
-Thyroid,Right breast glandular,0.0,2.4829115660000003
-Thyroid,Left breast adipose,0.0,1.698964268
-Thyroid,Left breast glandular,0.0,2.3943278
-Thyroid,RBreast-a + RBreast-g,0.0,1.3328907728824748
-Thyroid,LBreast-a + LBreast-g,0.0,1.3855935085256763
-Thyroid,RBreast-a + LBreast-a,0.0,1.1570253088389004
-Thyroid,RBreast-g + LBreast-g,0.0,1.7235956123027265
-Thyroid,Entire lens of eye,0.0,38.707376899545686
-Thyroid,Sensitive lens of eye,0.0,85.00895779
-Thyroid,Right kidney cortex,0.0,6.215283334
-Thyroid,Right kidney medulla,0.0,13.10674829
-Thyroid,Right kidney pelvis,0.0,20.08502785
-Thyroid,Right kidney C+M+P,0.0,5.460719434129191
-Thyroid,Left kidney cortex,0.0,5.228010193
-Thyroid,Left kidney medulla,0.0,12.29060491
-Thyroid,Left kidney pelvis,0.0,19.96792407
-Thyroid,Left kidney C+M+P,0.0,4.687622268157349
-Thyroid,Right ovary,0.0,92.50798231
-Thyroid,Left ovary,0.0,76.06629937000001
-Thyroid,Pituitary gland,0.0,19.94563039
-Thyroid,Spinal cord,0.0,1.84517479
-Thyroid,Ureters,0.0,33.28242597659721
-Thyroid,Adipose/residual tissue,0.2917235306999999,0.0245617056027776
+Source Organ,Target Organ,0.01 MeV,0.1 MeV,1 MeV,10 MeV
+Thyroid,Red (active) marrow,0.0,0.8076646327690604,0.3043611150512371,0.029999641473865
+Thyroid,Colon wall,0.0,54.18847678049168,8.330171667005194,1.469990724659423
+Thyroid,Stem cells of colon,0.0,0.0,99.9999995,5.376856747782558
+Thyroid,RLung + LLung,0.0,1.0054927669089817,0.3821933744505104,0.0494678147097305
+Thyroid,Stomach wall,0.0,18.261477647072976,3.48828634533698,0.9295758911497318
+Thyroid,Stem cells of stomach,0.0,0.0,24.03786469,3.16835651
+Thyroid,Breast-a + Breast-g,0.0,3.2744471687041874,0.9606723626735136,0.2826945959261351
+Thyroid,ROvary + LOvary,0.0,0.0,90.38441776703004,14.12939338799043
+Thyroid,Urinary bladder wall,0.0,0.0,47.42598894,5.70683962580316
+Thyroid,Urinary bladder basal cells,0.0,0.0,0.0,10.64641962
+Thyroid,Oesophagus wall,18.73739289,0.7820281836636997,0.1081798642600252,0.0254055520831059
+Thyroid,Oesophagus basal cells,0.0,16.20513143,1.8005560019999998,0.0703191621599999
+Thyroid,Liver,0.0,3.883538934,0.9497981223,0.2918492748
+Thyroid,Thyroid,2.604919383e-05,0.0002779957611,0.003286332018,0.008256923775
+Thyroid,50-um endosteal region,0.0,0.8186579068227466,0.3060262896340521,0.0297476152811326
+Thyroid,Brain,0.0,4.287678835,0.9396059719,0.2588689983
+Thyroid,Salivary glands,0.0,3.091433391786183,1.126576753097182,0.1626039787247654
+Thyroid,Skin,0.0,1.2337098082029725,0.5368170036441408,0.0222598392389183
+Thyroid,Basal cells of skin,0.0,5.908713541408868,2.087502608276576,0.0368210602446379
+Thyroid,RAdrenal + LAdrenal,0.0,55.10284798324175,11.188002433372237,3.052319825781124
+Thyroid,ET region,0.0,3.962375996689956,1.6510675241040478,0.095174020872667
+Thyroid,Gallbladder wall,0.0,0.0,12.45767366,2.864031344
+Thyroid,Heart wall,0.0,2.774719314,0.8808785787,0.2989728619
+Thyroid,RKidney + LKidney,0.0,21.934112002937567,3.5581645176783256,0.9323168826262328
+Thyroid,Systemic lymph nodes,0.0,3.603956340409648,1.071068031676683,0.0868754916784322
+Thyroid,Muscle,5.924588308,0.257159194787903,0.038886013407027,0.0104428710144671
+Thyroid,Oral mucosa,0.0,61.63964535386858,13.35553989615534,0.574274856057126
+Thyroid,Pancreas,0.0,31.65294587,5.221113406000001,1.450531985
+Thyroid,Small intestine wall,0.0,29.56405366884456,4.952014305840398,0.9948754004639216
+Thyroid,Stem cells of small intestine,0.0,0.0,52.99435857,3.792300371
+Thyroid,Spleen,0.0,14.91501116,2.9202525420000005,0.9469318606
+Thyroid,Thymus,0.0,1.5432427519999998,0.7853869051999999,0.0563597301499999
+Thyroid,Uterus/cervix,0.0,0.0,35.15171079,6.803942445
+Thyroid,Tongue,0.0,3.095210641633376,1.1242089131920951,0.2437327012197216
+Thyroid,Tonsils,0.0,20.13943414,5.960170763,1.776970568
+Thyroid,Right colon wall (ascending + right transverse),0.0,77.16113508305014,11.58485444902664,1.9933181614514213
+Thyroid,Left colon wall (left transverse + descending),0.0,68.65862892774139,12.339495441741292,2.397090304501888
+Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0,0.0,25.42457575659532,5.108435762085176
+Thyroid,Stem cells of right colon (ascending + right transverse),0.0,0.0,99.9999995,6.5379136428175375
+Thyroid,Stem cells of left colon (left transverse + descending),0.0,0.0,0.0,10.61964134283865
+Thyroid,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0,0.0,0.0,15.45352313
+Thyroid,Basal cells of anterior nasal passages,0.0,0.0,76.22750654000001,12.92758894
+Thyroid,Basal cells of posterior nasal passages + pharynx,0.0,61.87452323,13.78410645,0.2163649759
+Thyroid,Extrathoracic lymph nodes,0.0,9.873531333,3.107405608,0.7325281048
+Thyroid,Bronchi basal cells,0.0,62.61328941570952,23.51134906103717,0.876359900736572
+Thyroid,Bronchi secretory cells,0.0,70.93806364000001,21.407171059980804,0.8189947110427765
+Thyroid,Alveolar-interstitium,0.0,1.0054927669089817,0.3821933744505104,0.0494678147097305
+Thyroid,Thoracic lymph nodes,0.0,5.183924174,2.812316157,0.1402450177999999
+Thyroid,Right lung lobe,0.0,1.330413147,0.5125986994,0.06484371835
+Thyroid,Left lung lobe,0.0,1.535497869,0.5733274150000001,0.07629756649
+Thyroid,Right adrenal gland,0.0,58.58204253,17.21723861,4.350584557
+Thyroid,Left adrenal gland,0.0,88.73853803,13.75859718,4.189651808
+Thyroid,Right breast adipose,0.0,5.035017115,1.579758962,0.4299098226
+Thyroid,Right breast glandular,0.0,9.139114164,2.4829115660000003,0.7958589516
+Thyroid,Left breast adipose,0.0,5.756664931000001,1.698964268,0.4852600884
+Thyroid,Left breast glandular,0.0,9.056502770000002,2.3943278,0.7768432531999999
+Thyroid,RBreast-a + RBreast-g,0.0,4.417584661237985,1.3328907728824748,0.383437697744016
+Thyroid,LBreast-a + LBreast-g,0.0,4.875329363273911,1.3855935085256763,0.4181145041367741
+Thyroid,RBreast-a + LBreast-a,0.0,3.790097407889481,1.1570253088389004,0.3218444400610399
+Thyroid,RBreast-g + LBreast-g,0.0,6.436309444763784,1.7235956123027265,0.5559653610660946
+Thyroid,Entire lens of eye,0.0,0.0,38.707376899545686,8.50606888916704
+Thyroid,Sensitive lens of eye,0.0,0.0,85.00895779,13.439155904671004
+Thyroid,Right kidney cortex,0.0,36.49745454,6.215283334,1.6185744240000002
+Thyroid,Right kidney medulla,0.0,74.10047469,13.10674829,2.989377028
+Thyroid,Right kidney pelvis,0.0,0.0,20.08502785,5.94362128
+Thyroid,Right kidney C+M+P,0.0,36.07592091124808,5.460719434129191,1.3897353170465976
+Thyroid,Left kidney cortex,0.0,29.14596538,5.228010193,1.438558228
+Thyroid,Left kidney medulla,0.0,85.66509998000001,12.29060491,2.826707308
+Thyroid,Left kidney pelvis,0.0,0.0,19.96792407,6.070137977
+Thyroid,Left kidney C+M+P,0.0,27.62548040502842,4.687622268157349,1.2568493903105011
+Thyroid,Right ovary,0.0,0.0,92.50798231,18.56208901
+Thyroid,Left ovary,0.0,0.0,76.06629937000001,21.7849732
+Thyroid,Pituitary gland,0.0,99.9999999,19.94563039,5.008389642999999
+Thyroid,Spinal cord,0.0,5.853256548,1.84517479,0.1203693739999999
+Thyroid,Ureters,0.0,86.97149340503465,33.28242597659721,5.546130092621217
+Thyroid,Adipose/residual tissue,0.2917235306999999,0.0543171389228031,0.0245617056027776,0.0073510871242753

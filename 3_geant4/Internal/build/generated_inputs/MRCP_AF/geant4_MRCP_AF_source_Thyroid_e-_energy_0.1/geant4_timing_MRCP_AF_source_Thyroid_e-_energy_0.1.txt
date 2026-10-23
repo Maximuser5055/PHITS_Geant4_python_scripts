@@ -1,4 +1,4 @@
 Geant4 Timing Summary
 =====================
 
-Total Wall Time (s): 2094.391587
+Total Wall Time (s): 768.116923

@@ -4,13 +4,13 @@
 /run/verbose 1
 
 # Set the number of threads for multi-threading mode
-/run/numberOfThreads 12
+/run/numberOfThreads 32
 
 # Initialize
 /run/initialize
 
 # source setting
-/control/execute geant4_MRCP_AF_source_Brain_e-_energy_1.0.mac
+/control/execute geant4_MRCP_AF_source_Uterus_e-_energy_0.1.mac
 
 # Set the nps
-/run/beamOn 100000000
+/run/beamOn 500000000
