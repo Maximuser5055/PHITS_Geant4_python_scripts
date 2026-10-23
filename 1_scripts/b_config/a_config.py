@@ -129,7 +129,7 @@ RESULTS_GEANT4_DIR = RESULTS_DIR / "b_geant4"
 # PHITS or Geant4
 ############################
 
-SIMULATION_CODE = "GEANT4"
+SIMULATION_CODE = "PHITS"
 
 ############################
 # PHITS Settings
@@ -172,11 +172,11 @@ GEANT4_SOURCE_TYPE_MAP = {
 
 MEV_TO_J = 1.6021766339999e-13
 
-THREADS = 32
+THREADS = 12
 
 SOURCE_ENERGIES = [0.1]
 
-SELECTED_SOURCE_TYPE = "e-"
+SELECTED_SOURCE_TYPE = "photon"
 
 FLUENCE_SOURCE_TYPES = [
     "photon",

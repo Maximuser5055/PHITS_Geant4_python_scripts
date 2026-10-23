@@ -1,0 +1,5 @@
+Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),"Total Simulation Wall Time (sum of jobs, s)","Total Simulation Wall Time (sum of jobs, dhms)"
+Type + Energy,photon,0.1,,,1,623.71,0d 00h 10m 24s,,623.71,623.71,,
+Phantom + Type + Energy,photon,0.1,ICRP 145 Adult Female,,1,623.71,0d 00h 10m 24s,,623.71,623.71,,
+Source Organ + Type + Energy,photon,0.1,,Thyroid,1,623.71,0d 00h 10m 24s,,623.71,623.71,,
+All simulations,,,,,1,623.71,0d 00h 10m 24s,,623.71,623.71,623.71,0d 00h 10m 24s

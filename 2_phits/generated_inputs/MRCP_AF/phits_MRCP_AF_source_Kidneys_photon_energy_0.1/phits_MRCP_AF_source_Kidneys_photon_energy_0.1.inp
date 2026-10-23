@@ -1,0 +1,101 @@
+$OMP=12
+
+# ----------------------------------------------------------------------------
+#    name and sex       : ICRP 145 Adult Female                                              
+#    author             : HUREL
+# ----------------------------------------------------------------------------
+
+[ Parameters ]
+ icntl    =           0     # (D=0) 3:ECH 5:NOR 6:SRC 7,8:GSH 11:DSH 12:DUMP
+ maxcas   =  100     # (D=10) number of particles per one batch
+ maxbch   =  10     # (D=10) number of batches
+ itetvol  =           0     # (D=0) =1 Volume calculation for tetrahedrons
+ ntetelem =        2000     # Number of tetra element allowed in sub-block
+ maxbnk   =     1000000     # (D=10000) maximum bank memory length
+ itetra   =           0     # (D=0) tetra data is read(=1)/write(=2) on binary
+ file(6)  = phits_MRCP_AF_source_Kidneys_photon_energy_0.1.out # (D=phits.out) general output file name
+ file(1)  = /home/clarence/Software/phits/phits # PHITS installation folder name
+ negs     =           1     # (D=-1) 1:EGS
+ ipegs    =           0     # [EGS](D=0) 0:Full
+ emin(12) =       0.001     # 1 x 10^-3 MeV (1 keV) cut-off energy for electrons
+ emin(13) =       0.001     # positrons
+ emin(14) =       0.001     # photons
+
+[ Source ]
+  totfact = 1.00         # global factor
+  <source> = 0.417733302583  # mass fraction for organ ID 8900
+    s-type = 24
+      proj = photon
+    tetreg = 8900
+        e0 = 0.1
+       dir = all
+  <source> = 0.104905176284  # mass fraction for organ ID 9000
+    s-type = 24
+      proj = photon
+    tetreg = 9000
+        e0 = 0.1
+       dir = all
+  <source> = 0.0209978821801  # mass fraction for organ ID 9100
+    s-type = 24
+      proj = photon
+    tetreg = 9100
+        e0 = 0.1
+       dir = all
+  <source> = 0.350644348748  # mass fraction for organ ID 9200
+    s-type = 24
+      proj = photon
+    tetreg = 9200
+        e0 = 0.1
+       dir = all
+  <source> = 0.088090058618  # mass fraction for organ ID 9300
+    s-type = 24
+      proj = photon
+    tetreg = 9300
+        e0 = 0.1
+       dir = all
+  <source> = 0.017629231587  # mass fraction for organ ID 9400
+    s-type = 24
+      proj = photon
+    tetreg = 9400
+        e0 = 0.1
+       dir = all
+
+[ Material ]
+$ ----------------------------------------------------------------------------
+$ MATERIAL DATA FOR EACH ORGAN/TISSUE
+$ ----------------------------------------------------------------------------
+infl:{../phantoms/MRCP-AF.material}
+
+[ Surface ]
+  10  rpp -37.8854 37.8854 -24.56301 24.56301 -98.00236 98.00236  $ Phantom box
+  20  rpp -38.0854 38.0854 -24.76301 24.76301 -98.20236 98.20236
+  90  box -1000 -1000 -1000 2000 0 0 0 2000 0 0 0 2000         $ World boundary
+  
+[ Cell ]
+$ ----------------------------------------------------------------------------
+$ CELLS FOR PHANTOM
+$ ----------------------------------------------------------------------------
+infl:{../phantoms/MRCP-AF.cell}
+
+[ T-deposit ]
+# Deposit energy in a certain region.
+ file   = phits_deposit_MRCP_AF_source_Kidneys_photon_energy_0.1.out # file name of output for the axis
+ mesh   = reg               # mesh type is region-wise
+ reg    = all               # all regions become tallying region
+ axis   = reg               # axis of output
+ unit   = 0                 # unit is [Gy/source]
+
+[T-Track] 
+# Count fluence in a certain region.
+file   = phits_fluence_MRCP_AF_source_Kidneys_photon_energy_0.1.out
+mesh   = reg
+reg    = 1400 1500 1700 1800 2000 2100 2300 2500 2700 2900 3000 3200 3300 3500 3600 3800 4000 4200 4400 4600 4800 5000 5200 5400 5600
+axis   = eng    # energy-based spectrum
+part   = photon
+unit   = 1
+e-type = 3 # logarithmic energy binning of photon fluence
+ne     = 100 # number of bins
+emin   = 0.01
+emax   = 10
+   
+[ End ]

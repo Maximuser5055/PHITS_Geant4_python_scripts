@@ -1,0 +1,85 @@
+# Header
+# Document: Specific Absorbed Fractions (kg^-1)
+# Phantom type: ICRP 145 Adult Female
+# Source type: electrons
+# Number of source energies: 1
+# Number of source organs: 1
+# Number of target organs: 76
+# End Header
+Source Organ,Target Organ,0.1 MeV
+Thyroid,Red (active) marrow,0.0
+Thyroid,Colon wall,0.0
+Thyroid,Stem cells of colon,0.0
+Thyroid,RLung + LLung,0.0
+Thyroid,Stomach wall,0.0
+Thyroid,Stem cells of stomach,0.0
+Thyroid,Breast-a + Breast-g,0.0
+Thyroid,ROvary + LOvary,0.0
+Thyroid,Urinary bladder wall,0.0
+Thyroid,Urinary bladder basal cells,0.0
+Thyroid,Oesophagus wall,0.0
+Thyroid,Oesophagus basal cells,0.0
+Thyroid,Liver,0.0
+Thyroid,Thyroid,51.21844761593565
+Thyroid,50-um endosteal region,0.0
+Thyroid,Brain,0.0
+Thyroid,Salivary glands,0.0
+Thyroid,Skin,0.0
+Thyroid,Basal cells of skin,0.0
+Thyroid,RAdrenal + LAdrenal,0.0
+Thyroid,ET region,0.0
+Thyroid,Gallbladder wall,0.0
+Thyroid,Heart wall,0.0
+Thyroid,RKidney + LKidney,0.0
+Thyroid,Systemic lymph nodes,0.0
+Thyroid,Muscle,0.0
+Thyroid,Oral mucosa,0.0
+Thyroid,Pancreas,0.0
+Thyroid,Small intestine wall,0.0
+Thyroid,Stem cells of small intestine,0.0
+Thyroid,Spleen,0.0
+Thyroid,Thymus,0.0
+Thyroid,Uterus/cervix,0.0
+Thyroid,Tongue,0.0
+Thyroid,Tonsils,0.0
+Thyroid,Right colon wall (ascending + right transverse),0.0
+Thyroid,Left colon wall (left transverse + descending),0.0
+Thyroid,Rectosigmoid colon wall (sigmoid + rectum),0.0
+Thyroid,Stem cells of right colon (ascending + right transverse),0.0
+Thyroid,Stem cells of left colon (left transverse + descending),0.0
+Thyroid,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0
+Thyroid,Basal cells of anterior nasal passages,0.0
+Thyroid,Basal cells of posterior nasal passages + pharynx,0.0
+Thyroid,Extrathoracic lymph nodes,0.0
+Thyroid,Bronchi basal cells,0.0
+Thyroid,Bronchi secretory cells,0.0
+Thyroid,Alveolar-interstitium,0.0
+Thyroid,Thoracic lymph nodes,0.0
+Thyroid,Right lung lobe,0.0
+Thyroid,Left lung lobe,0.0
+Thyroid,Right adrenal gland,0.0
+Thyroid,Left adrenal gland,0.0
+Thyroid,Right breast adipose,0.0
+Thyroid,Right breast glandular,0.0
+Thyroid,Left breast adipose,0.0
+Thyroid,Left breast glandular,0.0
+Thyroid,RBreast-a + RBreast-g,0.0
+Thyroid,LBreast-a + LBreast-g,0.0
+Thyroid,RBreast-a + LBreast-a,0.0
+Thyroid,RBreast-g + LBreast-g,0.0
+Thyroid,Entire lens of eye,0.0
+Thyroid,Sensitive lens of eye,0.0
+Thyroid,Right kidney cortex,0.0
+Thyroid,Right kidney medulla,0.0
+Thyroid,Right kidney pelvis,0.0
+Thyroid,Right kidney C+M+P,0.0
+Thyroid,Left kidney cortex,0.0
+Thyroid,Left kidney medulla,0.0
+Thyroid,Left kidney pelvis,0.0
+Thyroid,Left kidney C+M+P,0.0
+Thyroid,Right ovary,0.0
+Thyroid,Left ovary,0.0
+Thyroid,Pituitary gland,0.0
+Thyroid,Spinal cord,0.0
+Thyroid,Ureters,0.0
+Thyroid,Adipose/residual tissue,0.0002005946129133

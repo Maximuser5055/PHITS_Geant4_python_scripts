@@ -380,7 +380,7 @@ def combine_target_organs_and_calculate_true_dose_and_SAFs(params):
                         fluence_df["Source Energy (MeV)"],
                         errors="coerce",
                     ),
-                    float(group_key[4]),
+                    float(str(group_key[4])),
                     rtol=1e-9,
                     atol=1e-12,
                 )
