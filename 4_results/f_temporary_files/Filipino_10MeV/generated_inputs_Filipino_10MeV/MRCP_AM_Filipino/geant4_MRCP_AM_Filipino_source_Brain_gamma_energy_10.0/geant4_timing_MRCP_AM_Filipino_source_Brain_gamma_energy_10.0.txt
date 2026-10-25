@@ -1,0 +1,4 @@
+Geant4 Timing Summary
+=====================
+
+Total Wall Time (s): 3420.887532
