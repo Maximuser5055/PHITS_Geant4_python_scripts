@@ -1,5 +1,0 @@
-# ParticleGun macro:
-# 10.0 MeV-gamma source
-/gun/particle gamma
-/gun/energy 10.0 MeV
-
