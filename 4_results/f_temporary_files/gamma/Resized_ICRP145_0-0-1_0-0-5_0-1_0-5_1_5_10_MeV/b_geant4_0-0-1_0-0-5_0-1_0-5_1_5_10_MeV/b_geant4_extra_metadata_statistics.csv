@@ -1,0 +1,14 @@
+Category,Source Type,Source Energy (MeV),Phantom,Source Organ,Count,Average (s),Average (dhms),StdDev (s),Minimum (s),Maximum (s),"Total Simulation Wall Time (sum of jobs, s)","Total Simulation Wall Time (sum of jobs, dhms)"
+Type + Energy,gamma,0.01,,,16,877.66,0d 00h 14m 38s,135.69,727.44,1207.25,,
+Phantom + Type + Energy,gamma,0.01,ICRP 145 Adult Female Resized to Filipino,,8,862.35,0d 00h 14m 22s,139.9,727.44,1189.54,,
+Phantom + Type + Energy,gamma,0.01,ICRP 145 Adult Male Resized to Filipino,,8,892.97,0d 00h 14m 53s,139.09,777.45,1207.25,,
+Source Organ + Type + Energy,gamma,0.01,,Brain,2,910.33,0d 00h 15m 10s,57.24,869.86,950.81,,
+Source Organ + Type + Energy,gamma,0.01,,Ht-wall,2,857.92,0d 00h 14m 18s,15.83,846.73,869.12,,
+Source Organ + Type + Energy,gamma,0.01,,Kidneys,2,822.43,0d 00h 13m 42s,8.29,816.57,828.29,,
+Source Organ + Type + Energy,gamma,0.01,,Liver,2,825.61,0d 00h 13m 46s,48.89,791.04,860.18,,
+Source Organ + Type + Energy,gamma,0.01,,Pancreas,2,794.12,0d 00h 13m 14s,7.81,788.59,799.64,,
+Source Organ + Type + Energy,gamma,0.01,,Prostate,1,896.17,0d 00h 14m 56s,,896.17,896.17,,
+Source Organ + Type + Energy,gamma,0.01,,Spleen,2,752.44,0d 00h 12m 32s,35.36,727.44,777.45,,
+Source Organ + Type + Energy,gamma,0.01,,Thyroid,2,1198.39,0d 00h 19m 58s,12.53,1189.54,1207.25,,
+Source Organ + Type + Energy,gamma,0.01,,Uterus,1,823.91,0d 00h 13m 44s,,823.91,823.91,,
+All simulations,,,,,16,877.66,0d 00h 14m 38s,135.69,727.44,1207.25,14042.576734,0d 03h 54m 03s

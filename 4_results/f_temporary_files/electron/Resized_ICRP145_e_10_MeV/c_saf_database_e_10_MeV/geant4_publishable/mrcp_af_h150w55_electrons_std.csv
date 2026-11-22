@@ -1,0 +1,617 @@
+# Header
+# Document: Statistical Uncertainties (%)
+# Phantom type: ICRP 145 Adult Female Resized to Filipino
+# Source type: electrons
+# Number of source energies: 1
+# Number of source organs: 8
+# Number of target organs: 76
+# End Header
+Source Organ,Target Organ,10 MeV
+Pancreas,Red (active) marrow,0.0443531122918487
+Pancreas,Colon wall,0.0714172574201603
+Pancreas,Stem cells of colon,0.1634137603035731
+Pancreas,RLung + LLung,0.2599310022267148
+Pancreas,Stomach wall,0.025777870419518
+Pancreas,Stem cells of stomach,0.05359261135
+Pancreas,Breast-a + Breast-g,0.372477105110148
+Pancreas,ROvary + LOvary,3.271694549835017
+Pancreas,Urinary bladder wall,1.228402157319901
+Pancreas,Urinary bladder basal cells,2.420284388
+Pancreas,Oesophagus wall,0.8695779921449546
+Pancreas,Oesophagus basal cells,3.70441252
+Pancreas,Liver,0.02063569194
+Pancreas,Thyroid,3.342955916
+Pancreas,50-um endosteal region,0.0443208045817762
+Pancreas,Brain,1.2049192809999998
+Pancreas,Salivary glands,2.7945250354543894
+Pancreas,Skin,0.1550705318723712
+Pancreas,Basal cells of skin,0.3254660582999999
+Pancreas,RAdrenal + LAdrenal,0.1514906366003871
+Pancreas,ET region,4.38926329130441
+Pancreas,Gallbladder wall,0.0400676428299999
+Pancreas,Heart wall,0.3574025943
+Pancreas,RKidney + LKidney,0.0274739127007678
+Pancreas,Systemic lymph nodes,0.491086678716595
+Pancreas,Muscle,0.0486427208499999
+Pancreas,Oral mucosa,10.067487034813317
+Pancreas,Pancreas,0.00734603245
+Pancreas,Small intestine wall,0.0247288353419803
+Pancreas,Stem cells of small intestine,0.06431857648
+Pancreas,Spleen,0.2224508101
+Pancreas,Thymus,2.566716223
+Pancreas,Uterus/cervix,1.39828045
+Pancreas,Tongue,2.784698758889956
+Pancreas,Tonsils,12.29123734
+Pancreas,Right colon wall (ascending + right transverse),0.0723101807423644
+Pancreas,Left colon wall (left transverse + descending),0.3659361151285439
+Pancreas,Rectosigmoid colon wall (sigmoid + rectum),1.061533548877098
+Pancreas,Stem cells of right colon (ascending + right transverse),0.1643124443214389
+Pancreas,Stem cells of left colon (left transverse + descending),1.6327218735075084
+Pancreas,Stem cells of rectosigmoid colon (sigmoid + rectum),3.752929476
+Pancreas,Basal cells of anterior nasal passages,28.58035437
+Pancreas,Basal cells of posterior nasal passages + pharynx,14.57409422
+Pancreas,Extrathoracic lymph nodes,5.977736051
+Pancreas,Bronchi basal cells,7.621535807643536
+Pancreas,Bronchi secretory cells,8.032271862434817
+Pancreas,Alveolar-interstitium,0.2599310022267148
+Pancreas,Thoracic lymph nodes,0.06799476512
+Pancreas,Right lung lobe,0.35314899
+Pancreas,Left lung lobe,0.3837060104999999
+Pancreas,Right adrenal gland,0.426365009
+Pancreas,Left adrenal gland,0.1612033886
+Pancreas,Right breast adipose,0.6632488266000001
+Pancreas,Right breast glandular,0.8383403244000001
+Pancreas,Left breast adipose,0.6723789364
+Pancreas,Left breast glandular,0.8741146296000001
+Pancreas,RBreast-a + RBreast-g,0.520382261374005
+Pancreas,LBreast-a + LBreast-g,0.5333412434273381
+Pancreas,RBreast-a + LBreast-a,0.4721895214461534
+Pancreas,RBreast-g + LBreast-g,0.6051090015652
+Pancreas,Entire lens of eye,28.1365335066574
+Pancreas,Sensitive lens of eye,45.142877650263806
+Pancreas,Right kidney cortex,0.04518743544
+Pancreas,Right kidney medulla,0.07703842555
+Pancreas,Right kidney pelvis,0.1335661481999999
+Pancreas,Right kidney C+M+P,0.0380010232912005
+Pancreas,Left kidney cortex,0.04783129292
+Pancreas,Left kidney medulla,0.0785799393499999
+Pancreas,Left kidney pelvis,0.131464252
+Pancreas,Left kidney C+M+P,0.0397644395602101
+Pancreas,Right ovary,4.379009186
+Pancreas,Left ovary,4.921762343
+Pancreas,Pituitary gland,31.04356650999999
+Pancreas,Spinal cord,0.9591299973
+Pancreas,Ureters,0.0687770285622076
+Pancreas,Adipose/residual tissue,0.0112064777099999
+Spleen,Red (active) marrow,0.02487036498443
+Spleen,Colon wall,0.4391142913387933
+Spleen,Stem cells of colon,1.75629384553426
+Spleen,RLung + LLung,0.0319915750765768
+Spleen,Stomach wall,0.0254519047817072
+Spleen,Stem cells of stomach,0.05561342155
+Spleen,Breast-a + Breast-g,0.3238829216942073
+Spleen,ROvary + LOvary,5.143402653206978
+Spleen,Urinary bladder wall,2.0061439914287096
+Spleen,Urinary bladder basal cells,4.057594444999999
+Spleen,Oesophagus wall,0.1814930667144587
+Spleen,Oesophagus basal cells,0.5381336739
+Spleen,Liver,0.1236618794
+Spleen,Thyroid,2.591256132
+Spleen,50-um endosteal region,0.0249123047200351
+Spleen,Brain,0.8779512200999999
+Spleen,Salivary glands,2.112030832499841
+Spleen,Skin,0.0349543718889625
+Spleen,Basal cells of skin,0.05558705075
+Spleen,RAdrenal + LAdrenal,0.1873397309742295
+Spleen,ET region,3.4333680418000863
+Spleen,Gallbladder wall,0.9451973896
+Spleen,Heart wall,0.08423592218
+Spleen,RKidney + LKidney,0.0399146912437215
+Spleen,Systemic lymph nodes,0.5302206635437523
+Spleen,Muscle,0.02050521959
+Spleen,Oral mucosa,7.314001636525813
+Spleen,Pancreas,0.2469723603999999
+Spleen,Small intestine wall,0.052789250319783
+Spleen,Stem cells of small intestine,0.1542396429
+Spleen,Spleen,0.007092353074
+Spleen,Thymus,1.943446206
+Spleen,Uterus/cervix,2.129055896
+Spleen,Tongue,2.2388452841700217
+Spleen,Tonsils,10.11569344
+Spleen,Right colon wall (ascending + right transverse),0.737717150141164
+Spleen,Left colon wall (left transverse + descending),0.58136567827292
+Spleen,Rectosigmoid colon wall (sigmoid + rectum),1.5678324084759891
+Spleen,Stem cells of right colon (ascending + right transverse),2.629420113962919
+Spleen,Stem cells of left colon (left transverse + descending),2.621567561310861
+Spleen,Stem cells of rectosigmoid colon (sigmoid + rectum),5.258991342
+Spleen,Basal cells of anterior nasal passages,36.70025129
+Spleen,Basal cells of posterior nasal passages + pharynx,9.405628599
+Spleen,Extrathoracic lymph nodes,4.387577832
+Spleen,Bronchi basal cells,4.875980986583727
+Spleen,Bronchi secretory cells,4.718493580698775
+Spleen,Alveolar-interstitium,0.0319915750765768
+Spleen,Thoracic lymph nodes,0.0842817525
+Spleen,Right lung lobe,0.3154721518
+Spleen,Left lung lobe,0.03207309981
+Spleen,Right adrenal gland,1.449526888
+Spleen,Left adrenal gland,0.1881089314
+Spleen,Right breast adipose,0.7438883333999999
+Spleen,Right breast glandular,0.9828499709
+Spleen,Left breast adipose,0.4955693738
+Spleen,Left breast glandular,0.6150669898
+Spleen,RBreast-a + RBreast-g,0.5939722000451694
+Spleen,LBreast-a + LBreast-g,0.3863137477630537
+Spleen,RBreast-a + LBreast-a,0.412470711280362
+Spleen,RBreast-g + LBreast-g,0.5214924320606766
+Spleen,Entire lens of eye,25.84155455219544
+Spleen,Sensitive lens of eye,50.810815046923686
+Spleen,Right kidney cortex,0.597805665
+Spleen,Right kidney medulla,1.140141466
+Spleen,Right kidney pelvis,2.2477056720000004
+Spleen,Right kidney C+M+P,0.5167779958933342
+Spleen,Left kidney cortex,0.0423423998299999
+Spleen,Left kidney medulla,0.1149256405
+Spleen,Left kidney pelvis,0.2453037090999999
+Spleen,Left kidney C+M+P,0.0399624837114959
+Spleen,Right ovary,7.496659780000001
+Spleen,Left ovary,7.068863222000001
+Spleen,Pituitary gland,21.4277722
+Spleen,Spinal cord,0.3023361386
+Spleen,Ureters,1.396017731746506
+Spleen,Adipose/residual tissue,0.009626866976
+Thyroid,Red (active) marrow,0.0290196363415294
+Thyroid,Colon wall,1.3978365845701666
+Thyroid,Stem cells of colon,5.513496125140192
+Thyroid,RLung + LLung,0.0470561108019066
+Thyroid,Stomach wall,0.8992365330224352
+Thyroid,Stem cells of stomach,2.977282245
+Thyroid,Breast-a + Breast-g,0.2863837161322855
+Thyroid,ROvary + LOvary,13.229509733693437
+Thyroid,Urinary bladder wall,5.214420259659388
+Thyroid,Urinary bladder basal cells,10.34845624
+Thyroid,Oesophagus wall,0.0254371661338879
+Thyroid,Oesophagus basal cells,0.07085313092
+Thyroid,Liver,0.2855101632
+Thyroid,Thyroid,0.008265312549
+Thyroid,50-um endosteal region,0.0286026882553242
+Thyroid,Brain,0.2537498336
+Thyroid,Salivary glands,0.1497559419648328
+Thyroid,Skin,0.0231867172331253
+Thyroid,Basal cells of skin,0.03883671378
+Thyroid,RAdrenal + LAdrenal,2.9159206421801955
+Thyroid,ET region,0.0921384852489151
+Thyroid,Gallbladder wall,2.7645441440000003
+Thyroid,Heart wall,0.2925377858
+Thyroid,RKidney + LKidney,0.9008470025480348
+Thyroid,Systemic lymph nodes,0.0837201110100033
+Thyroid,Muscle,0.01055061492
+Thyroid,Oral mucosa,0.5234256981314832
+Thyroid,Pancreas,1.4289247189999998
+Thyroid,Small intestine wall,0.9621226121619132
+Thyroid,Stem cells of small intestine,3.5627061500000003
+Thyroid,Spleen,0.9264823073
+Thyroid,Thymus,0.05547228778
+Thyroid,Uterus/cervix,5.962266706
+Thyroid,Tongue,0.2233011844168444
+Thyroid,Tonsils,1.748895387
+Thyroid,Right colon wall (ascending + right transverse),1.9058111698706104
+Thyroid,Left colon wall (left transverse + descending),2.265862952826497
+Thyroid,Rectosigmoid colon wall (sigmoid + rectum),4.769927447066176
+Thyroid,Stem cells of right colon (ascending + right transverse),7.783240666845137
+Thyroid,Stem cells of left colon (left transverse + descending),8.777750839430398
+Thyroid,Stem cells of rectosigmoid colon (sigmoid + rectum),14.980381889999997
+Thyroid,Basal cells of anterior nasal passages,10.27984952
+Thyroid,Basal cells of posterior nasal passages + pharynx,0.2077717832999999
+Thyroid,Extrathoracic lymph nodes,0.7017352857000001
+Thyroid,Bronchi basal cells,0.8463690053100279
+Thyroid,Bronchi secretory cells,0.7893703010737361
+Thyroid,Alveolar-interstitium,0.0470561108019066
+Thyroid,Thoracic lymph nodes,0.1385885788
+Thyroid,Right lung lobe,0.06198314268
+Thyroid,Left lung lobe,0.07211570688
+Thyroid,Right adrenal gland,4.153426566
+Thyroid,Left adrenal gland,4.060266816
+Thyroid,Right breast adipose,0.4591402011
+Thyroid,Right breast glandular,0.7801421629999998
+Thyroid,Left breast adipose,0.4944354869
+Thyroid,Left breast glandular,0.7633485766
+Thyroid,RBreast-a + RBreast-g,0.3956988482793559
+Thyroid,LBreast-a + LBreast-g,0.4150033030879756
+Thyroid,RBreast-a + LBreast-a,0.336454006952618
+Thyroid,RBreast-g + LBreast-g,0.5456217764459159
+Thyroid,Entire lens of eye,7.998329434558061
+Thyroid,Sensitive lens of eye,13.854285764948344
+Thyroid,Right kidney cortex,1.57369464
+Thyroid,Right kidney medulla,2.907378194
+Thyroid,Right kidney pelvis,5.609632075
+Thyroid,Right kidney C+M+P,1.3478376607532638
+Thyroid,Left kidney cortex,1.386100841
+Thyroid,Left kidney medulla,2.7605709180000004
+Thyroid,Left kidney pelvis,5.473892576999999
+Thyroid,Left kidney C+M+P,1.210582499844886
+Thyroid,Right ovary,17.19411125
+Thyroid,Left ovary,20.45481046
+Thyroid,Pituitary gland,5.108564039
+Thyroid,Spinal cord,0.111289107
+Thyroid,Ureters,5.210033849554646
+Thyroid,Adipose/residual tissue,0.0072256161349999
+Uterus,Red (active) marrow,0.0308359712108973
+Uterus,Colon wall,0.0213521931976056
+Uterus,Stem cells of colon,0.0547946552389623
+Uterus,RLung + LLung,1.0876138281619812
+Uterus,Stomach wall,1.093830714362884
+Uterus,Stem cells of stomach,3.895402648
+Uterus,Breast-a + Breast-g,1.5575512096391884
+Uterus,ROvary + LOvary,0.04384491756512
+Uterus,Urinary bladder wall,0.0228854601330874
+Uterus,Urinary bladder basal cells,0.03467152311
+Uterus,Oesophagus wall,4.329033299057313
+Uterus,Oesophagus basal cells,13.93823656
+Uterus,Liver,0.4982240037999998
+Uterus,Thyroid,10.93118589
+Uterus,50-um endosteal region,0.0309283546703413
+Uterus,Brain,3.227049578
+Uterus,Salivary glands,8.60734245670711
+Uterus,Skin,0.1596201845373241
+Uterus,Basal cells of skin,0.3349691021
+Uterus,RAdrenal + LAdrenal,3.7010498766851465
+Uterus,ET region,13.148014792228471
+Uterus,Gallbladder wall,3.06034716
+Uterus,Heart wall,1.7197913699999998
+Uterus,RKidney + LKidney,0.64093587969242
+Uterus,Systemic lymph nodes,0.0530177123087796
+Uterus,Muscle,0.02026071102
+Uterus,Oral mucosa,21.083196684127937
+Uterus,Pancreas,1.10414052
+Uterus,Small intestine wall,0.031157008331791
+Uterus,Stem cells of small intestine,0.0816464198199999
+Uterus,Spleen,1.526950259
+Uterus,Thymus,9.687929876
+Uterus,Uterus/cervix,0.007928797597
+Uterus,Tongue,8.76128359469449
+Uterus,Tonsils,26.67805852
+Uterus,Right colon wall (ascending + right transverse),0.4164949193804084
+Uterus,Left colon wall (left transverse + descending),0.3934384297060396
+Uterus,Rectosigmoid colon wall (sigmoid + rectum),0.0213788391534582
+Uterus,Stem cells of right colon (ascending + right transverse),1.6901061383770029
+Uterus,Stem cells of left colon (left transverse + descending),1.7551625924608238
+Uterus,Stem cells of rectosigmoid colon (sigmoid + rectum),0.0548486674499999
+Uterus,Basal cells of anterior nasal passages,54.62211632
+Uterus,Basal cells of posterior nasal passages + pharynx,35.7884007
+Uterus,Extrathoracic lymph nodes,14.873599860000002
+Uterus,Bronchi basal cells,26.26130569676842
+Uterus,Bronchi secretory cells,25.445894325587886
+Uterus,Alveolar-interstitium,1.0876138281619812
+Uterus,Thoracic lymph nodes,4.117118041
+Uterus,Right lung lobe,1.48681916
+Uterus,Left lung lobe,1.594727205
+Uterus,Right adrenal gland,4.680974762
+Uterus,Left adrenal gland,5.89380252
+Uterus,Right breast adipose,2.784214516
+Uterus,Right breast glandular,3.477838472
+Uterus,Left breast adipose,2.8569296130000006
+Uterus,Left breast glandular,3.578547273
+Uterus,RBreast-a + RBreast-g,2.173663204132224
+Uterus,LBreast-a + LBreast-g,2.232828540314687
+Uterus,RBreast-a + LBreast-a,1.994005275118104
+Uterus,RBreast-g + LBreast-g,2.4941111420276885
+Uterus,Entire lens of eye,46.95198958357158
+Uterus,Sensitive lens of eye,99.9999995
+Uterus,Right kidney cortex,1.033797623
+Uterus,Right kidney medulla,1.930915319
+Uterus,Right kidney pelvis,3.972800724
+Uterus,Right kidney C+M+P,0.8923811005249231
+Uterus,Left kidney cortex,1.07843175
+Uterus,Left kidney medulla,1.936597901
+Uterus,Left kidney pelvis,4.188128609
+Uterus,Left kidney C+M+P,0.9203435291964328
+Uterus,Right ovary,0.08709715066
+Uterus,Left ovary,0.05070514195
+Uterus,Pituitary gland,53.565282550000006
+Uterus,Spinal cord,5.583455369
+Uterus,Ureters,0.1447701198356282
+Uterus,Adipose/residual tissue,0.009648976861
+Brain,Red (active) marrow,0.0171167168631177
+Brain,Colon wall,2.7600205884085582
+Brain,Stem cells of colon,11.214507221925317
+Brain,RLung + LLung,0.5423130577978514
+Brain,Stomach wall,2.066509748816776
+Brain,Stem cells of stomach,6.119387246
+Brain,Breast-a + Breast-g,0.7231619424783771
+Brain,ROvary + LOvary,25.40262285398387
+Brain,Urinary bladder wall,9.176368291089885
+Brain,Urinary bladder basal cells,15.794454129999998
+Brain,Oesophagus wall,1.4950469419138557
+Brain,Oesophagus basal cells,5.725613137
+Brain,Liver,0.7325626298
+Brain,Thyroid,1.823109986
+Brain,50-um endosteal region,0.0163280733733783
+Brain,Brain,0.004667082595
+Brain,Salivary glands,0.2002499795649026
+Brain,Skin,0.0265699286357623
+Brain,Basal cells of skin,0.04372308314
+Brain,RAdrenal + LAdrenal,7.62955632709552
+Brain,ET region,0.182632863349446
+Brain,Gallbladder wall,6.362342119
+Brain,Heart wall,1.048097068
+Brain,RKidney + LKidney,2.0030304254555147
+Brain,Systemic lymph nodes,1.3701194761651303
+Brain,Muscle,0.04050310057
+Brain,Oral mucosa,1.1330934792807077
+Brain,Pancreas,3.263228288
+Brain,Small intestine wall,1.9527061259345504
+Brain,Stem cells of small intestine,7.249348991
+Brain,Spleen,2.133322871
+Brain,Thymus,2.538169754
+Brain,Uterus/cervix,10.59872071
+Brain,Tongue,0.4056432936592054
+Brain,Tonsils,0.9649772232
+Brain,Right colon wall (ascending + right transverse),3.85617357580187
+Brain,Left colon wall (left transverse + descending),4.446292021552277
+Brain,Rectosigmoid colon wall (sigmoid + rectum),8.36672631708757
+Brain,Stem cells of right colon (ascending + right transverse),16.513731141805707
+Brain,Stem cells of left colon (left transverse + descending),16.024067719835656
+Brain,Stem cells of rectosigmoid colon (sigmoid + rectum),32.96094008
+Brain,Basal cells of anterior nasal passages,2.392455421
+Brain,Basal cells of posterior nasal passages + pharynx,0.4224441734
+Brain,Extrathoracic lymph nodes,0.1590048732
+Brain,Bronchi basal cells,10.929597763555437
+Brain,Bronchi secretory cells,10.985666326783535
+Brain,Alveolar-interstitium,0.5423130577978514
+Brain,Thoracic lymph nodes,3.967990153
+Brain,Right lung lobe,0.7456224632999999
+Brain,Left lung lobe,0.7898457592
+Brain,Right adrenal gland,10.26829986
+Brain,Left adrenal gland,11.397652580000004
+Brain,Right breast adipose,1.218362385
+Brain,Right breast glandular,1.83315075
+Brain,Left breast adipose,1.235041748
+Brain,Left breast glandular,1.860772106
+Brain,RBreast-a + RBreast-g,1.0155538343860642
+Brain,LBreast-a + LBreast-g,1.0297786955589283
+Brain,RBreast-a + LBreast-a,0.867458764013476
+Brain,RBreast-g + LBreast-g,1.3060030997748648
+Brain,Entire lens of eye,0.8142902021320283
+Brain,Sensitive lens of eye,1.2939729141823535
+Brain,Right kidney cortex,3.501073967
+Brain,Right kidney medulla,6.378314845999999
+Brain,Right kidney pelvis,11.257724499999998
+Brain,Right kidney C+M+P,2.974302738625956
+Brain,Left kidney cortex,3.14752173
+Brain,Left kidney medulla,5.542704627
+Brain,Left kidney pelvis,12.51688949
+Brain,Left kidney C+M+P,2.706998895463557
+Brain,Right ovary,33.68585182
+Brain,Left ovary,37.61621927
+Brain,Pituitary gland,0.2285543123
+Brain,Spinal cord,0.4985797601
+Brain,Ureters,10.858053164542616
+Brain,Adipose/residual tissue,0.02307612395
+Ht-wall,Red (active) marrow,0.029686423784643
+Ht-wall,Colon wall,0.6770520291695342
+Ht-wall,Stem cells of colon,2.64110429570961
+Ht-wall,RLung + LLung,0.0175134820899345
+Ht-wall,Stomach wall,0.0565973274944446
+Ht-wall,Stem cells of stomach,0.1173699428
+Ht-wall,Breast-a + Breast-g,0.0405592543368192
+Ht-wall,ROvary + LOvary,7.395346414484175
+Ht-wall,Urinary bladder wall,2.854182001985273
+Ht-wall,Urinary bladder basal cells,5.773053548
+Ht-wall,Oesophagus wall,0.0481339995120226
+Ht-wall,Oesophagus basal cells,0.1298868245
+Ht-wall,Liver,0.0386483429699999
+Ht-wall,Thyroid,1.113048397
+Ht-wall,50-um endosteal region,0.0298707375502295
+Ht-wall,Brain,0.5744668156999999
+Ht-wall,Salivary glands,1.2265689883182307
+Ht-wall,Skin,0.0674129586747194
+Ht-wall,Basal cells of skin,0.1177297281
+Ht-wall,RAdrenal + LAdrenal,1.0649754172551342
+Ht-wall,ET region,1.927009653115062
+Ht-wall,Gallbladder wall,1.099072521
+Ht-wall,Heart wall,0.008378527292
+Ht-wall,RKidney + LKidney,0.37130984106793
+Ht-wall,Systemic lymph nodes,0.1200279359903369
+Ht-wall,Muscle,0.02263998632
+Ht-wall,Oral mucosa,4.950012264554958
+Ht-wall,Pancreas,0.5393425896
+Ht-wall,Small intestine wall,0.4023714500912357
+Ht-wall,Stem cells of small intestine,1.6133563909999995
+Ht-wall,Spleen,0.128519476
+Ht-wall,Thymus,0.1120927062
+Ht-wall,Uterus/cervix,3.240896540999999
+Ht-wall,Tongue,1.2250023537350032
+Ht-wall,Tonsils,5.035749645999999
+Ht-wall,Right colon wall (ascending + right transverse),0.984924141193306
+Ht-wall,Left colon wall (left transverse + descending),1.002729769852072
+Ht-wall,Rectosigmoid colon wall (sigmoid + rectum),2.4721351071346707
+Ht-wall,Stem cells of right colon (ascending + right transverse),3.624318527389788
+Ht-wall,Stem cells of left colon (left transverse + descending),4.35221349378228
+Ht-wall,Stem cells of rectosigmoid colon (sigmoid + rectum),8.170901847
+Ht-wall,Basal cells of anterior nasal passages,19.33257616
+Ht-wall,Basal cells of posterior nasal passages + pharynx,5.661188541
+Ht-wall,Extrathoracic lymph nodes,2.4891968980000003
+Ht-wall,Bronchi basal cells,0.1293301241866978
+Ht-wall,Bronchi secretory cells,0.116058848023675
+Ht-wall,Alveolar-interstitium,0.0175134820899345
+Ht-wall,Thoracic lymph nodes,0.1337373348
+Ht-wall,Right lung lobe,0.0297995249299999
+Ht-wall,Left lung lobe,0.0213249799499999
+Ht-wall,Right adrenal gland,1.918866128
+Ht-wall,Left adrenal gland,1.279891541
+Ht-wall,Right breast adipose,0.1210825007
+Ht-wall,Right breast glandular,0.2007084799
+Ht-wall,Left breast adipose,0.05552974613
+Ht-wall,Left breast glandular,0.06949352168
+Ht-wall,RBreast-a + RBreast-g,0.103680916971492
+Ht-wall,LBreast-a + LBreast-g,0.0437178622666019
+Ht-wall,RBreast-a + LBreast-a,0.0506786582505076
+Ht-wall,RBreast-g + LBreast-g,0.0661794284991478
+Ht-wall,Entire lens of eye,13.153580476571042
+Ht-wall,Sensitive lens of eye,19.887862387829795
+Ht-wall,Right kidney cortex,0.7737320414000001
+Ht-wall,Right kidney medulla,1.426081479
+Ht-wall,Right kidney pelvis,2.945578198
+Ht-wall,Right kidney C+M+P,0.6648244282225446
+Ht-wall,Left kidney cortex,0.5117373869
+Ht-wall,Left kidney medulla,1.017220144
+Ht-wall,Left kidney pelvis,2.046101342
+Ht-wall,Left kidney C+M+P,0.4476299550270365
+Ht-wall,Right ovary,9.689893112
+Ht-wall,Left ovary,11.389417280000002
+Ht-wall,Pituitary gland,14.58111175
+Ht-wall,Spinal cord,0.4310909408
+Ht-wall,Ureters,2.2894724221962326
+Ht-wall,Adipose/residual tissue,0.01290559302
+Kidneys,Red (active) marrow,0.0322883033951089
+Kidneys,Colon wall,0.0583105184602579
+Kidneys,Stem cells of colon,0.1453404610403711
+Kidneys,RLung + LLung,0.2451951292857094
+Kidneys,Stomach wall,0.0624956589899965
+Kidneys,Stem cells of stomach,0.1420293489
+Kidneys,Breast-a + Breast-g,0.4420270081009015
+Kidneys,ROvary + LOvary,3.0508241949662955
+Kidneys,Urinary bladder wall,1.2332145255725817
+Kidneys,Urinary bladder basal cells,2.373309627
+Kidneys,Oesophagus wall,0.7579649436690192
+Kidneys,Oesophagus basal cells,2.647046134000001
+Kidneys,Liver,0.03176279674
+Kidneys,Thyroid,3.631964239
+Kidneys,50-um endosteal region,0.032499493734876
+Kidneys,Brain,1.221647528
+Kidneys,Salivary glands,3.03664101927078
+Kidneys,Skin,0.1110302800389746
+Kidneys,Basal cells of skin,0.2127080891
+Kidneys,RAdrenal + LAdrenal,0.08143616052089
+Kidneys,ET region,4.83899888282505
+Kidneys,Gallbladder wall,0.1101396672999999
+Kidneys,Heart wall,0.3969995677
+Kidneys,RKidney + LKidney,0.0083693934760744
+Kidneys,Systemic lymph nodes,0.4554490655568797
+Kidneys,Muscle,0.01939266909
+Kidneys,Oral mucosa,11.464789722430298
+Kidneys,Pancreas,0.04619803062
+Kidneys,Small intestine wall,0.0318423233000992
+Kidneys,Stem cells of small intestine,0.0787071514699999
+Kidneys,Spleen,0.05784116426
+Kidneys,Thymus,2.7093231
+Kidneys,Uterus/cervix,1.342018109
+Kidneys,Tongue,3.1474248470214508
+Kidneys,Tonsils,13.13839588
+Kidneys,Right colon wall (ascending + right transverse),0.0591003243551959
+Kidneys,Left colon wall (left transverse + descending),0.3060420121006943
+Kidneys,Rectosigmoid colon wall (sigmoid + rectum),1.0026795809434736
+Kidneys,Stem cells of right colon (ascending + right transverse),0.1462702212882735
+Kidneys,Stem cells of left colon (left transverse + descending),1.34880461707358
+Kidneys,Stem cells of rectosigmoid colon (sigmoid + rectum),3.673120428
+Kidneys,Basal cells of anterior nasal passages,43.20245439
+Kidneys,Basal cells of posterior nasal passages + pharynx,19.959555660000003
+Kidneys,Extrathoracic lymph nodes,5.93855343
+Kidneys,Bronchi basal cells,8.698654971489264
+Kidneys,Bronchi secretory cells,8.50949581553918
+Kidneys,Alveolar-interstitium,0.2451951292857094
+Kidneys,Thoracic lymph nodes,0.08682189722
+Kidneys,Right lung lobe,0.3735721433
+Kidneys,Left lung lobe,0.3238404663
+Kidneys,Right adrenal gland,0.1028619358
+Kidneys,Left adrenal gland,0.1332295795999999
+Kidneys,Right breast adipose,0.7903039287000001
+Kidneys,Right breast glandular,1.012225125
+Kidneys,Left breast adipose,0.7915337328000001
+Kidneys,Left breast glandular,1.020245164
+Kidneys,RBreast-a + RBreast-g,0.6241888002916217
+Kidneys,LBreast-a + LBreast-g,0.626040021441457
+Kidneys,RBreast-a + LBreast-a,0.5593152678119542
+Kidneys,RBreast-g + LBreast-g,0.7185773128907127
+Kidneys,Entire lens of eye,30.45516682520703
+Kidneys,Sensitive lens of eye,48.10762611081198
+Kidneys,Right kidney cortex,0.0149424701499999
+Kidneys,Right kidney medulla,0.0257349144599999
+Kidneys,Right kidney pelvis,0.04722101187
+Kidneys,Right kidney C+M+P,0.0125016711828168
+Kidneys,Left kidney cortex,0.01335932209
+Kidneys,Left kidney medulla,0.0236707293
+Kidneys,Left kidney pelvis,0.0434254990799999
+Kidneys,Left kidney C+M+P,0.0112661630777146
+Kidneys,Right ovary,4.105167996
+Kidneys,Left ovary,4.549692285999999
+Kidneys,Pituitary gland,30.304187050000003
+Kidneys,Spinal cord,0.2403346882
+Kidneys,Ureters,0.1073626933994467
+Kidneys,Adipose/residual tissue,0.01194034006
+Liver,Red (active) marrow,0.0380960425395622
+Liver,Colon wall,0.1807206598122745
+Liver,Stem cells of colon,0.4638624148532287
+Liver,RLung + LLung,0.0407447401960586
+Liver,Stomach wall,0.0574109685381887
+Liver,Stem cells of stomach,0.1174712019
+Liver,Breast-a + Breast-g,0.1262840424396117
+Liver,ROvary + LOvary,4.724632485284555
+Liver,Urinary bladder wall,1.825163190227435
+Liver,Urinary bladder basal cells,3.495667558
+Liver,Oesophagus wall,0.1395663751532744
+Liver,Oesophagus basal cells,0.3864835
+Liver,Liver,0.0048290771
+Liver,Thyroid,2.287704279
+Liver,50-um endosteal region,0.0385263496013418
+Liver,Brain,0.8549006333
+Liver,Salivary glands,2.0129119403597056
+Liver,Skin,0.0415748952377207
+Liver,Basal cells of skin,0.0677029156
+Liver,RAdrenal + LAdrenal,0.1345135832018937
+Liver,ET region,3.229440700437181
+Liver,Gallbladder wall,0.0707040387799999
+Liver,Heart wall,0.0747573529699999
+Liver,RKidney + LKidney,0.0612930237120156
+Liver,Systemic lymph nodes,0.4533726834768183
+Liver,Muscle,0.02737418883
+Liver,Oral mucosa,6.695126116651267
+Liver,Pancreas,0.07542347458
+Liver,Small intestine wall,0.1718842440294478
+Liver,Stem cells of small intestine,0.4853661361
+Liver,Spleen,0.357516041
+Liver,Thymus,1.536759566
+Liver,Uterus/cervix,2.046691714
+Liver,Tongue,1.985174950806955
+Liver,Tonsils,8.211089674
+Liver,Right colon wall (ascending + right transverse),0.1850309973145784
+Liver,Left colon wall (left transverse + descending),0.6562901466401454
+Liver,Rectosigmoid colon wall (sigmoid + rectum),1.5642113246914553
+Liver,Stem cells of right colon (ascending + right transverse),0.4709606298139084
+Liver,Stem cells of left colon (left transverse + descending),2.938062425192445
+Liver,Stem cells of rectosigmoid colon (sigmoid + rectum),5.281896013
+Liver,Basal cells of anterior nasal passages,28.04471139
+Liver,Basal cells of posterior nasal passages + pharynx,10.01006863
+Liver,Extrathoracic lymph nodes,3.939123521
+Liver,Bronchi basal cells,3.827659320309688
+Liver,Bronchi secretory cells,3.72382139360763
+Liver,Alveolar-interstitium,0.0407447401960586
+Liver,Thoracic lymph nodes,0.1928620869
+Liver,Right lung lobe,0.04120367713
+Liver,Left lung lobe,0.2288206325
+Liver,Right adrenal gland,0.1505001129
+Liver,Left adrenal gland,0.2994773889
+Liver,Right breast adipose,0.1654572096
+Liver,Right breast glandular,0.2373945147
+Liver,Left breast adipose,0.3616830701
+Liver,Left breast glandular,0.6889696814
+Liver,RBreast-a + RBreast-g,0.1358700541994262
+Liver,LBreast-a + LBreast-g,0.3257826781713906
+Liver,RBreast-a + LBreast-a,0.1512132613322602
+Liver,RBreast-g + LBreast-g,0.2287794807470337
+Liver,Entire lens of eye,19.2833365801356
+Liver,Sensitive lens of eye,36.60035833525935
+Liver,Right kidney cortex,0.07329005301
+Liver,Right kidney medulla,0.124221454
+Liver,Right kidney pelvis,0.2354875493
+Liver,Right kidney C+M+P,0.0620621108600435
+Liver,Left kidney cortex,0.3552888069
+Liver,Left kidney medulla,0.7664956099
+Liver,Left kidney pelvis,1.520242785
+Liver,Left kidney C+M+P,0.3237290159611176
+Liver,Right ovary,6.401464797000001
+Liver,Left ovary,7.002142053
+Liver,Pituitary gland,25.11748756
+Liver,Spinal cord,0.3773360703999999
+Liver,Ureters,0.617666379292432
+Liver,Adipose/residual tissue,0.01691601751
