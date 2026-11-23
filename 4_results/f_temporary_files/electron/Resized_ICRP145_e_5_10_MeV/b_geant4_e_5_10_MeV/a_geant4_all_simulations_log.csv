@@ -1,0 +1,17 @@
+Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Total Elapsed Wall Time (s)
+ICRP 145 Adult Female Resized to Filipino,Brain,e-,5.0,MT-32,100000000,1,3561.319578
+ICRP 145 Adult Female Resized to Filipino,Ht-wall,e-,5.0,MT-32,100000000,1,4881.012151
+ICRP 145 Adult Female Resized to Filipino,Kidneys,e-,5.0,MT-32,100000000,1,5137.617015
+ICRP 145 Adult Female Resized to Filipino,Liver,e-,5.0,MT-32,100000000,1,3333.606432
+ICRP 145 Adult Female Resized to Filipino,Pancreas,e-,5.0,MT-32,100000000,1,4623.506063
+ICRP 145 Adult Female Resized to Filipino,Spleen,e-,5.0,MT-32,100000000,1,3964.081996
+ICRP 145 Adult Female Resized to Filipino,Thyroid,e-,5.0,MT-32,100000000,1,7346.643429
+ICRP 145 Adult Female Resized to Filipino,Uterus,e-,5.0,MT-32,100000000,1,4733.114577
+ICRP 145 Adult Male Resized to Filipino,Brain,e-,5.0,MT-32,100000000,1,3613.180724
+ICRP 145 Adult Male Resized to Filipino,Ht-wall,e-,5.0,MT-32,100000000,1,4568.790641
+ICRP 145 Adult Male Resized to Filipino,Kidneys,e-,5.0,MT-32,100000000,1,4657.275252
+ICRP 145 Adult Male Resized to Filipino,Liver,e-,5.0,MT-32,100000000,1,3432.065903
+ICRP 145 Adult Male Resized to Filipino,Pancreas,e-,5.0,MT-32,100000000,1,4523.146516
+ICRP 145 Adult Male Resized to Filipino,Prostate,e-,5.0,MT-32,100000000,1,4874.181029
+ICRP 145 Adult Male Resized to Filipino,Spleen,e-,5.0,MT-32,100000000,1,3884.248538
+ICRP 145 Adult Male Resized to Filipino,Thyroid,e-,5.0,MT-32,100000000,1,6881.949919
