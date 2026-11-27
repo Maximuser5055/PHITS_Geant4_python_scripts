@@ -1,0 +1,15 @@
+========================================
+Source Particle Allocation
+Run ID: 0
+Total requested events: 100000000
+----------------------------------------
+Organ ID 8900: 40079895 particles (40.0799%) | mass = 140.4796945757 g
+Organ ID 9000: 9470561 particles (9.4706%) | mass = 33.1942355823 g
+Organ ID 9100: 1889158 particles (1.8892%) | mass = 6.6214848661 g
+Organ ID 9200: 37827271 particles (37.8273%) | mass = 132.5842649103 g
+Organ ID 9300: 8940466 particles (8.9405%) | mass = 31.3362568836 g
+Organ ID 9400: 1792649 particles (1.7926%) | mass = 6.2832194729 g
+----------------------------------------
+Total allocated: 100000000
+========================================
+

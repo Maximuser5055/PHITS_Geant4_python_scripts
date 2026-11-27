@@ -1,17 +1,17 @@
 Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Total Elapsed Wall Time (s)
-ICRP 145 Adult Female Resized to Filipino,Brain,e-,0.01,MT-32,1000000000,1,387.949984
-ICRP 145 Adult Female Resized to Filipino,Ht-wall,e-,0.01,MT-32,1000000000,1,344.508234
-ICRP 145 Adult Female Resized to Filipino,Kidneys,e-,0.01,MT-32,1000000000,1,331.360532
-ICRP 145 Adult Female Resized to Filipino,Liver,e-,0.01,MT-32,1000000000,1,363.401563
-ICRP 145 Adult Female Resized to Filipino,Pancreas,e-,0.01,MT-32,1000000000,1,329.478988
-ICRP 145 Adult Female Resized to Filipino,Spleen,e-,0.01,MT-32,1000000000,1,313.016932
-ICRP 145 Adult Female Resized to Filipino,Thyroid,e-,0.01,MT-32,1000000000,1,356.570835
-ICRP 145 Adult Female Resized to Filipino,Uterus,e-,0.01,MT-32,1000000000,1,316.183667
-ICRP 145 Adult Male Resized to Filipino,Brain,e-,0.01,MT-32,1000000000,1,438.2287
-ICRP 145 Adult Male Resized to Filipino,Ht-wall,e-,0.01,MT-32,1000000000,1,359.148136
-ICRP 145 Adult Male Resized to Filipino,Kidneys,e-,0.01,MT-32,1000000000,1,351.84597
-ICRP 145 Adult Male Resized to Filipino,Liver,e-,0.01,MT-32,1000000000,1,409.892867
-ICRP 145 Adult Male Resized to Filipino,Pancreas,e-,0.01,MT-32,1000000000,1,345.282938
-ICRP 145 Adult Male Resized to Filipino,Prostate,e-,0.01,MT-32,1000000000,1,342.945728
-ICRP 145 Adult Male Resized to Filipino,Spleen,e-,0.01,MT-32,1000000000,1,352.639291
-ICRP 145 Adult Male Resized to Filipino,Thyroid,e-,0.01,MT-32,1000000000,1,384.442155
+Filipino Adult Female,Brain,e-,10.0,MT-32,100000000,1,7325.393807
+Filipino Adult Female,Ht-wall,e-,10.0,MT-32,100000000,1,10050.417207
+Filipino Adult Female,Kidneys,e-,10.0,MT-32,100000000,1,10519.590485
+Filipino Adult Female,Liver,e-,10.0,MT-32,100000000,1,7119.643802
+Filipino Adult Female,Pancreas,e-,10.0,MT-32,100000000,1,10237.515277
+Filipino Adult Female,Spleen,e-,10.0,MT-32,100000000,1,8590.931747
+Filipino Adult Female,Thyroid,e-,10.0,MT-32,100000000,1,13784.731093
+Filipino Adult Female,Uterus,e-,10.0,MT-32,100000000,1,10125.40717
+Filipino Adult Male,Brain,e-,10.0,MT-32,100000000,1,7278.802491
+Filipino Adult Male,Ht-wall,e-,10.0,MT-32,100000000,1,9338.984686
+Filipino Adult Male,Kidneys,e-,10.0,MT-32,100000000,1,9417.702051
+Filipino Adult Male,Liver,e-,10.0,MT-32,100000000,1,7463.992382
+Filipino Adult Male,Pancreas,e-,10.0,MT-32,100000000,1,10156.646662
+Filipino Adult Male,Prostate,e-,10.0,MT-32,100000000,1,8743.819491
+Filipino Adult Male,Spleen,e-,10.0,MT-32,100000000,1,8550.250283
+Filipino Adult Male,Thyroid,e-,10.0,MT-32,100000000,1,12466.676738
