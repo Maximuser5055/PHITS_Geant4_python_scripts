@@ -1,0 +1,17 @@
+Phantom,Source Organ,Source Type,Source Energy (MeV),Parallel Mode,maxcas (nps if Geant4),maxbch (1 if Geant4),Total Elapsed Wall Time (s)
+Filipino Adult Female,Brain,e-,5.0,MT-32,100000000,1,3663.880436
+Filipino Adult Female,Ht-wall,e-,5.0,MT-32,100000000,1,5044.112828
+Filipino Adult Female,Kidneys,e-,5.0,MT-32,100000000,1,5267.102575
+Filipino Adult Female,Liver,e-,5.0,MT-32,100000000,1,3331.875132
+Filipino Adult Female,Pancreas,e-,5.0,MT-32,100000000,1,4764.781396
+Filipino Adult Female,Spleen,e-,5.0,MT-32,100000000,1,3990.155575
+Filipino Adult Female,Thyroid,e-,5.0,MT-32,100000000,1,7713.44583
+Filipino Adult Female,Uterus,e-,5.0,MT-32,100000000,1,4911.872614
+Filipino Adult Male,Brain,e-,5.0,MT-32,100000000,1,3628.813816
+Filipino Adult Male,Ht-wall,e-,5.0,MT-32,100000000,1,4594.626601
+Filipino Adult Male,Kidneys,e-,5.0,MT-32,100000000,1,4677.221492
+Filipino Adult Male,Liver,e-,5.0,MT-32,100000000,1,3496.232636
+Filipino Adult Male,Pancreas,e-,5.0,MT-32,100000000,1,4580.624609
+Filipino Adult Male,Prostate,e-,5.0,MT-32,100000000,1,4648.724853
+Filipino Adult Male,Spleen,e-,5.0,MT-32,100000000,1,3898.725224
+Filipino Adult Male,Thyroid,e-,5.0,MT-32,100000000,1,7184.9344
